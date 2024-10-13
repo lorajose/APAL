@@ -1,0 +1,88 @@
+name: Dev to Prod CI/CD Pipeline
+
+# Trigger the workflow on push to Dev, Qa, Uat, and Prod branches
+on:
+  push:
+    branches:
+      - dev
+      - qa
+      - uat
+      - main  # Assuming 'main' is the production branch
+
+# Define permissions
+permissions:
+  contents: write  # Needed to commit and push changes to branches
+
+jobs:
+  # Step 1: Build and test in the Dev environment
+  dev-build:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'  # Only run if pushed to Dev branch
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run build/tests
+        run: |
+          echo "Running build and tests for Dev environment"
+          # Add your build/test commands here
+
+      - name: Deploy to QA
+        run: |
+          echo "Deploying to QA..."
+          # Add QA deployment commands here
+        if: success()
+
+  # Step 2: Deploy to the QA environment
+  qa-deploy:
+    runs-on: ubuntu-latest
+    needs: dev-build  # Depends on successful Dev build
+    if: github.ref == 'refs/heads/qa'  # Only run if pushed to Qa branch
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run QA tests
+        run: |
+          echo "Running tests in QA environment"
+          # Add QA test commands here
+
+      - name: Deploy to UAT
+        run: |
+          echo "Deploying to UAT..."
+          # Add UAT deployment commands here
+        if: success()
+
+  # Step 3: Deploy to the UAT environment
+  uat-deploy:
+    runs-on: ubuntu-latest
+    needs: qa-deploy  # Depends on successful QA deployment
+    if: github.ref == 'refs/heads/uat'  # Only run if pushed to Uat branch
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run UAT tests
+        run: |
+          echo "Running UAT tests"
+          # Add UAT test commands here
+
+      - name: Deploy to Production
+        run: |
+          echo "Deploying to Production..."
+          # Add Production deployment commands here
+        if: success()
+
+  # Step 4: Deploy to the Production environment
+  prod-deploy:
+    runs-on: ubuntu-latest
+    needs: uat-deploy  # Depends on successful UAT deployment
+    if: github.ref == 'refs/heads/main'  # Assuming 'main' is the production branch
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Final production deployment
+        run: |
+          echo "Deploying to Production environment"
+          # Add Production deployment commands here
