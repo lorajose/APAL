@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Already Registered (NPI Matched)</name>
+    <style>none</style>
+    <subject>Already Registered Provider - Attempting to reregister</subject>
+    <textOnly>Hello {!Lead.OwnerFullName},
+
+An already-registered provider is attempting to re-register here. Please review the following details to ensure the information is accurately recorded:
+
+Provider Name:{!Lead.Name}
+Provider NPI #: {!Lead.pcpnpi__c}
+Specialty: {!Lead.Specialty_Description__c}
+Email: {!Lead.Email}
+Phone Number: {!Lead.Phone}
+Mobile Number: {!Lead.MobilePhone}
+
+Please verify the record details and make any updates by converting the record to the matching one.
+
+Thank you!</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>
