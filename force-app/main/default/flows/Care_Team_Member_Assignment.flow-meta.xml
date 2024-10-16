@@ -392,6 +392,12 @@
             <targetReference>Create_Case_Team_Member_CN</targetReference>
         </connector>
         <inputAssignments>
+            <field>Assignment_Timestamp__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>Notes__c</field>
             <value>
                 <elementReference>NotesSelf</elementReference>
@@ -438,6 +444,12 @@
         <connector>
             <targetReference>Create_Case_Team_Member_CR</targetReference>
         </connector>
+        <inputAssignments>
+            <field>Assignment_Timestamp__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
         <inputAssignments>
             <field>Notes__c</field>
             <value>
