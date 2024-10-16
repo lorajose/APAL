@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+      }
+      .content {
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      .highlight {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <p>Hello <strong>{!Lead.OwnerFullName}</strong>,</p>
+      <p>
+        An already-registered provider is attempting to re-register
+        <a href="{!Lead.Link}">here</a>. Please review the following details to ensure
+        the information is accurately recorded:
+      </p>
+      <p>
+        <span class="highlight">Provider Name:</span>{!Lead.Name}<br />
+        <span class="highlight">Provider NPI #:</span> {!Lead.pcpnpi__c}<br />
+        <span class="highlight">Specialty:</span> {!Lead.Specialty_Description__c}<br />
+        <span class="highlight">Email:</span> {!Lead.Email}<br />
+        <span class="highlight">Phone Number:</span> {!Lead.Phone}<br />
+        <span class="highlight">Mobile Number:</span> {!Lead.MobilePhone}
+      </p>
+      <p>
+        Please verify the record details and make any updates by converting the record to the matching one.
+      </p>
+      <p>Thank you!</p>
+    </div>
+  </body>
+</html>
