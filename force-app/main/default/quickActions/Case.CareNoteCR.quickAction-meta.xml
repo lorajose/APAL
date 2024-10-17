@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Note for a care request</description>
+    <fieldOverrides>
+        <field>Case__c</field>
+        <formula>IF(isBlank( Case.ParentId) , Case.Id , Case.ParentId)</formula>
+    </fieldOverrides>
+    <fieldOverrides>
+        <field>Related_Case__c</field>
+        <formula>Case.ParentId</formula>
+    </fieldOverrides>
+    <label>New Note</label>
+    <optionsCreateFeedItem>true</optionsCreateFeedItem>
+    <quickActionLayout>
+        <layoutSectionStyle>TwoColumnsLeftToRight</layoutSectionStyle>
+        <quickActionLayoutColumns>
+            <quickActionLayoutItems>
+                <emptySpace>false</emptySpace>
+                <field>Related_Case__c</field>
+                <uiBehavior>Edit</uiBehavior>
+            </quickActionLayoutItems>
+            <quickActionLayoutItems>
+                <emptySpace>false</emptySpace>
+                <field>Case__c</field>
+                <uiBehavior>Edit</uiBehavior>
+            </quickActionLayoutItems>
+            <quickActionLayoutItems>
+                <emptySpace>false</emptySpace>
+                <field>Notes__c</field>
+                <uiBehavior>Required</uiBehavior>
+            </quickActionLayoutItems>
+        </quickActionLayoutColumns>
+        <quickActionLayoutColumns/>
+    </quickActionLayout>
+    <successMessage>Note Saved</successMessage>
+    <targetObject>Care_Note__c</targetObject>
+    <targetParentField>Related_Case__c</targetParentField>
+    <type>Create</type>
+</QuickAction>
