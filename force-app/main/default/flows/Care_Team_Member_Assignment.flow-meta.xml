@@ -3,8 +3,8 @@
     <actionCalls>
         <name>In_App_Notification</name>
         <label>In-App Notification</label>
-        <locationX>1602</locationX>
-        <locationY>2102</locationY>
+        <locationX>1304</locationX>
+        <locationY>2054</locationY>
         <actionName>customNotificationAction</actionName>
         <actionType>customNotificationAction</actionType>
         <connector>
@@ -47,8 +47,8 @@
     <actionCalls>
         <name>Send_Email_Notification</name>
         <label>Send Email Notification</label>
-        <locationX>1602</locationX>
-        <locationY>2210</locationY>
+        <locationX>1304</locationX>
+        <locationY>2162</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -83,8 +83,8 @@
     <assignments>
         <name>Assign_new_Record</name>
         <label>Assign new Record</label>
-        <locationX>1470</locationX>
-        <locationY>1694</locationY>
+        <locationX>1172</locationX>
+        <locationY>1646</locationY>
         <assignmentItems>
             <assignToReference>NewRecordId</assignToReference>
             <operator>Assign</operator>
@@ -99,8 +99,8 @@
     <assignments>
         <name>Assign_new_Record2</name>
         <label>Assign new Record</label>
-        <locationX>1734</locationX>
-        <locationY>1694</locationY>
+        <locationX>1436</locationX>
+        <locationY>1646</locationY>
         <assignmentItems>
             <assignToReference>NewRecordId</assignToReference>
             <operator>Assign</operator>
@@ -115,8 +115,8 @@
     <assignments>
         <name>Assign_Selected_User</name>
         <label>Assign Selected User</label>
-        <locationX>1602</locationX>
-        <locationY>1886</locationY>
+        <locationX>1304</locationX>
+        <locationY>1838</locationY>
         <assignmentItems>
             <assignToReference>RecipientsIds</assignToReference>
             <operator>Add</operator>
@@ -138,8 +138,8 @@
     <assignments>
         <name>Count_Records</name>
         <label>Count Records</label>
-        <locationX>744</locationX>
-        <locationY>938</locationY>
+        <locationX>50</locationX>
+        <locationY>890</locationY>
         <assignmentItems>
             <assignToReference>CountRecords</assignToReference>
             <operator>AssignCount</operator>
@@ -154,8 +154,8 @@
     <assignments>
         <name>Count_Records_Other</name>
         <label>Count Records</label>
-        <locationX>1448</locationX>
-        <locationY>1262</locationY>
+        <locationX>1150</locationX>
+        <locationY>1214</locationY>
         <assignmentItems>
             <assignToReference>CountRecords</assignToReference>
             <operator>AssignCount</operator>
@@ -170,8 +170,8 @@
     <decisions>
         <name>Check_Record_Type</name>
         <label>Check Record Type</label>
-        <locationX>1602</locationX>
-        <locationY>1478</locationY>
+        <locationX>1304</locationX>
+        <locationY>1430</locationY>
         <defaultConnector>
             <targetReference>Create_Care_Team_Member</targetReference>
         </defaultConnector>
@@ -193,10 +193,54 @@
         </rules>
     </decisions>
     <decisions>
+        <name>CN_Team_Member_Exists</name>
+        <label>CN Team Member Exists</label>
+        <locationX>72</locationX>
+        <locationY>1430</locationY>
+        <defaultConnector>
+            <targetReference>Create_Case_Team_Member_CN</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Exists</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Existing_Team_Member</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Yes Exists</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>CR_Team_Member_Exists</name>
+        <label>CR Team Member Exists</label>
+        <locationX>600</locationX>
+        <locationY>1430</locationY>
+        <defaultConnector>
+            <targetReference>Create_Case_Team_Member_CR</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Exists2</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Existing_Team_Member</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Yes Exists</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Is_Self</name>
         <label>Is Self?</label>
-        <locationX>1096</locationX>
-        <locationY>722</locationY>
+        <locationX>600</locationX>
+        <locationY>674</locationY>
         <defaultConnector>
             <targetReference>Get_Roles</targetReference>
         </defaultConnector>
@@ -220,10 +264,10 @@
     <decisions>
         <name>Open_Case_Exists</name>
         <label>Open Case Exists?</label>
-        <locationX>879</locationX>
-        <locationY>981</locationY>
+        <locationX>50</locationX>
+        <locationY>998</locationY>
         <defaultConnector>
-            <targetReference>Self_Record_Type</targetReference>
+            <targetReference>Get_Existing_Team_Member</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No</defaultConnectorLabel>
         <rules>
@@ -245,8 +289,8 @@
     <decisions>
         <name>Open_Case_Exists_Other</name>
         <label>Open Case Exists?</label>
-        <locationX>1448</locationX>
-        <locationY>1370</locationY>
+        <locationX>1150</locationX>
+        <locationY>1322</locationY>
         <defaultConnector>
             <targetReference>Check_Record_Type</targetReference>
         </defaultConnector>
@@ -270,8 +314,8 @@
     <decisions>
         <name>Self_Record_Type</name>
         <label>Self Record Type</label>
-        <locationX>898</locationX>
-        <locationY>1154</locationY>
+        <locationX>336</locationX>
+        <locationY>1214</locationY>
         <defaultConnector>
             <targetReference>Create_Care_Team_Case</targetReference>
         </defaultConnector>
@@ -320,7 +364,7 @@
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>FREE_FORM_CANVAS</stringValue>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -333,8 +377,8 @@
     <recordCreates>
         <name>Create_Care_Navigation_Case</name>
         <label>Create Care Navigation Case</label>
-        <locationX>1470</locationX>
-        <locationY>1586</locationY>
+        <locationX>1172</locationX>
+        <locationY>1538</locationY>
         <connector>
             <targetReference>Assign_new_Record</targetReference>
         </connector>
@@ -386,10 +430,10 @@
     <recordCreates>
         <name>Create_Care_Navigation_Case2</name>
         <label>Create Care Navigation Case</label>
-        <locationX>766</locationX>
-        <locationY>1262</locationY>
+        <locationX>72</locationX>
+        <locationY>1322</locationY>
         <connector>
-            <targetReference>Create_Case_Team_Member_CN</targetReference>
+            <targetReference>CN_Team_Member_Exists</targetReference>
         </connector>
         <inputAssignments>
             <field>Assignment_Timestamp__c</field>
@@ -439,10 +483,10 @@
     <recordCreates>
         <name>Create_Care_Team_Case</name>
         <label>Create Care Team Case</label>
-        <locationX>1030</locationX>
-        <locationY>1262</locationY>
+        <locationX>600</locationX>
+        <locationY>1322</locationY>
         <connector>
-            <targetReference>Create_Case_Team_Member_CR</targetReference>
+            <targetReference>CR_Team_Member_Exists</targetReference>
         </connector>
         <inputAssignments>
             <field>Assignment_Timestamp__c</field>
@@ -492,8 +536,8 @@
     <recordCreates>
         <name>Create_Care_Team_Member</name>
         <label>Create Care Team Member</label>
-        <locationX>1734</locationX>
-        <locationY>1586</locationY>
+        <locationX>1436</locationX>
+        <locationY>1538</locationY>
         <connector>
             <targetReference>Assign_new_Record2</targetReference>
         </connector>
@@ -545,8 +589,8 @@
     <recordCreates>
         <name>Create_Case_Team_Member_CN</name>
         <label>Create Case Team Member CN</label>
-        <locationX>766</locationX>
-        <locationY>1475</locationY>
+        <locationX>204</locationX>
+        <locationY>1538</locationY>
         <inputAssignments>
             <field>MemberId</field>
             <value>
@@ -571,8 +615,8 @@
     <recordCreates>
         <name>Create_Case_Team_Member_CR</name>
         <label>Create Case Team Member CR</label>
-        <locationX>1030</locationX>
-        <locationY>1477</locationY>
+        <locationX>732</locationX>
+        <locationY>1538</locationY>
         <inputAssignments>
             <field>MemberId</field>
             <value>
@@ -597,8 +641,8 @@
     <recordLookups>
         <name>Get_Care_Navigation_Record_Type</name>
         <label>Get Care Navigation Record Type</label>
-        <locationX>1096</locationX>
-        <locationY>398</locationY>
+        <locationX>600</locationX>
+        <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Get_Case_Team_Role</targetReference>
@@ -618,8 +662,8 @@
     <recordLookups>
         <name>Get_Care_Request_Record_Type</name>
         <label>Get Care Request Record Type</label>
-        <locationX>1096</locationX>
-        <locationY>290</locationY>
+        <locationX>600</locationX>
+        <locationY>242</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Get_Care_Navigation_Record_Type</targetReference>
@@ -639,8 +683,8 @@
     <recordLookups>
         <name>Get_Case</name>
         <label>Get Case</label>
-        <locationX>1096</locationX>
-        <locationY>182</locationY>
+        <locationX>600</locationX>
+        <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Get_Care_Request_Record_Type</targetReference>
@@ -660,8 +704,8 @@
     <recordLookups>
         <name>Get_Case_Team_Role</name>
         <label>Get Case Team Role</label>
-        <locationX>1096</locationX>
-        <locationY>506</locationY>
+        <locationX>600</locationX>
+        <locationY>458</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Assign_Care_Team_Member</targetReference>
@@ -679,10 +723,38 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <name>Get_Existing_Team_Member</name>
+        <label>Get Existing Team Member</label>
+        <locationX>336</locationX>
+        <locationY>1106</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Self_Record_Type</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>ParentId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Case.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>MemberId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CaseTeamMember</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Notification_Type</name>
         <label>Get Notification Type</label>
-        <locationX>1602</locationX>
-        <locationY>1994</locationY>
+        <locationX>1304</locationX>
+        <locationY>1946</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>In_App_Notification</targetReference>
@@ -702,8 +774,8 @@
     <recordLookups>
         <name>Get_Roles</name>
         <label>Get Roles</label>
-        <locationX>1448</locationX>
-        <locationY>830</locationY>
+        <locationX>1150</locationX>
+        <locationY>782</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Get_Users</targetReference>
@@ -723,8 +795,8 @@
     <recordLookups>
         <name>Get_Sub_Cases_Other_Users</name>
         <label>Get Sub Cases - Other Users</label>
-        <locationX>1448</locationX>
-        <locationY>1154</locationY>
+        <locationX>1150</locationX>
+        <locationY>1106</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Count_Records_Other</targetReference>
@@ -772,8 +844,8 @@
     <recordLookups>
         <name>Get_Sub_Cases_Self</name>
         <label>Get Sub Cases - Self</label>
-        <locationX>744</locationX>
-        <locationY>830</locationY>
+        <locationX>50</locationX>
+        <locationY>782</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Count_Records</targetReference>
@@ -821,8 +893,8 @@
     <recordLookups>
         <name>Get_Users</name>
         <label>Get Users</label>
-        <locationX>1448</locationX>
-        <locationY>938</locationY>
+        <locationX>1150</locationX>
+        <locationY>890</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Show_Users</targetReference>
@@ -850,8 +922,8 @@
     <screens>
         <name>Assign_Care_Team_Member</name>
         <label>Assign Care Team Member</label>
-        <locationX>1096</locationX>
-        <locationY>614</locationY>
+        <locationX>600</locationX>
+        <locationY>566</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -926,8 +998,8 @@
     <screens>
         <name>Error</name>
         <label>Error</label>
-        <locationX>1260</locationX>
-        <locationY>1255</locationY>
+        <locationX>600</locationX>
+        <locationY>2546</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -942,8 +1014,8 @@
     <screens>
         <name>Show_Users</name>
         <label>Show Users</label>
-        <locationX>1448</locationX>
-        <locationY>1046</locationY>
+        <locationX>1150</locationX>
+        <locationY>998</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -1011,8 +1083,8 @@
         <showHeader>true</showHeader>
     </screens>
     <start>
-        <locationX>970</locationX>
-        <locationY>48</locationY>
+        <locationX>474</locationX>
+        <locationY>0</locationY>
         <connector>
             <targetReference>Get_Case</targetReference>
         </connector>
