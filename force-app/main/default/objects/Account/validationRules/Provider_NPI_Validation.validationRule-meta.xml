@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Provider_NPI_Validation</fullName>
+    <active>true</active>
+    <description>Please specify Provider NPI# and check value</description>
+    <errorConditionFormula>((ISPICKVAL(pcphasnpi__c, &apos;Yes&apos;) &amp;&amp; pcpnpi__c=&apos;&apos;) ||
+ISPICKVAL(pcphasnpi__c, &apos;Yes&apos;) &amp;&amp;
+!REGEX(pcpnpi__c,&quot;^[0-9]{10}+$&quot;)) &amp;&amp;
+ RecordType.DeveloperName = &apos;Provider&apos;</errorConditionFormula>
+    <errorMessage>Please specify the Provider NPI # and check value</errorMessage>
+</ValidationRule>

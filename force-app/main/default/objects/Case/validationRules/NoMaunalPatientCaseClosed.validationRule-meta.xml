@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NoMaunalPatientCaseClosed</fullName>
+    <active>true</active>
+    <description>A user can&apos;t close a patient case manually.</description>
+    <errorConditionFormula>(
+    ISPICKVAL(Status, &quot;Consultation Completed - Pending CN&quot;) ||
+    ISPICKVAL(Status, &quot;Completed&quot;) ||
+    ISPICKVAL(Status, &quot;Merged&quot;)
+) 
+&amp;&amp; ISCHANGED(Status) 
+&amp;&amp; $Profile.Name != &quot;System Administrator&quot;
+&amp;&amp; $RecordType.DeveloperName = &quot;Patient_Case&quot;</errorConditionFormula>
+    <errorDisplayField>Status</errorDisplayField>
+    <errorMessage>Please close all related cases to close this case.</errorMessage>
+</ValidationRule>
