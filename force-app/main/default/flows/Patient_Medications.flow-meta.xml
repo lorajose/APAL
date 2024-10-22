@@ -2,27 +2,116 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>60.0</apiVersion>
     <assignments>
-        <name>Patient_Support_List</name>
-        <label>Patient Support List</label>
-        <locationX>402</locationX>
-        <locationY>782</locationY>
+        <name>Assign_Current_Record_ID</name>
+        <label>Assign Current Record ID</label>
+        <locationX>182</locationX>
+        <locationY>350</locationY>
         <assignmentItems>
-            <assignToReference>PatientSupports</assignToReference>
-            <operator>Add</operator>
+            <assignToReference>caseID</assignToReference>
+            <operator>Assign</operator>
             <value>
-                <elementReference>Get_Patient_Support</elementReference>
+                <elementReference>recordId</elementReference>
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Create_Patient_Supports</targetReference>
+            <targetReference>Case_Has_Patient</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Parent_Patient</name>
+        <label>Assign Parent Patient</label>
+        <locationX>490</locationX>
+        <locationY>566</locationY>
+        <assignmentItems>
+            <assignToReference>VarPatientId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Current_Case.Parent.ContactId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Medication_List</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Parent_Record_ID</name>
+        <label>Assign Parent Record ID</label>
+        <locationX>622</locationX>
+        <locationY>350</locationY>
+        <assignmentItems>
+            <assignToReference>caseID</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Current_Case.ParentId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Parent_Case_Has_Patient</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Patient</name>
+        <label>Assign Patient</label>
+        <locationX>50</locationX>
+        <locationY>566</locationY>
+        <assignmentItems>
+            <assignToReference>VarPatientId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Current_Case.ContactId</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Medication_List</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Patient_Medication_List</name>
+        <label>Patient Medication List</label>
+        <locationX>490</locationX>
+        <locationY>1382</locationY>
+        <assignmentItems>
+            <assignToReference>PatientMedications</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_Patient_Medication</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_1</targetReference>
         </connector>
     </assignments>
     <decisions>
+        <name>Case_Has_Patient</name>
+        <label>Case Has Patient</label>
+        <locationX>182</locationX>
+        <locationY>458</locationY>
+        <defaultConnector>
+            <targetReference>Get_Medication_List</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Patient</defaultConnectorLabel>
+        <rules>
+            <name>Has_Patient</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Current_Case.ContactId</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Patient</targetReference>
+            </connector>
+            <label>Has Patient</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>check_action_button</name>
         <label>check action button</label>
-        <locationX>314</locationX>
-        <locationY>1082</locationY>
-        <defaultConnectorLabel>Default</defaultConnectorLabel>
+        <locationX>402</locationX>
+        <locationY>1682</locationY>
+        <defaultConnectorLabel>default</defaultConnectorLabel>
         <rules>
             <name>Cancel</name>
             <conditionLogic>and</conditionLogic>
@@ -34,7 +123,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Delete_Supports</targetReference>
+                <targetReference>Delete_Records_1</targetReference>
             </connector>
             <label>Cancel</label>
         </rules>
@@ -54,18 +143,68 @@
             <label>Save</label>
         </rules>
     </decisions>
-    <environments>Default</environments>
-    <interviewLabel>Patient Support {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Patient Support</label>
-    <loops>
-        <name>Create_Patient_Supports</name>
-        <label>Create Patient Supports</label>
-        <locationX>314</locationX>
+    <decisions>
+        <name>Parent_Case_Has_Patient</name>
+        <label>Parent Case Has Patient</label>
+        <locationX>622</locationX>
         <locationY>458</locationY>
-        <collectionReference>Support1.outputSelectedRows</collectionReference>
+        <defaultConnector>
+            <targetReference>Get_Medication_List</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No Parent Patient</defaultConnectorLabel>
+        <rules>
+            <name>Has_Parent_Patient</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Current_Case.Parent.ContactId</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Parent_Patient</targetReference>
+            </connector>
+            <label>Has Parent Patient</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Parent_or_Subcase</name>
+        <label>Parent or Subcase</label>
+        <locationX>402</locationX>
+        <locationY>242</locationY>
+        <defaultConnector>
+            <targetReference>Assign_Parent_Record_ID</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Subcase</defaultConnectorLabel>
+        <rules>
+            <name>Parent_Case</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Current_Case.RecordType.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Patient Case</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Current_Record_ID</targetReference>
+            </connector>
+            <label>Parent Case</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>Patient Medications {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Patient Medications</label>
+    <loops>
+        <name>Loop_1</name>
+        <label>Loop 1</label>
+        <locationX>402</locationX>
+        <locationY>1058</locationY>
+        <collectionReference>MedicationListDatatable.outputSelectedRows</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Create_Support</targetReference>
+            <targetReference>Create_Patient_Medications</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
             <targetReference>Input</targetReference>
@@ -91,18 +230,24 @@
     </processMetadataValues>
     <processType>Flow</processType>
     <recordCreates>
-        <name>Create_Support</name>
-        <label>Create Support</label>
-        <locationX>402</locationX>
-        <locationY>566</locationY>
-        <assignRecordIdToReference>CreatedPatientSupport.Id</assignRecordIdToReference>
+        <name>Create_Patient_Medications</name>
+        <label>Create Patient Medications</label>
+        <locationX>490</locationX>
+        <locationY>1166</locationY>
+        <assignRecordIdToReference>CreatedPatientMedication.Id</assignRecordIdToReference>
         <connector>
-            <targetReference>Get_Patient_Support</targetReference>
+            <targetReference>Get_Patient_Medication</targetReference>
         </connector>
         <inputAssignments>
             <field>Case__c</field>
             <value>
-                <elementReference>recordId</elementReference>
+                <elementReference>caseID</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Medication_List__c</field>
+            <value>
+                <elementReference>Loop_1.Id</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -111,29 +256,23 @@
                 <elementReference>VarPatientId</elementReference>
             </value>
         </inputAssignments>
-        <inputAssignments>
-            <field>Support__c</field>
-            <value>
-                <elementReference>Create_Patient_Supports.Id</elementReference>
-            </value>
-        </inputAssignments>
-        <object>Patient_Support__c</object>
+        <object>Patient_Medication__c</object>
     </recordCreates>
     <recordDeletes>
-        <name>Delete_Supports</name>
-        <label>Delete Supports</label>
-        <locationX>50</locationX>
-        <locationY>1190</locationY>
-        <inputReference>PatientSupports</inputReference>
+        <name>Delete_Records_1</name>
+        <label>Delete Records 1</label>
+        <locationX>138</locationX>
+        <locationY>1790</locationY>
+        <inputReference>PatientMedications</inputReference>
     </recordDeletes>
     <recordLookups>
         <name>Get_Current_Case</name>
         <label>Get Current Case</label>
-        <locationX>314</locationX>
+        <locationX>402</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Get_Supports</targetReference>
+            <targetReference>Parent_or_Subcase</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -148,50 +287,50 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>Get_Patient_Support</name>
-        <label>Get Patient Support</label>
+        <name>Get_Medication_List</name>
+        <label>Get Medication List</label>
         <locationX>402</locationX>
-        <locationY>674</locationY>
+        <locationY>842</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Patient_Support_List</targetReference>
+            <targetReference>Medication</targetReference>
+        </connector>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Medication__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Patient_Medication</name>
+        <label>Get Patient Medication</label>
+        <locationX>490</locationX>
+        <locationY>1274</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Patient_Medication_List</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>CreatedPatientSupport.Id</elementReference>
+                <elementReference>CreatedPatientMedication.Id</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Patient_Support__c</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
-        <name>Get_Supports</name>
-        <label>Get Supports</label>
-        <locationX>314</locationX>
-        <locationY>242</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Supports</targetReference>
-        </connector>
-        <getFirstRecordOnly>false</getFirstRecordOnly>
-        <object>Support__c</object>
+        <object>Patient_Medication__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordUpdates>
         <name>Update_Submission_Completed</name>
         <label>Update Submission Completed</label>
-        <locationX>314</locationX>
-        <locationY>1298</locationY>
+        <locationX>402</locationX>
+        <locationY>1898</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>CreatedPatientSupport.Id</elementReference>
+                <elementReference>CreatedPatientMedication.Id</elementReference>
             </value>
         </filters>
         <inputAssignments>
@@ -200,24 +339,23 @@
                 <booleanValue>true</booleanValue>
             </value>
         </inputAssignments>
-        <object>Patient_Support__c</object>
+        <object>Patient_Medication__c</object>
     </recordUpdates>
     <recordUpdates>
         <name>UpdateEdits</name>
         <label>UpdateEdits</label>
-        <locationX>314</locationX>
-        <locationY>1190</locationY>
+        <locationX>402</locationX>
+        <locationY>1790</locationY>
         <connector>
             <targetReference>Update_Submission_Completed</targetReference>
         </connector>
-        <inputReference>PatientSupportDatatable.outputEditedRows</inputReference>
+        <inputReference>PatientMedicationDatatable.outputEditedRows</inputReference>
     </recordUpdates>
-    <runInMode>SystemModeWithoutSharing</runInMode>
     <screens>
         <name>Input</name>
         <label>Input</label>
-        <locationX>314</locationX>
-        <locationY>974</locationY>
+        <locationX>402</locationX>
+        <locationY>1574</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -226,13 +364,19 @@
             <targetReference>check_action_button</targetReference>
         </connector>
         <fields>
-            <name>PatientSupportDatatable</name>
+            <name>PatientMedicationDatatable</name>
             <dataTypeMappings>
                 <typeName>T</typeName>
-                <typeValue>Patient_Support__c</typeValue>
+                <typeValue>Patient_Medication__c</typeValue>
             </dataTypeMappings>
             <extensionName>c:datatable</extensionName>
             <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>displayAll</name>
+                <value>
+                    <booleanValue>true</booleanValue>
+                </value>
+            </inputParameters>
             <inputParameters>
                 <name>cb_displayAll</name>
                 <value>
@@ -240,7 +384,13 @@
                 </value>
             </inputParameters>
             <inputParameters>
-                <name>displayAll</name>
+                <name>objectName</name>
+                <value>
+                    <stringValue>Patient_Medication__c</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>isDisplayHeader</name>
                 <value>
                     <booleanValue>true</booleanValue>
                 </value>
@@ -252,15 +402,87 @@
                 </value>
             </inputParameters>
             <inputParameters>
-                <name>cb_isShowSearchBar</name>
+                <name>tableLabel</name>
+                <value>
+                    <stringValue>Medication</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>columnEdits</name>
+                <value>
+                    <stringValue>All</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>columnFields</name>
+                <value>
+                    <stringValue>Medication__c,MedicationNotes__c,Medication_Changes__c,Current_Medication__c</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>cb_matchCaseOnFilters</name>
                 <value>
                     <stringValue>CB_FALSE</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
-                <name>isDisplayHeader</name>
+                <name>columnWidths</name>
+                <value>
+                    <stringValue>Medication__c:0, MedicationNotes__c:0, Medication_Changes__c:0, Current_Medication__c:0</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>suppressBottomBar</name>
                 <value>
                     <booleanValue>true</booleanValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>cb_suppressBottomBar</name>
+                <value>
+                    <stringValue>CB_TRUE</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>cb_navigateNextOnSave</name>
+                <value>
+                    <stringValue>CB_FALSE</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>hideClearSelectionButton</name>
+                <value>
+                    <booleanValue>true</booleanValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>cb_hideClearSelectionButton</name>
+                <value>
+                    <stringValue>CB_TRUE</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>cb_not_suppressNameFieldLink</name>
+                <value>
+                    <stringValue>CB_FALSE</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>allowOverflow</name>
+                <value>
+                    <booleanValue>true</booleanValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>cb_allowOverflow</name>
+                <value>
+                    <stringValue>CB_TRUE</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>cb_allowNoneToBeChosen</name>
+                <value>
+                    <stringValue>CB_FALSE</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -282,141 +504,15 @@
                 </value>
             </inputParameters>
             <inputParameters>
-                <name>cb_suppressBottomBar</name>
+                <name>tableData</name>
                 <value>
-                    <stringValue>CB_TRUE</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>cb_navigateNextOnSave</name>
-                <value>
-                    <stringValue>CB_FALSE</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>columnFields</name>
-                <value>
-                    <stringValue>SupportName__c,Scheduled__c,Notes__c</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>cb_matchCaseOnFilters</name>
-                <value>
-                    <stringValue>CB_FALSE</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>columnWidths</name>
-                <value>
-                    <stringValue>SupportName__c:0, Scheduled__c:0, Notes__c:0</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>cb_hideClearSelectionButton</name>
-                <value>
-                    <stringValue>CB_TRUE</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>hideClearSelectionButton</name>
-                <value>
-                    <booleanValue>true</booleanValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>cb_not_suppressNameFieldLink</name>
-                <value>
-                    <stringValue>CB_FALSE</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>cb_allowNoneToBeChosen</name>
-                <value>
-                    <stringValue>CB_FALSE</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>allowOverflow</name>
-                <value>
-                    <booleanValue>true</booleanValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>cb_allowOverflow</name>
-                <value>
-                    <stringValue>CB_TRUE</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>columnEdits</name>
-                <value>
-                    <stringValue>All</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>columnFilters</name>
-                <value>
-                    <stringValue>All</stringValue>
+                    <elementReference>PatientMedications</elementReference>
                 </value>
             </inputParameters>
             <inputParameters>
                 <name>columnFlexes</name>
                 <value>
                     <stringValue>All</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>suppressBottomBar</name>
-                <value>
-                    <booleanValue>true</booleanValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>hideCheckboxColumn</name>
-                <value>
-                    <booleanValue>true</booleanValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>cb_hideCheckboxColumn</name>
-                <value>
-                    <stringValue>CB_TRUE</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>cb_isRequired</name>
-                <value>
-                    <stringValue>CB_FALSE</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>cb_singleRowSelection</name>
-                <value>
-                    <stringValue>CB_FALSE</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>not_suppressNameFieldLink</name>
-                <value>
-                    <booleanValue>true</booleanValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>objectName</name>
-                <value>
-                    <stringValue>Patient_Support__c</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>tableData</name>
-                <value>
-                    <elementReference>PatientSupports</elementReference>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>columnWraps</name>
-                <value>
-                    <stringValue>SupportName__c:true, Scheduled__c:false, Notes__c:true</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -444,9 +540,33 @@
                 </value>
             </inputParameters>
             <inputParameters>
-                <name>tableLabel</name>
+                <name>hideCheckboxColumn</name>
                 <value>
-                    <stringValue>Patient Support</stringValue>
+                    <booleanValue>true</booleanValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>cb_hideCheckboxColumn</name>
+                <value>
+                    <stringValue>CB_TRUE</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>cb_isRequired</name>
+                <value>
+                    <stringValue>CB_FALSE</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>cb_singleRowSelection</name>
+                <value>
+                    <stringValue>CB_FALSE</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>columnWraps</name>
+                <value>
+                    <stringValue>Medication__c:true, MedicationNotes__c:true, Medication_Changes__c:true, Current_Medication__c:false</stringValue>
                 </value>
             </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
@@ -496,82 +616,34 @@
         <showHeader>true</showHeader>
     </screens>
     <screens>
-        <name>Supports</name>
-        <label>Supports</label>
-        <locationX>314</locationX>
-        <locationY>350</locationY>
+        <name>Medication</name>
+        <label>Medication</label>
+        <locationX>402</locationX>
+        <locationY>950</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>Create_Patient_Supports</targetReference>
+            <targetReference>Loop_1</targetReference>
         </connector>
         <fields>
-            <name>Support1</name>
+            <name>MedicationListDatatable</name>
             <dataTypeMappings>
                 <typeName>T</typeName>
-                <typeValue>Support__c</typeValue>
+                <typeValue>Medication__c</typeValue>
             </dataTypeMappings>
             <extensionName>c:datatable</extensionName>
             <fieldType>ComponentInstance</fieldType>
             <inputParameters>
-                <name>cb_displayAll</name>
-                <value>
-                    <stringValue>CB_FALSE</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
                 <name>objectName</name>
                 <value>
-                    <stringValue>Support__c</stringValue>
+                    <stringValue>Medication__c</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
-                <name>isDisplayHeader</name>
+                <name>tableData</name>
                 <value>
-                    <booleanValue>true</booleanValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>cb_isDisplayHeader</name>
-                <value>
-                    <stringValue>CB_TRUE</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>tableLabel</name>
-                <value>
-                    <stringValue>Supports</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>tableIcon</name>
-                <value>
-                    <stringValue>custom:custom26</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>showPagination</name>
-                <value>
-                    <booleanValue>true</booleanValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>cb_showPagination</name>
-                <value>
-                    <stringValue>CB_TRUE</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>showRowNumbers</name>
-                <value>
-                    <booleanValue>true</booleanValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>cb_showRowNumbers</name>
-                <value>
-                    <stringValue>CB_TRUE</stringValue>
+                    <elementReference>Get_Medication_List</elementReference>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -589,7 +661,7 @@
             <inputParameters>
                 <name>columnFields</name>
                 <value>
-                    <stringValue>Name,Category__c,Description__c</stringValue>
+                    <stringValue>Name,Brand_Name_s__c,Category__c,Description__c</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -599,15 +671,9 @@
                 </value>
             </inputParameters>
             <inputParameters>
-                <name>columnFlexes</name>
-                <value>
-                    <stringValue>All</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
                 <name>columnWidths</name>
                 <value>
-                    <stringValue>Name:0, Category__c:0, Description__c:0</stringValue>
+                    <stringValue>Name:0, Brand_Name_s__c:0, Category__c:0, Description__c:0</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -623,25 +689,13 @@
                 </value>
             </inputParameters>
             <inputParameters>
-                <name>cb_singleRowSelection</name>
+                <name>cb_not_suppressNameFieldLink</name>
                 <value>
                     <stringValue>CB_FALSE</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
-                <name>recordsPerPage</name>
-                <value>
-                    <numberValue>100.0</numberValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>tableData</name>
-                <value>
-                    <elementReference>Get_Supports</elementReference>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>cb_not_suppressNameFieldLink</name>
+                <name>cb_allowNoneToBeChosen</name>
                 <value>
                     <stringValue>CB_FALSE</stringValue>
                 </value>
@@ -659,9 +713,51 @@
                 </value>
             </inputParameters>
             <inputParameters>
+                <name>showPagination</name>
+                <value>
+                    <booleanValue>true</booleanValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>cb_showPagination</name>
+                <value>
+                    <stringValue>CB_TRUE</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>recordsPerPage</name>
+                <value>
+                    <numberValue>100.0</numberValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>tableLabel</name>
+                <value>
+                    <stringValue>Medications</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>columnFlexes</name>
+                <value>
+                    <stringValue>All</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>showRowNumbers</name>
+                <value>
+                    <booleanValue>true</booleanValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>cb_showRowNumbers</name>
+                <value>
+                    <stringValue>CB_TRUE</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
                 <name>columnWraps</name>
                 <value>
-                    <stringValue>Name:true, Category__c:true, Description__c:true</stringValue>
+                    <stringValue>Name:true, Brand_Name_s__c:true, Category__c:true, Description__c:true</stringValue>
                 </value>
             </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
@@ -672,7 +768,7 @@
         <showHeader>true</showHeader>
     </screens>
     <start>
-        <locationX>188</locationX>
+        <locationX>276</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Current_Case</targetReference>
@@ -680,20 +776,27 @@
     </start>
     <status>Active</status>
     <variables>
-        <name>CreatedPatientSupport</name>
+        <name>caseID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>CreatedPatientMedication</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
-        <objectType>Patient_Support__c</objectType>
+        <objectType>Patient_Medication__c</objectType>
     </variables>
     <variables>
-        <name>PatientSupports</name>
+        <name>PatientMedications</name>
         <dataType>SObject</dataType>
         <isCollection>true</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
-        <objectType>Patient_Support__c</objectType>
+        <objectType>Patient_Medication__c</objectType>
     </variables>
     <variables>
         <name>recordId</name>
