@@ -400,7 +400,7 @@
             <inputParameters>
                 <name>recordsPerPage</name>
                 <value>
-                    <numberValue>10.0</numberValue>
+                    <numberValue>100.0</numberValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -479,6 +479,12 @@
                 <name>cb_singleRowSelection</name>
                 <value>
                     <stringValue>CB_FALSE</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>columnWraps</name>
+                <value>
+                    <stringValue>Screener_Name__c:true, Notes__c:true, Aproximate_Date_Screened__c:false, Positive_Outcome__c:false</stringValue>
                 </value>
             </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
@@ -627,7 +633,7 @@
             <inputParameters>
                 <name>recordsPerPage</name>
                 <value>
-                    <numberValue>10.0</numberValue>
+                    <numberValue>100.0</numberValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -688,6 +694,12 @@
                 <name>tableIcon</name>
                 <value>
                     <stringValue>custom:custom78</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>columnWraps</name>
+                <value>
+                    <stringValue>Name:true, Screener_Type__c:true, Positive_Outcome__c:true, Other_Notes__c:true</stringValue>
                 </value>
             </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>

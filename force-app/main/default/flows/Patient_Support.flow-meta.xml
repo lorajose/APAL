@@ -278,7 +278,7 @@
             <inputParameters>
                 <name>recordsPerPage</name>
                 <value>
-                    <numberValue>10.0</numberValue>
+                    <numberValue>100.0</numberValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -416,7 +416,7 @@
             <inputParameters>
                 <name>columnWraps</name>
                 <value>
-                    <stringValue>true</stringValue>
+                    <stringValue>SupportName__c:true, Scheduled__c:false, Notes__c:true</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -623,12 +623,6 @@
                 </value>
             </inputParameters>
             <inputParameters>
-                <name>isRequired</name>
-                <value>
-                    <booleanValue>true</booleanValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
                 <name>cb_singleRowSelection</name>
                 <value>
                     <stringValue>CB_FALSE</stringValue>
@@ -637,7 +631,7 @@
             <inputParameters>
                 <name>recordsPerPage</name>
                 <value>
-                    <numberValue>10.0</numberValue>
+                    <numberValue>100.0</numberValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -662,6 +656,12 @@
                 <name>cb_showRecordCount</name>
                 <value>
                     <stringValue>CB_TRUE</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>columnWraps</name>
+                <value>
+                    <stringValue>Name:true, Category__c:true, Description__c:true</stringValue>
                 </value>
             </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>

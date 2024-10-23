@@ -418,7 +418,7 @@
             <inputParameters>
                 <name>recordsPerPage</name>
                 <value>
-                    <numberValue>10.0</numberValue>
+                    <numberValue>100.0</numberValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -479,6 +479,24 @@
                 <name>cb_singleRowSelection</name>
                 <value>
                     <stringValue>CB_FALSE</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>cb_isUserDefinedObject</name>
+                <value>
+                    <stringValue>CB_FALSE</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>cb_isSerializedRecordData</name>
+                <value>
+                    <stringValue>CB_FALSE</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>columnWraps</name>
+                <value>
+                    <stringValue>Substance__c:true, Notes__c:true, Frequency_of_Substance_Use__c:true</stringValue>
                 </value>
             </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
@@ -595,12 +613,6 @@
                 </value>
             </inputParameters>
             <inputParameters>
-                <name>isRequired</name>
-                <value>
-                    <booleanValue>true</booleanValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
                 <name>cb_isRequired</name>
                 <value>
                     <stringValue>CB_TRUE</stringValue>
@@ -669,7 +681,13 @@
             <inputParameters>
                 <name>recordsPerPage</name>
                 <value>
-                    <numberValue>10.0</numberValue>
+                    <numberValue>100.0</numberValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>columnWraps</name>
+                <value>
+                    <stringValue>Name:true, Substance_Category__c:true</stringValue>
                 </value>
             </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
