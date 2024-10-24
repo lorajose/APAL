@@ -322,7 +322,7 @@
             <inputParameters>
                 <name>columnFields</name>
                 <value>
-                    <stringValue>Screener_Name__c,Notes__c,Aproximate_Date_Screened__c,Positive_Outcome__c</stringValue>
+                    <stringValue>Screener_Name__c,Notes__c,Aproximate_Date_Screened__c,Positive_Outcome__c,Score__c</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -334,7 +334,7 @@
             <inputParameters>
                 <name>columnWidths</name>
                 <value>
-                    <stringValue>Screener_Name__c:0, Notes__c:0, Aproximate_Date_Screened__c:0, Positive_Outcome__c:0</stringValue>
+                    <stringValue>Screener_Name__c:0, Notes__c:0, Aproximate_Date_Screened__c:0, Positive_Outcome__c:0, Score__c:0</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -484,7 +484,13 @@
             <inputParameters>
                 <name>columnWraps</name>
                 <value>
-                    <stringValue>Screener_Name__c:true, Notes__c:true, Aproximate_Date_Screened__c:false, Positive_Outcome__c:false</stringValue>
+                    <stringValue>Screener_Name__c:true, Notes__c:true, Aproximate_Date_Screened__c:false, Positive_Outcome__c:false, Score__c:true</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>columnFilters</name>
+                <value>
+                    <stringValue>All</stringValue>
                 </value>
             </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
