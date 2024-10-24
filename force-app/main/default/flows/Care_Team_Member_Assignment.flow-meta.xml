@@ -389,6 +389,12 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Call_Back_and_Communication_Preference__c</field>
+            <value>
+                <elementReference>Call_Back_and_Communication_Preference2</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>Notes__c</field>
             <value>
                 <elementReference>Notes</elementReference>
@@ -439,6 +445,12 @@
             <field>Assignment_Timestamp__c</field>
             <value>
                 <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Call_Back_and_Communication_Preference__c</field>
+            <value>
+                <elementReference>Call_Back_and_Communication_Preference</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -495,6 +507,12 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Call_Back_and_Communication_Preference__c</field>
+            <value>
+                <elementReference>Call_Back_and_Communication_Preference</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>Notes__c</field>
             <value>
                 <elementReference>NotesSelf</elementReference>
@@ -545,6 +563,12 @@
             <field>Assignment_Timestamp__c</field>
             <value>
                 <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Call_Back_and_Communication_Preference__c</field>
+            <value>
+                <elementReference>Call_Back_and_Communication_Preference2</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -957,6 +981,24 @@
             </visibilityRule>
         </fields>
         <fields>
+            <name>Call_Back_and_Communication_Preference</name>
+            <dataType>String</dataType>
+            <fieldText>Call Back and Communication Preference</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Assign_to_Self</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <booleanValue>true</booleanValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
             <name>Assign_Care_Team_Member_Section1</name>
             <fieldType>RegionContainer</fieldType>
             <fields>
@@ -1074,6 +1116,14 @@
             <name>Notes</name>
             <dataType>String</dataType>
             <fieldText>Instructions</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>Call_Back_and_Communication_Preference2</name>
+            <dataType>String</dataType>
+            <fieldText>Call Back and Communication Preference</fieldText>
             <fieldType>InputField</fieldType>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
