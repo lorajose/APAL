@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CompactLayout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Support_Compact</fullName>
+    <fields>SupportName__c</fields>
+    <fields>Case__c</fields>
+    <fields>Suspended__c</fields>
+    <fields>Scheduled__c</fields>
+    <fields>Going__c</fields>
+    <fields>Appointment_Completed__c</fields>
+    <fields>Appointment_Completed_Ineffective__c</fields>
+    <fields>Care_Not_Applicable__c</fields>
+    <label>Support Compact</label>
+</CompactLayout>
