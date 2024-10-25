@@ -7,5 +7,6 @@
 ISPICKVAL(pcphasnpi__c, &apos;Yes&apos;) &amp;&amp;
 !REGEX(pcpnpi__c,&quot;^[0-9]{10}+$&quot;)) &amp;&amp;
  RecordType.DeveloperName = &apos;Provider&apos;</errorConditionFormula>
-    <errorMessage>Please specify the Provider NPI # and check value</errorMessage>
+    <errorDisplayField>pcpnpi__c</errorDisplayField>
+    <errorMessage>If &quot;Does the provider have NPI #?&quot; is set to &quot;Yes&quot; please enter a 10 digit Provider NPI #.</errorMessage>
 </ValidationRule>
