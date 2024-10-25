@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Birthday_in_Future</fullName>
+    <active>true</active>
+    <description>You can&apos;t have a birthday in the future.</description>
+    <errorConditionFormula>ydob_v2__c &gt; TODAY()</errorConditionFormula>
+    <errorDisplayField>ydob_v2__c</errorDisplayField>
+    <errorMessage>You can&apos;t have a birthday in the future. Please enter a valid Patient DOB</errorMessage>
+</ValidationRule>
