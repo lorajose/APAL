@@ -8,8 +8,7 @@
     ISPICKVAL(Status, &quot;Completed&quot;) ||
     ISPICKVAL(Status, &quot;Merged&quot;)
 ) 
-&amp;&amp; ISCHANGED(Status) 
-&amp;&amp; $Profile.Name != &quot;System Administrator&quot;
+&amp;&amp; Not(ISCHANGED(Toggle__c))
 &amp;&amp; $RecordType.DeveloperName = &quot;Patient_Case&quot;</errorConditionFormula>
     <errorDisplayField>Status</errorDisplayField>
     <errorMessage>Please close all related cases to close this case.</errorMessage>
