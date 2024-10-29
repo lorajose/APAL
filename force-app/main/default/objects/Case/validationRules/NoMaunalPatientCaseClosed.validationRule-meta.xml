@@ -4,10 +4,11 @@
     <active>true</active>
     <description>A user can&apos;t close a patient case manually.</description>
     <errorConditionFormula>(
-    ISPICKVAL(Status, &quot;Consultation Completed - Pending CN&quot;) ||
-    ISPICKVAL(Status, &quot;Completed&quot;) ||
-    ISPICKVAL(Status, &quot;Merged&quot;)
-) 
+ISPICKVAL(Status, &quot;Consultation Completed - Pending CN&quot;) ||
+ISPICKVAL(Status, &quot;Completed&quot;) ||
+ISPICKVAL(Status, &quot;Merged&quot;)
+)
+&amp;&amp; isChanged(Status)
 &amp;&amp; Not(ISCHANGED(Toggle__c))
 &amp;&amp; $RecordType.DeveloperName = &quot;Patient_Case&quot;</errorConditionFormula>
     <errorDisplayField>Status</errorDisplayField>
