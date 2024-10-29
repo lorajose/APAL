@@ -416,7 +416,7 @@
             <inputParameters>
                 <name>columnFields</name>
                 <value>
-                    <stringValue>Medication__c,MedicationNotes__c,Medication_Changes__c,Current_Medication__c</stringValue>
+                    <stringValue>Medication__c,MedicationNotes__c,Medication_Changes__c,Current_Medication__c,Frequency__c,Amount__c,Dosing_Unit__c</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -428,7 +428,7 @@
             <inputParameters>
                 <name>columnWidths</name>
                 <value>
-                    <stringValue>Medication__c:0, MedicationNotes__c:0, Medication_Changes__c:0, Current_Medication__c:0</stringValue>
+                    <stringValue>Medication__c:0, MedicationNotes__c:0, Medication_Changes__c:0, Current_Medication__c:0, Frequency__c:0, Amount__c:0, Dosing_Unit__c:0</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -566,7 +566,13 @@
             <inputParameters>
                 <name>columnWraps</name>
                 <value>
-                    <stringValue>Medication__c:true, MedicationNotes__c:true, Medication_Changes__c:true, Current_Medication__c:false</stringValue>
+                    <stringValue>Medication__c:true, MedicationNotes__c:true, Medication_Changes__c:true, Current_Medication__c:false, Frequency__c:true, Amount__c:true, Dosing_Unit__c:true</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>columnFilters</name>
+                <value>
+                    <stringValue>All</stringValue>
                 </value>
             </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
