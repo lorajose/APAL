@@ -329,7 +329,7 @@
         <label>Delete Records 2</label>
         <locationX>138</locationX>
         <locationY>2414</locationY>
-        <inputReference>PatientMedications</inputReference>
+        <inputReference>UpdatedPatientMedications</inputReference>
     </recordDeletes>
     <recordLookups>
         <name>Get_Current_Case</name>
