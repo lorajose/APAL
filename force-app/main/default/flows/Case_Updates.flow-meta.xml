@@ -401,6 +401,11 @@
         </rules>
     </decisions>
     <environments>Default</environments>
+    <formulas>
+        <name>toggle</name>
+        <dataType>Boolean</dataType>
+        <expression>IF({!$Record.Toggle__c}= True, False, True)</expression>
+    </formulas>
     <interviewLabel>Case Updates {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Case Updates</label>
     <processMetadataValues>
@@ -541,6 +546,12 @@
                 <stringValue>Escalated</stringValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <field>Toggle__c</field>
+            <value>
+                <elementReference>toggle</elementReference>
+            </value>
+        </inputAssignments>
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <recordUpdates>
@@ -555,6 +566,12 @@
             <field>Status</field>
             <value>
                 <stringValue>Assigned</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Toggle__c</field>
+            <value>
+                <elementReference>toggle</elementReference>
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
@@ -573,6 +590,12 @@
                 <stringValue>Completed</stringValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <field>Toggle__c</field>
+            <value>
+                <elementReference>toggle</elementReference>
+            </value>
+        </inputAssignments>
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <recordUpdates>
@@ -587,6 +610,12 @@
             <field>Status</field>
             <value>
                 <stringValue>Consultation Completed - Pending CN</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Toggle__c</field>
+            <value>
+                <elementReference>toggle</elementReference>
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
@@ -605,6 +634,12 @@
                 <stringValue>In Progress</stringValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <field>Toggle__c</field>
+            <value>
+                <elementReference>toggle</elementReference>
+            </value>
+        </inputAssignments>
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <recordUpdates>
@@ -621,6 +656,12 @@
                 <stringValue>In Progress</stringValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <field>Toggle__c</field>
+            <value>
+                <elementReference>toggle</elementReference>
+            </value>
+        </inputAssignments>
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <recordUpdates>
@@ -635,6 +676,12 @@
             <field>Status</field>
             <value>
                 <stringValue>Assigned</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Toggle__c</field>
+            <value>
+                <elementReference>toggle</elementReference>
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>

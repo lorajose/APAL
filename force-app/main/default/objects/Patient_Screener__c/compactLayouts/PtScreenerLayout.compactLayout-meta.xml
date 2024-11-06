@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CompactLayout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PtScreenerLayout</fullName>
+    <fields>Name</fields>
+    <fields>Screener__c</fields>
+    <fields>Aproximate_Date_Screened__c</fields>
+    <fields>Positive_Outcome__c</fields>
+    <fields>Notes__c</fields>
+    <fields>Case__c</fields>
+    <label>PtScreenerLayout</label>
+</CompactLayout>
