@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Dosing_Unit__c</fullName>
+    <externalId>false</externalId>
+    <label>Dosing Unit</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>mg (milligrams)</fullName>
+                <default>false</default>
+                <label>mg (milligrams)</label>
+            </value>
+            <value>
+                <fullName>g (grams)</fullName>
+                <default>false</default>
+                <label>g (grams)</label>
+            </value>
+            <value>
+                <fullName>mcg (micrograms)</fullName>
+                <default>false</default>
+                <label>mcg (micrograms)</label>
+            </value>
+            <value>
+                <fullName>mL (milliliters)</fullName>
+                <default>false</default>
+                <label>mL (milliliters)</label>
+            </value>
+            <value>
+                <fullName>Units (for medications measured in units)</fullName>
+                <default>false</default>
+                <label>Units (for medications measured in units)</label>
+            </value>
+            <value>
+                <fullName>Custom</fullName>
+                <default>false</default>
+                <label>Custom</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
