@@ -1,0 +1,1047 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Practice</fullName>
+    <active>true</active>
+    <label>Practice</label>
+    <picklistValues>
+        <picklist>AccountSource</picklist>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Partner Referral</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Phone Inquiry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Purchased List</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Web</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Active__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>CustomerPriority__c</picklist>
+        <values>
+            <fullName>High</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Low</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medium</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Industry</picklist>
+        <values>
+            <fullName>Agriculture</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Apparel</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Banking</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Biotechnology</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chemicals</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Communications</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Construction</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Consulting</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Education</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Electronics</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Energy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Engineering</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Entertainment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Environmental</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Finance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Food %26 Beverage</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Government</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Healthcare</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hospitality</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Insurance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Machinery</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manufacturing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Media</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not For Profit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Recreation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Retail</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shipping</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Technology</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Telecommunications</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transportation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Utilities</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Ownership</picklist>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Private</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Public</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Subsidiary</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Practice_Locality__c</picklist>
+        <values>
+            <fullName>Accomack County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Albemarle County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Alexandria City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Alleghany County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Amelia County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Amherst County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Appomattox County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Arlington County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Augusta County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bath County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bedford County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bland County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Botetourt County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bristol City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Brunswick County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Buchanan County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Buckingham County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Buena Vista City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Campbell County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Caroline County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Carroll County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Charles City County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Charlotte County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Charlottesville City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chesapeake City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chesterfield County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Clarke County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Colonial Heights City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Covington City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Craig County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Culpeper County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cumberland County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Danville City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dickenson County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dinwiddie County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Emporia City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Essex County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fairfax City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fairfax County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Falls Church City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fauquier County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Floyd County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fluvanna County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Franklin City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Franklin County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Frederick County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fredericksburg City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Galax City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Giles County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gloucester County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Goochland County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Grayson County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Greene County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Greensville County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Halifax County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hampton City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hanover County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Harrisonburg City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Henrico County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Henry County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Highland County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hopewell City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Isle of Wight County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>James City County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>King George County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>King William County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>King and Queen County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lancaster County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lee County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lexington City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Loudoun County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Louisa County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lunenburg County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lynchburg City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Madison County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manassas City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Manassas Park City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Martinsville City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mathews County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mecklenburg County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Middlesex County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Montgomery County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nelson County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New Kent County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Newport News City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Norfolk City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Northampton County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Northumberland County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Norton City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nottoway County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OUT OF STATE %28Outside Virginia%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Orange County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Page County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Patrick County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Petersburg City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pittsylvania County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Poquoson City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Portsmouth City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Powhatan County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Prince Edward County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Prince George County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Prince William County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pulaski County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Radford City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rappahannock County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Richmond City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Richmond County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Roanoke City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Roanoke County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rockbridge County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rockingham County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Russell County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Salem City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Scott County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Shenandoah County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Smyth County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Southampton County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Spotsylvania County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Stafford County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Staunton City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Suffolk City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Surry County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sussex County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tazewell County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Virginia Beach City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Warren County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Washington County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Waynesboro City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Westmoreland County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Williamsburg City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Winchester City</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wise County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Wythe County</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>York County</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Rating</picklist>
+        <values>
+            <fullName>Cold</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hot</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Warm</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SLA__c</picklist>
+        <values>
+            <fullName>Bronze</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Gold</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Platinum</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Silver</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Type</picklist>
+        <values>
+            <fullName>Channel Partner %2F Reseller</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer - Channel</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Customer - Direct</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Installation Partner</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Prospect</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Technology Partner</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>UpsellOpportunity__c</picklist>
+        <values>
+            <fullName>Maybe</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>pcpgender__c</picklist>
+        <values>
+            <fullName>Decline to answer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Female</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Male</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>pcphasnpi__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>pcplang__c</picklist>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Spanish</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>pcpmdtype__c</picklist>
+        <values>
+            <fullName>Care Coordinator</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mental Health Provider</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>pcpmhtrain__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>pcpphonedesc__c</picklist>
+        <values>
+            <fullName>Cell Phone</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Home Phone</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pager</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Work Phone</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>pcppracmh__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>pcptitle__c</picklist>
+        <values>
+            <fullName>Nurse practitioner %28NP%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Physician %28MD%2C DO%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Physician%27s Assistant %28PA%29</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>pcptrainee__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>pcptraintype__c</picklist>
+        <values>
+            <fullName>Fellow %28or equivalent within other medical fields%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other medical trainee</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Resident %28or equivalent within other medical fields%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Student in a medical school</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>pracregion_del__c</picklist>
+        <values>
+            <fullName>Central</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Eastern</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Northern</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Southwestern</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Western</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>provider_racee__c</picklist>
+        <values>
+            <fullName>American Indian or Alaska Native</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Asian</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Black or African American</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hispanic%2F Latinx%2F Spanish</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Middle Eastern%2F North African</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Multiple race%2F Biracial</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Native Hawaiian or Pacific Islander</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Prefer not to answer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Prefer to self-describe %28option not listed%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>White or Caucasian</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>sole_provider__c</picklist>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>
