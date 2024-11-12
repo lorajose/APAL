@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Type__c</fullName>
+    <externalId>false</externalId>
+    <label>Provider Type</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Physician (MD, DO)</fullName>
+                <default>false</default>
+                <label>Physician (MD, DO)</label>
+            </value>
+            <value>
+                <fullName>Nurse practitioner (NP)</fullName>
+                <default>false</default>
+                <label>Nurse practitioner (NP)</label>
+            </value>
+            <value>
+                <fullName>Physician&apos;s Assistant (PA)</fullName>
+                <default>false</default>
+                <label>Physician&apos;s Assistant (PA)</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+            <value>
+                <fullName>Channel Partner / Reseller Channel Partner</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Channel Partner / Reseller Channel Partner</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
