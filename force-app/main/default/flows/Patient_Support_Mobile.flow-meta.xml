@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <apiVersion>62.0</apiVersion>
+    <apiVersion>60.0</apiVersion>
     <assignments>
         <name>Assign_Patient_Supports_to_Add</name>
         <label>Assign Patient Supports to Add</label>
@@ -637,7 +637,7 @@
             <targetReference>Get_Supports</targetReference>
         </connector>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
     <variables>
         <name>CurrentPatientSupport</name>
         <dataType>SObject</dataType>
