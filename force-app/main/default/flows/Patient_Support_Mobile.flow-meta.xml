@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <apiVersion>60.0</apiVersion>
+    <apiVersion>62.0</apiVersion>
     <assignments>
         <name>Assign_Patient_Supports_to_Add</name>
         <label>Assign Patient Supports to Add</label>
@@ -180,6 +180,9 @@
         <label>Navigation</label>
         <locationX>336</locationX>
         <locationY>1682</locationY>
+        <defaultConnector>
+            <targetReference>Cancel_Message</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Cancel</defaultConnectorLabel>
         <rules>
             <name>Save</name>
@@ -438,8 +441,27 @@
         <label>Update Patient Support</label>
         <locationX>182</locationX>
         <locationY>2198</locationY>
+        <connector>
+            <targetReference>Success_Message</targetReference>
+        </connector>
         <inputReference>UpdatedPatientSupports</inputReference>
     </recordUpdates>
+    <screens>
+        <name>Cancel_Message</name>
+        <label>Cancel Message</label>
+        <locationX>490</locationX>
+        <locationY>1790</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>cancel</name>
+            <fieldText>&lt;p&gt;You have canceled your transaction. No changes have been made. Please click the back button above to return to the patient record.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>false</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
     <screens>
         <name>Existing_Patient_Supports</name>
         <label>Existing Patient Supports</label>
@@ -630,6 +652,22 @@
         <showFooter>false</showFooter>
         <showHeader>false</showHeader>
     </screens>
+    <screens>
+        <name>Success_Message</name>
+        <label>Success Message</label>
+        <locationX>182</locationX>
+        <locationY>2306</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>message</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;Success!&lt;/strong&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt; Your updates have been saved. Please click the back button above to return to the patient record.&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>false</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
     <start>
         <locationX>210</locationX>
         <locationY>0</locationY>
@@ -637,7 +675,7 @@
             <targetReference>Get_Supports</targetReference>
         </connector>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <variables>
         <name>CurrentPatientSupport</name>
         <dataType>SObject</dataType>
