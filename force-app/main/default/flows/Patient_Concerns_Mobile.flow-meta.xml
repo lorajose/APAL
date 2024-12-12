@@ -4,7 +4,7 @@
     <assignments>
         <name>Assign_Parent_Patient_Concerns_to_Add</name>
         <label>Assign Parent Patient Concerns to Add</label>
-        <locationX>1172</locationX>
+        <locationX>1128</locationX>
         <locationY>1406</locationY>
         <assignmentItems>
             <assignToReference>PatientConcern.Concern__c</assignToReference>
@@ -48,7 +48,7 @@
     <assignments>
         <name>Assign_Parent_Patient_Concerns_to_Delete</name>
         <label>Assign Parent Patient Concerns to Delete</label>
-        <locationX>1172</locationX>
+        <locationX>1128</locationX>
         <locationY>890</locationY>
         <assignmentItems>
             <assignToReference>RemovePatientConcerns</assignToReference>
@@ -64,7 +64,7 @@
     <assignments>
         <name>Assign_Parent_Patient_Corncern_to_Update</name>
         <label>Assign Parent Patient Corncern to Update</label>
-        <locationX>1172</locationX>
+        <locationX>1128</locationX>
         <locationY>1706</locationY>
         <assignmentItems>
             <assignToReference>UpdatedPatientConcern.Id</assignToReference>
@@ -184,7 +184,7 @@
     <decisions>
         <name>Case_Type</name>
         <label>Case Type</label>
-        <locationX>710</locationX>
+        <locationX>688</locationX>
         <locationY>350</locationY>
         <defaultConnector>
             <targetReference>Get_Parent_Case</targetReference>
@@ -211,6 +211,9 @@
         <label>Navigation?</label>
         <locationX>336</locationX>
         <locationY>1790</locationY>
+        <defaultConnector>
+            <targetReference>Cancel_Message</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Cancel</defaultConnectorLabel>
         <rules>
             <name>Save</name>
@@ -231,8 +234,12 @@
     <decisions>
         <name>NavigationParent</name>
         <label>Navigation?</label>
-        <locationX>1084</locationX>
+        <locationX>1040</locationX>
         <locationY>1898</locationY>
+        <defaultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Cancel_Message</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Cancel</defaultConnectorLabel>
         <rules>
             <name>SaveParent</name>
@@ -305,6 +312,9 @@
         <label>Update Items?</label>
         <locationX>886</locationX>
         <locationY>2414</locationY>
+        <defaultConnector>
+            <targetReference>Success_Message</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>No</defaultConnectorLabel>
         <rules>
             <name>YesUpdate</name>
@@ -335,7 +345,7 @@
     <loops>
         <name>Deleted_Parent_Patient_Concerns</name>
         <label>Deleted Parent Patient Concerns</label>
-        <locationX>1084</locationX>
+        <locationX>1040</locationX>
         <locationY>782</locationY>
         <collectionReference>ParentPatientConcernsRepeater.RemovedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
@@ -363,7 +373,7 @@
     <loops>
         <name>New_Parent_Patient_Concerns</name>
         <label>New Parent Patient Concerns</label>
-        <locationX>1084</locationX>
+        <locationX>1040</locationX>
         <locationY>1190</locationY>
         <collectionReference>ParentPatientConcernsRepeater.AddedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
@@ -391,7 +401,7 @@
     <loops>
         <name>Update_Parent_Patient_Concerns</name>
         <label>Update Parent Patient Concerns</label>
-        <locationX>1084</locationX>
+        <locationX>1040</locationX>
         <locationY>1598</locationY>
         <collectionReference>ParentPatientConcernsRepeater.PrepopulatedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
@@ -499,7 +509,7 @@
     <recordLookups>
         <name>Get_Concerns</name>
         <label>Get Concerns</label>
-        <locationX>710</locationX>
+        <locationX>688</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -512,7 +522,7 @@
     <recordLookups>
         <name>Get_Current_Case</name>
         <label>Get Current Case</label>
-        <locationX>710</locationX>
+        <locationX>688</locationX>
         <locationY>242</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -533,7 +543,7 @@
     <recordLookups>
         <name>Get_Parent_Case</name>
         <label>Get Parent Case</label>
-        <locationX>1084</locationX>
+        <locationX>1040</locationX>
         <locationY>458</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -554,7 +564,7 @@
     <recordLookups>
         <name>Get_Parent_Concern_Selected</name>
         <label>Get Parent Concern Selected</label>
-        <locationX>1172</locationX>
+        <locationX>1128</locationX>
         <locationY>1298</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -575,7 +585,7 @@
     <recordLookups>
         <name>Get_Parent_Patient_Concerns</name>
         <label>Get Parent Patient Concerns</label>
-        <locationX>1084</locationX>
+        <locationX>1040</locationX>
         <locationY>566</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -617,7 +627,7 @@
     <recordLookups>
         <name>ParentPatientRecordstoDelete</name>
         <label>ParentPatientRecordstoDelete</label>
-        <locationX>1084</locationX>
+        <locationX>1040</locationX>
         <locationY>1082</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -661,6 +671,9 @@
         <label>Update Parent Patient Concern</label>
         <locationX>754</locationX>
         <locationY>2522</locationY>
+        <connector>
+            <targetReference>Success_Message</targetReference>
+        </connector>
         <inputReference>UpdatedPatientConcerns</inputReference>
     </recordUpdates>
     <recordUpdates>
@@ -668,12 +681,31 @@
         <label>Update Patient Concern</label>
         <locationX>182</locationX>
         <locationY>2306</locationY>
+        <connector>
+            <targetReference>Success_Message</targetReference>
+        </connector>
         <inputReference>UpdatedPatientConcerns</inputReference>
     </recordUpdates>
     <screens>
+        <name>Cancel_Message</name>
+        <label>Cancel Message</label>
+        <locationX>490</locationX>
+        <locationY>1898</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>Copy_1_of_message</name>
+            <fieldText>&lt;p&gt;You have canceled your transaction. No changes have been made. Please click the back button above to return to the patient record.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>false</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
         <name>Existing_Parent_Patient_Concerns</name>
         <label>Existing Parent Patient Concerns</label>
-        <locationX>1084</locationX>
+        <locationX>1040</locationX>
         <locationY>674</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
@@ -918,8 +950,24 @@
         <showFooter>false</showFooter>
         <showHeader>false</showHeader>
     </screens>
+    <screens>
+        <name>Success_Message</name>
+        <label>Success Message</label>
+        <locationX>688</locationX>
+        <locationY>2882</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>message</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Success!&lt;/strong&gt; Your updates have been saved. Please click the back button above to return to the patient record.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>false</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
     <start>
-        <locationX>584</locationX>
+        <locationX>562</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Concerns</targetReference>

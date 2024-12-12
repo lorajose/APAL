@@ -267,6 +267,9 @@
         <label>Navigation</label>
         <locationX>336</locationX>
         <locationY>1790</locationY>
+        <defaultConnector>
+            <targetReference>cancel_message</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Cancel</defaultConnectorLabel>
         <rules>
             <name>Save</name>
@@ -289,6 +292,10 @@
         <label>Navigation</label>
         <locationX>1040</locationX>
         <locationY>1898</locationY>
+        <defaultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>cancel_message</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Cancel</defaultConnectorLabel>
         <rules>
             <name>Saveparent</name>
@@ -711,6 +718,9 @@
         <label>Update Parent Patient Safety Risk</label>
         <locationX>886</locationX>
         <locationY>2414</locationY>
+        <connector>
+            <targetReference>Success_Message</targetReference>
+        </connector>
         <inputReference>UpdatedSafetyRisks</inputReference>
     </recordUpdates>
     <recordUpdates>
@@ -718,8 +728,27 @@
         <label>Update Patient Safety Risk</label>
         <locationX>182</locationX>
         <locationY>2306</locationY>
+        <connector>
+            <targetReference>Success_Message</targetReference>
+        </connector>
         <inputReference>UpdatedSafetyRisks</inputReference>
     </recordUpdates>
+    <screens>
+        <name>cancel_message</name>
+        <label>cancel message</label>
+        <locationX>490</locationX>
+        <locationY>1898</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>cancel</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;You have canceled your transaction. No changes have been made. Please click the back button above to return to the patient record.&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>false</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
     <screens>
         <name>Existing_Parent_Patient_Safety_Risks</name>
         <label>Existing Parent Patient Safety Risks</label>
@@ -1009,6 +1038,22 @@
             <storeOutputAutomatically>true</storeOutputAutomatically>
         </fields>
         <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
+        <showFooter>false</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>Success_Message</name>
+        <label>Success Message</label>
+        <locationX>688</locationX>
+        <locationY>2690</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>message</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;Success!&lt;/strong&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;&amp;nbsp;Your updates have been saved. Please click the back button above to return to the patient record.&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
         <showFooter>false</showFooter>
         <showHeader>false</showHeader>
     </screens>
