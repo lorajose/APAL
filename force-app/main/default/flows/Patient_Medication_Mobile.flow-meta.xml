@@ -975,7 +975,7 @@
                 <defaultValue>
                     <elementReference>Get_Parent_Patient_Medications[$EachItem].Frequency__c</elementReference>
                 </defaultValue>
-                <fieldText>Frecuency:</fieldText>
+                <fieldText>Frecuency</fieldText>
                 <fieldType>DropdownBox</fieldType>
                 <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                 <isRequired>false</isRequired>
