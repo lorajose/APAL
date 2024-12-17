@@ -803,7 +803,7 @@
                 <inputParameters>
                     <name>placeholder</name>
                     <value>
-                        <stringValue>Select a Safety Risk</stringValue>
+                        <stringValue>Select a Screener</stringValue>
                     </value>
                 </inputParameters>
                 <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>

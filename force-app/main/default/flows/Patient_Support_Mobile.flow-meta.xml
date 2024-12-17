@@ -488,7 +488,7 @@
                 <inputParameters>
                     <name>placeholder</name>
                     <value>
-                        <stringValue>Select a Safety Risk</stringValue>
+                        <stringValue>Select a Support</stringValue>
                     </value>
                 </inputParameters>
                 <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
