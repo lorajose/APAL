@@ -27,7 +27,7 @@ public with sharing class FlowLauncherController {
         return results;
     } */
 
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled(cacheable=false)
     public static List<FlowButtonInfo> getFlowsAndCounts(Id caseId) {
         List<FlowButtonInfo> results = new List<FlowButtonInfo>();
 
