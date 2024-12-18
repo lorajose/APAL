@@ -1,0 +1,26 @@
+<template>
+
+     <!-- Aquí va tu contenido dinámico -->
+    <template if:true={buttons}>
+        <div style="display: flex; flex-direction: column; gap: 1rem; align-items: flex-start; transform: translateX(25px);">
+            <template for:each={buttons} for:item="button">
+                <lightning-button
+                    variant="base"
+                    icon-name="utility:edit_form"
+                    key={button.key}
+                    label={button.label}
+                    onclick={handleButtonClick}
+                    data-flow-name={button.flowApiName}>
+                </lightning-button>
+            </template>
+        </div>
+      </template>
+
+           <!-- Botón para refrescar el componente -->
+<!--  <lightning-button 
+  variant="neutral" 
+  label="Refresh" 
+  icon-name="utility:refresh" 
+  onclick={handleRefresh}>
+</lightning-button> -->
+</template>
