@@ -425,6 +425,12 @@
                 <identifier>flexipage_fieldSection7</identifier>
             </componentInstance>
         </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>flowLauncher</componentName>
+                <identifier>c_flowLauncher</identifier>
+            </componentInstance>
+        </itemInstances>
         <name>Facet-21c57c39-be82-4cf2-b457-4da839767f6c</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -792,10 +798,10 @@
                             <value>Case.New_Medication_Mobile</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>Case.New_Screener_Mobile</value>
+                            <value>Case.New_Safety_Risk_Mobile</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>Case.New_Safety_Risk_Mobile</value>
+                            <value>Case.New_Screener_Mobile</value>
                         </valueListItems>
                         <valueListItems>
                             <value>Case.New_Care_Request</value>
@@ -808,12 +814,6 @@
                         </valueListItems>
                         <valueListItems>
                             <value>ChangeOwnerOne</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Share</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Delete</value>
                         </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
@@ -863,12 +863,6 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:tabset</componentName>
                 <identifier>flexipage_tabset3</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentName>flowLauncher</componentName>
-                <identifier>c_flowLauncher</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
