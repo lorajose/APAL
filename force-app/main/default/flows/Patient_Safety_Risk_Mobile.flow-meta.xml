@@ -49,6 +49,13 @@
             </value>
         </assignmentItems>
         <assignmentItems>
+            <assignToReference>PatientSafetyRisk.Submission_Completed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
             <assignToReference>NewPatientSafetyRisks</assignToReference>
             <operator>Add</operator>
             <value>
@@ -164,6 +171,13 @@
             <operator>Assign</operator>
             <value>
                 <elementReference>New_Patient_Safety_Risks.Historical</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientSafetyRisk.Submission_Completed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
             </value>
         </assignmentItems>
         <assignmentItems>
