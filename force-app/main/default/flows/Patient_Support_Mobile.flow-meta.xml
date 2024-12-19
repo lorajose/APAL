@@ -77,6 +77,13 @@
             </value>
         </assignmentItems>
         <assignmentItems>
+            <assignToReference>NewPatientSupport.Submission_Completed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
             <assignToReference>NewPatientSupports</assignToReference>
             <operator>Add</operator>
             <value>

@@ -56,6 +56,13 @@
             </value>
         </assignmentItems>
         <assignmentItems>
+            <assignToReference>PatientScreener.Submission_Completed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
             <assignToReference>NewPatientScreeners</assignToReference>
             <operator>Add</operator>
             <value>
@@ -185,6 +192,13 @@
             <operator>Assign</operator>
             <value>
                 <elementReference>New_Patient_Screeners.Score</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientScreener.Submission_Completed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
             </value>
         </assignmentItems>
         <assignmentItems>

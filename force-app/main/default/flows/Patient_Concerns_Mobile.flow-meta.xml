@@ -35,6 +35,13 @@
             </value>
         </assignmentItems>
         <assignmentItems>
+            <assignToReference>PatientConcern.Submission_Completed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
             <assignToReference>NewPatientConcerns</assignToReference>
             <operator>Add</operator>
             <value>
@@ -122,6 +129,13 @@
             <operator>Assign</operator>
             <value>
                 <elementReference>New_Patient_Concerns.Concern_Notes</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientConcern.Submission_Completed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
             </value>
         </assignmentItems>
         <assignmentItems>
