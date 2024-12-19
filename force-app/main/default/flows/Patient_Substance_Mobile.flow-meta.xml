@@ -42,6 +42,13 @@
             </value>
         </assignmentItems>
         <assignmentItems>
+            <assignToReference>PatientSubstance.Submission_Completed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
             <assignToReference>NewPatientSubstances</assignToReference>
             <operator>Add</operator>
             <value>
@@ -143,6 +150,13 @@
             <operator>Assign</operator>
             <value>
                 <elementReference>New_Patient_Substances.FrecuencyPicklist</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientSubstance.Submission_Completed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
             </value>
         </assignmentItems>
         <assignmentItems>

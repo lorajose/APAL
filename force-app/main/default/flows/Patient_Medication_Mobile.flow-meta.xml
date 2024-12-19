@@ -70,6 +70,13 @@
             </value>
         </assignmentItems>
         <assignmentItems>
+            <assignToReference>PatientMedication.Submission_Completed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
             <assignToReference>NewPatientMedications</assignToReference>
             <operator>Add</operator>
             <value>
@@ -227,6 +234,13 @@
             <operator>Assign</operator>
             <value>
                 <elementReference>New_Patient_Medications.Medication_Changes</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Submission_Completed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
             </value>
         </assignmentItems>
         <assignmentItems>
