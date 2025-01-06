@@ -145,12 +145,6 @@
             <targetReference>Parent_Case</targetReference>
         </connector>
         <inputAssignments>
-            <field>AccountId</field>
-            <value>
-                <elementReference>AccountName.recordId</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
             <field>BilingualTranslation_Required__c</field>
             <value>
                 <elementReference>Bilingual_Translation_Required</elementReference>
@@ -213,7 +207,7 @@
         <inputAssignments>
             <field>OwnerId</field>
             <value>
-                <elementReference>PatientOwner.recordId</elementReference>
+                <elementReference>$User.Id</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -433,6 +427,10 @@
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <validationRule>
+                        <errorMessage>&lt;p&gt;Please enter a last name&lt;/p&gt;</errorMessage>
+                        <formulaExpression>isblank({!PatientName.lastName})</formulaExpression>
+                    </validationRule>
                 </fields>
                 <fields>
                     <name>Preferred_Name</name>
@@ -449,82 +447,6 @@
                     <fieldType>InputField</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>12</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithHeader</regionContainerType>
-        </fields>
-        <fields>
-            <name>Patient_Ownership_Account_Lookup</name>
-            <fieldText>Patient Ownership &amp; Account Lookup</fieldText>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>Patient_Ownership_Account_Lookup_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>PatientOwner</name>
-                    <extensionName>flowruntime:lookup</extensionName>
-                    <fieldType>ComponentInstance</fieldType>
-                    <inputParameters>
-                        <name>fieldApiName</name>
-                        <value>
-                            <stringValue>OwnerId</stringValue>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
-                        <name>label</name>
-                        <value>
-                            <stringValue>Patient Owner</stringValue>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
-                        <name>objectApiName</name>
-                        <value>
-                            <stringValue>Contact</stringValue>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
-                        <name>disabled</name>
-                        <value>
-                            <booleanValue>false</booleanValue>
-                        </value>
-                    </inputParameters>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                    <storeOutputAutomatically>true</storeOutputAutomatically>
-                </fields>
-                <fields>
-                    <name>AccountName</name>
-                    <extensionName>flowruntime:lookup</extensionName>
-                    <fieldType>ComponentInstance</fieldType>
-                    <inputParameters>
-                        <name>objectApiName</name>
-                        <value>
-                            <stringValue>Account</stringValue>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
-                        <name>label</name>
-                        <value>
-                            <stringValue>Account Name</stringValue>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
-                        <name>fieldApiName</name>
-                        <value>
-                            <stringValue>Name</stringValue>
-                        </value>
-                    </inputParameters>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                    <storeOutputAutomatically>true</storeOutputAutomatically>
                 </fields>
                 <inputParameters>
                     <name>width</name>
@@ -814,7 +736,7 @@
             <isRequired>false</isRequired>
             <regionContainerType>SectionWithHeader</regionContainerType>
         </fields>
-        <nextOrFinishButtonLabel>Finish</nextOrFinishButtonLabel>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
     </screens>
