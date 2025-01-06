@@ -789,6 +789,15 @@
                     <name>actionNames</name>
                     <valueList>
                         <valueListItems>
+                            <value>Case.New_Provider</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Case.New_Patient</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Case.New_Practice</value>
+                        </valueListItems>
+                        <valueListItems>
                             <value>Case.New_Concern_Mobile</value>
                         </valueListItems>
                         <valueListItems>
