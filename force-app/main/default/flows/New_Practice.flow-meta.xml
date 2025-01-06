@@ -133,6 +133,30 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>InsAcceptedMedicaid__c</field>
+            <value>
+                <elementReference>Medicaid_Public</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InsAcceptedNone__c</field>
+            <value>
+                <elementReference>None</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InsAcceptedPrivate__c</field>
+            <value>
+                <elementReference>Private</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>InsAcceptedUninsured__c</field>
+            <value>
+                <elementReference>Uninsured</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>Name</field>
             <value>
                 <elementReference>Name</elementReference>
@@ -408,6 +432,56 @@
             <isRequired>false</isRequired>
         </fields>
         <fields>
+            <name>Insurance_Types</name>
+            <fieldText>Insurance Types</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Insurance_Types_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>None</name>
+                    <dataType>Boolean</dataType>
+                    <fieldText>None</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                </fields>
+                <fields>
+                    <name>Medicaid_Public</name>
+                    <dataType>Boolean</dataType>
+                    <fieldText>Medicaid/Public</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                </fields>
+                <fields>
+                    <name>Private</name>
+                    <dataType>Boolean</dataType>
+                    <fieldText>Private</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                </fields>
+                <fields>
+                    <name>Uninsured</name>
+                    <dataType>Boolean</dataType>
+                    <fieldText>Uninsured</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+        </fields>
+        <fields>
             <name>Phone</name>
             <extensionName>flowruntime:phone</extensionName>
             <fieldType>ComponentInstance</fieldType>
@@ -550,7 +624,7 @@
             <isRequired>true</isRequired>
             <storeOutputAutomatically>true</storeOutputAutomatically>
         </fields>
-        <nextOrFinishButtonLabel>Finish</nextOrFinishButtonLabel>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
     </screens>

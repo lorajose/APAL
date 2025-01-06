@@ -169,7 +169,7 @@
         <inputAssignments>
             <field>Incomplete_Submission__c</field>
             <value>
-                <booleanValue>false</booleanValue>
+                <elementReference>Incomplete</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -964,6 +964,16 @@
                     <fieldType>InputField</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>Provider_Language_other_than_English</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <stringValue>Other</stringValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
                 </fields>
                 <inputParameters>
                     <name>width</name>
@@ -1010,7 +1020,33 @@
             <isRequired>false</isRequired>
             <regionContainerType>SectionWithHeader</regionContainerType>
         </fields>
-        <nextOrFinishButtonLabel>Finish</nextOrFinishButtonLabel>
+        <fields>
+            <name>System_Information</name>
+            <fieldText>System Information</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>System_Information_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Incomplete</name>
+                    <dataType>Boolean</dataType>
+                    <fieldText>Incomplete?</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+        </fields>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
     </screens>
