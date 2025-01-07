@@ -75,6 +75,14 @@
         <picklistObject>Account</picklistObject>
     </dynamicChoiceSets>
     <dynamicChoiceSets>
+        <name>SalutationList</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>Salutation</picklistField>
+        <picklistObject>Account</picklistObject>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
         <name>Specialty2</name>
         <dataType>Picklist</dataType>
         <displayField xsi:nil="true"/>
@@ -157,7 +165,7 @@
         <inputAssignments>
             <field>FirstName</field>
             <value>
-                <elementReference>ProviderName.firstName</elementReference>
+                <elementReference>First_Name</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -175,13 +183,13 @@
         <inputAssignments>
             <field>LastName</field>
             <value>
-                <elementReference>ProviderName.lastName</elementReference>
+                <elementReference>Last_Name</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>MiddleName</field>
             <value>
-                <elementReference>ProviderName.middleName</elementReference>
+                <elementReference>Middle_Name</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -247,19 +255,13 @@
         <inputAssignments>
             <field>Salutation</field>
             <value>
-                <elementReference>ProviderName.salutation</elementReference>
+                <elementReference>Salutation</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>SearchEngine__c</field>
             <value>
                 <elementReference>Search_Engine</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Suffix</field>
-            <value>
-                <elementReference>ProviderName.suffix</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -500,24 +502,37 @@
                 <name>Name_Practice_Details_Column1</name>
                 <fieldType>Region</fieldType>
                 <fields>
-                    <name>ProviderName</name>
-                    <extensionName>flowruntime:name</extensionName>
-                    <fieldType>ComponentInstance</fieldType>
-                    <inputParameters>
-                        <name>fieldsToDisplayList</name>
-                        <value>
-                            <stringValue>salutation,firstName,middleName,lastName,suffix</stringValue>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
-                        <name>salutationOptions</name>
-                        <value>
-                            <stringValue>Mr.,Mrs.,Ms.,Dr.,Prof.,Mx.</stringValue>
-                        </value>
-                    </inputParameters>
+                    <name>Salutation</name>
+                    <choiceReferences>SalutationList</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Salutation</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <fields>
+                    <name>First_Name</name>
+                    <dataType>String</dataType>
+                    <fieldText>First Name</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <fields>
+                    <name>Middle_Name</name>
+                    <dataType>String</dataType>
+                    <fieldText>Middle Name</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <fields>
+                    <name>Last_Name</name>
+                    <dataType>String</dataType>
+                    <fieldText>Last Name</fieldText>
+                    <fieldType>InputField</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
-                    <storeOutputAutomatically>true</storeOutputAutomatically>
                 </fields>
                 <fields>
                     <name>Practice</name>
