@@ -549,6 +549,12 @@
                     <stringValue>http://</stringValue>
                 </value>
             </inputParameters>
+            <inputParameters>
+                <name>pattern</name>
+                <value>
+                    <stringValue>^(?:https?:\/\/.*)?$</stringValue>
+                </value>
+            </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <storeOutputAutomatically>true</storeOutputAutomatically>
