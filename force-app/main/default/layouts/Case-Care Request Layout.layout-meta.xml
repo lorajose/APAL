@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
     <emailDefault>false</emailDefault>
+    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
@@ -325,6 +326,13 @@
         <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>Notes__c</fields>
+        <relatedList>Care_Note__c.Case__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <excludeButtons>MassChangeOwner</excludeButtons>
+        <excludeButtons>New</excludeButtons>
+        <fields>NAME</fields>
+        <fields>Notes__c</fields>
         <fields>Service__c</fields>
         <fields>OWNER.ALIAS</fields>
         <relatedList>Care_Note__c.Related_Case__c</relatedList>
@@ -348,6 +356,9 @@
         <fields>Current_Medication__c</fields>
         <fields>Medication_Changes__c</fields>
         <fields>MedicationNotes__c</fields>
+        <fields>Frequency__c</fields>
+        <fields>Amount__c</fields>
+        <fields>Dosing_Unit__c</fields>
         <relatedList>Patient_Medication__c.Case__c</relatedList>
     </relatedLists>
     <relatedLists>
