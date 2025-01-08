@@ -737,7 +737,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>parentFieldApiName</name>
-                    <value>Case.Id</value>
+                    <value>Case.ParentId</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>relatedListApiName</name>
