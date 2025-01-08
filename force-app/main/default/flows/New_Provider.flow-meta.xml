@@ -496,7 +496,7 @@
         </connector>
         <fields>
             <name>Name_Practice_Details</name>
-            <fieldText>Name &amp; Practice Details</fieldText>
+            <fieldText>Name &amp; Practice</fieldText>
             <fieldType>RegionContainer</fieldType>
             <fields>
                 <name>Name_Practice_Details_Column1</name>
