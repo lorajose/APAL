@@ -1,11 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <apiVersion>62.0</apiVersion>
+    <assignments>
+        <name>Add_URL</name>
+        <label>Add URL</label>
+        <locationX>50</locationX>
+        <locationY>566</locationY>
+        <assignmentItems>
+            <assignToReference>URL</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Website.value</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Create_New_Practice</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>CheckURL</name>
+        <label>CheckURL</label>
+        <locationX>182</locationX>
+        <locationY>458</locationY>
+        <defaultConnector>
+            <targetReference>Create_New_Practice</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No URL</defaultConnectorLabel>
+        <rules>
+            <name>HasURL</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Website.value</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>http://</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Add_URL</targetReference>
+            </connector>
+            <label>Has URL</label>
+        </rules>
+    </decisions>
     <decisions>
         <name>Parent_Case</name>
         <label>Parent Case</label>
         <locationX>182</locationX>
-        <locationY>566</locationY>
+        <locationY>866</locationY>
         <defaultConnector>
             <targetReference>Update_Case_on_Parent</targetReference>
         </defaultConnector>
@@ -92,7 +133,7 @@
         <name>Create_New_Practice</name>
         <label>Create New Practice</label>
         <locationX>182</locationX>
-        <locationY>458</locationY>
+        <locationY>758</locationY>
         <connector>
             <targetReference>Parent_Case</targetReference>
         </connector>
@@ -189,7 +230,7 @@
         <inputAssignments>
             <field>Website</field>
             <value>
-                <elementReference>Website.value</elementReference>
+                <elementReference>URL</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -313,7 +354,7 @@
         <name>Update_Case</name>
         <label>Update Case</label>
         <locationX>50</locationX>
-        <locationY>674</locationY>
+        <locationY>974</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -334,7 +375,7 @@
         <name>Update_Case_on_Parent</name>
         <label>Update Case on Parent</label>
         <locationX>314</locationX>
-        <locationY>674</locationY>
+        <locationY>974</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -360,7 +401,7 @@
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>Create_New_Practice</targetReference>
+            <targetReference>CheckURL</targetReference>
         </connector>
         <fields>
             <name>Name</name>
@@ -641,6 +682,13 @@
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>URL</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
 </Flow>
