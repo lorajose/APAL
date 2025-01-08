@@ -400,7 +400,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Update_Patient_Medications</targetReference>
+                <targetReference>Update_SubCases</targetReference>
             </connector>
             <label>Yes</label>
         </rules>
@@ -442,7 +442,7 @@
         <name>Change_Patient_Supports</name>
         <label>Change Patient Supports</label>
         <locationX>710</locationX>
-        <locationY>2951</locationY>
+        <locationY>3059</locationY>
         <collectionReference>Get_Case_Care_Navigations</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -453,7 +453,7 @@
         <name>Update_Patient_Supports</name>
         <label>Update Patient Supports</label>
         <locationX>886</locationX>
-        <locationY>3167</locationY>
+        <locationY>3275</locationY>
         <collectionReference>Get_Patient_Supports</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -643,7 +643,7 @@
         <name>Get_Patient_Supports</name>
         <label>Get Patient Supports</label>
         <locationX>886</locationX>
-        <locationY>3059</locationY>
+        <locationY>3167</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Update_Patient_Supports</targetReference>
@@ -686,7 +686,7 @@
         <name>Update_Patient_Concerns</name>
         <label>Update Patient Concerns</label>
         <locationX>710</locationX>
-        <locationY>2627</locationY>
+        <locationY>2735</locationY>
         <connector>
             <targetReference>Update_Patient_Screeners</targetReference>
         </connector>
@@ -702,7 +702,7 @@
         <name>Update_Patient_Medications</name>
         <label>Update Patient Medications</label>
         <locationX>710</locationX>
-        <locationY>2411</locationY>
+        <locationY>2519</locationY>
         <connector>
             <targetReference>Update_Patient_Substances</targetReference>
         </connector>
@@ -718,7 +718,7 @@
         <name>Update_Patient_Safety_Risks</name>
         <label>Update Patient Safety Risks</label>
         <locationX>710</locationX>
-        <locationY>2843</locationY>
+        <locationY>2951</locationY>
         <connector>
             <targetReference>Change_Patient_Supports</targetReference>
         </connector>
@@ -734,7 +734,7 @@
         <name>Update_Patient_Screeners</name>
         <label>Update Patient Screeners</label>
         <locationX>710</locationX>
-        <locationY>2735</locationY>
+        <locationY>2843</locationY>
         <connector>
             <targetReference>Update_Patient_Safety_Risks</targetReference>
         </connector>
@@ -750,7 +750,7 @@
         <name>Update_Patient_Substances</name>
         <label>Update Patient Substances</label>
         <locationX>710</locationX>
-        <locationY>2519</locationY>
+        <locationY>2627</locationY>
         <connector>
             <targetReference>Update_Patient_Concerns</targetReference>
         </connector>
@@ -766,7 +766,7 @@
         <name>Update_Patient_Support_Record</name>
         <label>Update Patient Support Record</label>
         <locationX>974</locationX>
-        <locationY>3275</locationY>
+        <locationY>3383</locationY>
         <connector>
             <targetReference>Update_Patient_Supports</targetReference>
         </connector>
@@ -917,6 +917,22 @@
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_SubCases</name>
+        <label>Update SubCases</label>
+        <locationX>710</locationX>
+        <locationY>2411</locationY>
+        <connector>
+            <targetReference>Update_Patient_Medications</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>ContactId</field>
+            <value>
+                <elementReference>$Record.Contact.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Cases</inputReference>
     </recordUpdates>
     <start>
         <locationX>716</locationX>
