@@ -789,25 +789,19 @@
                     <name>actionNames</name>
                     <valueList>
                         <valueListItems>
-                            <value>Case.New_Concern_Mobile</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Case.New_Substance_Mobile</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Case.New_Medication_Mobile</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Case.New_Safety_Risk_Mobile</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Case.New_Screener_Mobile</value>
-                        </valueListItems>
-                        <valueListItems>
                             <value>Case.New_Care_Request</value>
                         </valueListItems>
                         <valueListItems>
                             <value>Case.CareNoteCR</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Case.New_Provider</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Case.New_Patient</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Case.New_Practice</value>
                         </valueListItems>
                         <valueListItems>
                             <value>Edit</value>
