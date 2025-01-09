@@ -458,6 +458,10 @@
                     <fieldType>InputField</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
+                    <validationRule>
+                        <errorMessage>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;Please input a date that is not in the future&lt;/span&gt;&lt;/p&gt;</errorMessage>
+                        <formulaExpression>{!Date_of_Patient_Intake} &lt;= Today()</formulaExpression>
+                    </validationRule>
                 </fields>
                 <inputParameters>
                     <name>width</name>
@@ -517,8 +521,13 @@
                     <dataType>Date</dataType>
                     <fieldText>Patient DOB</fieldText>
                     <fieldType>InputField</fieldType>
+                    <helpText>&lt;p&gt;Can not be in the future&lt;/p&gt;</helpText>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
+                    <validationRule>
+                        <errorMessage>&lt;p&gt;Please input a date that is not in the future&lt;/p&gt;</errorMessage>
+                        <formulaExpression>{!Patient_DOB} &lt;= Today()</formulaExpression>
+                    </validationRule>
                 </fields>
                 <fields>
                     <name>Patient_Sex_at_Birth</name>
