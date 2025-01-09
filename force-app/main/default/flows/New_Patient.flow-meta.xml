@@ -459,7 +459,7 @@
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <validationRule>
-                        <errorMessage>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;Please input a date that is not in the future&lt;/span&gt;&lt;/p&gt;</errorMessage>
+                        <errorMessage>&lt;p&gt;&lt;span style=&quot;color: rgb(255, 0, 0); background-color: rgb(255, 255, 255);&quot;&gt;Please input a date that is not in the future&lt;/span&gt;&lt;/p&gt;</errorMessage>
                         <formulaExpression>{!Date_of_Patient_Intake} &lt;= Today()</formulaExpression>
                     </validationRule>
                 </fields>
@@ -525,7 +525,7 @@
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <validationRule>
-                        <errorMessage>&lt;p&gt;Please input a date that is not in the future&lt;/p&gt;</errorMessage>
+                        <errorMessage>&lt;p&gt;&lt;span style=&quot;color: rgb(255, 0, 0);&quot;&gt;Please input a date that is not in the future&lt;/span&gt;&lt;/p&gt;</errorMessage>
                         <formulaExpression>{!Patient_DOB} &lt;= Today()</formulaExpression>
                     </validationRule>
                 </fields>
