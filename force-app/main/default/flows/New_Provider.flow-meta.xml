@@ -620,18 +620,17 @@
                     <fieldText>Provider NPI #</fieldText>
                     <fieldType>InputField</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
+                    <isRequired>true</isRequired>
                     <validationRule>
                         <errorMessage>&lt;p&gt;Please enter a valid NPI # &lt;/p&gt;</errorMessage>
-                        <formulaExpression>(
-    IF(
-        {!Does_the_provider_have_NPI} = &quot;Yes&quot;, 
-        AND(
-            NOT(ISBLANK({!Provider_NPI})),
-            REGEX({!Provider_NPI}, &quot;^[0-9]{10}+$&quot;)
-        ),
-        TRUE
-    )
+                        <formulaExpression>IF(
+    {!Does_the_provider_have_NPI} = &quot;Yes&quot;, 
+    AND(
+        NOT(ISNULL({!Provider_NPI})), 
+        {!Provider_NPI} &lt;&gt; &quot;&quot;, 
+        REGEX({!Provider_NPI}, &quot;^[0-9]{10}$&quot;)
+    ), 
+    TRUE
 )</formulaExpression>
                     </validationRule>
                     <visibilityRule>
