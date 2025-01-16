@@ -68,8 +68,8 @@
     <assignments>
         <name>Assign_Updated_Record</name>
         <label>Assign Updated Record</label>
-        <locationX>402</locationX>
-        <locationY>2198</locationY>
+        <locationX>490</locationX>
+        <locationY>2306</locationY>
         <assignmentItems>
             <assignToReference>UpdatedPatientMedications</assignToReference>
             <operator>Add</operator>
@@ -78,7 +78,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Input_Part_2</targetReference>
+            <targetReference>Updated_Patient_Medications_Search</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -128,7 +128,7 @@
         <locationX>402</locationX>
         <locationY>1682</locationY>
         <defaultConnector>
-            <targetReference>Get_Updated_Patient_Medication</targetReference>
+            <targetReference>Updated_Patient_Medications_Search</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>default</defaultConnectorLabel>
         <rules>
@@ -166,7 +166,7 @@
         <name>check_action_button_Part_2</name>
         <label>check action button Part 2</label>
         <locationX>402</locationX>
-        <locationY>2414</locationY>
+        <locationY>2606</locationY>
         <defaultConnectorLabel>default</defaultConnectorLabel>
         <rules>
             <name>CancelPart2</name>
@@ -266,6 +266,31 @@
             <targetReference>Input</targetReference>
         </noMoreValuesConnector>
     </loops>
+    <loops>
+        <name>Updated_Patient_Medications</name>
+        <label>Updated Patient Medications</label>
+        <locationX>446</locationX>
+        <locationY>2822</locationY>
+        <collectionReference>PatientMedications</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Copy_1_of_Get_Updated_Patient_Medication</targetReference>
+        </nextValueConnector>
+    </loops>
+    <loops>
+        <name>Updated_Patient_Medications_Search</name>
+        <label>Updated Patient Medications Search</label>
+        <locationX>402</locationX>
+        <locationY>2090</locationY>
+        <collectionReference>PatientMedications</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Get_Updated_Patient_Medication</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Input_Part_2</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -324,10 +349,31 @@
     <recordDeletes>
         <name>Delete_Records_2</name>
         <label>Delete Records 2</label>
-        <locationX>138</locationX>
-        <locationY>2522</locationY>
+        <locationX>94</locationX>
+        <locationY>2714</locationY>
         <inputReference>UpdatedPatientMedications</inputReference>
     </recordDeletes>
+    <recordLookups>
+        <name>Copy_1_of_Get_Updated_Patient_Medication</name>
+        <label>Get Updated Patient Medication</label>
+        <locationX>534</locationX>
+        <locationY>2930</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Update_Submission_Completed</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Updated_Patient_Medications.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Patient_Medication__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordLookups>
         <name>Get_Current_Case</name>
         <label>Get Current Case</label>
@@ -386,8 +432,8 @@
     <recordLookups>
         <name>Get_Updated_Patient_Medication</name>
         <label>Get Updated Patient Medication</label>
-        <locationX>402</locationX>
-        <locationY>2090</locationY>
+        <locationX>490</locationX>
+        <locationY>2198</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Assign_Updated_Record</targetReference>
@@ -397,7 +443,7 @@
             <field>Id</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>CreatedPatientMedication.Id</elementReference>
+                <elementReference>Updated_Patient_Medications_Search.Id</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -407,14 +453,17 @@
     <recordUpdates>
         <name>Update_Submission_Completed</name>
         <label>Update Submission Completed</label>
-        <locationX>402</locationX>
-        <locationY>2630</locationY>
+        <locationX>534</locationX>
+        <locationY>3038</locationY>
+        <connector>
+            <targetReference>Updated_Patient_Medications</targetReference>
+        </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>CreatedPatientMedication.Id</elementReference>
+                <elementReference>Copy_1_of_Get_Updated_Patient_Medication.Id</elementReference>
             </value>
         </filters>
         <inputAssignments>
@@ -431,17 +480,17 @@
         <locationX>402</locationX>
         <locationY>1790</locationY>
         <connector>
-            <targetReference>Get_Updated_Patient_Medication</targetReference>
+            <targetReference>Updated_Patient_Medications_Search</targetReference>
         </connector>
         <inputReference>PatientMedicationDatatable.outputEditedRows</inputReference>
     </recordUpdates>
     <recordUpdates>
         <name>UpdateEdits_Part_2</name>
         <label>UpdateEdits Part 2</label>
-        <locationX>402</locationX>
-        <locationY>2522</locationY>
+        <locationX>446</locationX>
+        <locationY>2714</locationY>
         <connector>
-            <targetReference>Update_Submission_Completed</targetReference>
+            <targetReference>Updated_Patient_Medications</targetReference>
         </connector>
         <inputReference>PatientMedicationDatatable2.outputEditedRows</inputReference>
     </recordUpdates>
@@ -719,7 +768,7 @@
         <name>Input_Part_2</name>
         <label>Input Part 2</label>
         <locationX>402</locationX>
-        <locationY>2306</locationY>
+        <locationY>2498</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -1156,6 +1205,14 @@
         <name>CreatedPatientMedication</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Patient_Medication__c</objectType>
+    </variables>
+    <variables>
+        <name>IDs</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>Patient_Medication__c</objectType>
