@@ -4,7 +4,7 @@
     <assignments>
         <name>Assign_Current_Record_ID</name>
         <label>Assign Current Record ID</label>
-        <locationX>182</locationX>
+        <locationX>226</locationX>
         <locationY>350</locationY>
         <assignmentItems>
             <assignToReference>caseID</assignToReference>
@@ -20,7 +20,7 @@
     <assignments>
         <name>Assign_Parent_Record_ID</name>
         <label>Assign Parent Record ID</label>
-        <locationX>446</locationX>
+        <locationX>490</locationX>
         <locationY>350</locationY>
         <assignmentItems>
             <assignToReference>caseID</assignToReference>
@@ -36,7 +36,7 @@
     <assignments>
         <name>Patient_Screeners_List</name>
         <label>Patient Screeners List</label>
-        <locationX>402</locationX>
+        <locationX>446</locationX>
         <locationY>1082</locationY>
         <assignmentItems>
             <assignToReference>PatientScreeners</assignToReference>
@@ -52,7 +52,7 @@
     <decisions>
         <name>check_action_button</name>
         <label>check action button</label>
-        <locationX>314</locationX>
+        <locationX>358</locationX>
         <locationY>1382</locationY>
         <defaultConnectorLabel>default</defaultConnectorLabel>
         <rules>
@@ -89,7 +89,7 @@
     <decisions>
         <name>Parent_or_Subcase</name>
         <label>Parent or Subcase</label>
-        <locationX>314</locationX>
+        <locationX>358</locationX>
         <locationY>242</locationY>
         <defaultConnector>
             <targetReference>Assign_Parent_Record_ID</targetReference>
@@ -117,7 +117,7 @@
     <loops>
         <name>Selected_Screeners</name>
         <label>Selected Screeners</label>
-        <locationX>314</locationX>
+        <locationX>358</locationX>
         <locationY>758</locationY>
         <collectionReference>ScreenerListDatatable.outputSelectedRows</collectionReference>
         <iterationOrder>Asc</iterationOrder>
@@ -127,6 +127,17 @@
         <noMoreValuesConnector>
             <targetReference>Input</targetReference>
         </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>Updated_Patient_Screeners</name>
+        <label>Updated Patient Screeners</label>
+        <locationX>402</locationX>
+        <locationY>1598</locationY>
+        <collectionReference>PatientScreeners</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Get_Updated_Screeners</targetReference>
+        </nextValueConnector>
     </loops>
     <processMetadataValues>
         <name>BuilderType</name>
@@ -150,7 +161,7 @@
     <recordCreates>
         <name>Create_Patient_Screener</name>
         <label>Create Patient Screener</label>
-        <locationX>402</locationX>
+        <locationX>446</locationX>
         <locationY>866</locationY>
         <assignRecordIdToReference>CreatedPatientScreener.Id</assignRecordIdToReference>
         <connector>
@@ -186,7 +197,7 @@
     <recordLookups>
         <name>Get_Current_Case</name>
         <label>Get Current Case</label>
-        <locationX>314</locationX>
+        <locationX>358</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -207,7 +218,7 @@
     <recordLookups>
         <name>Get_Patient_Screener</name>
         <label>Get Patient Screener</label>
-        <locationX>402</locationX>
+        <locationX>446</locationX>
         <locationY>974</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -228,7 +239,7 @@
     <recordLookups>
         <name>Get_Screener_List</name>
         <label>Get Screener List</label>
-        <locationX>314</locationX>
+        <locationX>358</locationX>
         <locationY>542</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -238,17 +249,41 @@
         <object>Screener__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
-    <recordUpdates>
-        <name>Update_Submission_Completed</name>
-        <label>Update Submission Completed</label>
-        <locationX>314</locationX>
-        <locationY>1598</locationY>
+    <recordLookups>
+        <name>Get_Updated_Screeners</name>
+        <label>Get Updated Screeners</label>
+        <locationX>490</locationX>
+        <locationY>1706</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Update_Submission_Completed</targetReference>
+        </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>CreatedPatientScreener.Id</elementReference>
+                <elementReference>Updated_Patient_Screeners.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Patient_Screener__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Submission_Completed</name>
+        <label>Update Submission Completed</label>
+        <locationX>490</locationX>
+        <locationY>1814</locationY>
+        <connector>
+            <targetReference>Updated_Patient_Screeners</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Updated_Screeners.Id</elementReference>
             </value>
         </filters>
         <inputAssignments>
@@ -262,17 +297,17 @@
     <recordUpdates>
         <name>UpdateEdits</name>
         <label>UpdateEdits</label>
-        <locationX>314</locationX>
+        <locationX>402</locationX>
         <locationY>1490</locationY>
         <connector>
-            <targetReference>Update_Submission_Completed</targetReference>
+            <targetReference>Updated_Patient_Screeners</targetReference>
         </connector>
         <inputReference>PatientScreenersDatatable.outputEditedRows</inputReference>
     </recordUpdates>
     <screens>
         <name>Input</name>
         <label>Input</label>
-        <locationX>314</locationX>
+        <locationX>358</locationX>
         <locationY>1274</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
@@ -542,7 +577,7 @@
     <screens>
         <name>Screeners</name>
         <label>Screeners</label>
-        <locationX>314</locationX>
+        <locationX>358</locationX>
         <locationY>650</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
@@ -716,7 +751,7 @@
         <showHeader>true</showHeader>
     </screens>
     <start>
-        <locationX>188</locationX>
+        <locationX>232</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Current_Case</targetReference>

@@ -4,7 +4,7 @@
     <assignments>
         <name>Patient_Support_List</name>
         <label>Patient Support List</label>
-        <locationX>402</locationX>
+        <locationX>446</locationX>
         <locationY>782</locationY>
         <assignmentItems>
             <assignToReference>PatientSupports</assignToReference>
@@ -20,7 +20,7 @@
     <decisions>
         <name>check_action_button</name>
         <label>check action button</label>
-        <locationX>314</locationX>
+        <locationX>358</locationX>
         <locationY>1082</locationY>
         <defaultConnectorLabel>Default</defaultConnectorLabel>
         <rules>
@@ -60,7 +60,7 @@
     <loops>
         <name>Create_Patient_Supports</name>
         <label>Create Patient Supports</label>
-        <locationX>314</locationX>
+        <locationX>358</locationX>
         <locationY>458</locationY>
         <collectionReference>Support1.outputSelectedRows</collectionReference>
         <iterationOrder>Asc</iterationOrder>
@@ -70,6 +70,17 @@
         <noMoreValuesConnector>
             <targetReference>Input</targetReference>
         </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>Get_Updated_Supports</name>
+        <label>Get Updated Supports</label>
+        <locationX>402</locationX>
+        <locationY>1298</locationY>
+        <collectionReference>PatientSupports</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Get_Updated_Patient_Supports</targetReference>
+        </nextValueConnector>
     </loops>
     <processMetadataValues>
         <name>BuilderType</name>
@@ -93,7 +104,7 @@
     <recordCreates>
         <name>Create_Support</name>
         <label>Create Support</label>
-        <locationX>402</locationX>
+        <locationX>446</locationX>
         <locationY>566</locationY>
         <assignRecordIdToReference>CreatedPatientSupport.Id</assignRecordIdToReference>
         <connector>
@@ -129,7 +140,7 @@
     <recordLookups>
         <name>Get_Current_Case</name>
         <label>Get Current Case</label>
-        <locationX>314</locationX>
+        <locationX>358</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -150,7 +161,7 @@
     <recordLookups>
         <name>Get_Patient_Support</name>
         <label>Get Patient Support</label>
-        <locationX>402</locationX>
+        <locationX>446</locationX>
         <locationY>674</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -171,7 +182,7 @@
     <recordLookups>
         <name>Get_Supports</name>
         <label>Get Supports</label>
-        <locationX>314</locationX>
+        <locationX>358</locationX>
         <locationY>242</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -181,17 +192,41 @@
         <object>Support__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
-    <recordUpdates>
-        <name>Update_Submission_Completed</name>
-        <label>Update Submission Completed</label>
-        <locationX>314</locationX>
-        <locationY>1298</locationY>
+    <recordLookups>
+        <name>Get_Updated_Patient_Supports</name>
+        <label>Get Updated Patient Supports</label>
+        <locationX>490</locationX>
+        <locationY>1406</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Update_Submission_Completed</targetReference>
+        </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>CreatedPatientSupport.Id</elementReference>
+                <elementReference>Get_Updated_Supports.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Patient_Support__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Submission_Completed</name>
+        <label>Update Submission Completed</label>
+        <locationX>490</locationX>
+        <locationY>1514</locationY>
+        <connector>
+            <targetReference>Get_Updated_Supports</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Updated_Patient_Supports.Id</elementReference>
             </value>
         </filters>
         <inputAssignments>
@@ -205,10 +240,10 @@
     <recordUpdates>
         <name>UpdateEdits</name>
         <label>UpdateEdits</label>
-        <locationX>314</locationX>
+        <locationX>402</locationX>
         <locationY>1190</locationY>
         <connector>
-            <targetReference>Update_Submission_Completed</targetReference>
+            <targetReference>Get_Updated_Supports</targetReference>
         </connector>
         <inputReference>PatientSupportDatatable.outputEditedRows</inputReference>
     </recordUpdates>
@@ -216,7 +251,7 @@
     <screens>
         <name>Input</name>
         <label>Input</label>
-        <locationX>314</locationX>
+        <locationX>358</locationX>
         <locationY>974</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
@@ -498,7 +533,7 @@
     <screens>
         <name>Supports</name>
         <label>Supports</label>
-        <locationX>314</locationX>
+        <locationX>358</locationX>
         <locationY>350</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
@@ -672,7 +707,7 @@
         <showHeader>true</showHeader>
     </screens>
     <start>
-        <locationX>188</locationX>
+        <locationX>232</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Current_Case</targetReference>
