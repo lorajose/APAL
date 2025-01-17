@@ -4,7 +4,7 @@
         <name>In_App_Notification</name>
         <label>In-App Notification</label>
         <locationX>1106</locationX>
-        <locationY>863</locationY>
+        <locationY>1079</locationY>
         <actionName>customNotificationAction</actionName>
         <actionType>customNotificationAction</actionType>
         <connector>
@@ -42,13 +42,14 @@
             </value>
         </inputParameters>
         <nameSegment>customNotificationAction</nameSegment>
+        <offset>0</offset>
         <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>Reassigned_Notification</name>
         <label>Reassigned Notification</label>
-        <locationX>644</locationX>
-        <locationY>1379</locationY>
+        <locationX>666</locationX>
+        <locationY>1595</locationY>
         <actionName>customNotificationAction</actionName>
         <actionType>customNotificationAction</actionType>
         <connector>
@@ -86,6 +87,7 @@
             </value>
         </inputParameters>
         <nameSegment>customNotificationAction</nameSegment>
+        <offset>0</offset>
         <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>61.0</apiVersion>
@@ -93,7 +95,7 @@
         <name>Assign_Owner_to_Recipients</name>
         <label>Assign Owner to Recipients</label>
         <locationX>1106</locationX>
-        <locationY>755</locationY>
+        <locationY>971</locationY>
         <assignmentItems>
             <assignToReference>RecipientIds</assignToReference>
             <operator>Add</operator>
@@ -108,8 +110,8 @@
     <assignments>
         <name>Assign_Reassignment_Recipient</name>
         <label>Assign Reassignment Recipient</label>
-        <locationX>644</locationX>
-        <locationY>1271</locationY>
+        <locationX>666</locationX>
+        <locationY>1487</locationY>
         <assignmentItems>
             <assignToReference>ReassignmentRecipientIDs</assignToReference>
             <operator>Add</operator>
@@ -125,7 +127,7 @@
         <name>Case_Status</name>
         <label>Case Status</label>
         <locationX>842</locationX>
-        <locationY>539</locationY>
+        <locationY>755</locationY>
         <defaultConnector>
             <targetReference>Changed_Owner</targetReference>
         </defaultConnector>
@@ -339,7 +341,10 @@
         <name>Changed_Owner</name>
         <label>Changed Owner?</label>
         <locationX>842</locationX>
-        <locationY>1055</locationY>
+        <locationY>1271</locationY>
+        <defaultConnector>
+            <targetReference>Changed_Patient</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>No</defaultConnectorLabel>
         <rules>
             <name>Yes</name>
@@ -379,10 +384,32 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Changed_Patient</name>
+        <label>Changed Patient?</label>
+        <locationX>842</locationX>
+        <locationY>2303</locationY>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Patient</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.ContactId</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_SubCases</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Old_Owner_Has_Cases</name>
         <label>Old Owner Has Cases</label>
-        <locationX>644</locationX>
-        <locationY>1595</locationY>
+        <locationX>666</locationX>
+        <locationY>1811</locationY>
         <defaultConnector>
             <targetReference>Get_Case_Team_Member_Record</targetReference>
         </defaultConnector>
@@ -397,6 +424,9 @@
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
+            <connector>
+                <targetReference>Changed_Patient</targetReference>
+            </connector>
             <label>Yes</label>
         </rules>
     </decisions>
@@ -408,6 +438,31 @@
     </formulas>
     <interviewLabel>Case Updates {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Case Updates</label>
+    <loops>
+        <name>Change_Patient_Supports</name>
+        <label>Change Patient Supports</label>
+        <locationX>710</locationX>
+        <locationY>3059</locationY>
+        <collectionReference>Get_Case_Care_Navigations</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Get_Patient_Supports</targetReference>
+        </nextValueConnector>
+    </loops>
+    <loops>
+        <name>Update_Patient_Supports</name>
+        <label>Update Patient Supports</label>
+        <locationX>886</locationX>
+        <locationY>3275</locationY>
+        <collectionReference>Get_Patient_Supports</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Update_Patient_Support_Record</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Change_Patient_Supports</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -430,15 +485,18 @@
     <recordDeletes>
         <name>Delete_Team_Member</name>
         <label>Delete Team Member</label>
-        <locationX>776</locationX>
-        <locationY>1811</locationY>
+        <locationX>754</locationX>
+        <locationY>2027</locationY>
+        <connector>
+            <targetReference>Changed_Patient</targetReference>
+        </connector>
         <inputReference>Get_Case_Team_Member_Record</inputReference>
     </recordDeletes>
     <recordLookups>
         <name>Get_all_SubCases_Related_to_Parent_Case</name>
         <label>Get all SubCases Related to Parent Case</label>
-        <locationX>644</locationX>
-        <locationY>1487</locationY>
+        <locationX>666</locationX>
+        <locationY>1703</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Old_Owner_Has_Cases</targetReference>
@@ -463,10 +521,59 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <name>Get_Care_Navigation_Case_Record_Type</name>
+        <label>Get Care Navigation Case Record Type</label>
+        <locationX>842</locationX>
+        <locationY>431</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Notification_Type</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Care_Navigation</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RecordType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Case_Care_Navigations</name>
+        <label>Get Case - Care Navigations</label>
+        <locationX>842</locationX>
+        <locationY>647</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Case_Status</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>ParentId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>RecordTypeId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Care_Navigation_Case_Record_Type.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Case_Team_Member_Record</name>
         <label>Get Case Team Member Record</label>
-        <locationX>776</locationX>
-        <locationY>1703</locationY>
+        <locationX>754</locationX>
+        <locationY>1919</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Delete_Team_Member</targetReference>
@@ -494,10 +601,10 @@
         <name>Get_Notification_Type</name>
         <label>Get Notification Type</label>
         <locationX>842</locationX>
-        <locationY>431</locationY>
+        <locationY>539</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Case_Status</targetReference>
+            <targetReference>Get_Case_Care_Navigations</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -518,7 +625,7 @@
         <locationY>323</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Get_Notification_Type</targetReference>
+            <targetReference>Get_Care_Navigation_Case_Record_Type</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -532,11 +639,32 @@
         <object>RecordType</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordLookups>
+        <name>Get_Patient_Supports</name>
+        <label>Get Patient Supports</label>
+        <locationX>886</locationX>
+        <locationY>3167</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Update_Patient_Supports</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Case__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Change_Patient_Supports.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Patient_Support__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <recordUpdates>
         <name>Update_case_if_Escalated</name>
         <label>Update case if Escalated</label>
         <locationX>50</locationX>
-        <locationY>647</locationY>
+        <locationY>863</locationY>
         <connector>
             <targetReference>Changed_Owner</targetReference>
         </connector>
@@ -555,10 +683,114 @@
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <recordUpdates>
+        <name>Update_Patient_Concerns</name>
+        <label>Update Patient Concerns</label>
+        <locationX>710</locationX>
+        <locationY>2735</locationY>
+        <connector>
+            <targetReference>Update_Patient_Screeners</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Patient__c</field>
+            <value>
+                <elementReference>$Record.Contact.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Patient_Concerns__r</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Patient_Medications</name>
+        <label>Update Patient Medications</label>
+        <locationX>710</locationX>
+        <locationY>2519</locationY>
+        <connector>
+            <targetReference>Update_Patient_Substances</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Patient__c</field>
+            <value>
+                <elementReference>$Record.Contact.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Medications__r</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Patient_Safety_Risks</name>
+        <label>Update Patient Safety Risks</label>
+        <locationX>710</locationX>
+        <locationY>2951</locationY>
+        <connector>
+            <targetReference>Change_Patient_Supports</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Patient__c</field>
+            <value>
+                <elementReference>$Record.Contact.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Patient_Safety_Risks__r</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Patient_Screeners</name>
+        <label>Update Patient Screeners</label>
+        <locationX>710</locationX>
+        <locationY>2843</locationY>
+        <connector>
+            <targetReference>Update_Patient_Safety_Risks</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Patient__c</field>
+            <value>
+                <elementReference>$Record.Contact.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Patient_Screeners__r</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Patient_Substances</name>
+        <label>Update Patient Substances</label>
+        <locationX>710</locationX>
+        <locationY>2627</locationY>
+        <connector>
+            <targetReference>Update_Patient_Concerns</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Patient__c</field>
+            <value>
+                <elementReference>$Record.Contact.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Substances__r</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Patient_Support_Record</name>
+        <label>Update Patient Support Record</label>
+        <locationX>974</locationX>
+        <locationY>3383</locationY>
+        <connector>
+            <targetReference>Update_Patient_Supports</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Update_Patient_Supports.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Patient__c</field>
+            <value>
+                <elementReference>$Record.Contact.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Patient_Support__c</object>
+    </recordUpdates>
+    <recordUpdates>
         <name>Update_Stage_to_Assigned</name>
         <label>Update Stage to Assigned</label>
         <locationX>1106</locationX>
-        <locationY>647</locationY>
+        <locationY>863</locationY>
         <connector>
             <targetReference>Assign_Owner_to_Recipients</targetReference>
         </connector>
@@ -580,7 +812,7 @@
         <name>Update_Stage_to_Closed</name>
         <label>Update Stage to Closed</label>
         <locationX>578</locationX>
-        <locationY>647</locationY>
+        <locationY>863</locationY>
         <connector>
             <targetReference>Changed_Owner</targetReference>
         </connector>
@@ -602,7 +834,7 @@
         <name>Update_Stage_to_Consultation_Completed_Pending_CN</name>
         <label>Update Stage to Consultation Completed Pending CN</label>
         <locationX>842</locationX>
-        <locationY>647</locationY>
+        <locationY>863</locationY>
         <connector>
             <targetReference>Changed_Owner</targetReference>
         </connector>
@@ -624,7 +856,7 @@
         <name>Update_Stage_to_In_Progress</name>
         <label>Update Stage to In Progress</label>
         <locationX>314</locationX>
-        <locationY>647</locationY>
+        <locationY>863</locationY>
         <connector>
             <targetReference>Changed_Owner</targetReference>
         </connector>
@@ -646,7 +878,7 @@
         <name>Update_Stage_toIn_Progress</name>
         <label>Update Stage to In Progress</label>
         <locationX>1370</locationX>
-        <locationY>647</locationY>
+        <locationY>863</locationY>
         <connector>
             <targetReference>Changed_Owner</targetReference>
         </connector>
@@ -667,8 +899,8 @@
     <recordUpdates>
         <name>Update_Sub_Case_Owner</name>
         <label>Update Sub Case Owner</label>
-        <locationX>644</locationX>
-        <locationY>1163</locationY>
+        <locationX>666</locationX>
+        <locationY>1379</locationY>
         <connector>
             <targetReference>Assign_Reassignment_Recipient</targetReference>
         </connector>
@@ -685,6 +917,22 @@
             </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_SubCases</name>
+        <label>Update SubCases</label>
+        <locationX>710</locationX>
+        <locationY>2411</locationY>
+        <connector>
+            <targetReference>Update_Patient_Medications</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>ContactId</field>
+            <value>
+                <elementReference>$Record.Contact.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Cases</inputReference>
     </recordUpdates>
     <start>
         <locationX>716</locationX>
