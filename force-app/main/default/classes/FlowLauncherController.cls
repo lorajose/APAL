@@ -74,7 +74,7 @@ public with sharing class FlowLauncherController {
      return results;
     }
 
-    private static List<FlowButtonInfo> generateFlowButtons(Id caseId, String recordTypeName) {
+    public static List<FlowButtonInfo> generateFlowButtons(Id caseId, String recordTypeName) {
         List<FlowButtonInfo> flowButtons = new List<FlowButtonInfo>();
     Map<String, Integer> counts = new Map<String, Integer>();
 
