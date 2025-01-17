@@ -92,4 +92,75 @@ public class FlowLauncherControllerTest {
         //System.assert(resultsRequest[0].objectName == 'Patient_Concern__c', 'El primer flujo debe ser Patient_Concern__c');
         //System.assert(resultsRequest[0].recordCount == 2, 'El recuento de registros debe ser 2 para Patient_Concern__c');
     }
+    
+    @isTest
+    public static void testGenerateFlowButtons() {
+        // Step 1: Set up test data
+        // Create Record Types
+        RecordType careNavigationRecordType = [SELECT Id FROM RecordType WHERE DeveloperName = 'Care_Navigation' AND SObjectType = 'Case' LIMIT 1];
+        RecordType otherRecordType = [SELECT Id FROM RecordType WHERE DeveloperName = 'Care_Request' AND SObjectType = 'Case' LIMIT 1];
+
+        // Create Cases
+        Case careNavigationCase = new Case(
+            RecordTypeId = careNavigationRecordType.Id,
+            Subject = 'Test Care Navigation Case'
+        );
+        Case otherCase = new Case(
+            RecordTypeId = otherRecordType.Id,
+            Subject = 'Test Other Case'
+        );
+        insert new List<Case>{careNavigationCase, otherCase};
+            
+             // Crear un registro de tipo 'Substance' si es necesario (esto depende de tu configuración de objeto)
+        Substance_List__c substanceRecord = new Substance_List__c(
+            Name = 'Test Substance'
+        );
+        insert substanceRecord;
+            
+        // Crear un registro de tipo 'Substance' si es necesario (esto depende de tu configuración de objeto)
+        Concern_List__c substanceRecordConcert = new Concern_List__c(
+            Name = 'Test Concern'
+        );
+        insert substanceRecordConcert;    
+
+        // Insert related records for careNavigationCase
+        List<Patient_Concern__c> concerns = new List<Patient_Concern__c>{
+            new Patient_Concern__c(Case__c = careNavigationCase.Id, Concern__c = substanceRecordConcert.Id ),
+            new Patient_Concern__c(Case__c = careNavigationCase.Id, Concern__c = substanceRecordConcert.Id )
+        };
+        insert concerns;
+
+        List<Patient_Substance__c> substances = new List<Patient_Substance__c>{
+            new Patient_Substance__c(Case__c = careNavigationCase.Id, Substance_Listing__c = substanceRecord.Id )
+        };
+        insert substances;
+
+       // List<Patient_Support__c> supports = new List<Patient_Support__c>{
+       //     new Patient_Support__c(Case__c = careNavigationCase.Id)
+       // };
+       // insert supports;
+
+        // Step 2: Test the generateFlowButtons method for Care_Navigation
+        Test.startTest();
+        List<FlowLauncherController.FlowButtonInfo> careNavigationButtons = FlowLauncherController.generateFlowButtons(careNavigationCase.Id, 'Care_Navigation');
+        Test.stopTest();
+
+        // Step 3: Assert results for Care_Navigation
+        System.assertEquals(6, careNavigationButtons.size(), 'Expected 6 flow buttons for Care_Navigation.');
+        System.assertEquals('Patient_Concern__c', careNavigationButtons[0].objectName, 'Expected first button to be Patient_Concern__c.');
+        System.assertEquals(2, careNavigationButtons[0].recordCount, 'Expected 2 Patient Concern records.');
+
+        //System.assertEquals('Patient_Support__c', careNavigationButtons[5].objectName, 'Expected last button to be Patient_Support__c.');
+        //System.assertEquals(1, careNavigationButtons[5].recordCount, 'Expected 1 Patient Support record.');
+
+        // Step 4: Test the generateFlowButtons method for other Record Types
+       // Test.startTest();
+        List<FlowLauncherController.FlowButtonInfo> otherButtons = FlowLauncherController.generateFlowButtons(otherCase.Id, 'Care_Request');
+       // Test.stopTest();
+
+        // Step 5: Assert results for Care_Request
+        System.assertEquals(5, otherButtons.size(), 'Expected 5 flow buttons for Care_Request.');
+        System.assertEquals('Patient_Concern__c', otherButtons[0].objectName, 'Expected first button to be Patient_Concern__c.');
+        System.assertEquals(0, otherButtons[0].recordCount, 'Expected 0 Patient Concern records for Care_Request.');
+    }
 }
