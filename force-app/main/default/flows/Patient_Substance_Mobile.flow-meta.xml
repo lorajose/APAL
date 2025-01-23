@@ -822,6 +822,9 @@
             <fields>
                 <name>Current_Substance_Parent</name>
                 <dataType>Boolean</dataType>
+                <defaultValue>
+                    <elementReference>Get_Parent_Patient_Substances[$EachItem].Current_Substance__c</elementReference>
+                </defaultValue>
                 <fieldText>Current Substance</fieldText>
                 <fieldType>InputField</fieldType>
                 <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
@@ -966,6 +969,9 @@
             <fields>
                 <name>Current_Substance</name>
                 <dataType>Boolean</dataType>
+                <defaultValue>
+                    <elementReference>Get_Patient_Substances[$EachItem].Current_Substance__c</elementReference>
+                </defaultValue>
                 <fieldText>Current Substance</fieldText>
                 <fieldType>InputField</fieldType>
                 <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
