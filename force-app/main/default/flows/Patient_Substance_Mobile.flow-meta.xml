@@ -49,6 +49,13 @@
             </value>
         </assignmentItems>
         <assignmentItems>
+            <assignToReference>PatientSubstance.Current_Substance__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Parent_Patient_Substances.Current_Substance_Parent</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
             <assignToReference>NewPatientSubstances</assignToReference>
             <operator>Add</operator>
             <value>
@@ -99,6 +106,13 @@
             <operator>Assign</operator>
             <value>
                 <elementReference>Update_Parent_Patient_Substances.Substance_Notes_Parent</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>CurrentSubstance.Current_Substance__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Update_Parent_Patient_Substances.Current_Substance_Parent</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -160,6 +174,13 @@
             </value>
         </assignmentItems>
         <assignmentItems>
+            <assignToReference>PatientSubstance.Current_Substance__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Patient_Substances.Current_Substance</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
             <assignToReference>NewPatientSubstances</assignToReference>
             <operator>Add</operator>
             <value>
@@ -210,6 +231,13 @@
             <operator>Assign</operator>
             <value>
                 <elementReference>Update_Patient_Substances.Substance_Notes</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>CurrentSubstance.Current_Substance__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Update_Patient_Substances.Current_Substance</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -792,6 +820,14 @@
                 </visibilityRule>
             </fields>
             <fields>
+                <name>Current_Substance_Parent</name>
+                <dataType>Boolean</dataType>
+                <fieldText>Current Substance</fieldText>
+                <fieldType>InputField</fieldType>
+                <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                <isRequired>true</isRequired>
+            </fields>
+            <fields>
                 <name>Substance_Notes_Parent</name>
                 <defaultValue>
                     <stringValue>{!Get_Parent_Patient_Substances[$EachItem].Notes__c}</stringValue>
@@ -926,6 +962,14 @@
                         <operator>NotEqualTo</operator>
                     </conditions>
                 </visibilityRule>
+            </fields>
+            <fields>
+                <name>Current_Substance</name>
+                <dataType>Boolean</dataType>
+                <fieldText>Current Substance</fieldText>
+                <fieldType>InputField</fieldType>
+                <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                <isRequired>true</isRequired>
             </fields>
             <fields>
                 <name>Substance_Notes</name>
