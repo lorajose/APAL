@@ -77,6 +77,13 @@
             </value>
         </assignmentItems>
         <assignmentItems>
+            <assignToReference>PatientMedication.Allergy__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Parent_Patient_Medications.Allergy_Parent</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
             <assignToReference>NewPatientMedications</assignToReference>
             <operator>Add</operator>
             <value>
@@ -155,6 +162,13 @@
             <operator>Assign</operator>
             <value>
                 <elementReference>Update_Parent_Patient_Medications.Medication_Changes_Parent</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>CurrentMedication.Allergy__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Update_Parent_Patient_Medications.Allergy_Parent</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -244,6 +258,13 @@
             </value>
         </assignmentItems>
         <assignmentItems>
+            <assignToReference>PatientMedication.Allergy__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Patient_Medications.Allergy</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
             <assignToReference>NewPatientMedications</assignToReference>
             <operator>Add</operator>
             <value>
@@ -322,6 +343,13 @@
             <operator>Assign</operator>
             <value>
                 <elementReference>Update_Patient_Medications.Current_Medication</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>CurrentMedication.Allergy__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Update_Patient_Medications.Allergy</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -947,6 +975,14 @@
                 <isRequired>true</isRequired>
             </fields>
             <fields>
+                <name>Allergy_Parent</name>
+                <dataType>Boolean</dataType>
+                <fieldText>Allergy</fieldText>
+                <fieldType>InputField</fieldType>
+                <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                <isRequired>true</isRequired>
+            </fields>
+            <fields>
                 <name>Medication_Changes_Parent</name>
                 <choiceReferences>MedicationChanges</choiceReferences>
                 <dataType>String</dataType>
@@ -1137,6 +1173,14 @@
                     <elementReference>Get_Patient_Medications[$EachItem].Current_Medication__c</elementReference>
                 </defaultValue>
                 <fieldText>Current Medication</fieldText>
+                <fieldType>InputField</fieldType>
+                <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                <isRequired>true</isRequired>
+            </fields>
+            <fields>
+                <name>Allergy</name>
+                <dataType>Boolean</dataType>
+                <fieldText>Allergy</fieldText>
                 <fieldType>InputField</fieldType>
                 <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                 <isRequired>true</isRequired>
