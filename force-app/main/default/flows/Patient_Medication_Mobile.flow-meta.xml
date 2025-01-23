@@ -977,6 +977,9 @@
             <fields>
                 <name>Allergy_Parent</name>
                 <dataType>Boolean</dataType>
+                <defaultValue>
+                    <elementReference>Get_Parent_Patient_Medications[$EachItem].Allergy__c</elementReference>
+                </defaultValue>
                 <fieldText>Allergy</fieldText>
                 <fieldType>InputField</fieldType>
                 <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
@@ -1180,6 +1183,9 @@
             <fields>
                 <name>Allergy</name>
                 <dataType>Boolean</dataType>
+                <defaultValue>
+                    <elementReference>Get_Patient_Medications[$EachItem].Allergy__c</elementReference>
+                </defaultValue>
                 <fieldText>Allergy</fieldText>
                 <fieldType>InputField</fieldType>
                 <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
