@@ -308,6 +308,7 @@
         <fields>Substance_List__c.Substance_Category__c</fields>
         <fields>Frequency_of_Substance_Use__c</fields>
         <fields>Notes__c</fields>
+        <fields>Current_Substance__c</fields>
         <relatedList>Patient_Substance__c.Case__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -332,15 +333,6 @@
         <excludeButtons>MassChangeOwner</excludeButtons>
         <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
-        <fields>Notes__c</fields>
-        <fields>Service__c</fields>
-        <fields>OWNER.ALIAS</fields>
-        <relatedList>Care_Note__c.Related_Case__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <excludeButtons>MassChangeOwner</excludeButtons>
-        <excludeButtons>New</excludeButtons>
-        <fields>NAME</fields>
         <fields>Safety_Risk__c.NAME</fields>
         <fields>Recent__c</fields>
         <fields>Historical__c</fields>
@@ -359,6 +351,7 @@
         <fields>Frequency__c</fields>
         <fields>Amount__c</fields>
         <fields>Dosing_Unit__c</fields>
+        <fields>Allergy__c</fields>
         <relatedList>Patient_Medication__c.Case__c</relatedList>
     </relatedLists>
     <relatedLists>
