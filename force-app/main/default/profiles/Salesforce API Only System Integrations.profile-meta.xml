@@ -610,6 +610,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Patient_Substance__c.Current_Substance__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Patient_Substance__c.Frequency_of_Substance_Use__c</field>
         <readable>true</readable>
     </fieldPermissions>
