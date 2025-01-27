@@ -1121,6 +1121,12 @@
         </itemInstances>
         <itemInstances>
             <componentInstance>
+                <componentName>buttonBarWithFlowModal</componentName>
+                <identifier>c_buttonBarWithFlowModal</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
                 <componentInstanceProperties>
                     <name>parentFieldApiName</name>
                     <value>Case.Id</value>
