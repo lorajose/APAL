@@ -418,6 +418,9 @@
         <label>Navigation</label>
         <locationX>1040</locationX>
         <locationY>1898</locationY>
+        <defaultConnector>
+            <targetReference>Copy_1_of_Cancel_message</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Cancel</defaultConnectorLabel>
         <rules>
             <name>Saveparent</name>
@@ -881,6 +884,22 @@
         <allowPause>true</allowPause>
         <fields>
             <name>cancel</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;You have canceled your transaction. No changes have been made. Please click the back button above to return to the patient record.&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>false</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>Copy_1_of_Cancel_message</name>
+        <label>Copy 1 of Cancel message</label>
+        <locationX>1194</locationX>
+        <locationY>2006</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>Copy_1_of_cancel</name>
             <fieldText>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(68, 68, 68);&quot;&gt;You have canceled your transaction. No changes have been made. Please click the back button above to return to the patient record.&lt;/span&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
