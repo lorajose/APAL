@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <brand>
+        <headerColor>#0070D2</headerColor>
+        <shouldOverrideOrgTheme>true</shouldOverrideOrgTheme>
+    </brand>
+    <description>Documentation Management App</description>
+    <formFactors>Small</formFactors>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
+    <isOmniPinnedViewEnabled>false</isOmniPinnedViewEnabled>
+    <label>Admin App</label>
+    <navType>Console</navType>
+    <tabs>Medication__c</tabs>
+    <tabs>Concern_List__c</tabs>
+    <tabs>Screener__c</tabs>
+    <tabs>Safety_Risk__c</tabs>
+    <tabs>Substance_List__c</tabs>
+    <tabs>Support__c</tabs>
+    <uiType>Lightning</uiType>
+    <utilityBar>Admin_App_UtilityBar</utilityBar>
+    <workspaceConfig>
+        <mappings>
+            <tab>Concern_List__c</tab>
+        </mappings>
+        <mappings>
+            <tab>Medication__c</tab>
+        </mappings>
+        <mappings>
+            <tab>Safety_Risk__c</tab>
+        </mappings>
+        <mappings>
+            <tab>Screener__c</tab>
+        </mappings>
+        <mappings>
+            <tab>Substance_List__c</tab>
+        </mappings>
+        <mappings>
+            <tab>Support__c</tab>
+        </mappings>
+    </workspaceConfig>
+</CustomApplication>
