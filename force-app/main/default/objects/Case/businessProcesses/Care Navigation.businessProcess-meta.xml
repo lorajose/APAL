@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <BusinessProcess xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Patient Case</fullName>
+    <fullName>Care Navigation</fullName>
     <isActive>true</isActive>
     <values>
-        <fullName>Completed</fullName>
+        <fullName>Accepted</fullName>
         <default>false</default>
     </values>
     <values>
-        <fullName>Consultation Completed - Pending CN</fullName>
+        <fullName>Assigned</fullName>
         <default>false</default>
     </values>
     <values>
@@ -15,19 +15,23 @@
         <default>false</default>
     </values>
     <values>
-        <fullName>In Progress</fullName>
+        <fullName>Follow-Up</fullName>
         <default>false</default>
     </values>
     <values>
-        <fullName>Merged</fullName>
+        <fullName>Rejected</fullName>
         <default>false</default>
     </values>
     <values>
-        <fullName>New</fullName>
+        <fullName>Sent</fullName>
         <default>true</default>
     </values>
     <values>
-        <fullName>On Hold</fullName>
+        <fullName>Successful Navigation</fullName>
+        <default>false</default>
+    </values>
+    <values>
+        <fullName>Unconfirmed Navigation</fullName>
         <default>false</default>
     </values>
     <values>
