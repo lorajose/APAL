@@ -89,12 +89,8 @@
     <flexiPageRegions>
         <itemInstances>
             <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Subject</fieldItem>
-                <identifier>RecordSubjectField2</identifier>
+                <fieldItem>Record.Parent.Subject</fieldItem>
+                <identifier>RecordParentSubjectField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
