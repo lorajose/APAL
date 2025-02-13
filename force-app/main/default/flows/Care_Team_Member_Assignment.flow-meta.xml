@@ -42,6 +42,7 @@
             </value>
         </inputParameters>
         <nameSegment>customNotificationAction</nameSegment>
+        <offset>0</offset>
         <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
@@ -77,6 +78,7 @@
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
         <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>60.0</apiVersion>
@@ -436,6 +438,12 @@
                 <stringValue>Assigned</stringValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <elementReference>Subject</elementReference>
+            </value>
+        </inputAssignments>
         <object>Case</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
@@ -499,6 +507,12 @@
             <field>Status</field>
             <value>
                 <stringValue>Accepted</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <elementReference>SubjectSelf</elementReference>
             </value>
         </inputAssignments>
         <object>Case</object>
@@ -566,6 +580,12 @@
                 <stringValue>Accepted</stringValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <elementReference>SubjectSelf</elementReference>
+            </value>
+        </inputAssignments>
         <object>Case</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
@@ -629,6 +649,12 @@
             <field>Status</field>
             <value>
                 <stringValue>Assigned</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <elementReference>Subject</elementReference>
             </value>
         </inputAssignments>
         <object>Case</object>
@@ -1175,6 +1201,16 @@ To approve or reject the assignment please review the Case above.</text>
         <name>NotificationTitle</name>
         <isViewedAsPlainText>true</isViewedAsPlainText>
         <text>New Case Assignment</text>
+    </textTemplates>
+    <textTemplates>
+        <name>Subject</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>{!Service}: {!Notes}</text>
+    </textTemplates>
+    <textTemplates>
+        <name>SubjectSelf</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>{!$UserRole.Name}: {!NotesSelf}</text>
     </textTemplates>
     <variables>
         <name>CountRecords</name>
