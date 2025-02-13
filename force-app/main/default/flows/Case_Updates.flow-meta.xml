@@ -962,6 +962,9 @@
         </inputAssignments>
         <inputAssignments>
             <field>IsEscalated</field>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
         </inputAssignments>
         <inputAssignments>
             <field>Number_of_Care_Requests_Completed__c</field>
