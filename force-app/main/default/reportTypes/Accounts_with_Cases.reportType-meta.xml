@@ -938,6 +938,21 @@
             <field>Provider__c.pcpnpi__c</field>
             <table>Account.Cases</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Unrelated_Call__c</field>
+            <table>Account.Cases</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Unrelated_Call_Reason__c</field>
+            <table>Account.Cases</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Unrelated_Call_Details__c</field>
+            <table>Account.Cases</table>
+        </columns>
         <masterLabel>Cases</masterLabel>
     </sections>
 </ReportType>
