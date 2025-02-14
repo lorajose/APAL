@@ -990,7 +990,7 @@
         <inputAssignments>
             <field>Status</field>
             <value>
-                <stringValue>Unrelated Call</stringValue>
+                <stringValue>Closed - Unrelated Call</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>

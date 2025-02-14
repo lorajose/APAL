@@ -34,8 +34,4 @@
         <fullName>Unconfirmed Navigation</fullName>
         <default>false</default>
     </values>
-    <values>
-        <fullName>Unrelated Call</fullName>
-        <default>false</default>
-    </values>
 </BusinessProcess>
