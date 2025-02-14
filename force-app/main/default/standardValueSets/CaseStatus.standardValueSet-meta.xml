@@ -86,9 +86,9 @@
         <closed>true</closed>
     </standardValue>
     <standardValue>
-        <fullName>Unrelated Call</fullName>
+        <fullName>Closed - Unrelated Call</fullName>
         <default>false</default>
-        <label>Unrelated Call</label>
-        <closed>true</closed>
+        <label>Closed - Unrelated Call</label>
+        <closed>false</closed>
     </standardValue>
 </StandardValueSet>

@@ -3,6 +3,10 @@
     <fullName>Patient Case</fullName>
     <isActive>true</isActive>
     <values>
+        <fullName>Closed - Unrelated Call</fullName>
+        <default>false</default>
+    </values>
+    <values>
         <fullName>Completed</fullName>
         <default>false</default>
     </values>
@@ -28,10 +32,6 @@
     </values>
     <values>
         <fullName>On Hold</fullName>
-        <default>false</default>
-    </values>
-    <values>
-        <fullName>Unrelated Call</fullName>
         <default>false</default>
     </values>
 </BusinessProcess>
