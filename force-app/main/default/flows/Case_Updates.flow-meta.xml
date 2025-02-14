@@ -3,7 +3,7 @@
     <actionCalls>
         <name>In_App_Notification</name>
         <label>In-App Notification</label>
-        <locationX>1106</locationX>
+        <locationX>1634</locationX>
         <locationY>1079</locationY>
         <actionName>customNotificationAction</actionName>
         <actionType>customNotificationAction</actionType>
@@ -94,7 +94,7 @@
     <assignments>
         <name>Assign_Owner_to_Recipients</name>
         <label>Assign Owner to Recipients</label>
-        <locationX>1106</locationX>
+        <locationX>1634</locationX>
         <locationY>971</locationY>
         <assignmentItems>
             <assignToReference>RecipientIds</assignToReference>
@@ -132,6 +132,38 @@
             <targetReference>Changed_Owner</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>New</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Unrelated_Call__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Status_to_New</targetReference>
+            </connector>
+            <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+            <label>New</label>
+        </rules>
+        <rules>
+            <name>Closed_Unrelated_Call</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Unrelated_Call__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Status_and_Fields</targetReference>
+            </connector>
+            <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+            <label>Closed - &apos;Unrelated Call&apos;</label>
+        </rules>
         <rules>
             <name>Escalated</name>
             <conditionLogic>and</conditionLogic>
@@ -198,6 +230,42 @@
             <label>In Progress</label>
         </rules>
         <rules>
+            <name>Closed_Pending_CN</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Number_of_Care_Requests_Offered__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record.Number_of_Care_Requests_Completed__c</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Number_of_CN_Offered__c</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <elementReference>$Record.Number_of_CN_Completed__c</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Patient_Case</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>On Hold</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Stage_to_Consultation_Completed_Pending_CN</targetReference>
+            </connector>
+            <label>Closed Pending CN</label>
+        </rules>
+        <rules>
             <name>Closed</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
@@ -246,42 +314,6 @@
                 <targetReference>Update_Stage_to_Closed</targetReference>
             </connector>
             <label>Closed</label>
-        </rules>
-        <rules>
-            <name>Closed_Pending_CN</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.Number_of_Care_Requests_Offered__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <elementReference>$Record.Number_of_Care_Requests_Completed__c</elementReference>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.Number_of_CN_Offered__c</leftValueReference>
-                <operator>GreaterThan</operator>
-                <rightValue>
-                    <elementReference>$Record.Number_of_CN_Completed__c</elementReference>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Patient_Case</stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.Status</leftValueReference>
-                <operator>NotEqualTo</operator>
-                <rightValue>
-                    <stringValue>On Hold</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Update_Stage_to_Consultation_Completed_Pending_CN</targetReference>
-            </connector>
-            <label>Closed Pending CN</label>
         </rules>
         <rules>
             <name>Was_Escalated_CR</name>
@@ -335,38 +367,6 @@
             </connector>
             <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
             <label>Was Escalated Patient Case</label>
-        </rules>
-        <rules>
-            <name>Closed_Unrelated_Call</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.Unrelated_Call__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Update_Status_and_Fields</targetReference>
-            </connector>
-            <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
-            <label>Closed - &apos;Unrelated Call&apos;</label>
-        </rules>
-        <rules>
-            <name>New</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.Unrelated_Call__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Update_Status_to_New</targetReference>
-            </connector>
-            <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
-            <label>New</label>
         </rules>
     </decisions>
     <decisions>
@@ -695,7 +695,7 @@
     <recordUpdates>
         <name>Update_case_if_Escalated</name>
         <label>Update case if Escalated</label>
-        <locationX>50</locationX>
+        <locationX>578</locationX>
         <locationY>863</locationY>
         <connector>
             <targetReference>Changed_Owner</targetReference>
@@ -821,7 +821,7 @@
     <recordUpdates>
         <name>Update_Stage_to_Assigned</name>
         <label>Update Stage to Assigned</label>
-        <locationX>1106</locationX>
+        <locationX>1634</locationX>
         <locationY>863</locationY>
         <connector>
             <targetReference>Assign_Owner_to_Recipients</targetReference>
@@ -843,7 +843,7 @@
     <recordUpdates>
         <name>Update_Stage_to_Closed</name>
         <label>Update Stage to Closed</label>
-        <locationX>578</locationX>
+        <locationX>1370</locationX>
         <locationY>863</locationY>
         <connector>
             <targetReference>Changed_Owner</targetReference>
@@ -865,7 +865,7 @@
     <recordUpdates>
         <name>Update_Stage_to_Consultation_Completed_Pending_CN</name>
         <label>Update Stage to Consultation Completed Pending CN</label>
-        <locationX>842</locationX>
+        <locationX>1106</locationX>
         <locationY>863</locationY>
         <connector>
             <targetReference>Changed_Owner</targetReference>
@@ -887,7 +887,7 @@
     <recordUpdates>
         <name>Update_Stage_to_In_Progress</name>
         <label>Update Stage to In Progress</label>
-        <locationX>314</locationX>
+        <locationX>842</locationX>
         <locationY>863</locationY>
         <connector>
             <targetReference>Changed_Owner</targetReference>
@@ -909,7 +909,7 @@
     <recordUpdates>
         <name>Update_Stage_toIn_Progress</name>
         <label>Update Stage to In Progress</label>
-        <locationX>1370</locationX>
+        <locationX>1898</locationX>
         <locationY>863</locationY>
         <connector>
             <targetReference>Changed_Owner</targetReference>
@@ -931,7 +931,7 @@
     <recordUpdates>
         <name>Update_Status_and_Fields</name>
         <label>Update Status and Fields</label>
-        <locationX>1634</locationX>
+        <locationX>314</locationX>
         <locationY>863</locationY>
         <connector>
             <targetReference>Changed_Owner</targetReference>
@@ -965,12 +965,6 @@
             <value>
                 <booleanValue>false</booleanValue>
             </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Number_of_Care_Requests_Completed__c</field>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Number_of_Care_Requests_Offered__c</field>
         </inputAssignments>
         <inputAssignments>
             <field>Patient_Substance_Use_and_Past_Tx__c</field>
@@ -1007,7 +1001,7 @@
     <recordUpdates>
         <name>Update_Status_to_New</name>
         <label>Update Status to New</label>
-        <locationX>1898</locationX>
+        <locationX>50</locationX>
         <locationY>863</locationY>
         <connector>
             <targetReference>Changed_Owner</targetReference>
