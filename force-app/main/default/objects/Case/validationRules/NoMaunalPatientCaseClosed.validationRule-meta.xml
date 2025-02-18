@@ -6,7 +6,8 @@
     <errorConditionFormula>(
 ISPICKVAL(Status, &quot;Consultation Completed - Pending CN&quot;) ||
 ISPICKVAL(Status, &quot;Completed&quot;) ||
-ISPICKVAL(Status, &quot;Merged&quot;)
+ISPICKVAL(Status, &quot;Merged&quot;) ||
+ISPICKVAL(Status, &quot;Closed - Unrelated Call&quot;)
 )
 &amp;&amp; isChanged(Status)
 &amp;&amp; Not(ISCHANGED(Toggle__c))
