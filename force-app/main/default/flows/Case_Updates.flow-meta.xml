@@ -43,7 +43,6 @@
         </inputParameters>
         <nameSegment>customNotificationAction</nameSegment>
         <offset>0</offset>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>Reassigned_Notification</name>
@@ -88,7 +87,6 @@
         </inputParameters>
         <nameSegment>customNotificationAction</nameSegment>
         <offset>0</offset>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>61.0</apiVersion>
     <assignments>
@@ -995,6 +993,12 @@
         </inputAssignments>
         <inputAssignments>
             <field>Substance_Use_in_the_Last_3_Months__c</field>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Toggle__c</field>
+            <value>
+                <elementReference>toggle</elementReference>
+            </value>
         </inputAssignments>
         <inputReference>$Record</inputReference>
     </recordUpdates>
