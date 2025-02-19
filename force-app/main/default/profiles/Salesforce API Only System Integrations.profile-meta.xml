@@ -170,6 +170,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Account.Provider_Case_Count__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Account.Provider_Sex_Other__c</field>
         <readable>false</readable>
     </fieldPermissions>

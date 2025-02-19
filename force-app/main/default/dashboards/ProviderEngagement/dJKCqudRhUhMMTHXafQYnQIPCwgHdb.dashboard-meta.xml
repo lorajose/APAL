@@ -460,7 +460,7 @@
                 <indicatorHighColor>#00716B</indicatorHighColor>
                 <indicatorLowColor>#C23934</indicatorLowColor>
                 <indicatorMiddleColor>#CA8501</indicatorMiddleColor>
-                <report>Service_Dashboards_Reports/ProviderEngagement/Unique_Providers_with_Cases_Vwu</report>
+                <report>Service_Dashboards_Reports/ProviderEngagement/Unique_Providers_with_Cases_xJF</report>
                 <showRange>false</showRange>
             </dashboardComponent>
             <rowIndex>36</rowIndex>
