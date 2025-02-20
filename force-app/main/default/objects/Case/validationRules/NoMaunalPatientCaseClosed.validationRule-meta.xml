@@ -11,7 +11,8 @@ ISPICKVAL(Status, &quot;Closed - Unrelated Call&quot;)
 )
 &amp;&amp; isChanged(Status)
 &amp;&amp; Not(ISCHANGED(Toggle__c))
-&amp;&amp; $RecordType.DeveloperName = &quot;Patient_Case&quot;</errorConditionFormula>
+&amp;&amp; $RecordType.DeveloperName = &quot;Patient_Case&quot;
+&amp;&amp;  Unrelated_Call__c = False</errorConditionFormula>
     <errorDisplayField>Status</errorDisplayField>
     <errorMessage>Please close all related cases to close this case.</errorMessage>
 </ValidationRule>
