@@ -42,6 +42,7 @@
             </value>
         </inputParameters>
         <nameSegment>customNotificationAction</nameSegment>
+        <offset>0</offset>
         <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
@@ -77,6 +78,7 @@
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
         <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>60.0</apiVersion>
@@ -353,6 +355,16 @@
         <valueField>Id</valueField>
     </dynamicChoiceSets>
     <environments>Default</environments>
+    <formulas>
+        <name>SubjectSelfText</name>
+        <dataType>String</dataType>
+        <expression>LEFT({!$UserRole.Name}&amp; &quot;: &quot; &amp; {!NotesSelf}, 255)</expression>
+    </formulas>
+    <formulas>
+        <name>SubjectText</name>
+        <dataType>String</dataType>
+        <expression>LEFT({!Service} &amp; &quot;: &quot; &amp; {!Notes}, 255)</expression>
+    </formulas>
     <interviewLabel>Care Team Member Assignment {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Care Team Member Assignment</label>
     <processMetadataValues>
@@ -436,6 +448,12 @@
                 <stringValue>Assigned</stringValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <elementReference>SubjectText</elementReference>
+            </value>
+        </inputAssignments>
         <object>Case</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
@@ -499,6 +517,12 @@
             <field>Status</field>
             <value>
                 <stringValue>Accepted</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <elementReference>SubjectSelfText</elementReference>
             </value>
         </inputAssignments>
         <object>Case</object>
@@ -566,6 +590,12 @@
                 <stringValue>Accepted</stringValue>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <elementReference>SubjectSelfText</elementReference>
+            </value>
+        </inputAssignments>
         <object>Case</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
@@ -629,6 +659,12 @@
             <field>Status</field>
             <value>
                 <stringValue>Assigned</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <elementReference>SubjectText</elementReference>
             </value>
         </inputAssignments>
         <object>Case</object>
@@ -1175,6 +1211,16 @@ To approve or reject the assignment please review the Case above.</text>
         <name>NotificationTitle</name>
         <isViewedAsPlainText>true</isViewedAsPlainText>
         <text>New Case Assignment</text>
+    </textTemplates>
+    <textTemplates>
+        <name>Subject</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>LEFT({!Service} &amp; &quot;: &quot; &amp; {!Notes}, 255)</text>
+    </textTemplates>
+    <textTemplates>
+        <name>SubjectSelf</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>LEFT({!$UserRole.Name}&amp; &quot;: &quot; &amp; {!NotesSelf}, 255)</text>
     </textTemplates>
     <variables>
         <name>CountRecords</name>
