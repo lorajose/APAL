@@ -20,7 +20,7 @@
         <name>standard__Service</name>
         <type>CustomApplication</type>
     </appMenuItems>
-  <!--  <appMenuItems>
+    <appMenuItems>
        <name>Chatter_Desktop</name> 
       <type>ConnectedApp</type>
     </appMenuItems>
@@ -43,7 +43,7 @@
     <appMenuItems>
         <name>SalesforceA</name>
         <type>ConnectedApp</type>
-    </appMenuItems> -->
+    </appMenuItems>
     <appMenuItems>
         <name>standard__Community</name>
         <type>CustomApplication</type>
@@ -88,15 +88,15 @@
         <name>standard__FlowsApp</name>
         <type>CustomApplication</type>
     </appMenuItems>
-   <!-- <appMenuItems>
+    <appMenuItems>
         <name>DEVHUB_h3hazkseyyraocxsntvm</name>
         <type>ConnectedApp</type>
-    </appMenuItems> -->
+    </appMenuItems>
     <appMenuItems>
         <name>standard__ExpressionSetConsole</name>
         <type>CustomApplication</type>
     </appMenuItems>
-  <!--  <appMenuItems>
+   <appMenuItems>
         <name>Dataloader_Bulk</name>
         <type>ConnectedApp</type>
     </appMenuItems>
@@ -131,7 +131,7 @@
     <appMenuItems>
         <name>Salesforce1_for_Windows</name>
         <type>ConnectedApp</type>
-    </appMenuItems> -->
+    </appMenuItems>
     <appMenuItems>
         <name>dlrs__DeclarativeLookupRollupSummaries</name>
         <type>CustomApplication</type>
