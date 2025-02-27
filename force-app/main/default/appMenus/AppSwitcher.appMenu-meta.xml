@@ -88,10 +88,10 @@
         <name>standard__FlowsApp</name>
         <type>CustomApplication</type>
     </appMenuItems>
-    <appMenuItems>
+  <!--  <appMenuItems>
         <name>DEVHUB_h3hazkseyyraocxsntvm</name>
         <type>ConnectedApp</type>
-    </appMenuItems>
+    </appMenuItems> -->
     <appMenuItems>
         <name>standard__ExpressionSetConsole</name>
         <type>CustomApplication</type>
@@ -100,10 +100,10 @@
         <name>Dataloader_Bulk</name>
         <type>ConnectedApp</type>
     </appMenuItems>
-    <appMenuItems>
+  <!--  <appMenuItems>
         <name>Dataloader_Partner</name>
         <type>ConnectedApp</type>
-    </appMenuItems>
+    </appMenuItems> 
     <appMenuItems>
         <name>Forcecom_IDE</name>
         <type>ConnectedApp</type>
@@ -131,7 +131,7 @@
     <appMenuItems>
         <name>Salesforce1_for_Windows</name>
         <type>ConnectedApp</type>
-    </appMenuItems>
+    </appMenuItems> -->
     <appMenuItems>
         <name>dlrs__DeclarativeLookupRollupSummaries</name>
         <type>CustomApplication</type>
@@ -144,18 +144,18 @@
         <name>timeline__Timeline</name>
         <type>CustomApplication</type>
     </appMenuItems>
-    <appMenuItems>
+  <!--  <appMenuItems>
         <name>SFDX_CLI_Connected_App</name>
         <type>ConnectedApp</type>
-    </appMenuItems>
+    </appMenuItems> -->
     <appMenuItems>
         <name>standard__Content</name>
         <type>CustomApplication</type>
     </appMenuItems>
-    <appMenuItems>
+   <!-- <appMenuItems>
         <name>DevOps_Center</name>
         <type>ConnectedApp</type>
-    </appMenuItems>
+    </appMenuItems> -->
     <appMenuItems>
         <name>Admin_App</name>
         <type>CustomApplication</type>
