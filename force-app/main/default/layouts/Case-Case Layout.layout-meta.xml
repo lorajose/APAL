@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
     <emailDefault>false</emailDefault>
+    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <feedLayout>
         <autocollapsePublisher>true</autocollapsePublisher>
@@ -494,6 +495,7 @@
         <fields>Substance_List__c.Substance_Category__c</fields>
         <fields>Frequency_of_Substance_Use__c</fields>
         <fields>Notes__c</fields>
+        <fields>Current_Substance__c</fields>
         <relatedList>Patient_Substance__c.Case__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -545,6 +547,7 @@
         <fields>Frequency__c</fields>
         <fields>Amount__c</fields>
         <fields>Dosing_Unit__c</fields>
+        <fields>Allergy__c</fields>
         <relatedList>Patient_Medication__c.Case__c</relatedList>
     </relatedLists>
     <relatedLists>
