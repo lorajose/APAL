@@ -31,7 +31,7 @@
     <appMenuItems>
         <name>Chatter_for_BlackBerry</name>
         <type>ConnectedApp</type>
-    </appMenuItems>-->
+    </appMenuItems>
     <appMenuItems>
         <name>Chatter_for_iOS</name>
         <type>ConnectedApp</type>
@@ -43,7 +43,7 @@
     <appMenuItems>
         <name>SalesforceA</name>
         <type>ConnectedApp</type>
-    </appMenuItems>
+    </appMenuItems> -->
     <appMenuItems>
         <name>standard__Community</name>
         <type>CustomApplication</type>
