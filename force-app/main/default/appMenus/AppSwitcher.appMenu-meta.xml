@@ -96,11 +96,11 @@
         <name>standard__ExpressionSetConsole</name>
         <type>CustomApplication</type>
     </appMenuItems>
-   <appMenuItems>
+  <!-- <appMenuItems>
         <name>Dataloader_Bulk</name>
         <type>ConnectedApp</type>
     </appMenuItems>
-  <!--  <appMenuItems>
+    <appMenuItems>
         <name>Dataloader_Partner</name>
         <type>ConnectedApp</type>
     </appMenuItems> 
