@@ -39,11 +39,11 @@
     <appMenuItems>
         <name>Salesforce_Chatterbox</name>
         <type>ConnectedApp</type>
-    </appMenuItems> -->
+    </appMenuItems> 
     <appMenuItems>
         <name>SalesforceA</name>
         <type>ConnectedApp</type>
-    </appMenuItems>
+    </appMenuItems> -->
     <appMenuItems>
         <name>standard__Community</name>
         <type>CustomApplication</type>
