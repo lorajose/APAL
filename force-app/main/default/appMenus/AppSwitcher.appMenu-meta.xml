@@ -1,4 +1,4 @@
-<!-- <?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <AppMenu xmlns="http://soap.sforce.com/2006/04/metadata">
     <appMenuItems>
         <name>standard__Platform</name>
@@ -20,7 +20,7 @@
         <name>standard__Service</name>
         <type>CustomApplication</type>
     </appMenuItems>
-    <appMenuItems>
+  <!--  <appMenuItems>
        <name>Chatter_Desktop</name> 
       <type>ConnectedApp</type>
     </appMenuItems>
@@ -39,7 +39,7 @@
     <appMenuItems>
         <name>Salesforce_Chatterbox</name>
         <type>ConnectedApp</type>
-    </appMenuItems>
+    </appMenuItems> -->
     <appMenuItems>
         <name>SalesforceA</name>
         <type>ConnectedApp</type>
@@ -160,4 +160,4 @@
         <name>Admin_App</name>
         <type>CustomApplication</type>
     </appMenuItems>
-</AppMenu> -->
+</AppMenu>
