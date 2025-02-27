@@ -21,8 +21,8 @@
         <type>CustomApplication</type>
     </appMenuItems>
     <appMenuItems>
-      <!--  <name>Chatter_Desktop</name>
-        <type>ConnectedApp</type> -->
+      <!--  <name>Chatter_Desktop</name> -->
+      <!--  <type>ConnectedApp</type> -->
     </appMenuItems>
     <appMenuItems>
         <name>Chatter_for_Android</name>
