@@ -20,10 +20,10 @@
         <name>standard__Service</name>
         <type>CustomApplication</type>
     </appMenuItems>
-    <appMenuItems>
+   <!-- <appMenuItems>
        <name>Chatter_Desktop</name> 
       <type>ConnectedApp</type>
-    </appMenuItems>
+    </appMenuItems>-->
     <appMenuItems>
         <name>Chatter_for_Android</name>
         <type>ConnectedApp</type>
