@@ -27,11 +27,11 @@
     <appMenuItems>
         <name>Chatter_for_Android</name>
         <type>ConnectedApp</type>
-    </appMenuItems>-->
+    </appMenuItems>
     <appMenuItems>
         <name>Chatter_for_BlackBerry</name>
         <type>ConnectedApp</type>
-    </appMenuItems>
+    </appMenuItems>-->
     <appMenuItems>
         <name>Chatter_for_iOS</name>
         <type>ConnectedApp</type>
