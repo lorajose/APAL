@@ -5,7 +5,9 @@
     <description>If pcpmdtype_c = ‘Other’, then pcpmdtypedesc_c must be provided.
 This validation fires only if the current time is greater than or equal to Bypass_Validations_Timeout__c.</description>
     <errorConditionFormula>AND(
-Bypass_Validations_Timeout__c &lt;= NOW(),
+OR(Bypass_Validations_Timeout__c &lt;= NOW(),
+isBlank(Bypass_Validations_Timeout__c)
+),
 ISPICKVAL( Specialty_Description__c , &apos;Other&apos;),
 ISBLANK( Other_Specialty_Description__c )
 )</errorConditionFormula>

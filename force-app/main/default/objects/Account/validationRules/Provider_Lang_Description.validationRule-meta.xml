@@ -5,7 +5,9 @@
     <description>If pcplang_c is set to “Other,” then pcplangdesc_c must be filled in to describe the language.
 This validation fires only if the current time is greater than or equal to Bypass_Validations_Timeout__c.</description>
     <errorConditionFormula>AND(
-Bypass_Validations_Timeout__c &lt;= NOW(),
+OR(Bypass_Validations_Timeout__c &lt;= NOW(),
+isBlank(Bypass_Validations_Timeout__c)
+),
 ISPICKVAL(pcplang__c, &apos;Other&apos;),
 ISBLANK(pcplangdesc__c),
 RecordType.DeveloperName = &apos;Provider&apos;

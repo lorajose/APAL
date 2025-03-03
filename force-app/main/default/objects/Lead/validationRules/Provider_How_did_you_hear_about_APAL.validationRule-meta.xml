@@ -5,7 +5,9 @@
     <description>If OtherSource_c is true, the user must fill in heard_other_c to explain how they heard about APAL.
 This validation fires only if the current time is greater than or equal to Bypass_Validations_Timeout__c.</description>
     <errorConditionFormula>AND(
-Bypass_Validations_Timeout__c &lt;= NOW(),
+OR(Bypass_Validations_Timeout__c &lt;= NOW(),
+isBlank(Bypass_Validations_Timeout__c)
+),
 Other__c = true,
 ISBLANK(heard_other__c)
 )</errorConditionFormula>

@@ -5,7 +5,9 @@
     <description>If the provider is a trainee, the trainee type (pcptraintype__c) must be specified.
 This validation fires only if the current time is greater than or equal to Bypass_Validations_Timeout__c.</description>
     <errorConditionFormula>AND(
-Bypass_Validations_Timeout__c &lt;= NOW(),
+OR(Bypass_Validations_Timeout__c &lt;= NOW(),
+isBlank(Bypass_Validations_Timeout__c)
+),
 ISPICKVAL(pcptrainee__c, &apos;Yes&apos;),
 ISPICKVAL(pcptraintype__c, &apos;&apos;),
 RecordType.DeveloperName = &apos;Provider&apos;
