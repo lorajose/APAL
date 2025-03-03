@@ -358,6 +358,9 @@
         <label>Changed Patient?</label>
         <locationX>1106</locationX>
         <locationY>1247</locationY>
+        <defaultConnector>
+            <targetReference>Instructions_Updated</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>No</defaultConnectorLabel>
         <rules>
             <name>Yes_Patient</name>
@@ -371,6 +374,35 @@
             </conditions>
             <connector>
                 <targetReference>Patient_Update_on_Case</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Instructions_Updated</name>
+        <label>Instructions Updated?</label>
+        <locationX>1106</locationX>
+        <locationY>1547</locationY>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_InstructionsUpdated</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Notes__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Patient_Case</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Case_Subject</targetReference>
             </connector>
             <label>Yes</label>
         </rules>
@@ -685,7 +717,35 @@
         <label>Patient Update on Case</label>
         <locationX>974</locationX>
         <locationY>1355</locationY>
+        <connector>
+            <targetReference>Instructions_Updated</targetReference>
+        </connector>
         <flowName>Patient_Update_on_Case</flowName>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <subflows>
+        <name>Update_Case_Subject</name>
+        <label>Update Case Subject</label>
+        <locationX>974</locationX>
+        <locationY>1655</locationY>
+        <flowName>Update_Case_Subject</flowName>
+        <inputAssignments>
+            <name>NewInstructions</name>
+            <value>
+                <elementReference>$Record.Notes__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
     </subflows>
     <textTemplates>
         <name>NotificationBody</name>
