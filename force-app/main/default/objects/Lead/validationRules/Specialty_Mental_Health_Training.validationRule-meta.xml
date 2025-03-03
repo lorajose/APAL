@@ -5,7 +5,9 @@
     <description>If pcpmhtrain_c = ‘Yes’, the user must fill in pcpmhtraindesc_c to detail that training.
 This validation fires only if the current time is greater than or equal to Bypass_Validations_Timeout__c.</description>
     <errorConditionFormula>AND(
-Bypass_Validations_Timeout__c &lt;= NOW(),
+OR(Bypass_Validations_Timeout__c &lt;= NOW(),
+isBlank(Bypass_Validations_Timeout__c)
+),
 ISPICKVAL( Specialty_Mental_Health_Training__c , &apos;Yes&apos;),
 ISBLANK( Other_Medical_Trainee_Description__c )
 )</errorConditionFormula>

@@ -5,7 +5,9 @@
     <description>If the Provider’s Race is “Prefer to self-describe (option not listed),” pcpracedesc__c must be filled out with the specific race.
 This validation fires only if the current time is greater than or equal to Bypass_Validations_Timeout__c.</description>
     <errorConditionFormula>AND(
-Bypass_Validations_Timeout__c &lt;= NOW(),
+OR(Bypass_Validations_Timeout__c &lt;= NOW(),
+isBlank(Bypass_Validations_Timeout__c)
+),
 ISPICKVAL(provider_racee__c, &apos;Prefer to self-describe (option not listed)&apos;),
 ISBLANK(pcpracedesc__c),
 RecordType.DeveloperName = &apos;Provider&apos;

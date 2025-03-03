@@ -5,7 +5,9 @@
     <description>If pcpmdtype_c = ‘Other’, then pcpmdtypedesc_c must be provided.
 This validation fires only if the current time is greater than or equal to Bypass_Validations_Timeout__c.</description>
     <errorConditionFormula>AND(
-Bypass_Validations_Timeout__c &lt;= NOW(),
+OR(Bypass_Validations_Timeout__c &lt;= NOW(),
+isBlank(Bypass_Validations_Timeout__c)
+),
 ISPICKVAL(pcpmdtype__c, &apos;Other&apos;),
 ISBLANK(pcpmdtypedesc__c),
 RecordType.DeveloperName = &apos;Provider&apos;

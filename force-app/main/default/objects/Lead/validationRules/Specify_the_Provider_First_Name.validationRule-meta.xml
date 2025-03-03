@@ -5,7 +5,9 @@
     <description>When the record is a Provider (or a lead representing a Provider), a First Name is required.
 This validation fires only if the current time is greater than or equal to Bypass_Validations_Timeout__c.</description>
     <errorConditionFormula>AND(
-Bypass_Validations_Timeout__c &lt;= NOW(),
+OR(Bypass_Validations_Timeout__c &lt;= NOW(),
+isBlank(Bypass_Validations_Timeout__c)
+),
 ISBLANK(FirstName)
 )</errorConditionFormula>
     <errorMessage>Please enter your First Name.</errorMessage>
