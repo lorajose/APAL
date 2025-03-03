@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Specify_the_Trainee_Type</fullName>
+    <active>true</active>
+    <description>If the provider is a trainee, the trainee type (pcptraintype__c) must be specified.
+This validation fires only if the current time is greater than or equal to Bypass_Validations_Timeout__c.</description>
+    <errorConditionFormula>AND(
+Bypass_Validations_Timeout__c &lt;= NOW(),
+ISPICKVAL(pcptrainee__c, &apos;Yes&apos;),
+ISPICKVAL(pcptraintype__c, &apos;&apos;),
+RecordType.DeveloperName = &apos;Provider&apos;
+)</errorConditionFormula>
+    <errorMessage>Please specify the Trainee Type if the provider is marked as a Trainee.</errorMessage>
+</ValidationRule>
