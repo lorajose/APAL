@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Specify_the_Provider_First_Name</fullName>
+    <active>true</active>
+    <description>When the record is a Provider (or a lead representing a Provider), a First Name is required.
+This validation fires only if the current time is greater than or equal to Bypass_Validations_Timeout__c.</description>
+    <errorConditionFormula>AND(
+Bypass_Validations_Timeout__c &lt;= NOW(),
+ISBLANK(FirstName)
+)</errorConditionFormula>
+    <errorMessage>Please enter your First Name.</errorMessage>
+</ValidationRule>
