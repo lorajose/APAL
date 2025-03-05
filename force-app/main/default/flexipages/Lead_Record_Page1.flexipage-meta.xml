@@ -4,28 +4,20 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
-                    <name>actionNames</name>
-                    <valueList>
-                        <valueListItems>
-                            <value>Lead.Convert_to_Provider</value>
-                        </valueListItems>
-                    </valueList>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
                     <name>collapsed</name>
                     <value>false</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>enableActionsConfiguration</name>
-                    <value>true</value>
+                    <value>false</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>enableActionsInNative</name>
-                    <value>true</value>
+                    <value>false</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>hideChatterActions</name>
-                    <value>true</value>
+                    <value>false</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>numVisibleActions</name>
@@ -40,6 +32,20 @@
         <type>Region</type>
     </flexiPageRegions>
     <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>hideUpdateButton</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>variant</name>
+                    <value>linear</value>
+                </componentInstanceProperties>
+                <componentName>runtime_sales_lead:pathAssistant</componentName>
+                <identifier>runtime_sales_lead_pathAssistant</identifier>
+            </componentInstance>
+        </itemInstances>
         <mode>Replace</mode>
         <name>subheader</name>
         <type>Region</type>
@@ -75,7 +81,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Type__c</fieldItem>
                 <identifier>RecordType_cField</identifier>
@@ -85,22 +91,6 @@
             <fieldInstance>
                 <fieldItem>Record.Matching_Provider__r.pcptitle__c</fieldItem>
                 <identifier>RecordMatching_Provider_rpcptitle_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.pcpothersta_desc__c</fieldItem>
-                <identifier>Recordpcpothersta_desc__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.pcpothersta_desc__c</fieldItem>
-                <identifier>RecordMatching_Provider_rpcpothersta_desc_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -155,7 +145,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Phone</fieldItem>
                 <identifier>RecordPhoneField</identifier>
@@ -183,7 +173,31 @@
                 <identifier>RecordMatching_Provider_rpcpphoneext_cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <name>Facet-c3287956-09d4-43c1-a87f-e2c88452faa4</name>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.pcpothersta_desc__c</fieldItem>
+                <identifier>Recordpcpothersta_desc__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.heard_other__c</fieldItem>
+                <identifier>Recordheard_other__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.pcpracedesc__c</fieldItem>
+                <identifier>Recordpcpracedesc__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.trainenddate__c</fieldItem>
+                <identifier>Recordtrainenddate__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-3a876747-4900-4f8d-99fc-70a7884c1daa</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -203,21 +217,25 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Other_Specialty_Description__c</fieldItem>
-                <identifier>RecordOther_Specialty_Description_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.pcpmdtypedesc__c</fieldItem>
-                <identifier>RecordMatching_Provider_rpcpmdtypedesc_cField</identifier>
+                <fieldItem>Record.Practice__c</fieldItem>
+                <identifier>RecordPractice_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Other_Specialty_Description__c</fieldItem>
+                <identifier>RecordOther_Specialty_Description_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Specialty_Description__c</fieldItem>
                 <identifier>RecordSpecialty_Description_cField</identifier>
@@ -225,8 +243,12 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.pcpmdtype__c</fieldItem>
-                <identifier>RecordMatching_Provider_rpcpmdtype_cField</identifier>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Email</fieldItem>
+                <identifier>RecordEmailField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -235,17 +257,11 @@
                     <name>uiBehavior</name>
                     <value>required</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Email</fieldItem>
-                <identifier>RecordEmailField</identifier>
+                <fieldItem>Record.Status</fieldItem>
+                <identifier>RecordStatusField</identifier>
             </fieldInstance>
         </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.PersonEmail</fieldItem>
-                <identifier>RecordMatching_Provider_rPersonEmailField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-c28adddb-b903-4621-b896-efa9b6a41753</name>
+        <name>Facet-e66b0a40-f3c8-49cc-a2be-3a9ca654e1c3</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -253,7 +269,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-c3287956-09d4-43c1-a87f-e2c88452faa4</value>
+                    <value>Facet-3a876747-4900-4f8d-99fc-70a7884c1daa</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
                 <identifier>flexipage_column</identifier>
@@ -263,13 +279,13 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-c28adddb-b903-4621-b896-efa9b6a41753</value>
+                    <value>Facet-e66b0a40-f3c8-49cc-a2be-3a9ca654e1c3</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
                 <identifier>flexipage_column2</identifier>
             </componentInstance>
         </itemInstances>
-        <name>Facet-b28c0c23-78c6-4b2f-81e8-b3dca6f8d705</name>
+        <name>Facet-a2130d8b-fc04-4342-b556-399b6e14ef37</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -285,12 +301,6 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.PersonHomePhone</fieldItem>
-                <identifier>RecordMatching_Provider_rPersonHomePhoneField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
                     <value>none</value>
@@ -299,13 +309,7 @@
                 <identifier>RecordOther_Phone_cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.PersonOtherPhone</fieldItem>
-                <identifier>RecordMatching_Provider_rPersonOtherPhoneField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-a2169eb0-b6c5-4460-aba3-ee244185f0c5</name>
+        <name>Facet-8e1b582b-256f-4bb0-a94d-c145a0f70e82</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -319,13 +323,7 @@
                 <identifier>RecordMobilePhoneField</identifier>
             </fieldInstance>
         </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.PersonMobilePhone</fieldItem>
-                <identifier>RecordMatching_Provider_rPersonMobilePhoneField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-264234eb-2475-4d32-b110-15b9cce37a9e</name>
+        <name>Facet-8f49a860-db51-4863-b7a4-3749e05a87ef</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -333,7 +331,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-a2169eb0-b6c5-4460-aba3-ee244185f0c5</value>
+                    <value>Facet-8e1b582b-256f-4bb0-a94d-c145a0f70e82</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
                 <identifier>flexipage_column3</identifier>
@@ -343,13 +341,13 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-264234eb-2475-4d32-b110-15b9cce37a9e</value>
+                    <value>Facet-8f49a860-db51-4863-b7a4-3749e05a87ef</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
                 <identifier>flexipage_column4</identifier>
             </componentInstance>
         </itemInstances>
-        <name>Facet-ab9cd346-14ef-40fa-a2cd-1b152ddbc430</name>
+        <name>Facet-6b78be1a-5313-4d4d-8498-053d245a5c5a</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -365,24 +363,12 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.DirectContactWithVMAPstaff__c</fieldItem>
-                <identifier>RecordMatching_Provider_rDirectContactWithVMAPstaff_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Health_Haven_Enrolled_Provider__c</fieldItem>
                 <identifier>RecordHealth_Haven_Enrolled_Provider_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.VMAPEnrolledProvider__c</fieldItem>
-                <identifier>RecordMatching_Provider_rVMAPEnrolledProvider_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -397,24 +383,12 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.FriendOrColleague__c</fieldItem>
-                <identifier>RecordMatching_Provider_rFriendOrColleague_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.My_Medical_or_Specialty_Association__c</fieldItem>
                 <identifier>RecordMy_Medical_or_Specialty_Association_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.MyMedicalOrSpecialtyAssociation__c</fieldItem>
-                <identifier>RecordMatching_Provider_rMyMedicalOrSpecialtyAssociation_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -427,13 +401,7 @@
                 <identifier>RecordSocial_Media_cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.OtherSocialMedia__c</fieldItem>
-                <identifier>RecordMatching_Provider_rOtherSocialMedia_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-ce5db469-c53b-4074-abfa-c0f786561497</name>
+        <name>Facet-1b8a1aa9-6ed9-4751-86ed-431af5a299ba</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -449,24 +417,12 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.SearchEngine__c</fieldItem>
-                <identifier>RecordMatching_Provider_rSearchEngine_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.News_Story__c</fieldItem>
                 <identifier>RecordNews_Story_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.NewspaperNewsStory__c</fieldItem>
-                <identifier>RecordMatching_Provider_rNewspaperNewsStory_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -481,12 +437,6 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.ConferencePresentation__c</fieldItem>
-                <identifier>RecordMatching_Provider_rConferencePresentation_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
                     <value>none</value>
@@ -495,29 +445,7 @@
                 <identifier>RecordOther_cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.OtherSource__c</fieldItem>
-                <identifier>RecordMatching_Provider_rOtherSource_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.heard_other__c</fieldItem>
-                <identifier>Recordheard_other__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.heard_other__c</fieldItem>
-                <identifier>RecordMatching_Provider_rheard_other_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-d01745f9-bb22-44ac-a642-f88a27aaa1fb</name>
+        <name>Facet-bd517c2c-9665-45eb-9ca6-504611ff72b0</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -525,7 +453,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-ce5db469-c53b-4074-abfa-c0f786561497</value>
+                    <value>Facet-1b8a1aa9-6ed9-4751-86ed-431af5a299ba</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
                 <identifier>flexipage_column5</identifier>
@@ -535,13 +463,13 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-d01745f9-bb22-44ac-a642-f88a27aaa1fb</value>
+                    <value>Facet-bd517c2c-9665-45eb-9ca6-504611ff72b0</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
                 <identifier>flexipage_column6</identifier>
             </componentInstance>
         </itemInstances>
-        <name>Facet-dae306ea-9559-4685-ae1d-3962007bc7c3</name>
+        <name>Facet-74dddd8a-71a5-43f7-bc16-a0a24d60b4c7</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -557,40 +485,12 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.pcpyrspract__c</fieldItem>
-                <identifier>RecordMatching_Provider_rpcpyrspract_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>required</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.The_provider_is_a_Trainee__c</fieldItem>
-                <identifier>RecordThe_provider_is_a_Trainee_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.pcptrainee__c</fieldItem>
-                <identifier>RecordMatching_Provider_rpcptrainee_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.trainenddate__c</fieldItem>
-                <identifier>Recordtrainenddate__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.trainenddate__c</fieldItem>
-                <identifier>RecordMatching_Provider_rtrainenddate_cField</identifier>
+                <fieldItem>Record.The_provider_is_a_Trainee__c</fieldItem>
+                <identifier>RecordThe_provider_is_a_Trainee_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -605,12 +505,6 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.pcptraintype__c</fieldItem>
-                <identifier>RecordMatching_Provider_rpcptraintype_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
                     <value>none</value>
@@ -619,13 +513,7 @@
                 <identifier>RecordOther_Medical_Trainee_Description_cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.pcptraintypedescrmd__c</fieldItem>
-                <identifier>RecordMatching_Provider_rpcptraintypedescrmd_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-e48c0cd9-117e-4c9f-b38a-3daa95a1c983</name>
+        <name>Facet-45bd1b25-d225-487b-b66c-17c19e826726</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -641,12 +529,6 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.pcpmhtrain__c</fieldItem>
-                <identifier>RecordMatching_Provider_rpcpmhtrain_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
                     <value>none</value>
@@ -657,17 +539,15 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.pcpmhtraindesc__c</fieldItem>
-                <identifier>RecordMatching_Provider_rpcpmhtraindesc_cField</identifier>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Practice_APAL_Region__c</fieldItem>
+                <identifier>RecordPractice_APAL_Region_cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.Practice_VMAP_Region__c</fieldItem>
-                <identifier>RecordMatching_Provider_rPractice_VMAP_Region_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-8e59801a-ceaf-4a21-ac5b-665d6cca0098</name>
+        <name>Facet-8e82bb13-77fa-4d6c-9aa0-972e56287911</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -675,7 +555,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-e48c0cd9-117e-4c9f-b38a-3daa95a1c983</value>
+                    <value>Facet-45bd1b25-d225-487b-b66c-17c19e826726</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
                 <identifier>flexipage_column7</identifier>
@@ -685,13 +565,13 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-8e59801a-ceaf-4a21-ac5b-665d6cca0098</value>
+                    <value>Facet-8e82bb13-77fa-4d6c-9aa0-972e56287911</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
                 <identifier>flexipage_column8</identifier>
             </componentInstance>
         </itemInstances>
-        <name>Facet-587207b1-cb0b-46e9-a774-70b658c262a4</name>
+        <name>Facet-0b00afe2-bedf-4dcf-bb86-fb15f6b1d83c</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -707,12 +587,6 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.pcpgender__c</fieldItem>
-                <identifier>RecordMatching_Provider_rpcpgender_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
                     <value>none</value>
@@ -721,29 +595,7 @@
                 <identifier>RecordHow_do_You_Identify_with_Respect_to_Race_cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.provider_racee__c</fieldItem>
-                <identifier>RecordMatching_Provider_rprovider_racee_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.pcpracedesc__c</fieldItem>
-                <identifier>Recordpcpracedesc__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.pcpracedesc__c</fieldItem>
-                <identifier>RecordMatching_Provider_rpcpracedesc_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-c4bc7297-21b7-4589-ad37-44c50487f22c</name>
+        <name>Facet-4cca1904-3ac7-4573-8093-151df0d2ce7c</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -759,12 +611,6 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.pcplang__c</fieldItem>
-                <identifier>RecordMatching_Provider_rpcplang_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
                     <value>none</value>
@@ -773,13 +619,7 @@
                 <identifier>RecordProvider_Languages_Description_cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.pcplangdesc__c</fieldItem>
-                <identifier>RecordMatching_Provider_rpcplangdesc_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-46d64a7c-c08a-45de-9d6e-6ffec7418c33</name>
+        <name>Facet-cbeb5215-6823-4b13-bf61-6800222e6f06</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -787,7 +627,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-c4bc7297-21b7-4589-ad37-44c50487f22c</value>
+                    <value>Facet-4cca1904-3ac7-4573-8093-151df0d2ce7c</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
                 <identifier>flexipage_column9</identifier>
@@ -797,13 +637,13 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-46d64a7c-c08a-45de-9d6e-6ffec7418c33</value>
+                    <value>Facet-cbeb5215-6823-4b13-bf61-6800222e6f06</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
                 <identifier>flexipage_column10</identifier>
             </componentInstance>
         </itemInstances>
-        <name>Facet-ed134cb3-4f09-4520-b45f-ae7a36ef23b6</name>
+        <name>Facet-e8b2eff4-4214-4dfc-8f85-c5f106551559</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -817,13 +657,7 @@
                 <identifier>RecordOpt_out_cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.pcpinitials__c</fieldItem>
-                <identifier>RecordMatching_Provider_rpcpinitials_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-3b3f520d-1837-400c-9a38-1135cbe91866</name>
+        <name>Facet-3360234d-dffe-440f-bf72-5e0b29f10a0e</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -837,13 +671,7 @@
                 <identifier>RecordProvider_Signature_cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.pcpesignature__c</fieldItem>
-                <identifier>RecordMatching_Provider_rpcpesignature_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-72076b4e-3ced-4628-97da-263d3bb08dca</name>
+        <name>Facet-9430d36e-6810-47a7-875b-e9d8fdc82392</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -851,7 +679,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-3b3f520d-1837-400c-9a38-1135cbe91866</value>
+                    <value>Facet-3360234d-dffe-440f-bf72-5e0b29f10a0e</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
                 <identifier>flexipage_column11</identifier>
@@ -861,13 +689,13 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-72076b4e-3ced-4628-97da-263d3bb08dca</value>
+                    <value>Facet-9430d36e-6810-47a7-875b-e9d8fdc82392</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
                 <identifier>flexipage_column12</identifier>
             </componentInstance>
         </itemInstances>
-        <name>Facet-84bfdf60-a4d8-4765-99ec-306135a19877</name>
+        <name>Facet-6bd02581-87ea-464a-8934-0c25995e9052</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -883,12 +711,6 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.Description</fieldItem>
-                <identifier>RecordMatching_Provider_rDescriptionField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
                     <value>none</value>
@@ -897,17 +719,7 @@
                 <identifier>RecordMatching_Provider_cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Incomplete_Submission__c</fieldItem>
-                <identifier>RecordIncomplete_Submission_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-052c5eb8-ec7f-4ae8-b5a1-dd46f062ef60</name>
+        <name>Facet-c56d2bea-92dc-4b92-8799-443f3c128eb2</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -915,17 +727,81 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-052c5eb8-ec7f-4ae8-b5a1-dd46f062ef60</value>
+                    <value>Facet-c56d2bea-92dc-4b92-8799-443f3c128eb2</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
                 <identifier>flexipage_column13</identifier>
             </componentInstance>
         </itemInstances>
-        <name>Facet-63da0ce0-eebe-4a26-a733-721af072d322</name>
+        <name>Facet-b8ef308c-413c-4132-ad54-ff135efd82cb</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
-        <name>Facet-b4650d97-fdd5-49b5-9f2a-f2d86916c836</name>
+        <name>Facet-b40d1a8e-0ee0-4a6c-9538-7b966010e9e4</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <name>Facet-0ee8d3ed-96a8-45f6-97e6-e8d4623b29bc</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-b40d1a8e-0ee0-4a6c-9538-7b966010e9e4</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column14</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-0ee8d3ed-96a8-45f6-97e6-e8d4623b29bc</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column15</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-634dacff-cf12-4b4b-8af2-cc3f909ba0ef</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <name>Facet-e6c6b905-98ef-4e50-be00-249493fe6a77</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <name>Facet-a7cec8a8-abf0-4d1a-81f1-ca7b86a1f4d5</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-e6c6b905-98ef-4e50-be00-249493fe6a77</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column16</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-a7cec8a8-abf0-4d1a-81f1-ca7b86a1f4d5</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column17</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-39aecf46-ea4d-4eac-a1a2-00d9d5f12639</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <name>Facet-da857ab2-a785-49c6-a658-aa9fa6492b9f</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -939,7 +815,7 @@
                 <identifier>RecordLastModifiedByIdField</identifier>
             </fieldInstance>
         </itemInstances>
-        <name>Facet-6c774bf3-d1de-4bf0-a9a1-6aa4ddf91b85</name>
+        <name>Facet-f0b3ec87-9fef-4298-9861-76e236466f71</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -947,7 +823,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-b4650d97-fdd5-49b5-9f2a-f2d86916c836</value>
+                    <value>Facet-da857ab2-a785-49c6-a658-aa9fa6492b9f</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
                 <identifier>flexipage_column18</identifier>
@@ -957,13 +833,13 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-6c774bf3-d1de-4bf0-a9a1-6aa4ddf91b85</value>
+                    <value>Facet-f0b3ec87-9fef-4298-9861-76e236466f71</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
                 <identifier>flexipage_column19</identifier>
             </componentInstance>
         </itemInstances>
-        <name>Facet-f3d20496-3572-4498-a05f-1d702b1bf428</name>
+        <name>Facet-77429bde-4653-4454-adb6-56002820bbb4</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -971,7 +847,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>columns</name>
-                    <value>Facet-b28c0c23-78c6-4b2f-81e8-b3dca6f8d705</value>
+                    <value>Facet-a2130d8b-fc04-4342-b556-399b6e14ef37</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>horizontalAlignment</name>
@@ -989,7 +865,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>columns</name>
-                    <value>Facet-ab9cd346-14ef-40fa-a2cd-1b152ddbc430</value>
+                    <value>Facet-6b78be1a-5313-4d4d-8498-053d245a5c5a</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>horizontalAlignment</name>
@@ -1007,7 +883,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>columns</name>
-                    <value>Facet-dae306ea-9559-4685-ae1d-3962007bc7c3</value>
+                    <value>Facet-74dddd8a-71a5-43f7-bc16-a0a24d60b4c7</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>horizontalAlignment</name>
@@ -1025,7 +901,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>columns</name>
-                    <value>Facet-587207b1-cb0b-46e9-a774-70b658c262a4</value>
+                    <value>Facet-0b00afe2-bedf-4dcf-bb86-fb15f6b1d83c</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>horizontalAlignment</name>
@@ -1043,7 +919,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>columns</name>
-                    <value>Facet-ed134cb3-4f09-4520-b45f-ae7a36ef23b6</value>
+                    <value>Facet-e8b2eff4-4214-4dfc-8f85-c5f106551559</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>horizontalAlignment</name>
@@ -1051,7 +927,7 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>label</name>
-                    <value>Provider Demographics</value>
+                    <value>Provider Ethnicity</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection5</identifier>
@@ -1061,7 +937,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>columns</name>
-                    <value>Facet-84bfdf60-a4d8-4765-99ec-306135a19877</value>
+                    <value>Facet-6bd02581-87ea-464a-8934-0c25995e9052</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>horizontalAlignment</name>
@@ -1069,7 +945,7 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>label</name>
-                    <value>Confidentiality</value>
+                    <value>Provider Privacy</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection6</identifier>
@@ -1079,7 +955,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>columns</name>
-                    <value>Facet-63da0ce0-eebe-4a26-a733-721af072d322</value>
+                    <value>Facet-b8ef308c-413c-4132-ad54-ff135efd82cb</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>horizontalAlignment</name>
@@ -1097,7 +973,43 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>columns</name>
-                    <value>Facet-f3d20496-3572-4498-a05f-1d702b1bf428</value>
+                    <value>Facet-634dacff-cf12-4b4b-8af2-cc3f909ba0ef</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>horizontalAlignment</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Address Information</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:fieldSection</componentName>
+                <identifier>flexipage_fieldSection8</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>columns</name>
+                    <value>Facet-39aecf46-ea4d-4eac-a1a2-00d9d5f12639</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>horizontalAlignment</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Additional Information</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:fieldSection</componentName>
+                <identifier>flexipage_fieldSection9</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>columns</name>
+                    <value>Facet-77429bde-4653-4454-adb6-56002820bbb4</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>horizontalAlignment</name>
@@ -1226,6 +1138,24 @@
                 </componentInstanceProperties>
                 <componentName>runtime_sales_merge:mergeCandidatesPreviewCard</componentName>
                 <identifier>runtime_sales_merge_mergeCandidatesPreviewCard</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>relatedListComponentOverride</name>
+                    <value>NONE</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>rowsToDisplay</name>
+                    <value>10</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showActionBar</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentName>force:relatedListContainer</componentName>
+                <identifier>force_relatedListContainer</identifier>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>

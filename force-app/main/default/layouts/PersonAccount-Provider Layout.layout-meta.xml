@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
-    <excludeButtons>DataDotComCompanyHierarchy</excludeButtons>
+    <excludeButtons>DataDotComAccountInsights</excludeButtons>
+    <excludeButtons>DataDotComClean</excludeButtons>
     <excludeButtons>DisableCustomerPortalAccount</excludeButtons>
     <excludeButtons>DisablePartnerPortalAccount</excludeButtons>
     <excludeButtons>IncludeOffline</excludeButtons>
+    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <excludeButtons>Share</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
@@ -17,7 +19,7 @@
                 <field>Name</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Required</behavior>
                 <field>pcptitle__c</field>
             </layoutItems>
             <layoutItems>
@@ -37,7 +39,7 @@
                 <field>pcpphonedesc__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Required</behavior>
                 <field>Phone</field>
             </layoutItems>
             <layoutItems>
@@ -47,6 +49,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Email_Alert_Recipient__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Provider_Case_Count__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -59,7 +65,7 @@
                 <field>practiceid__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Required</behavior>
                 <field>pcpmdtype__c</field>
             </layoutItems>
             <layoutItems>
@@ -67,7 +73,7 @@
                 <field>pcpmdtypedesc__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Required</behavior>
                 <field>PersonEmail</field>
             </layoutItems>
         </layoutColumns>
@@ -140,6 +146,10 @@
                 <behavior>Edit</behavior>
                 <field>OtherSource__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>heard_other__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>
@@ -154,8 +164,12 @@
                 <field>pcpyrspract__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Required</behavior>
                 <field>pcptrainee__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>trainenddate__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -195,6 +209,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>provider_racee__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>pcpracedesc__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
