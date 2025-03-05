@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StandardValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sorted>false</sorted>
+    <standardValue>
+        <fullName>New</fullName>
+        <default>true</default>
+        <label>New</label>
+        <closed>false</closed>
+    </standardValue>
+    <standardValue>
+        <fullName>In Progress</fullName>
+        <default>false</default>
+        <label>In Progress</label>
+        <closed>false</closed>
+    </standardValue>
+    <standardValue>
+        <fullName>On Hold</fullName>
+        <default>false</default>
+        <label>On Hold</label>
+        <closed>false</closed>
+    </standardValue>
+    <standardValue>
+        <fullName>Escalated</fullName>
+        <default>false</default>
+        <label>Escalated</label>
+        <closed>false</closed>
+    </standardValue>
+    <standardValue>
+        <fullName>Consultation Completed - Pending CN</fullName>
+        <default>false</default>
+        <label>Consultation Completed - Pending CN</label>
+        <closed>true</closed>
+    </standardValue>
+    <standardValue>
+        <fullName>Assigned</fullName>
+        <default>false</default>
+        <label>Assigned</label>
+        <closed>false</closed>
+    </standardValue>
+    <standardValue>
+        <fullName>Rejected</fullName>
+        <default>false</default>
+        <label>Rejected</label>
+        <closed>false</closed>
+    </standardValue>
+    <standardValue>
+        <fullName>Accepted</fullName>
+        <default>false</default>
+        <label>Accepted</label>
+        <closed>false</closed>
+    </standardValue>
+    <standardValue>
+        <fullName>Sent</fullName>
+        <default>false</default>
+        <label>Sent</label>
+        <closed>false</closed>
+    </standardValue>
+    <standardValue>
+        <fullName>Follow-Up</fullName>
+        <default>false</default>
+        <label>Follow-Up</label>
+        <closed>false</closed>
+    </standardValue>
+    <standardValue>
+        <fullName>Unconfirmed Navigation</fullName>
+        <default>false</default>
+        <label>Unconfirmed Navigation</label>
+        <closed>true</closed>
+    </standardValue>
+    <standardValue>
+        <fullName>Successful Navigation</fullName>
+        <default>false</default>
+        <label>Successful Navigation</label>
+        <closed>true</closed>
+    </standardValue>
+    <standardValue>
+        <fullName>Completed</fullName>
+        <default>false</default>
+        <label>Completed</label>
+        <closed>true</closed>
+    </standardValue>
+    <standardValue>
+        <fullName>Merged</fullName>
+        <default>false</default>
+        <label>Merged</label>
+        <closed>true</closed>
+    </standardValue>
+    <standardValue>
+        <fullName>Closed - Unrelated Call</fullName>
+        <default>false</default>
+        <label>Closed - Unrelated Call</label>
+        <closed>true</closed>
+    </standardValue>
+</StandardValueSet>
