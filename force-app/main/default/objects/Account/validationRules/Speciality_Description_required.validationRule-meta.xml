@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Speciality_Description_required</fullName>
+    <active>true</active>
+    <description>If pcpmdtype_c = ‘Other’, then pcpmdtypedesc_c must be provided.
+This validation fires only if the current time is greater than or equal to Bypass_Validations_Timeout__c.</description>
+    <errorConditionFormula>AND(
+OR(Bypass_Validations_Timeout__c &lt;= NOW(),
+isBlank(Bypass_Validations_Timeout__c)
+),
+ISPICKVAL(pcpmdtype__c, &apos;Other&apos;),
+ISBLANK(pcpmdtypedesc__c),
+RecordType.DeveloperName = &apos;Provider&apos;
+)</errorConditionFormula>
+    <errorMessage>Specialty Description is required if Specialty is ‘Other’.</errorMessage>
+</ValidationRule>

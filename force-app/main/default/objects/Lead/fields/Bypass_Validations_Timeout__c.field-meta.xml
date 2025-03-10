@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Bypass_Validations_Timeout__c</fullName>
+    <description>Field to bypass all validation rules on Provider Registration and Lead records for system maintenance, data loading, or emergency fixes, and ensure validations are automatically re-enabled after the specified timeout period.</description>
+    <label>Bypass Validations Timeout</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>DateTime</type>
+</CustomField>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Provider_Number_of_years_of_practice</fullName>
+    <active>true</active>
+    <description>When the Provider Trainee Type is ‘Other’, the user must specify the Number of Years In Practice (pcpyrspract__c).
+This validation fires only if the current time is greater than or equal to Bypass_Validations_Timeout__c and the Bypass field is not blank.</description>
+    <errorConditionFormula>AND(
+				NOT(Incomplete_Submission__c),
+OR(Bypass_Validations_Timeout__c &lt;= NOW(), ISBLANK(Bypass_Validations_Timeout__c)),
+ISPICKVAL(pcptraintype__c, &apos;Other medical trainee&apos;),
+ISBLANK(pcpyrspract__c),
+RecordType.DeveloperName = &apos;Provider&apos;
+)</errorConditionFormula>
+    <errorDisplayField>pcpyrspract__c</errorDisplayField>
+    <errorMessage>“Please specify the Number of Years In Practice when ‘Trainee Type’ is ‘Other medical trainee’.”</errorMessage>
+</ValidationRule>
