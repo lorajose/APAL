@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Specialty_Mental_Health_Training</fullName>
+    <active>true</active>
+    <description>If pcpmhtrain_c = ‘Yes’, the user must fill in pcpmhtraindesc_c to detail that training.
+This validation fires only if the current time is greater than or equal to Bypass_Validations_Timeout__c.</description>
+    <errorConditionFormula>AND(
+OR(Bypass_Validations_Timeout__c &lt;= NOW(),
+isBlank(Bypass_Validations_Timeout__c)
+),
+ISPICKVAL( Specialty_Mental_Health_Training__c , &apos;Yes&apos;),
+ISBLANK( Specialty_Mental_Health_Training_Desc__c )
+)</errorConditionFormula>
+    <errorMessage>Please describe the previous mental health training if Specialty Mental Health Training is ‘Yes’.</errorMessage>
+</ValidationRule>
