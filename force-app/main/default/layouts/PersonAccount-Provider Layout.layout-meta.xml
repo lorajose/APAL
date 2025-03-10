@@ -27,7 +27,7 @@
                 <field>pcpothersta_desc__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Required</behavior>
                 <field>pcphasnpi__c</field>
             </layoutItems>
             <layoutItems>
@@ -53,6 +53,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Provider_Case_Count__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Bypass_Validations_Timeout__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>

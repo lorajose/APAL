@@ -9,7 +9,7 @@ OR(Bypass_Validations_Timeout__c &lt;= NOW(),
 isBlank(Bypass_Validations_Timeout__c)
 ),
 ISPICKVAL( Specialty_Mental_Health_Training__c , &apos;Yes&apos;),
-ISBLANK( Other_Medical_Trainee_Description__c )
+ISBLANK( Specialty_Mental_Health_Training_Desc__c )
 )</errorConditionFormula>
     <errorMessage>Please describe the previous mental health training if Specialty Mental Health Training is ‘Yes’.</errorMessage>
 </ValidationRule>
