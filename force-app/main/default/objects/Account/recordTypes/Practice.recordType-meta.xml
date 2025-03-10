@@ -963,7 +963,7 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>Student in a medical school</fullName>
+            <fullName>Student in a medical field %28e%2Eg%2E%2C medical student%2C PA student%29</fullName>
             <default>false</default>
         </values>
     </picklistValues>

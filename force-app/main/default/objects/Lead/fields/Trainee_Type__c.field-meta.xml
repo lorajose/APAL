@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Trainee_Type__c</fullName>
-    <externalId>false</externalId>
     <label>Trainee Type</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
@@ -11,9 +10,9 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>Student in a medical school</fullName>
+                <fullName>Student in a medical field (e.g., medical student, PA student)</fullName>
                 <default>false</default>
-                <label>Student in a medical school</label>
+                <label>Student in a medical field (e.g., medical student, PA student)</label>
             </value>
             <value>
                 <fullName>Resident (or equivalent within other medical fields)</fullName>
@@ -29,6 +28,18 @@
                 <fullName>Other medical trainee</fullName>
                 <default>false</default>
                 <label>Other medical trainee</label>
+            </value>
+            <value>
+                <fullName>Resident (or equivalent...)</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Resident (or equivalent...)</label>
+            </value>
+            <value>
+                <fullName>Student in a medical school</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Student in a medical school</label>
             </value>
         </valueSetDefinition>
     </valueSet>
