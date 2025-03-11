@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Data_Payload_Json__c</fullName>
+    <description>Json with Payload for Sync</description>
+    <inlineHelpText>Json with Payload for Sync</inlineHelpText>
+    <label>Data Payload (Json)</label>
+    <length>131072</length>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>LongTextArea</type>
+    <visibleLines>6</visibleLines>
+</CustomField>
