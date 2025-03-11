@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VMAP_Field_API_Name__c</fullName>
+    <caseSensitive>false</caseSensitive>
+    <description>The API name of the Account field in the VMAP org that will be mapped for synchronization.</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>The API name of the corresponding Account field in the VMAP org that will send data to the APAL org during synchronization.</inlineHelpText>
+    <label>VMAP Field API Name</label>
+    <length>255</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>true</unique>
+</CustomField>

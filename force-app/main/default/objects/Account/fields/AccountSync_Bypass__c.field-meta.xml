@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AccountSync_Bypass__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>System Field. Indicates whether the account should be excluded from synchronization to prevent infinite sync loops.</description>
+    <label>AccountSync Bypass</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Checkbox</type>
+</CustomField>
