@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_Active__c</fullName>
+    <defaultValue>true</defaultValue>
+    <description>Indicates whether this field mapping is active for synchronization. If set to true, this mapping will be used.</description>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>Determines whether this field mapping is active. If enabled, this mapping will be used during synchronization. If disabled, this field will be ignored.</inlineHelpText>
+    <label>Active</label>
+    <type>Checkbox</type>
+</CustomField>
