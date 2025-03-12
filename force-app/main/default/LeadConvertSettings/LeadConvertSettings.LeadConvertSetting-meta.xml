@@ -40,10 +40,6 @@
             <outputField>provider_racee__c</outputField>
         </mappingFields>
         <mappingFields>
-            <inputField>Incomplete_Submission__c</inputField>
-            <outputField>Incomplete_Submission__c</outputField>
-        </mappingFields>
-        <mappingFields>
             <inputField>My_Medical_or_Specialty_Association__c</inputField>
             <outputField>MyMedicalOrSpecialtyAssociation__c</outputField>
         </mappingFields>
@@ -102,6 +98,10 @@
         <mappingFields>
             <inputField>pcpracedesc__c</inputField>
             <outputField>pcpracedesc__c</outputField>
+        </mappingFields>
+        <mappingFields>
+            <inputField>Provider_Registration_Status__c</inputField>
+            <outputField>Provider_Registration_Status__c</outputField>
         </mappingFields>
         <mappingFields>
             <inputField>Provider_Signature__c</inputField>

@@ -183,6 +183,16 @@
                 <identifier>RecordMatching_Provider_rpcpphoneext_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Provider_Registration_Status__c</fieldItem>
+                <identifier>RecordProvider_Registration_Status__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-c3287956-09d4-43c1-a87f-e2c88452faa4</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -565,7 +575,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.The_provider_is_a_Trainee__c</fieldItem>
                 <identifier>RecordThe_provider_is_a_Trainee_cField</identifier>
@@ -895,16 +905,6 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Matching_Provider__c</fieldItem>
                 <identifier>RecordMatching_Provider_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Incomplete_Submission__c</fieldItem>
-                <identifier>RecordIncomplete_Submission_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-052c5eb8-ec7f-4ae8-b5a1-dd46f062ef60</name>

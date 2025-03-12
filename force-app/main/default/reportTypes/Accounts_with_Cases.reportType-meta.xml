@@ -187,11 +187,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Incomplete_Submission__c</field>
-            <table>Account</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Industry</field>
             <table>Account</table>
         </columns>
@@ -578,6 +573,11 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Bypass_Validations_Timeout__c</field>
+            <table>Account</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Provider_Registration_Status__c</field>
             <table>Account</table>
         </columns>
         <masterLabel>Accounts</masterLabel>
