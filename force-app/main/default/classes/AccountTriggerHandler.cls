@@ -16,6 +16,23 @@ public with sharing class AccountTriggerHandler {
     }
 
     /**
+     * Handles after-insert operations for Account records.
+     * @param newAccounts List of newly inserted Account records.
+     */
+    public void handleAfterInsert(List<Account> newAccounts) {
+        List<Account> accountsWithoutSyncIds = new List<Account>();
+        for (Account newAccount : newAccounts) {
+            if (String.isBlank(newAccount.AccountSync_Id__c)) {
+                accountsWithoutSyncIds.add(
+                        new Account(Id = newAccount.Id)
+                );
+            }
+        }
+        this.populateAccountSyncId(accountsWithoutSyncIds);
+        Database.update(accountsWithoutSyncIds);
+    }
+
+    /**
      * Populates the Account Sync ID for the given records.
      * @param accountRecords List of Account records to update.
      */
