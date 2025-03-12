@@ -183,16 +183,6 @@
                 <identifier>RecordMatching_Provider_rpcpphoneext_cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Provider_Registration_Status__c</fieldItem>
-                <identifier>RecordProvider_Registration_Status__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
         <name>Facet-c3287956-09d4-43c1-a87f-e2c88452faa4</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -925,6 +915,16 @@
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Provider_Registration_Status__c</fieldItem>
+                <identifier>RecordProvider_Registration_Status__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-b4650d97-fdd5-49b5-9f2a-f2d86916c836</name>
         <type>Facet</type>
     </flexiPageRegions>
