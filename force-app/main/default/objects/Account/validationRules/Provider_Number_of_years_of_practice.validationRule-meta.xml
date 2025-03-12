@@ -5,7 +5,7 @@
     <description>When the Provider Trainee Type is ‘Other’, the user must specify the Number of Years In Practice (pcpyrspract__c).
 This validation fires only if the current time is greater than or equal to Bypass_Validations_Timeout__c and the Bypass field is not blank.</description>
     <errorConditionFormula>AND(
-				NOT(Incomplete_Submission__c),
+ISPICKVAL(Provider_Registration_Status__c, &apos;Complete&apos;),
 OR(Bypass_Validations_Timeout__c &lt;= NOW(), ISBLANK(Bypass_Validations_Timeout__c)),
 ISPICKVAL(pcptraintype__c, &apos;Other medical trainee&apos;),
 ISBLANK(pcpyrspract__c),

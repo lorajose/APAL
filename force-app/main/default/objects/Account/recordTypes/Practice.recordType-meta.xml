@@ -742,6 +742,21 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Provider_Registration_Status__c</picklist>
+        <values>
+            <fullName>Complete</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Incomplete</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>No NPI</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>Rating</picklist>
         <values>
             <fullName>Cold</fullName>

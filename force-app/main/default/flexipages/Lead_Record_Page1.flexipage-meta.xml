@@ -197,6 +197,12 @@
                 <identifier>Recordtrainenddate__cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Provider_Registration_Status__c</fieldItem>
+                <identifier>RecordProvider_Registration_Status__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-3a876747-4900-4f8d-99fc-70a7884c1daa</name>
         <type>Facet</type>
     </flexiPageRegions>
