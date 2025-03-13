@@ -163,6 +163,9 @@ public with sharing class AccountSyncService {
         return (changedFields.size() == 2
                 && changedFields.contains(AccountSyncUtil.SYNC_BYPASS_FIELD_API_NAME)
                 && changedFields.contains(AccountSyncUtil.LAST_MODIFIED_DATE_FIELD_API_NAME)) ||
+                (changedFields.size() == 2
+                        && changedFields.contains(AccountSyncUtil.SYNC_BYPASS_FIELD_API_NAME)
+                        && changedFields.contains(AccountSyncUtil.LAST_MODIFIED_BY_ID_FIELD_API_NAME)) ||
                 (changedFields.size() == 3
                         && changedFields.contains(AccountSyncUtil.SYNC_BYPASS_FIELD_API_NAME)
                         && changedFields.contains(AccountSyncUtil.LAST_MODIFIED_BY_ID_FIELD_API_NAME)
