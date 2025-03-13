@@ -10,8 +10,9 @@ Can be bypassed if Bypass_Validations_Timeout__c  &gt; now and the Bypass field 
 								Bypass_Validations_Timeout__c &lt;= NOW(), 
 								ISBLANK(Bypass_Validations_Timeout__c)
 				),
-				ISBLANK(Number_of_Years_In_Practice__c),
+				
 				OR(
+								ISBLANK(Number_of_Years_In_Practice__c),
 								Number_of_Years_In_Practice__c &lt; 0,
 								Number_of_Years_In_Practice__c &gt; 99
 				    )

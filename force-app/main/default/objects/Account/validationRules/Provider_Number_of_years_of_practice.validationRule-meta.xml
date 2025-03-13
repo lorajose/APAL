@@ -9,8 +9,8 @@
 								Bypass_Validations_Timeout__c &lt;= NOW(), 
 								ISBLANK(Bypass_Validations_Timeout__c)
 				),
-				ISBLANK(pcpyrspract__c),
 				OR(
+								ISBLANK(pcpyrspract__c),
 								pcpyrspract__c &lt; 0,
 								pcpyrspract__c &gt; 99
 				    ),
