@@ -12,7 +12,7 @@ public class LeadConversionControllerTest {
             pcpnpi__c = '1234567890',
             LeadSource = 'Referral',
             Status = 'Open - Not Contacted',
-            Phone_Extension__c = 123,
+            Phone_Extension__c = 1234,
             MobilePhone = '9876543212',
             Home_Phone__c = '0000000000',
             Other_Phone__c = '1111111111',
@@ -23,6 +23,8 @@ public class LeadConversionControllerTest {
             Search_Engine__c = true,
             News_Story__c = true,
             Opt_out__c = true,
+            Health_Haven_staff__c = true,
+            Conference_presentation_or_exhibit__c = true,
             Provider_Registration_Status__c  = 'Incomplete',
             Provider_Signature__c = 'Test Signature',
             Provider_Languages_Description__c = 'test',
@@ -35,7 +37,16 @@ public class LeadConversionControllerTest {
             The_provider_is_a_Trainee__c = 'Yes',
             Trainee_Type__c = 'Other medical trainee',
             Other_Medical_Trainee_Description__c = 'Test',
-            Phone_Type__c = 'Work Phone'
+            Phone_Type__c = 'Work Phone',
+            Other__c = True,
+            Type__c	= 'Physician (MD, DO)',
+            Specialty_Description__c = 'Orthopedic',
+            pcpothersta_desc__c = 'Test',
+            Other_Specialty_Description__c = 'Test',
+            Description = 'Test',
+            heard_other__c = 'Test',
+            pcpracedesc__c = 'Test',
+            trainenddate__c = Date.newInstance(2025, 3, 12)
             
         );
         insert lead;
@@ -57,7 +68,7 @@ public class LeadConversionControllerTest {
             LastName = 'OldLastName',
             PersonEmail = 'old.email@example.com',
             Phone = '9876543210',
-            pcphasnpi__c = 'Yes',
+            pcphasnpi__c = 'No',
             pcpnpi__c = '5555555555',
             PersonLeadSource = 'OldSource',
             pcpphoneext__c = 123,
@@ -70,7 +81,7 @@ public class LeadConversionControllerTest {
             DirectContactWithVMAPstaff__c = false,
             VMAPEnrolledProvider__c = false,
             pcpinitials__c = false,
-            Provider_Registration_Status__c  = 'Complete',
+            Provider_Registration_Status__c  = 'Incomplete',
             pcpesignature__c = '',
             pcplangdesc__c = '',
             pcplang__c = '',
@@ -82,7 +93,14 @@ public class LeadConversionControllerTest {
             pcptrainee__c = '',
             pcptraintype__c = '',
             pcptraintypedescrmd__c = '',
-            pcpphonedesc__c = ''
+            pcpphonedesc__c = '',
+            pcptitle__c	= 'Nurse practitioner (NP)',
+            pcpothersta_desc__c = 'lead',
+            pcpmdtypedesc__c  = 'Other Specialty Description',
+            Description = 'Test Today',
+            heard_other__c = 'Test Today',
+            pcpracedesc__c = 'Test Today',
+            trainenddate__c = Date.today().addDays(30)
 
             
             

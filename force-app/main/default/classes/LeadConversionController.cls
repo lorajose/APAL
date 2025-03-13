@@ -176,8 +176,7 @@ public with sharing  class LeadConversionController {
             if (lead.Opt_out__c != false && lead.Opt_out__c != null && lead.Opt_out__c != personAccount.pcpinitials__c )
             {personAccount.pcpinitials__c  = lead.Opt_out__c;}
             if (lead.Provider_Signature__c != null && lead.Provider_Signature__c != personAccount.pcpesignature__c)
-            {personAccount.pcpesignature__c = lead.Provider_Signature__c;}
-           
+            {personAccount.pcpesignature__c = lead.Provider_Signature__c;}  
             if (lead.Description != null && lead.Description != personAccount.Description)
                 personAccount.Description = lead.Description;
             //Last Add
