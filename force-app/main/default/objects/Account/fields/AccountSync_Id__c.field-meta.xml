@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AccountSync_Id__c</fullName>
+    <caseSensitive>false</caseSensitive>
+    <description>An external ID used for synchronizing Account records between the APAL and VMAP organizations. Automatically generated in the AccountSyncService Apex class.</description>
+    <externalId>true</externalId>
+    <label>AccountSync Id</label>
+    <length>255</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Text</type>
+    <unique>true</unique>
+</CustomField>

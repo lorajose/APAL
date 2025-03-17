@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Provider_Number_of_years_of_practice</fullName>
+    <active>true</active>
+    <description>If a registration is completed, it needs to have a number for years in practice. This can be bypassed by Bypass_Validations_Timeout__c.</description>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Provider_Registration_Status__c, &apos;Complete&apos;),
+    OR(
+								Bypass_Validations_Timeout__c &lt;= NOW(), 
+								ISBLANK(Bypass_Validations_Timeout__c)
+				),
+				OR(
+								ISBLANK(pcpyrspract__c),
+								pcpyrspract__c &lt; 0,
+								pcpyrspract__c &gt; 99
+				    ),
+RecordType.DeveloperName = &apos;Provider&apos;
+)</errorConditionFormula>
+    <errorDisplayField>pcpyrspract__c</errorDisplayField>
+    <errorMessage>If a registration is completed, the number of years in practice needs to be greater than 0 but less than 99.</errorMessage>
+</ValidationRule>

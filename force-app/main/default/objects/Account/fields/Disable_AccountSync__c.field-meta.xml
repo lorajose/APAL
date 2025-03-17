@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Disable_AccountSync__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>If set to true, this Account will be excluded from the data synchronization process between VMAP and APAL. Used to prevent specific records from being automatically transmitted.</description>
+    <label>Disable AccountSync</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Checkbox</type>
+</CustomField>

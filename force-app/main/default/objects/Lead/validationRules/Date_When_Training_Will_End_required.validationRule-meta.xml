@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Date_When_Training_Will_End_required</fullName>
+    <active>true</active>
+    <description>When the Provider Trainee Type is ‘Student’, the user must specify the Date When Training Will End (trainenddate__c).
+Can bypass validation if &gt; that now and not blank</description>
+    <errorConditionFormula>AND(
+OR(Bypass_Validations_Timeout__c &lt;= NOW(), ISBLANK(Bypass_Validations_Timeout__c)),
+ISPICKVAL(Trainee_Type__c , &apos;Student in a medical field (e.g., medical student, PA student)&apos;),
+ISBLANK(trainenddate__c)
+)</errorConditionFormula>
+    <errorDisplayField>trainenddate__c</errorDisplayField>
+    <errorMessage>Please specify the Date When Training Will End if ‘Trainee Type’ is ‘Student’.</errorMessage>
+</ValidationRule>

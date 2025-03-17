@@ -75,7 +75,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>required</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Type__c</fieldItem>
                 <identifier>RecordType_cField</identifier>
@@ -155,7 +155,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>required</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Phone</fieldItem>
                 <identifier>RecordPhoneField</identifier>
@@ -217,7 +217,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>required</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Specialty_Description__c</fieldItem>
                 <identifier>RecordSpecialty_Description_cField</identifier>
@@ -233,7 +233,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>required</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Email</fieldItem>
                 <identifier>RecordEmailField</identifier>
@@ -501,6 +501,22 @@
                 <identifier>RecordMatching_Provider_rOtherSource_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.heard_other__c</fieldItem>
+                <identifier>Recordheard_other__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Matching_Provider__r.heard_other__c</fieldItem>
+                <identifier>RecordMatching_Provider_rheard_other_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-d01745f9-bb22-44ac-a642-f88a27aaa1fb</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -559,6 +575,22 @@
             <fieldInstance>
                 <fieldItem>Record.Matching_Provider__r.pcptrainee__c</fieldItem>
                 <identifier>RecordMatching_Provider_rpcptrainee_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.trainenddate__c</fieldItem>
+                <identifier>Recordtrainenddate__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Matching_Provider__r.trainenddate__c</fieldItem>
+                <identifier>RecordMatching_Provider_rtrainenddate_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -693,6 +725,22 @@
             <fieldInstance>
                 <fieldItem>Record.Matching_Provider__r.provider_racee__c</fieldItem>
                 <identifier>RecordMatching_Provider_rprovider_racee_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.pcpracedesc__c</fieldItem>
+                <identifier>Recordpcpracedesc__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Matching_Provider__r.pcpracedesc__c</fieldItem>
+                <identifier>RecordMatching_Provider_rpcpracedesc_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-c4bc7297-21b7-4589-ad37-44c50487f22c</name>
@@ -847,16 +895,6 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Matching_Provider__c</fieldItem>
                 <identifier>RecordMatching_Provider_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Incomplete_Submission__c</fieldItem>
-                <identifier>RecordIncomplete_Submission_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-052c5eb8-ec7f-4ae8-b5a1-dd46f062ef60</name>

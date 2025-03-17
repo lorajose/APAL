@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Outbound_Syncs</fullName>
+    <columns>NAME</columns>
+    <columns>Account_Provider_Practice__c</columns>
+    <columns>Sync_Type__c</columns>
+    <columns>Status__c</columns>
+    <columns>Sync_Direction__c</columns>
+    <columns>Sync_Initiator_Formula__c</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Sync_Direction__c</field>
+        <operation>equals</operation>
+        <value>VMAP</value>
+    </filters>
+    <label>Outbound Syncs</label>
+</ListView>

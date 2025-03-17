@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Provider_How_did_you_hear_about_APAL</fullName>
+    <active>true</active>
+    <description>If OtherSource_c is true, the user must fill in heard_other_c to explain how they heard about APAL.
+This validation fires only if the current time is greater than or equal to Bypass_Validations_Timeout__c.</description>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Provider_Registration_Status__c, &apos;Complete&apos;),
+    OR(Bypass_Validations_Timeout__c &lt;= NOW(),
+        isBlank(Bypass_Validations_Timeout__c)
+        ),
+    OtherSource__c = true,
+    ISBLANK(heard_other__c),
+    RecordType.DeveloperName = &apos;Provider&apos;
+)</errorConditionFormula>
+    <errorMessage>If you heard about APAL from a different source, please specify where you heard about APAL in the ‘How did you hear about APAL? – Other’ text box.</errorMessage>
+</ValidationRule>

@@ -45,6 +45,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Account.Bypass_Validations_Timeout__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Account.ConferencePresentation__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -250,6 +255,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Account.heard_other__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Account.pcpesignature__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -350,6 +360,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Account.pcpracedesc__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Account.pcpstateoth__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -410,6 +425,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Account.trainenddate__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Case.Call_Back_and_Communication_Preference__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -426,6 +446,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Case.Unrelated_Call__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Lead.Bypass_Validations_Timeout__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -480,7 +505,22 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Lead.heard_other__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Lead.pcpothersta_desc__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Lead.pcpracedesc__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Lead.trainenddate__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -699,6 +739,13 @@
         <readable>true</readable>
     </fieldPermissions>
     <layoutAssignments>
+        <layout>Account-Account Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Account-Account Layout</layout>
+        <recordType>Account.Practice</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
         <layout>Barrier__c-Barrier Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
@@ -718,6 +765,9 @@
     </layoutAssignments>
     <layoutAssignments>
         <layout>Contact-Contact Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Lead-Lead %28Support%29 Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
         <layout>Patient_Concern__c-Patient Concern Layout</layout>

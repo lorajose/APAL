@@ -67,6 +67,14 @@
         <picklistObject>Account</picklistObject>
     </dynamicChoiceSets>
     <dynamicChoiceSets>
+        <name>ProviderRegistrationStatus</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>Provider_Registration_Status__c</picklistField>
+        <picklistObject>Account</picklistObject>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
         <name>ProviderType</name>
         <dataType>Picklist</dataType>
         <displayField xsi:nil="true"/>
@@ -175,12 +183,6 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>Incomplete_Submission__c</field>
-            <value>
-                <elementReference>Incomplete</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
             <field>LastName</field>
             <value>
                 <elementReference>Last_Name</elementReference>
@@ -244,6 +246,12 @@
             <field>Phone</field>
             <value>
                 <elementReference>Phone.value</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Provider_Registration_Status__c</field>
+            <value>
+                <elementReference>Provider_Registration_Status</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -1054,6 +1062,18 @@
             <fields>
                 <name>System_Information_Column1</name>
                 <fieldType>Region</fieldType>
+                <fields>
+                    <name>Provider_Registration_Status</name>
+                    <choiceReferences>ProviderRegistrationStatus</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <stringValue>Incomplete</stringValue>
+                    </defaultValue>
+                    <fieldText>Provider Registration Status</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                </fields>
                 <fields>
                     <name>Incomplete</name>
                     <dataType>Boolean</dataType>
