@@ -48,12 +48,12 @@ public without sharing class AccountSelector {
     private String buildDynamicQuery(Set<Id> accountIds) {
         Map<String, Schema.SObjectField> fields = Account.SObjectType.getDescribe().fields.getMap();
         List<String> fieldNames = new List<String>(fields.keySet());
-        return 'SELECT ' + String.join(fieldNames, ',') + ' FROM Account WHERE Id IN :accountIds AND AccountSync_Id__c != NULL';
+        return 'SELECT RecordType.DeveloperName, ' + String.join(fieldNames, ',') + ' FROM Account WHERE Id IN :accountIds AND AccountSync_Id__c != NULL';
     }
 
     private String buildDynamicQuery(Set<String> accountSyncIds) {
         Map<String, Schema.SObjectField> fields = Account.SObjectType.getDescribe().fields.getMap();
         List<String> fieldNames = new List<String>(fields.keySet());
-        return 'SELECT ' + String.join(fieldNames, ',') + ' FROM Account WHERE AccountSync_Id__c IN :accountSyncIds';
+        return 'SELECT RecordType.DeveloperName, ' + String.join(fieldNames, ',') + ' FROM Account WHERE AccountSync_Id__c IN :accountSyncIds';
     }
 }

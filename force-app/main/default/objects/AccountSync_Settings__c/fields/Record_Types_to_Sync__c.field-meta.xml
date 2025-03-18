@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Record_Types_to_Sync__c</fullName>
+    <description>This field defines which Record Types should be included in the synchronization process. It allows specifying multiple record types that the system should consider when executing data synchronization operations.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Specify the Record Type Developer Names that should be synchronized. Use a semicolon (;) to separate multiple values.
+
+Example: Provider;Patient;Facility</inlineHelpText>
+    <label>Record Types to Sync</label>
+    <length>255</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>
