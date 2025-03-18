@@ -60,6 +60,11 @@ public with sharing class AccountSyncUtil {
         return syncSettings == null ? false : syncSettings.Is_Active__c;
     }
 
+    public static Boolean isRecordTypeInSyncSetting(Account accountRecord) {
+        AccountSync_Settings__c syncSettings = getSyncSettings();
+        return syncSettings == null ? false : syncSettings.Record_Types_to_Sync__c.contains(accountRecord.RecordType.DeveloperName);
+    }
+
     public static String buildEndpoint() {
         return String.format(
                 ENDPOINT_TEMPLATE,
