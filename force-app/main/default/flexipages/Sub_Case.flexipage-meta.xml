@@ -8,31 +8,79 @@
                     <valueList>
                         <valueListItems>
                             <value>Case.CareNoteCR</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Parent.Unrelated_Call__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Case.New_Patient_Support</value>
                             <visibilityRule>
+                                <booleanFilter>1 AND 2</booleanFilter>
                                 <criteria>
                                     <leftValue>{!Record.RecordType.DeveloperName}</leftValue>
                                     <operator>EQUAL</operator>
                                     <rightValue>Care_Navigation</rightValue>
                                 </criteria>
+                                <criteria>
+                                    <leftValue>{!Record.Parent.Unrelated_Call__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
                             </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Case.New_Concern</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Parent.Unrelated_Call__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Case.New_Substance</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Parent.Unrelated_Call__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Case.New_Medication</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Parent.Unrelated_Call__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Case.New_Screener</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Parent.Unrelated_Call__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Case.New_Safety_Risk</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Parent.Unrelated_Call__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Edit</value>
