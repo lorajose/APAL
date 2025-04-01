@@ -97,7 +97,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Update_Status_and_Fields</targetReference>
+                <targetReference>Unrelated_Call_Cleanup</targetReference>
             </connector>
             <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
             <label>Closed - &apos;Unrelated Call&apos;</label>
@@ -588,82 +588,6 @@
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <recordUpdates>
-        <name>Update_Status_and_Fields</name>
-        <label>Update Status and Fields</label>
-        <locationX>314</locationX>
-        <locationY>539</locationY>
-        <connector>
-            <targetReference>Changed_Owner</targetReference>
-        </connector>
-        <inputAssignments>
-            <field>Are_they_involved_with_the_criminal_just__c</field>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Challenges_in_Seeking_Continuing_Tx__c</field>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Co_occurring_Mental_Health_Conditions__c</field>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Current_Treatment_or_Counseling_for_Subs__c</field>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Description</field>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Family_Involvement_in_Patient_s_Tx__c</field>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Frequency_of_Substance_Use__c</field>
-        </inputAssignments>
-        <inputAssignments>
-            <field>History_of_Substance_Use_Treatment__c</field>
-        </inputAssignments>
-        <inputAssignments>
-            <field>IsEscalated</field>
-            <value>
-                <booleanValue>false</booleanValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Patient_Substance_Use_and_Past_Tx__c</field>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Patient_Willingness_for_Tx__c</field>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Previous_Substance_Use_Related_Hospitali__c</field>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Priority</field>
-            <value>
-                <stringValue>Low</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Status</field>
-            <value>
-                <stringValue>Closed - Unrelated Call</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Subject</field>
-            <value>
-                <stringValue>Unrelated case</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Substance_Use_in_the_Last_3_Months__c</field>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Toggle__c</field>
-            <value>
-                <elementReference>toggle</elementReference>
-            </value>
-        </inputAssignments>
-        <inputReference>$Record</inputReference>
-    </recordUpdates>
-    <recordUpdates>
         <name>Update_Status_to_New</name>
         <label>Update Status to New</label>
         <locationX>50</locationX>
@@ -723,6 +647,22 @@
         <flowName>Patient_Update_on_Case</flowName>
         <inputAssignments>
             <name>recordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <subflows>
+        <name>Unrelated_Call_Cleanup</name>
+        <label>Unrelated Call Cleanup</label>
+        <locationX>314</locationX>
+        <locationY>539</locationY>
+        <connector>
+            <targetReference>Changed_Owner</targetReference>
+        </connector>
+        <flowName>Unrelated_Call_Cleanup</flowName>
+        <inputAssignments>
+            <name>caseId</name>
             <value>
                 <elementReference>$Record.Id</elementReference>
             </value>
