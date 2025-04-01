@@ -1037,20 +1037,6 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
-                    <name>flowLayout</name>
-                    <value>oneColumn</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>flowName</name>
-                    <value>Provider_Search</value>
-                </componentInstanceProperties>
-                <componentName>flowruntime:interview</componentName>
-                <identifier>flowruntime_interview</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
                     <name>columns</name>
                     <value>Facet-1ac34617-98c3-480c-8cec-dd349b29bad9</value>
                 </componentInstanceProperties>
