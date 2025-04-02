@@ -4,8 +4,8 @@
     <assignments>
         <name>Barriers_to_Delete</name>
         <label>Barriers to Delete</label>
-        <locationX>270</locationX>
-        <locationY>4262</locationY>
+        <locationX>710</locationX>
+        <locationY>4070</locationY>
         <assignmentItems>
             <assignToReference>PatientBarriers</assignToReference>
             <operator>Add</operator>
@@ -14,32 +14,16 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Check_Each_CN</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Supports_to_Delete</name>
-        <label>Supports to Delete</label>
-        <locationX>270</locationX>
-        <locationY>3962</locationY>
-        <assignmentItems>
-            <assignToReference>PatientSupports</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>Get_Related_Patient_Supports</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Has_Barriers</targetReference>
+            <targetReference>Patient_Support_Barrier</targetReference>
         </connector>
     </assignments>
     <decisions>
         <name>Has_Barriers</name>
         <label>Has Barriers?</label>
-        <locationX>402</locationX>
-        <locationY>4154</locationY>
+        <locationX>842</locationX>
+        <locationY>3962</locationY>
         <defaultConnector>
-            <targetReference>Check_Each_CN</targetReference>
+            <targetReference>Patient_Support_Barrier</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No</defaultConnectorLabel>
         <rules>
@@ -87,7 +71,7 @@
         <name>Has_Patient_Barriers</name>
         <label>Has Patient Barriers?</label>
         <locationX>182</locationX>
-        <locationY>4838</locationY>
+        <locationY>4430</locationY>
         <defaultConnector>
             <targetReference>Has_Related_CN</targetReference>
         </defaultConnector>
@@ -234,35 +218,10 @@
         </rules>
     </decisions>
     <decisions>
-        <name>Has_Patient_Supports</name>
-        <label>Has Patient Supports?</label>
-        <locationX>182</locationX>
-        <locationY>4538</locationY>
-        <defaultConnector>
-            <targetReference>Has_Patient_Barriers</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>No</defaultConnectorLabel>
-        <rules>
-            <name>Yes_PatientSupports</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>PatientSupports</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Delete_Patient_Supports</targetReference>
-            </connector>
-            <label>Yes</label>
-        </rules>
-    </decisions>
-    <decisions>
         <name>Has_Related_CN</name>
         <label>Has Related CN?</label>
         <locationX>182</locationX>
-        <locationY>5138</locationY>
+        <locationY>4730</locationY>
         <defaultConnectorLabel>No</defaultConnectorLabel>
         <rules>
             <name>Yes_CN</name>
@@ -305,31 +264,6 @@
             <label>Yes</label>
         </rules>
     </decisions>
-    <decisions>
-        <name>Has_Supports</name>
-        <label>Has Supports?</label>
-        <locationX>402</locationX>
-        <locationY>3854</locationY>
-        <defaultConnector>
-            <targetReference>Has_Barriers</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>No</defaultConnectorLabel>
-        <rules>
-            <name>Yes_HasSupports</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Get_Related_Patient_Supports</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Supports_to_Delete</targetReference>
-            </connector>
-            <label>Yes</label>
-        </rules>
-    </decisions>
     <environments>Default</environments>
     <formulas>
         <name>toggle</name>
@@ -339,17 +273,31 @@
     <interviewLabel>Unrelated Call Cleanup {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Unrelated Call Cleanup</label>
     <loops>
-        <name>Check_Each_CN</name>
-        <label>Check Each CN</label>
+        <name>Find_Patient_Supports</name>
+        <label>Find Patient Supports</label>
         <locationX>182</locationX>
         <locationY>3530</locationY>
         <collectionReference>Get_Related_Sub_Cases_CN</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Get_Related_Patient_Supports</targetReference>
+            <targetReference>Get_Patient_Supports</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>Has_Patient_Supports</targetReference>
+            <targetReference>Has_Patient_Barriers</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>Patient_Support_Barrier</name>
+        <label>Patient Support-Barrier</label>
+        <locationX>622</locationX>
+        <locationY>3746</locationY>
+        <collectionReference>Get_Patient_Supports</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Get_Related_Patient_Barriers</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Find_Patient_Supports</targetReference>
         </noMoreValuesConnector>
     </loops>
     <processMetadataValues>
@@ -385,7 +333,7 @@
         <name>Delete_Patient_Barriers</name>
         <label>Delete Patient Barriers</label>
         <locationX>50</locationX>
-        <locationY>4946</locationY>
+        <locationY>4538</locationY>
         <connector>
             <targetReference>Has_Related_CN</targetReference>
         </connector>
@@ -442,20 +390,10 @@
         <inputReference>Get_Related_Patient_Substances</inputReference>
     </recordDeletes>
     <recordDeletes>
-        <name>Delete_Patient_Supports</name>
-        <label>Delete Patient Supports</label>
-        <locationX>50</locationX>
-        <locationY>4646</locationY>
-        <connector>
-            <targetReference>Has_Patient_Barriers</targetReference>
-        </connector>
-        <inputReference>PatientSupports</inputReference>
-    </recordDeletes>
-    <recordDeletes>
         <name>Delete_Related_CN</name>
         <label>Delete Related CN</label>
         <locationX>50</locationX>
-        <locationY>5246</locationY>
+        <locationY>4838</locationY>
         <inputReference>Get_Related_Sub_Cases_CN</inputReference>
     </recordDeletes>
     <recordDeletes>
@@ -532,6 +470,27 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <name>Get_Patient_Supports</name>
+        <label>Get Patient Supports</label>
+        <locationX>622</locationX>
+        <locationY>3638</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Patient_Support_Barrier</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Case__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Find_Patient_Supports.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Patient_Support__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Related_Care_Notes</name>
         <label>Get Related Care Notes</label>
         <locationX>182</locationX>
@@ -555,18 +514,18 @@
     <recordLookups>
         <name>Get_Related_Patient_Barriers</name>
         <label>Get Related Patient Barriers</label>
-        <locationX>402</locationX>
-        <locationY>3746</locationY>
+        <locationX>842</locationX>
+        <locationY>3854</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Has_Supports</targetReference>
+            <targetReference>Has_Barriers</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>Case__c</field>
+            <field>Patient_Support__c</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>caseId</elementReference>
+                <elementReference>Patient_Support_Barrier.Id</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
@@ -679,34 +638,13 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>Get_Related_Patient_Supports</name>
-        <label>Get Related Patient Supports</label>
-        <locationX>402</locationX>
-        <locationY>3638</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Get_Related_Patient_Barriers</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Case__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>caseId</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>false</getFirstRecordOnly>
-        <object>Patient_Support__c</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
         <name>Get_Related_Sub_Cases_CN</name>
         <label>Get Related Sub Cases - CN</label>
         <locationX>182</locationX>
         <locationY>3422</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Check_Each_CN</targetReference>
+            <targetReference>Find_Patient_Supports</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
