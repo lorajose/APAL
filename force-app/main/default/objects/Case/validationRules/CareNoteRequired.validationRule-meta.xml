@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CareNoteRequired</fullName>
+    <active>true</active>
+    <description>A care request or care navigation must have at least one note before closing.</description>
+    <errorConditionFormula>(RecordType.DeveloperName = &apos;Care_Request&apos; || 
+	RecordType.DeveloperName = &apos;Care_Navigation&apos;) &amp;&amp;
+ (Text(Status) = &apos;Unconfirmed Navigation&apos; || 
+		Text(Status) = &apos;Successful Navigation&apos; ||
+		Text(Status) = &apos;Completed&apos;) &amp;&amp;
+	(Care_Note_Count__c = 0 || isBlank(Care_Note_Count__c)) &amp;&amp;  Parent.Unrelated_Call__c = false</errorConditionFormula>
+    <errorDisplayField>Status</errorDisplayField>
+    <errorMessage>You must enter at least one note before closing the case.</errorMessage>
+</ValidationRule>
