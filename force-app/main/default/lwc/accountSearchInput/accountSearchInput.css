@@ -1,0 +1,116 @@
+.search-container {
+    position: relative;
+    width: 100%;
+    max-width: 2000px;
+}
+
+.box-shadow {
+    box-shadow:
+            0 0 0 2px var(--slds-g-color-surface-container-1) inset,
+            0 0 0 3px var(--slds-g-color-border-1) inset;
+}
+
+.help-text {
+    position: relative;
+    top: -0.1rem;
+}
+
+.error-background-input {
+    background-color: #fef0f3;
+}
+
+.error-text {
+    color: #b60554;
+}
+
+.input-label {
+    font-weight: bold;
+    margin-bottom: 0.1rem;
+    display: block;
+}
+
+.dropdown-scrollable {
+    max-height: 15rem;
+    overflow-y: auto;
+}
+
+.required {
+    color: red;
+    margin-left: 0.25rem;
+}
+
+.input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.input-flex {
+    position: relative;
+    width: 100%;
+}
+
+.custom-input {
+    width: 100%;
+    padding-right: 2rem; /* make space for the icon */
+    margin-top: 0;
+}
+
+.search-icon {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #999;
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    z-index: 10;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.group-header {
+    font-weight: bold;
+    padding: 0.5rem;
+    background: #f0f0f0;
+}
+
+.full-width-input {
+    width: 100%;
+    display: block;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.dropdown-item:hover {
+    background-color: var(--slds-s-menu-item-color-background-active, var(--slds-g-color-surface-container-2));
+}
+
+.account-info {
+    margin-left: 0.5rem;
+}
+
+.npi {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.dropdown-error-message {
+    font-size: 0.85rem;
+    font-style: italic;
+    color: #c23934;
+}

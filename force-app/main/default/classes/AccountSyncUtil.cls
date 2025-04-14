@@ -11,8 +11,10 @@ public with sharing class AccountSyncUtil {
     public static final String REQUEST_PARAM_SYNC_INITIATOR_NAME = 'syncInitiatorName';
 
     public static final String EXTERNAL_ID_TEMPLATE = '{0}-{1}{2}';
-    public static final String ENDPOINT_TEMPLATE = 'callout:{0}/{1}';
+    public static final String SYNC_ENDPOINT_TEMPLATE = 'callout:{0}/{1}';
+    public static final String QUERY_ENDPOINT_TEMPLATE = 'callout:{0}/{1}{2}';
     public static final String EXTERNAL_SYNC_INITIATOR_NAME_TEMPLATE = '{0} {1}';
+    public static final String ENCODING_SCHEME_UTF8 = 'UTF-8';
     public static final String NAME_SUBFIELD_PREFIX = 'Name.';
 
 
@@ -26,12 +28,16 @@ public with sharing class AccountSyncUtil {
 
     public static final String EXTERNAL_USER_SUFFIX = '[EXT]';
 
+    public static final String PERSON_ACCOUNT_RECORD_TYPE_DEVELOPER_NAME = 'Provider' ;//'PersonAccount';
+
     public static final String EXCEPTION_MESSAGE_RECORD_DISABLED = 'Account is disabled for synchronization and cannot be updated.';
+    public static final String EXCEPTION_MESSAGE_SYNC_IS_NOT_ALLOWED_IN_CURRENT_MODE = 'Account synchronization is not allowed in the current mode. This record is not marked for On-Demand sync.';
     public static final String EXCEPTION_MESSAGE_RECORD_NOT_FOUND = 'Account for synchronization was not found.';
 
     public static final String SYNC_BYPASS_FIELD_API_NAME = Account.AccountSync_Bypass__c.toString();
     public static final String LAST_MODIFIED_DATE_FIELD_API_NAME = Account.LastModifiedDate.toString();
     public static final String LAST_MODIFIED_BY_ID_FIELD_API_NAME = Account.LastModifiedById.toString();
+    public static final String ON_DEMAND_ACCOUNT_SYNC_FIELD_API_NAME = Account.On_Demand_AccountSync__c.toString();
     public static final String NAME_FIELD_API_NAME = Account.Name.toString();
 
     public static final Set<String> NAME_SUBFIELDS_API_NAMES = new Set<String>{
@@ -65,12 +71,28 @@ public with sharing class AccountSyncUtil {
         return syncSettings == null ? false : syncSettings.Record_Types_to_Sync__c.contains(accountRecord.RecordType.DeveloperName);
     }
 
-    public static String buildEndpoint() {
+    public static Boolean isAccountSyncAllowedInCurrentMode(Account accountRecord) {
+        AccountSync_Settings__c syncSettings = getSyncSettings();
+        return syncSettings == null ? false : syncSettings.On_Demand_Mode__c ? accountRecord.On_Demand_AccountSync__c : true;
+    }
+
+    public static String buildSyncEndpoint() {
         return String.format(
-                ENDPOINT_TEMPLATE,
+                SYNC_ENDPOINT_TEMPLATE,
                 new List<String>{
                         getAccountSyncNamedCredentialName(),
                         getAccountSyncEndpointPath()
+                }
+        );
+    }
+
+    public static String buildQueryEndpoint(String queryString) {
+        return String.format(
+                QUERY_ENDPOINT_TEMPLATE,
+                new List<String>{
+                        getAccountSyncNamedCredentialName(),
+                        getAccountQueryEndpointPath(),
+                        EncodingUtil.urlEncode(queryString, ENCODING_SCHEME_UTF8)
                 }
         );
     }
@@ -115,6 +137,11 @@ public with sharing class AccountSyncUtil {
     private static String getAccountSyncEndpointPath() {
         AccountSync_Settings__c syncSettings = getSyncSettings();
         return syncSettings == null ? null : syncSettings.Endpoint_Path__c;
+    }
+
+    private static String getAccountQueryEndpointPath() {
+        AccountSync_Settings__c syncSettings = getSyncSettings();
+        return syncSettings == null ? null : syncSettings.Query_Endpoint_Path__c;
     }
 
     private static String getAccountSyncNamedCredentialName() {

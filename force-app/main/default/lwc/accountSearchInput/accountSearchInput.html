@@ -1,0 +1,134 @@
+<template>
+    <div class="search-container">
+        <div class="slds-form-element slds-m-left_xx-small">
+            <label class="slds-form-element__label" for="account-input">
+                Name<span class="required">*</span>
+                <span if:true={helpTextContent} class="help-text">
+        <lightning-helptext class="slds-m-left_xx-small"
+                            content={helpTextContent}></lightning-helptext>
+    </span>
+            </label>
+
+            <template if:true={selectedAccount}>
+                <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_left-right">
+                    <div class="slds-combobox_container">
+                        <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click">
+                            <div class="slds-combobox__form-element">
+                                <lightning-icon
+                                        icon-name="standard:account"
+                                        size="x-small"
+                                        class="slds-icon slds-input__icon slds-input__icon_left slds-icon-text-default"
+                                ></lightning-icon>
+                                <input
+                                        type="text"
+                                        class={inputClass}
+                                        value={searchTerm}
+                                        placeholder="Search Accounts..."
+                                />
+                                <lightning-icon
+                                        icon-name="utility:close"
+                                        size="x-small"
+                                        class="slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default clickable"
+                                        onclick={clearSelection}
+                                        style="cursor: pointer;"
+                                ></lightning-icon>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <template if:false={selectedAccount}>
+                <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+                    <lightning-icon
+                            size="x-small"
+                            class="slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default"
+                            icon-name="utility:search"
+                    ></lightning-icon>
+
+                    <input
+                            type="text"
+                            id="account-input"
+                            class={inputClass}
+                            placeholder="Search Accounts..."
+                            value={searchTerm}
+                            disabled={selectedAccount}
+                            oninput={handleInputChange}
+                            onfocus={handleFocus}
+                            onblur={handleBlur}
+                    />
+                </div>
+            </template>
+
+            <template if:true={shouldShowError}>
+                <div class="slds-form-element__help slds-has-error error-text">Complete this field.</div>
+            </template>
+        </div>
+
+        <template if:true={showDropdown}>
+            <div class="slds-listbox dropdown-scrollable slds-listbox_vertical slds-dropdown slds-dropdown_fluid slds-dropdown_left"
+                 onmousedown={preventBlur}>
+                <template if:true={filteredVMAPAccounts.length}>
+                    <div class="group-header">VMAP Accounts</div>
+                    <template for:each={filteredVMAPAccounts} for:item="account">
+                        <div key={account.id} class="dropdown-item" onclick={handleSelect} data-id={account.id}>
+                            <lightning-icon icon-name="standard:account" size="x-small"></lightning-icon>
+                            <div class="account-info">
+                                <div>{account.firstName} {account.lastName}</div>
+                                <div class="npi">{account.npi}</div>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+
+                <template if:true={filteredAPALAccounts.length}>
+                    <div class="group-header">APAL Accounts</div>
+                    <template for:each={filteredAPALAccounts} for:item="account">
+                        <div key={account.id} class="dropdown-item" onclick={handleSelect} data-id={account.id}>
+                            <lightning-icon icon-name="standard:account" size="x-small"></lightning-icon>
+                            <div class="account-info">
+                                <div>{account.firstName} {account.lastName}</div>
+                                <div class="npi">{account.npi}</div>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+
+                <template if:false={filteredAPALAccounts.length}>
+                    <template if:false={isExternalRetrieveSuccessful}>
+                        <div class="group-header">APAL Accounts</div>
+                        <div class="dropdown-error-message slds-p-around_small slds-text-color_error">
+                            Failed to retrieve provider information from the APAL system.
+                        </div>
+                    </template>
+                </template>
+            </div>
+        </template>
+    </div>
+
+    <div class="slds-m-top_small slds-m-left_xx-small">
+        <lightning-button variant="brand" label="New Provider" onclick={launchFlow}>
+        </lightning-button>
+    </div>
+    
+<template if:true={isModalOpen}>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close" title="Close" onclick={closeModal}>
+                    <lightning-icon icon-name="utility:close" alternative-text="Close" size="small">
+                    </lightning-icon>
+                </button>
+                <h2 class="slds-modal__title slds-hyphenate">New Provider</h2>
+            </header>
+
+            <div class="slds-modal__content slds-p-around_medium">
+                <lightning-flow flow-api-name="New_Provider" onstatuschange={handleFlowStatusChange}>
+                </lightning-flow>
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>
+
+</template>
