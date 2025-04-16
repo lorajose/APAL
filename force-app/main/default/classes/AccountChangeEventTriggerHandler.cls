@@ -53,6 +53,7 @@ public with sharing class AccountChangeEventTriggerHandler {
             if ((!accountChangeEvent.Disable_AccountSync__c && !accountsByChangeEventIds.get(accountChangeEvent.Id).Disable_AccountSync__c)
                     && !syncService.shouldBypassSync(accountChangeEvent)
                     && AccountSyncUtil.isRecordTypeInSyncSetting(accountsByChangeEventIds.get(accountChangeEvent.Id))
+                    && AccountSyncUtil.isAccountSyncAllowedInCurrentMode(accountsByChangeEventIds.get(accountChangeEvent.Id))
                     && AccountSyncUtil.CDC_EVENTS_TO_TRACK.contains(accountChangeEvent.ChangeEventHeader.getChangeType())
             ) {
                 syncLogger.setDebug(AccountSyncUtil.DEBUG_HEADER_CHANGE_EVENT, accountChangeEvent);
@@ -70,7 +71,7 @@ public with sharing class AccountChangeEventTriggerHandler {
         for (AccountChangeEvent accountChangeEvent : newAccountChangeEvents) {
             logInstances.add(syncLogger.createFailedLog(ex)
                     .setRecordId(getAccountIdsByChangeEventIds.get(accountChangeEvent.Id))
-                    .setDirection(AccountSyncUtil.APAL_PREFIX)
+                    .setDirection(AccountSyncUtil.VMAP_PREFIX)
                     .setType(accountChangeEvent.ChangeEventHeader.getChangeType())
                     .setInitiator(AccountSyncUtil.getCommitUser(accountChangeEvent))
                     .setPayload(accountChangeEvent)
