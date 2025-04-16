@@ -45,11 +45,12 @@ public with sharing class AccountSyncBatch implements Database.Batchable<Account
      * @param accountChangeEvents The list of AccountChangeEvent records to process in this batch execution.
      */
     public void execute(Database.BatchableContext batchContext, List<AccountChangeEvent> accountChangeEvents) {
+        System.debug('🔥 AccountSyncBatch.execute() - Processing batch of size: ' + accountChangeEvents.size());
         for (AccountChangeEvent accountChangeEvent : accountChangeEvents) {
             CalloutService.RequestInstance request;
             try {
                 request = calloutService.createPOSTRequest()
-                        .setEndpoint(AccountSyncUtil.buildEndpoint())
+                        .setEndpoint(AccountSyncUtil.buildSyncEndpoint())
                         .setBody(AccountSyncUtil.buildRequestBody(
                                 this.accountsByChangeEventIds.get(accountChangeEvent.Id),
                                 accountChangeEvent
@@ -57,10 +58,6 @@ public with sharing class AccountSyncBatch implements Database.Batchable<Account
                         ));
 
                 HttpResponse response = calloutService.sendRequest(request);
-
-                System.debug('RESPONSE ---> ' + response.getBody().toString());
-                System.debug('RESPONSE 2 ---> ' + response.getBodyAsBlob().toString());
-                System.debug('RESPONSE 3 ---> ' + response.getStatusCode());
 
                 logInstances.add(
                         syncLogger.logSyncResponse(
@@ -75,8 +72,9 @@ public with sharing class AccountSyncBatch implements Database.Batchable<Account
                 logInstances.add(syncLogger.createFailedLog(ex)
                         .setSyncId(this.accountsByChangeEventIds.get(accountChangeEvent.Id).AccountSync_Id__c)
                         .setRecordId(accountChangeEvent.ChangeEventHeader.getRecordIds()[0])
-                        .setDirection(AccountSyncUtil.APAL_PREFIX)
+                        .setDirection(AccountSyncUtil.VMAP_PREFIX)
                         .setType(accountChangeEvent.ChangeEventHeader.getChangeType())
+                        .setInitiator(AccountSyncUtil.getCommitUser(accountChangeEvent))
                         .setPayload(request.request.getBody())
                 );
             }
