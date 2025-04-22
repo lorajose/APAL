@@ -12,7 +12,12 @@ public with sharing class AccountSyncException extends Exception {
     public class RecordDisableForSyncException extends Exception {}
 
     /**
+     * @description Exception thrown when an account is not eligible for sync in On-Demand mode.
+     */
+    public class OnDemandSyncRestrictionException extends Exception {}
+
+    /**
      * @description Exception thrown when a required record cannot be found.
      */
-    public class RecordNotFoundException extends Exception { }
+    public class RecordNotFoundException extends Exception {}
 }

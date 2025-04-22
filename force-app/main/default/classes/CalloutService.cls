@@ -18,6 +18,7 @@ public with sharing class CalloutService {
     };
 
     private static final String METHOD_POST = 'POST';
+    private static final String METHOD_GET = 'GET';
     private static final String HEADER_CONTENT_TYPE = 'Content-Type';
     private static final String CONTENT_TYPE_JSON = 'application/json';
 
@@ -27,6 +28,10 @@ public with sharing class CalloutService {
      */
     public RequestInstance createPOSTRequest() {
         return this.createRequest(METHOD_POST);
+    }
+
+    public RequestInstance createGETRequest() {
+        return this.createRequest(METHOD_GET);
     }
 
     /**

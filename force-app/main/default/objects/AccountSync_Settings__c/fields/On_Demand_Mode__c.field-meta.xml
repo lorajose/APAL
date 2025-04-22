@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>On_Demand_Mode__c</fullName>
+    <defaultValue>true</defaultValue>
+    <description>Controls whether account synchronization is enabled by default or only triggered manually.</description>
+    <inlineHelpText>If enabled, accounts will not be synchronized automatically. Sync must be triggered manually or through specific user actions.
+Disable this to sync all accounts by default.</inlineHelpText>
+    <label>Enable Sync On Demand</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

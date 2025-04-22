@@ -9,6 +9,7 @@ public with sharing class AccountSyncService {
 
     private static AccountSelector accountSelector = new AccountSelector();
     private static AccountSyncLogger syncLogger = AccountSyncLogger.getInstance();
+    private static CalloutService httpService = new CalloutService();
     private static AccountSyncFieldMappingSelector fieldMappingSelector = new AccountSyncFieldMappingSelector();
 
     private Map<String, String> fieldMappingsMap;
@@ -56,6 +57,57 @@ public with sharing class AccountSyncService {
                 accountRecord.AccountSync_Id__c = AccountSyncUtil.generateAccountSyncId();
             }
         }
+    }
+
+    public List<Account> getExternalAccounts() {
+        this.retrieveFieldMappings();
+
+        CalloutService.RequestInstance request = httpService.createGETRequest()
+                .setEndpoint(AccountSyncUtil.buildQueryEndpoint(
+                        accountSelector.buildDynamicExternalQuery(fieldMappingsMap.keySet())
+                ));
+
+
+        HttpResponse response = httpService.sendRequest(request);
+
+        Set<String> fields = fieldMappingsMap.keySet();
+        String query = accountSelector.buildDynamicExternalQuery(fields);
+        String fullUrl = AccountSyncUtil.buildQueryEndpoint(query);
+
+        return this.parseQueryResult(response);
+    }
+
+    private List<Account> parseQueryResult(HttpResponse response) {
+        List<Account> externalAccounts = new List<Account>();
+        if (response.getStatusCode() == CalloutService.STATUS_CODE_200) {
+            Map<String, Object> result = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
+            List<Object> records = (List<Object>) result.get('records');
+            for (Object obj : records) {
+                Map<String, Object> rec = (Map<String, Object>) obj;
+                Account externalAccount = new Account(
+                        AccountSync_Id__c = String.valueOf(rec.get('AccountSync_Id__c'))
+                );
+                for (String externalFieldApiName : this.fieldMappingsMap.keySet()) {
+                    this.populateAccountField(
+                            externalAccount,
+                            fieldMappingsMap.get(externalFieldApiName),
+                            rec.get(externalFieldApiName)
+                    );
+                }
+                for (String internalFieldApiName : fieldDefaultValueMappingsMap.keySet()) {
+                    this.populateAccountField(
+                            externalAccount,
+                            internalFieldApiName,
+                            fieldDefaultValueMappingsMap.get(internalFieldApiName)
+                    );
+                }
+                externalAccounts.add(externalAccount);
+            }
+        } else {
+            throw new CalloutException('Failed to get data. Status: ' + response.getStatus());
+        }
+
+        return externalAccounts;
     }
 
     /**
@@ -155,7 +207,6 @@ public with sharing class AccountSyncService {
                 accountIdsByChangeEventIds.put(accountChangeEvent.Id, Id.valueOf(recordIds[0]));
             }
         }
-
         return accountIdsByChangeEventIds;
     }
 
@@ -176,11 +227,10 @@ public with sharing class AccountSyncService {
         this.fieldMappingsMap = new Map<String, String>();
         this.fieldDefaultValueMappingsMap = new Map<String, String>();
         for (AccountSync_Field_Mapping__mdt fieldMapping : fieldMappingSelector.queryAllActive()) {
-            if (String.isNotBlank(fieldMapping.APAL_Field_API_Name__c)) {
+            if (String.isNotBlank(fieldMapping.VMAP_Field_API_Name__c)) {
                 this.fieldMappingsMap.put(
                         fieldMapping.VMAP_Field_API_Name__c,
                         fieldMapping.APAL_Field_API_Name__c
-
                 );
             } else {
                 this.fieldDefaultValueMappingsMap.put(
@@ -246,6 +296,18 @@ public with sharing class AccountSyncService {
     private void updateAccount(Account accountRecord, AccountSyncUtil.RequestWrapper syncRequest) {
         accountRecord.AccountSync_Bypass__c = true;
 
+        if (onDemandSyncEnabled(syncRequest)) {
+            accountRecord.On_Demand_AccountSync__c = true;
+            upsert accountRecord Account.AccountSync_Id__c;
+            return;
+        }
+
+        if (!AccountSyncUtil.isAccountSyncAllowedInCurrentMode(accountRecord)) {
+            throw new AccountSyncException.OnDemandSyncRestrictionException(
+                    AccountSyncUtil.EXCEPTION_MESSAGE_SYNC_IS_NOT_ALLOWED_IN_CURRENT_MODE
+            );
+        }
+
         for (String changedExternalField : normalizeNameSubFields(syncRequest.changedFields)) {
             if (this.fieldMappingsMap.containsKey(changedExternalField)) {
                 this.populateAccountField(
@@ -269,6 +331,11 @@ public with sharing class AccountSyncService {
         }
 
         upsert accountRecord Account.AccountSync_Id__c;
+    }
+
+    private static Boolean onDemandSyncEnabled(AccountSyncUtil.RequestWrapper syncRequest) {
+        return syncRequest.changedFields.contains(AccountSyncUtil.ON_DEMAND_ACCOUNT_SYNC_FIELD_API_NAME)
+                && Boolean.valueOf(syncRequest.changeEvent.get(AccountSyncUtil.ON_DEMAND_ACCOUNT_SYNC_FIELD_API_NAME));
     }
 
     private static List<String> normalizeNameSubFields(List<String> changedFields) {
@@ -303,6 +370,7 @@ public with sharing class AccountSyncService {
                 parsedValue = fieldValue;
             }
         }
+
 
         accountRecord.put(fieldApiName, parsedValue);
     }

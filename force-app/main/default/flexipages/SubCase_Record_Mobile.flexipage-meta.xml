@@ -566,6 +566,13 @@
                     <valueList>
                         <valueListItems>
                             <value>Case.CareNoteCR</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Parent.Unrelated_Call__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Case.New_Provider</value>
@@ -727,6 +734,13 @@
             <componentInstance>
                 <componentName>flowLauncher</componentName>
                 <identifier>c_flowLauncher</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Parent.Unrelated_Call__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>

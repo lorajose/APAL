@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
-    <excludeButtons>DataDotComClean</excludeButtons>
+    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
+    <excludeButtons>RequestUseSfdc</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
@@ -418,6 +419,8 @@
         <relatedList>RelatedHistoryList</relatedList>
     </relatedLists>
     <relatedLists>
+        <excludeButtons>MassChangeOwner</excludeButtons>
+        <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>Case__c</fields>
         <fields>Medication_List__c</fields>
@@ -427,6 +430,8 @@
         <relatedList>Patient_Medication__c.Patient__c</relatedList>
     </relatedLists>
     <relatedLists>
+        <excludeButtons>MassChangeOwner</excludeButtons>
+        <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>Case__c</fields>
         <fields>Concern__c</fields>
@@ -434,6 +439,8 @@
         <relatedList>Patient_Concern__c.Patient__c</relatedList>
     </relatedLists>
     <relatedLists>
+        <excludeButtons>MassChangeOwner</excludeButtons>
+        <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>Case__c</fields>
         <fields>Safety_Risk__c</fields>
@@ -443,6 +450,8 @@
         <relatedList>Patient_Safety_Risk__c.Patient__c</relatedList>
     </relatedLists>
     <relatedLists>
+        <excludeButtons>MassChangeOwner</excludeButtons>
+        <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>Case__c</fields>
         <fields>Substance_Listing__c</fields>
@@ -451,6 +460,8 @@
         <relatedList>Patient_Substance__c.Patient__c</relatedList>
     </relatedLists>
     <relatedLists>
+        <excludeButtons>MassChangeOwner</excludeButtons>
+        <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>Case__c</fields>
         <fields>Support__c</fields>
@@ -459,6 +470,8 @@
         <relatedList>Patient_Support__c.Patient__c</relatedList>
     </relatedLists>
     <relatedLists>
+        <excludeButtons>MassChangeOwner</excludeButtons>
+        <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>Case__c</fields>
         <fields>Screener_Name__c</fields>
