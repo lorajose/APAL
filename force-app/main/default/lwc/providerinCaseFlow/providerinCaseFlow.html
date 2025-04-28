@@ -1,0 +1,15 @@
+<template>
+    <lightning-layout multiple-rows>
+        <lightning-layout-item size="12" class="slds-p-bottom_x-small">
+            <c-account-search-input record-id={recordId} account-record={accountRecord} is-from-flow={isFromFlow}
+                                    onclearselection={handleClearSelection} onvalidationresult={handleValidation}
+                                    oninitialpopulation={handleInitialPopulate}
+                                    onaccountselected={handleValueChange}></c-account-search-input> 
+        </lightning-layout-item>
+        <lightning-layout-item size="12" padding="medium">
+            <c-modal-flow-button label="New Provider" variant="brand" finish-action={finishAction}
+                                 flow-api-name='New_Provider'></c-modal-flow-button>
+        </lightning-layout-item>
+        
+    </lightning-layout>
+</template>

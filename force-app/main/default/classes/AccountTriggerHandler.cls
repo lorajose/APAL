@@ -28,8 +28,10 @@ public with sharing class AccountTriggerHandler {
                 );
             }
         }
-        this.populateAccountSyncId(accountsWithoutSyncIds);
-        Database.update(accountsWithoutSyncIds);
+        if (!accountsWithoutSyncIds.isEmpty()) {
+            this.populateAccountSyncId(accountsWithoutSyncIds);
+            Database.update(accountsWithoutSyncIds);
+        }
     }
 
     /**
