@@ -172,7 +172,7 @@ export default class AccountSearchDropdown extends LightningElement {
         );
         const finalAccountId = matchingOriginal ? matchingOriginal.Id : account.id;
 
-        this.searchTerm = `${account.firstName} ${account.middleName ? account.middleName + ' ' : ''}${account.lastName}${account.suffix ? ' ' + account.suffix : ''}`;
+        this.searchTerm = `${account.firstName} ${account.middleName ? account.middleName + '' : ''}${account.lastName}${account.suffix ? '' + account.suffix : ''}`;
         this.showDropdown = false;
         this.selectedAccount = account;
         this.showError = false;
