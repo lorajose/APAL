@@ -446,7 +446,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>readonly</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Provider__c</fieldItem>
                 <identifier>RecordProvider_cField</identifier>
