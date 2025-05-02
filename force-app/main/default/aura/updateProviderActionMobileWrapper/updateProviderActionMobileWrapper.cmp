@@ -1,0 +1,6 @@
+<aura:component implements="force:lightningQuickAction,force:hasRecordId,flexipage:availableForRecordHome,flexipage:availableForAllPageTypes" access="global">
+     <!-- Declarar el atributo recordId -->
+    <aura:attribute name="recordId" type="Id" access="public"/>
+   <!-- <c:updateProviderActionMobile record-id="{!v.recordId}" /> -->
+    <c:updateProviderActionMobile recordId="{!v.recordId}" />
+</aura:component>

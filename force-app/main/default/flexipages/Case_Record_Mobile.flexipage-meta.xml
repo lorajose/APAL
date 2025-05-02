@@ -446,7 +446,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>readonly</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Provider__c</fieldItem>
                 <identifier>RecordProvider_cField</identifier>
@@ -825,10 +825,16 @@
                             <value>Case.New_Practice</value>
                         </valueListItems>
                         <valueListItems>
+                            <value>Case.Update_Provider</value>
+                        </valueListItems>
+                        <valueListItems>
                             <value>Edit</value>
                         </valueListItems>
                         <valueListItems>
                             <value>ChangeOwnerOne</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Case.Update_Provider_Mobile</value>
                         </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
@@ -1018,6 +1024,13 @@
     <sobjectType>Case</sobjectType>
     <template>
         <name>flexipage:recordHomeSingleColNoHeaderTemplateDesktop</name>
+        <properties>
+            <name>actionNames</name>
+        </properties>
+        <properties>
+            <name>enablePageActionConfig</name>
+            <value>false</value>
+        </properties>
     </template>
     <type>RecordPage</type>
 </FlexiPage>
