@@ -84,8 +84,8 @@
                                 <lightning-icon icon-name="standard:account" size="x-small"></lightning-icon>
                                 <div class="account-info">
                                     {account.firstName}
-                                    <template if:true={account.middleName}> {account.middleName} </template>
-                                    {account.lastName}
+                                    <template if:true={account.middleName}> {account.middleName}</template>
+                                     &nbsp;{account.lastName}
                                     <template if:true={account.suffix}> {account.suffix}</template>
                                     <div class="npi">{account.npi}</div>
                                 </div>
