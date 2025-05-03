@@ -46,7 +46,7 @@ export default class AccountSearchDropdown extends LightningElement {
                         org: this.accountRecord.Id ? 'VMAP' : 'APAL'
                     };
                     this.selectedAccount = formatted;
-                    this.searchTerm = `${formatted.firstName} ${formatted.middleName ? formatted.middleName + '' : ''}${formatted.lastName}${formatted.suffix ? ', ' + formatted.suffix : ''}`;
+                    this.searchTerm = `${formatted.firstName} ${formatted.middleName ? formatted.middleName + ' ' : ''}${formatted.lastName}${formatted.suffix ? ', ' + formatted.suffix : ''}`;
                     this.processSelect(formatted.id);
                 } else {
                     const initialPopulationEvent = new CustomEvent('initialpopulation', {
@@ -77,7 +77,7 @@ export default class AccountSearchDropdown extends LightningElement {
                                 org: currentAccount.Id ? 'VMAP' : 'APAL'
                             };
                             this.selectedAccount = formatted;
-                            this.searchTerm = `${formatted.firstName} ${formatted.middleName ? formatted.middleName + '' : ''}${formatted.lastName}${formatted.suffix ? ', ' + formatted.suffix : ''}`;
+                            this.searchTerm = `${formatted.firstName} ${formatted.middleName ? formatted.middleName + ' ' : ''}${formatted.lastName}${formatted.suffix ? ', ' + formatted.suffix : ''}`;
                             const loadingEndEventSuccess = new CustomEvent('loadingend', {
                                 detail: {
                                     accountId: currentAccount.Id,
@@ -172,7 +172,7 @@ export default class AccountSearchDropdown extends LightningElement {
         );
         const finalAccountId = matchingOriginal ? matchingOriginal.Id : account.id;
 
-        this.searchTerm = `${account.firstName} ${account.middleName ? account.middleName + '' : ''}${account.lastName}${account.suffix ? '' + account.suffix : ''}`;
+        this.searchTerm = `${account.firstName} ${account.middleName ? account.middleName + ' ' : ''}${account.lastName}${account.suffix ? ' ' + account.suffix : ''}`;
         this.showDropdown = false;
         this.selectedAccount = account;
         this.showError = false;
