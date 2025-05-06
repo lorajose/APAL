@@ -12,6 +12,7 @@ public with sharing class AccountSyncUtilApal {
     public static final String EXTERNAL_ID_TEMPLATE = '{0}-{1}{2}';
     public static final String SYNC_ENDPOINT_TEMPLATE = 'callout:{0}/{1}';
     public static final String QUERY_ENDPOINT_TEMPLATE = 'callout:{0}/{1}{2}';
+    public static final String QUERY_ENDPOINT_TEMPLATE_SKIP_SERVICE = 'callout:{0}/{1}';
     public static final String EXTERNAL_SYNC_INITIATOR_NAME_TEMPLATE = '{0} {1}';
     public static final String ENCODING_SCHEME_UTF8 = 'UTF-8';
     public static final String NAME_SUBFIELD_PREFIX = 'Name.';
@@ -92,6 +93,16 @@ public with sharing class AccountSyncUtilApal {
                         getAccountSyncNamedCredentialName(),
                         getAccountQueryEndpointPath(),
                         EncodingUtil.urlEncode(queryString, ENCODING_SCHEME_UTF8)
+                }
+        );
+    }
+
+    public static String buildQueryEndpointSkipService(String queryString) {
+        return String.format(
+                QUERY_ENDPOINT_TEMPLATE_SKIP_SERVICE,
+                new List<String>{
+                        getAccountSyncNamedCredentialName(),
+                        queryString, ENCODING_SCHEME_UTF8
                 }
         );
     }
