@@ -16,7 +16,11 @@ export default class AccountSearchDropdown extends LightningElement {
     @track helpTextContent;
     @track isExternalRetrieveSuccessful;
 
+    @track isLoading = true;
+
     @api isFromFlow = false;
+
+    debounceTimeout;
 
     connectedCallback() {
         getAccounts()
@@ -95,8 +99,10 @@ export default class AccountSearchDropdown extends LightningElement {
                 } else {
                     this.dispatchEvent(loadingEndEvent);
                 }
+                this.isLoading = false;
             })
             .catch((error) => {
+                this.isLoading = false;
                 console.error('Error loading accounts:', error);
             });
 
@@ -124,16 +130,20 @@ export default class AccountSearchDropdown extends LightningElement {
     }
 
     get filteredVMAPAccounts() {
-        return this.filterAccounts('APAL');
+        return this.filteredAccounts('APAL');
     }
 
     get filteredAPALAccounts() {
-        return this.filterAccounts('VMAP');
+        return this.filteredAccounts('VMAP');
     }
 
     handleInputChange(event) {
-        this.searchTerm = event.target.value;
-        this.showDropdown = this.searchTerm.length >= 3;
+        clearTimeout(this.debounceTimeout);
+        const value = event.target.value;
+        this.debounceTimeout = setTimeout(() => {
+            this.searchTerm = value;
+            this.showDropdown = value.length >= 3;
+        }, 300);
     }
 
     handleFocus() {
@@ -156,8 +166,6 @@ export default class AccountSearchDropdown extends LightningElement {
     }
 
     handleSelect(event) {
-        console.log('handleSelect');
-        console.log('event.currentTarget.dataset.id: ' + event.currentTarget.dataset.id);
         this.processSelect(event.currentTarget.dataset.id);
 
     }
@@ -207,15 +215,17 @@ export default class AccountSearchDropdown extends LightningElement {
         }, 0);
     }
 
-    filterAccounts(org) {
+    filteredAccounts(org) {
         if (this.searchTerm.length < 3) return [];
 
         const term = this.searchTerm.toLowerCase().trim();
         const terms = term.split(/\s+/);
+        const cleanedSearchTerm = term.replace(/\D/g, '');
 
         return this.allAccounts
-            .filter(acc => acc.org === org)
             .filter(acc => {
+                if (acc.org !== org) return false;
+
                 const fullName = `${acc.firstName} ${acc.lastName}`.toLowerCase();
                 const reverseFullName = `${acc.lastName} ${acc.firstName}`.toLowerCase();
 
@@ -224,7 +234,6 @@ export default class AccountSearchDropdown extends LightningElement {
                 );
 
                 const cleanedPhone = acc.phone.replace(/\D/g, '');
-                const cleanedSearchTerm = term.replace(/\D/g, '');
 
                 const matchesPhone =
                     cleanedSearchTerm.length >= 3 && cleanedPhone.includes(cleanedSearchTerm);

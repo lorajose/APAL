@@ -149,3 +149,9 @@
 .clickable {
     pointer-events: auto !important;
 }
+
+.slds-align_absolute-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

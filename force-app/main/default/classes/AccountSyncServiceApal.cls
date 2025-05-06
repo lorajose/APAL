@@ -54,7 +54,6 @@ public with sharing class AccountSyncServiceApal {
 
     public List<Account> getExternalAccounts() {
         this.retrieveFieldMappings();
-        System.debug('AccountSyncServiceApal.getExternalAccounts()');
         CalloutService.RequestInstance request = httpService.createGETRequest()
                 .setEndpoint(AccountSyncUtilApal.buildQueryEndpoint(
                         accountSelector.buildDynamicExternalQuery(fieldMappingsMap.keySet())
@@ -67,32 +66,52 @@ public with sharing class AccountSyncServiceApal {
 
     private List<Account> parseQueryResult(HttpResponse response) {
         List<Account> externalAccounts = new List<Account>();
-        if (response.getStatusCode() == CalloutService.STATUS_CODE_200) {
-            Map<String, Object> result = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
-            List<Object> records = (List<Object>) result.get('records');
-            for (Object obj : records) {
-                Map<String, Object> rec = (Map<String, Object>) obj;
-                Account externalAccount = new Account(
-                        AccountSync_Id__c = String.valueOf(rec.get('AccountSync_Id__c'))
-                );
-                for (String externalFieldApiName : this.fieldMappingsMap.keySet()) {
-                    this.populateAccountField(
-                            externalAccount,
-                            fieldMappingsMap.get(externalFieldApiName),
-                            rec.get(externalFieldApiName)
+
+        while (true) {
+            if (response.getStatusCode() == CalloutService.STATUS_CODE_200) {
+                Map<String, Object> result = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
+                List<Object> records = (List<Object>) result.get('records');
+
+                for (Object obj : records) {
+                    Map<String, Object> rec = (Map<String, Object>) obj;
+                    Account externalAccount = new Account(
+                            AccountSync_Id__c = String.valueOf(rec.get('AccountSync_Id__c'))
                     );
+
+                    for (String externalFieldApiName : this.fieldMappingsMap.keySet()) {
+                        this.populateAccountField(
+                                externalAccount,
+                                fieldMappingsMap.get(externalFieldApiName),
+                                rec.get(externalFieldApiName)
+                        );
+                    }
+
+                    for (String internalFieldApiName : fieldDefaultValueMappingsMap.keySet()) {
+                        this.populateAccountField(
+                                externalAccount,
+                                internalFieldApiName,
+                                fieldDefaultValueMappingsMap.get(internalFieldApiName)
+                        );
+                    }
+
+                    externalAccounts.add(externalAccount);
                 }
-                for (String internalFieldApiName : fieldDefaultValueMappingsMap.keySet()) {
-                    this.populateAccountField(
-                            externalAccount,
-                            internalFieldApiName,
-                            fieldDefaultValueMappingsMap.get(internalFieldApiName)
-                    );
+
+                if (result.containsKey('nextRecordsUrl')) {
+                    String nextUrl = (String) result.get('nextRecordsUrl');
+                    nextUrl = EncodingUtil.urlDecode(nextUrl, 'UTF-8');
+
+                    CalloutService.RequestInstance nextRequest = httpService.createGETRequest()
+                            .setEndpoint(AccountSyncUtilApal.buildQueryEndpointSkipService(nextUrl));
+
+                    response = httpService.sendRequest(nextRequest);
+                } else {
+                    break;
                 }
-                externalAccounts.add(externalAccount);
+
+            } else {
+                throw new CalloutException('Failed to get data. Status: ' + response.getStatus());
             }
-        } else {
-            throw new CalloutException('Failed to get data. Status: ' + response.getStatus());
         }
         return externalAccounts;
     }
