@@ -1,6 +1,8 @@
 public without sharing class AccountSyncLogger {
 
+    @TestVisible
     private static final String LOG_STATUS_COMPLETE = 'Complete';
+    @TestVisible
     private static final String LOG_STATUS_FAILED = 'Failed';
 
     private static final String DEBUG_MESSAGE_TEMPLATE = '{0}: {1}';
