@@ -218,16 +218,23 @@ public with sharing class AccountSyncServiceApal {
     }
 
     private Boolean isOnlySyncBypassFieldChanged(List<String> changedFields) {
-        return (changedFields.size() == 2
-                && changedFields.contains(AccountSyncUtilApal.SYNC_BYPASS_FIELD_API_NAME)
-                && changedFields.contains(AccountSyncUtilApal.LAST_MODIFIED_DATE_FIELD_API_NAME)) ||
+        return (changedFields.size() == 1
+                && changedFields.contains(AccountSyncUtil.LAST_MODIFIED_BY_ID_FIELD_API_NAME)) ||
+                (changedFields.size() == 1
+                        && changedFields.contains(AccountSyncUtil.LAST_MODIFIED_DATE_FIELD_API_NAME)) ||
                 (changedFields.size() == 2
-                        && changedFields.contains(AccountSyncUtilApal.SYNC_BYPASS_FIELD_API_NAME)
-                        && changedFields.contains(AccountSyncUtilApal.LAST_MODIFIED_BY_ID_FIELD_API_NAME)) ||
+                        && changedFields.contains(AccountSyncUtil.LAST_MODIFIED_DATE_FIELD_API_NAME)
+                        && changedFields.contains(AccountSyncUtil.LAST_MODIFIED_BY_ID_FIELD_API_NAME)) ||
+                (changedFields.size() == 2
+                        && changedFields.contains(AccountSyncUtil.SYNC_BYPASS_FIELD_API_NAME)
+                        && changedFields.contains(AccountSyncUtil.LAST_MODIFIED_DATE_FIELD_API_NAME)) ||
+                (changedFields.size() == 2
+                        && changedFields.contains(AccountSyncUtil.SYNC_BYPASS_FIELD_API_NAME)
+                        && changedFields.contains(AccountSyncUtil.LAST_MODIFIED_BY_ID_FIELD_API_NAME)) ||
                 (changedFields.size() == 3
-                        && changedFields.contains(AccountSyncUtilApal.SYNC_BYPASS_FIELD_API_NAME)
-                        && changedFields.contains(AccountSyncUtilApal.LAST_MODIFIED_BY_ID_FIELD_API_NAME)
-                        && changedFields.contains(AccountSyncUtilApal.LAST_MODIFIED_DATE_FIELD_API_NAME));
+                        && changedFields.contains(AccountSyncUtil.SYNC_BYPASS_FIELD_API_NAME)
+                        && changedFields.contains(AccountSyncUtil.LAST_MODIFIED_BY_ID_FIELD_API_NAME)
+                        && changedFields.contains(AccountSyncUtil.LAST_MODIFIED_DATE_FIELD_API_NAME));
     }
 
     private void retrieveFieldMappings() {
@@ -276,8 +283,10 @@ public with sharing class AccountSyncServiceApal {
     }
 
     private Id createAccount(AccountSyncUtilApal.RequestWrapper syncRequest) {
+        RecordType defaultRecordType = [SELECT Id FROM RecordType WHERE SobjectType = 'Account' AND DeveloperName = 'Provider' LIMIT 1];
         Account newAccount = new Account(
-                AccountSync_Id__c = syncRequest.accountSyncId
+                AccountSync_Id__c = syncRequest.accountSyncId,
+                RecordTypeId = defaultRecordType.Id
         );
 
         for (String externalFieldApiName : this.fieldMappingsMap.keySet()) {
