@@ -19,7 +19,79 @@
  *
  * See the Apex Language Reference for more information about Testing and Code Coverage.
  */
-@isTest
+
+@IsTest
+private class AccountChangeEventTriggerHandlerApalTest {
+
+    @TestSetup
+    private static void testSetup() {
+        insert new AccountSync_Settings__c(
+                Name = 'Default Account Sync setting',
+                Is_Active__c = true,
+                Endpoint_Path__c = 'services/apexrest/AccountSync',
+                Named_Credential__c = 'APAL_Org_Auth'
+        );
+    }
+    @IsTest
+    private static void handleAfterInsertTest() {
+
+        Account testAccountRecord = new Account(
+                Name = 'Test Account',
+                Phone = '123-456-7890'
+        );
+
+        Test.startTest();
+
+        Test.enableChangeDataCapture();
+
+        insert testAccountRecord;
+
+        Test.getEventBus().deliver();
+
+        Test.stopTest();
+    }
+
+    @IsTest
+    private static void handleAfterInsertExceptionTest() {
+        Account testAccountRecord = new Account(
+                Name = 'Test Account',
+                Phone = '123-456-7890'
+        );
+
+        Test.startTest();
+
+        Test.enableChangeDataCapture();
+
+        AccountChangeEventTriggerHandlerApal.throwTestException = true;
+
+        insert testAccountRecord;
+
+        Test.getEventBus().deliver();
+
+        Test.stopTest();
+
+        List<Sync_Log__c> syncLogs = [
+                SELECT
+                        Id
+                FROM Sync_Log__c
+                WHERE Account_Provider_Practice__c = :testAccountRecord.Id
+                LIMIT 1
+        ];
+
+        System.assert(
+                !syncLogs.isEmpty(),
+                'Sync_Log__c record should be created'
+        );
+        System.assertEquals(
+                1,
+                syncLogs.size(),
+                'Sync_Log__c records size should be 1'
+        );
+    }
+}
+
+
+/* @isTest
 private class AccountChangeEventTriggerHandlerApalTest {
 
     static Id testAccountId;
@@ -71,4 +143,4 @@ private class AccountChangeEventTriggerHandlerApalTest {
 
         AccountChangeEventTriggerHandlerApal.throwTestException = false;
     }
-}
+} */
