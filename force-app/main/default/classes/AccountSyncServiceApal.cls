@@ -216,7 +216,7 @@ public with sharing class AccountSyncServiceApal {
 
         return accountIdsByChangeEventIds;
     }
-
+   @TestVisible
     private Boolean isOnlySyncBypassFieldChanged(List<String> changedFields) {
         return (changedFields.size() == 1
                 && changedFields.contains(AccountSyncUtil.LAST_MODIFIED_BY_ID_FIELD_API_NAME)) ||
