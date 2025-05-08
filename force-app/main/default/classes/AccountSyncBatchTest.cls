@@ -31,12 +31,12 @@ private class AccountSyncBatchTest {
                 Query_Endpoint_Path__c = '/services/data/v60.0/query?q=',
                 Named_Credential__c = 'APAL_Org_Auth',
                 On_Demand_Mode__c = true,
-                Record_Types_to_Sync__c = 'PersonAccount'
+                Record_Types_to_Sync__c = 'Provider'
         );
     }
     @IsTest
     private static void accountSyncBatchExecuteTest() {
-        Id personAccountRecordTypeId = [SELECT Id FROM RecordType WHERE SobjectType = 'Account' AND DeveloperName = 'PersonAccount' LIMIT 1].Id;
+        Id personAccountRecordTypeId = [SELECT Id FROM RecordType WHERE SobjectType = 'Account' AND DeveloperName = 'Provider' LIMIT 1].Id;
         Account testAccountRecord = new Account(
                 FirstName = 'Test',
                 LastName = 'Account',
@@ -95,7 +95,7 @@ private class AccountSyncBatchTest {
 
     @IsTest
     private static void accountSyncBatchExecuteExceptionTest() {
-        Id personAccountRecordTypeId = [SELECT Id FROM RecordType WHERE SobjectType = 'Account' AND DeveloperName = 'PersonAccount' LIMIT 1].Id;
+        Id personAccountRecordTypeId = [SELECT Id FROM RecordType WHERE SobjectType = 'Account' AND DeveloperName = 'Provider' LIMIT 1].Id;
         Account testAccountRecord = new Account(
                 FirstName = 'Test',
                 LastName = 'Account',
