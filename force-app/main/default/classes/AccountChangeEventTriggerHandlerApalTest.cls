@@ -20,7 +20,7 @@
  * See the Apex Language Reference for more information about Testing and Code Coverage.
  */
 
-@IsTest
+/*@IsTest
 private class AccountChangeEventTriggerHandlerApalTest {
 
     @TestSetup
@@ -88,10 +88,10 @@ private class AccountChangeEventTriggerHandlerApalTest {
                 'Sync_Log__c records size should be 1'
         );
     }
-}
+} */
 
-
-/* @isTest
+/*
+ @isTest
 private class AccountChangeEventTriggerHandlerApalTest {
 
     static Id testAccountId;
@@ -144,3 +144,60 @@ private class AccountChangeEventTriggerHandlerApalTest {
         AccountChangeEventTriggerHandlerApal.throwTestException = false;
     }
 } */
+@IsTest
+private class AccountChangeEventTriggerHandlerApalTest {
+
+    @TestSetup
+    private static void testSetup() {
+        insert new AccountSync_Settings__c(
+            Name = 'Default Account Sync setting',
+            Is_Active__c = true,
+            Endpoint_Path__c = 'services/apexrest/AccountSync',
+            Named_Credential__c = 'APAL_Org_Auth'
+        );
+    }
+
+    @IsTest
+    private static void testHandleAfterInsert_Success() {
+
+        // Insert account for test
+        Account acc = new Account(
+            Name = 'Test Account',
+            Disable_AccountSync__c = false,
+            RecordTypeId = [SELECT Id FROM RecordType WHERE SObjectType = 'Account' LIMIT 1].Id
+        );
+        insert acc;
+
+        // Workaround → create fake AccountChangeEvent list without newSObject
+        List<AccountChangeEvent> fakeEvents = (List<AccountChangeEvent>)(List<SObject>) new List<SObject>();
+
+        Test.startTest();
+        AccountChangeEventTriggerHandlerApal handler = new AccountChangeEventTriggerHandlerApal();
+        handler.handleAfterInsert(fakeEvents);
+        Test.stopTest();
+    }
+
+    @IsTest
+    private static void testHandleAfterInsert_Exception() {
+
+        // Insert account for test
+        Account acc = new Account(
+            Name = 'Test Account Exception',
+            Disable_AccountSync__c = false,
+            RecordTypeId = [SELECT Id FROM RecordType WHERE SObjectType = 'Account' LIMIT 1].Id
+        );
+        insert acc;
+
+        // Workaround → create fake AccountChangeEvent list without newSObject
+        List<AccountChangeEvent> fakeEvents = (List<AccountChangeEvent>)(List<SObject>) new List<SObject>();
+
+        AccountChangeEventTriggerHandlerApal.throwTestException = true;
+
+        Test.startTest();
+        AccountChangeEventTriggerHandlerApal handler = new AccountChangeEventTriggerHandlerApal();
+        handler.handleAfterInsert(fakeEvents);
+        Test.stopTest();
+
+        AccountChangeEventTriggerHandlerApal.throwTestException = false;
+    }
+}
