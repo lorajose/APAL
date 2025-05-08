@@ -177,6 +177,7 @@ public class LeadConversionControllerTest {
     try {
         Id personAccountId = LeadConversionController.convertLeadToPersonAccount(lead.Id);
        
+
         
         // Validate the Person Account was created
         Account personAccount = [SELECT Id, LastName FROM Account WHERE Id = :personAccountId LIMIT 1];
@@ -188,6 +189,7 @@ public class LeadConversionControllerTest {
         System.assert(true, 'Unexpected AuraHandledException occurred: ' + e.getMessage());
     }
       Test.stopTest();
+
     }
 
     @isTest
