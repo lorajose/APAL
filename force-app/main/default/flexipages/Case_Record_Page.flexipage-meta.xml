@@ -8,27 +8,79 @@
                     <valueList>
                         <valueListItems>
                             <value>Case.New_Concern</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Unrelated_Call__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Case.New_Substance</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Unrelated_Call__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Case.New_Medication</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Unrelated_Call__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Case.New_Screener</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Unrelated_Call__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Case.New_Safety_Risk</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Unrelated_Call__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Case.New_Care_Request</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Unrelated_Call__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Case.CareNoteCR</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Unrelated_Call__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Edit</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Case.Update_Provider</value>
                         </valueListItems>
                         <valueListItems>
                             <value>ChangeOwnerOne</value>
@@ -38,6 +90,9 @@
                         </valueListItems>
                         <valueListItems>
                             <value>Delete</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Case.New_Patient_Case</value>
                         </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
@@ -765,7 +820,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>readonly</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Provider__c</fieldItem>
                 <identifier>RecordProvider_cField</identifier>

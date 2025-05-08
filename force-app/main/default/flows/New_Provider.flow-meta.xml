@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <apiVersion>62.0</apiVersion>
+    <assignments>
+        <name>New_Provider_Assignment</name>
+        <label>New Provider Assignment</label>
+        <locationX>182</locationX>
+        <locationY>674</locationY>
+        <assignmentItems>
+            <assignToReference>provider</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>get_provider</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Case_Type</targetReference>
+        </connector>
+    </assignments>
     <decisions>
         <name>Case_Type</name>
         <label>Case Type</label>
         <locationX>182</locationX>
-        <locationY>566</locationY>
+        <locationY>782</locationY>
         <defaultConnector>
             <targetReference>Update_Parent_Case</targetReference>
         </defaultConnector>
@@ -64,6 +80,14 @@
         <displayField xsi:nil="true"/>
         <object xsi:nil="true"/>
         <picklistField>pcplang__c</picklistField>
+        <picklistObject>Account</picklistObject>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>ProviderRegistrationStatus</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>Provider_Registration_Status__c</picklistField>
         <picklistObject>Account</picklistObject>
     </dynamicChoiceSets>
     <dynamicChoiceSets>
@@ -142,7 +166,7 @@
         <locationX>182</locationX>
         <locationY>458</locationY>
         <connector>
-            <targetReference>Case_Type</targetReference>
+            <targetReference>get_provider</targetReference>
         </connector>
         <inputAssignments>
             <field>ConferencePresentation__c</field>
@@ -172,12 +196,6 @@
             <field>FriendOrColleague__c</field>
             <value>
                 <elementReference>Friend_or_Colleague</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Incomplete_Submission__c</field>
-            <value>
-                <elementReference>Incomplete</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -247,6 +265,12 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Provider_Registration_Status__c</field>
+            <value>
+                <stringValue>Incomplete</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>RecordTypeId</field>
             <value>
                 <elementReference>Get_Provider_Record_Type.Id</elementReference>
@@ -268,6 +292,12 @@
             <field>VMAPEnrolledProvider__c</field>
             <value>
                 <elementReference>APAL_or_HealthHaven_Enrolled_Provider</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>heard_other__c</field>
+            <value>
+                <elementReference>How_did_you_hear_about_APAL_Other</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -355,6 +385,12 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>pcpracedesc__c</field>
+            <value>
+                <elementReference>Provider_Race_Description</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>pcptitle__c</field>
             <value>
                 <elementReference>Provider_Type</elementReference>
@@ -396,6 +432,12 @@
                 <elementReference>How_do_you_Identify_with_Respect_to_Race</elementReference>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <field>trainenddate__c</field>
+            <value>
+                <elementReference>Date_When_Training_Will_End</elementReference>
+            </value>
+        </inputAssignments>
         <object>Account</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
@@ -418,6 +460,30 @@
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>get_provider</name>
+        <label>get provider</label>
+        <locationX>182</locationX>
+        <locationY>566</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>New_Provider_Assignment</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Create_New_Provider</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>FirstName</queriedFields>
+        <queriedFields>LastName</queriedFields>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
@@ -445,7 +511,7 @@
         <name>Update_Case</name>
         <label>Update Case</label>
         <locationX>50</locationX>
-        <locationY>674</locationY>
+        <locationY>890</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -466,7 +532,7 @@
         <name>Update_Parent_Case</name>
         <label>Update Parent Case</label>
         <locationX>314</locationX>
-        <locationY>674</locationY>
+        <locationY>890</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -516,7 +582,7 @@
                     <fieldText>First Name</fieldText>
                     <fieldType>InputField</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
+                    <isRequired>true</isRequired>
                 </fields>
                 <fields>
                     <name>Middle_Name</name>
@@ -585,7 +651,7 @@
                     <fieldText>Provider Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
+                    <isRequired>true</isRequired>
                 </fields>
                 <fields>
                     <name>Other_Provider_Type</name>
@@ -593,7 +659,7 @@
                     <fieldText>Other Provider Type</fieldText>
                     <fieldType>InputField</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
+                    <isRequired>true</isRequired>
                     <visibilityRule>
                         <conditionLogic>and</conditionLogic>
                         <conditions>
@@ -612,7 +678,7 @@
                     <fieldText>Does the provider have NPI #?</fieldText>
                     <fieldType>DropdownBox</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
+                    <isRequired>true</isRequired>
                 </fields>
                 <fields>
                     <name>Provider_NPI</name>
@@ -651,7 +717,7 @@
                     <fieldText>Specialty</fieldText>
                     <fieldType>DropdownBox</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
+                    <isRequired>true</isRequired>
                 </fields>
                 <fields>
                     <name>Other_Specialty</name>
@@ -659,7 +725,7 @@
                     <fieldText>Other Specialty</fieldText>
                     <fieldType>InputField</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
+                    <isRequired>true</isRequired>
                     <visibilityRule>
                         <conditionLogic>and</conditionLogic>
                         <conditions>
@@ -693,6 +759,12 @@
                     <name>Email</name>
                     <extensionName>flowruntime:email</extensionName>
                     <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -710,6 +782,12 @@
                     <name>Phone</name>
                     <extensionName>flowruntime:phone</extensionName>
                     <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>required</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                     <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -869,6 +947,24 @@
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
                 </fields>
+                <fields>
+                    <name>How_did_you_hear_about_APAL_Other</name>
+                    <dataType>String</dataType>
+                    <fieldText>How did you hear about APAL? - Other</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>Other</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <booleanValue>true</booleanValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
                 <inputParameters>
                     <name>width</name>
                     <value>
@@ -912,7 +1008,53 @@
                     <fieldText>Trainee Type</fieldText>
                     <fieldType>DropdownBox</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
+                    <isRequired>true</isRequired>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>The_provider_is_a_Trainee</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <stringValue>Yes</stringValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>Date_When_Training_Will_End</name>
+                    <dataType>Date</dataType>
+                    <fieldText>Date When Training Will End</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>Trainee_Type</leftValueReference>
+                            <operator>Contains</operator>
+                            <rightValue>
+                                <stringValue>Student</stringValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
+                    <name>Other_Medical_Trainee_Description</name>
+                    <dataType>String</dataType>
+                    <fieldText>Other Medical Trainee Description</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>Trainee_Type</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <stringValue>Other medical trainee</stringValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
                 </fields>
                 <fields>
                     <name>Specialty_Mental_Health_Training</name>
@@ -929,15 +1071,17 @@
                     <fieldText>Describe Previous Mental Health Training</fieldText>
                     <fieldType>InputField</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <fields>
-                    <name>Other_Medical_Trainee_Description</name>
-                    <dataType>String</dataType>
-                    <fieldText>Other Medical Trainee Description</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
+                    <isRequired>true</isRequired>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>Specialty_Mental_Health_Training</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <stringValue>Yes</stringValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
                 </fields>
                 <inputParameters>
                     <name>width</name>
@@ -976,6 +1120,24 @@
                     <isRequired>false</isRequired>
                 </fields>
                 <fields>
+                    <name>Provider_Race_Description</name>
+                    <dataType>String</dataType>
+                    <fieldText>Provider Race Description</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>How_do_you_Identify_with_Respect_to_Race</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <stringValue>Prefer to self-describe (option not listed)</stringValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <fields>
                     <name>Provider_Language_other_than_English</name>
                     <choiceReferences>ProviderLanguage</choiceReferences>
                     <dataType>String</dataType>
@@ -990,7 +1152,7 @@
                     <fieldText>Other Languages</fieldText>
                     <fieldType>InputField</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
+                    <isRequired>true</isRequired>
                     <visibilityRule>
                         <conditionLogic>and</conditionLogic>
                         <conditions>
@@ -1047,32 +1209,6 @@
             <isRequired>false</isRequired>
             <regionContainerType>SectionWithHeader</regionContainerType>
         </fields>
-        <fields>
-            <name>System_Information</name>
-            <fieldText>System Information</fieldText>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>System_Information_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Incomplete</name>
-                    <dataType>Boolean</dataType>
-                    <fieldText>Incomplete?</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>12</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithHeader</regionContainerType>
-        </fields>
         <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
@@ -1085,6 +1221,39 @@
         </connector>
     </start>
     <status>Active</status>
+    <variables>
+        <name>createdProvider</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Account</objectType>
+    </variables>
+    <variables>
+        <name>newAccount</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <elementReference>Create_New_Provider</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <name>newProvider</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>provider</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Account</objectType>
+    </variables>
     <variables>
         <name>recordId</name>
         <dataType>String</dataType>

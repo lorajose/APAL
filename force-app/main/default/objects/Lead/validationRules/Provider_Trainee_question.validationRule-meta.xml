@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Provider_Trainee_question</fullName>
+    <active>true</active>
+    <description>The “Trainee?” field (pcptrainee_c) is no longer required on the view but must be required by validation only if Provider_Registration_Status__c is Complete.</description>
+    <errorConditionFormula>AND(
+  ISPICKVAL(The_provider_is_a_Trainee__c, &quot;&quot;),
+  ISPICKVAL(Provider_Registration_Status__c, &quot;Complete&quot;)
+)</errorConditionFormula>
+    <errorDisplayField>The_provider_is_a_Trainee__c</errorDisplayField>
+    <errorMessage>The provider is a Trainee? is required if Provider Registration Status is Complete.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,5 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:appHostable" access="global">
+    <aura:handler name="flowfinished" value="{!this}" action="{!c.handleFlowFinished}"/>
+    <lightning:workspaceAPI aura:id="workspace"/>
+    <c:flowRedirectWrapperV2/>
+</aura:component>

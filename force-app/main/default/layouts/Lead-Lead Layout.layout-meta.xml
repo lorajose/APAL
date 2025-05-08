@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <excludeButtons>DataDotComClean</excludeButtons>
+    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
@@ -139,6 +141,10 @@
                 <behavior>Edit</behavior>
                 <field>Other__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>heard_other__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
@@ -155,6 +161,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>The_provider_is_a_Trainee__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>trainenddate__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -194,6 +204,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>How_do_You_Identify_with_Respect_to_Race__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>pcpracedesc__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>

@@ -429,6 +429,13 @@
             <componentInstance>
                 <componentName>flowLauncher</componentName>
                 <identifier>c_flowLauncher</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Unrelated_Call__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <name>Facet-21c57c39-be82-4cf2-b457-4da839767f6c</name>
@@ -439,7 +446,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>readonly</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Provider__c</fieldItem>
                 <identifier>RecordProvider_cField</identifier>
@@ -790,9 +797,23 @@
                     <valueList>
                         <valueListItems>
                             <value>Case.New_Care_Request</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Unrelated_Call__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Case.CareNoteCR</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Unrelated_Call__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>false</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Case.New_Provider</value>
@@ -804,10 +825,16 @@
                             <value>Case.New_Practice</value>
                         </valueListItems>
                         <valueListItems>
+                            <value>Case.Update_Provider</value>
+                        </valueListItems>
+                        <valueListItems>
                             <value>Edit</value>
                         </valueListItems>
                         <valueListItems>
                             <value>ChangeOwnerOne</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Case.Update_Provider_Mobile</value>
                         </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
@@ -863,6 +890,13 @@
             <componentInstance>
                 <componentName>flowLauncher</componentName>
                 <identifier>c_flowLauncher2</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Unrelated_Call__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -990,6 +1024,13 @@
     <sobjectType>Case</sobjectType>
     <template>
         <name>flexipage:recordHomeSingleColNoHeaderTemplateDesktop</name>
+        <properties>
+            <name>actionNames</name>
+        </properties>
+        <properties>
+            <name>enablePageActionConfig</name>
+            <value>false</value>
+        </properties>
     </template>
     <type>RecordPage</type>
 </FlexiPage>

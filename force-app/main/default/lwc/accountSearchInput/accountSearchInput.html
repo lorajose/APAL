@@ -1,0 +1,118 @@
+<template>
+    <div class="search-container">
+        <div class="slds-form-element slds-m-left_xx-small">
+            <label class="slds-form-element__label" for="account-input">
+                Name<span class="required">*</span>
+                <span if:true={helpTextContent} class="help-text">
+                    <lightning-helptext class="slds-m-left_xx-small" content={helpTextContent}></lightning-helptext>
+                </span>
+            </label>
+
+            <template if:true={selectedAccount}>
+                <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_left-right">
+                    <div class="slds-combobox_container">
+                        <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click">
+                            <div class="slds-combobox__form-element">
+                                <lightning-icon icon-name="standard:account" size="x-small"
+                                                class="slds-icon slds-input__icon slds-input__icon_left slds-icon-text-default"></lightning-icon>
+                                <input type="text" class={inputClass} value={searchTerm}
+                                       placeholder="Search Providers..." style={inputLockStyle}/>
+                                <lightning-icon icon-name="utility:close" size="x-small"
+                                                class="slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default clickable"
+                                                onclick={clearSelection} style="cursor: pointer;"></lightning-icon>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <template if:false={selectedAccount}>
+                <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+                    <lightning-icon size="x-small"
+                                    class="slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default"
+                                    icon-name="utility:search"></lightning-icon>
+
+                    <input type="text" id="account-input" class={inputClass} placeholder="Search Providers..."
+                           value={searchTerm} oninput={handleInputChange} onfocus={handleFocus} onblur={handleBlur}
+                           style={inputLockStyle}/>
+                </div>
+            </template>
+
+            <template if:true={shouldShowError}>
+                <template if:true={shouldShowSelectOrClearMessage}>
+                    <div class="slds-form-element__help slds-has-error error-text">
+                        Select an option from the picklist or remove the search term.
+                    </div>
+                </template>
+                <template if:false={shouldShowSelectOrClearMessage}>
+                    <div class="slds-form-element__help slds-has-error error-text">
+                        Complete this field.
+                    </div>
+                </template>
+            </template>
+        </div>
+
+        <template if:true={showDropdown}>
+            <div class={dropdownClass} onmousedown={preventBlur}>
+                <template if:true={isLoading}>
+                    <div class="slds-p-around_small slds-align_absolute-center">
+                        <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                    </div>
+                </template>
+                <template if:false={isLoading}>
+                    <div class="group-header">APAL Providers</div>
+                    <template if:true={filteredAPALAccounts.length}>
+                        <template for:each={filteredAPALAccounts} for:item="account">
+                            <div key={account.id} class="dropdown-item" onclick={handleSelect} data-id={account.id}>
+                                <lightning-icon icon-name="standard:account" size="x-small"></lightning-icon>
+                                <div class="account-info">
+                                    {account.firstName}
+                                    <template if:true={account.middleName}> {account.middleName}</template>
+                                    &nbsp;{account.lastName}
+                                    <template if:true={account.suffix}> {account.suffix}</template>
+                                    <div class="npi">{account.npi}</div>
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+
+                    <template if:false={filteredAPALAccounts.length}>
+                        <template if:true={isExternalRetrieveSuccessful}>
+                            <div class="no-results-message slds-p-around_small">
+                                We couldn't find any providers for that search.
+                            </div>
+                        </template>
+                    </template>
+                    <div class="group-header">VMAP Providers</div>
+                    <template if:true={filteredVMAPAccounts.length}>
+                        <template for:each={filteredVMAPAccounts} for:item="account">
+                            <div key={account.id} class="dropdown-item" onclick={handleSelect} data-id={account.id}>
+                                <lightning-icon icon-name="standard:account" size="x-small"></lightning-icon>
+                                <div class="account-info">
+                                    {account.firstName}
+                                    <template if:true={account.middleName}> {account.middleName}</template>
+                                    &nbsp;{account.lastName}
+                                    <template if:true={account.suffix}> {account.suffix}</template>
+                                    <div class="npi">{account.npi}</div>
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+                    <template if:false={filteredVMAPAccounts.length}>
+                        <div class="no-results-message slds-p-around_small">
+                            We couldn't find any providers for that search.
+                        </div>
+                    </template>
+
+                    <template if:false={filteredAPALAccounts.length}>
+                        <template if:false={isExternalRetrieveSuccessful}>
+                            <div class="dropdown-error-message slds-p-around_small slds-text-color_error">
+                                Failed to retrieve provider information from the VMAP system.
+                            </div>
+                        </template>
+                    </template>
+                </template>
+            </div>
+        </template>
+    </div>
+</template>

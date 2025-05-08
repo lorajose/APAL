@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Provider_Number_of_years_of_practice</fullName>
+    <active>true</active>
+    <description>the user must specify the Number of Years In Practice (Number_of_Years) if registration (VMAP SIDE) is complete
+Can be bypassed if Bypass_Validations_Timeout__c  &gt; now and the Bypass field is not blank.</description>
+    <errorConditionFormula>AND(
+    ISPICKVAL(Provider_Registration_Status__c, &apos;Complete&apos;),
+    OR(
+								Bypass_Validations_Timeout__c &lt;= NOW(), 
+								ISBLANK(Bypass_Validations_Timeout__c)
+				),
+				
+				OR(
+								ISBLANK(Number_of_Years_In_Practice__c),
+								Number_of_Years_In_Practice__c &lt; 0,
+								Number_of_Years_In_Practice__c &gt; 99
+				    )
+)</errorConditionFormula>
+    <errorDisplayField>Number_of_Years_In_Practice__c</errorDisplayField>
+    <errorMessage>Please specify the Number of Years In Practice since this registration is completed. Value must be greater than 0 and less than 99 years.</errorMessage>
+</ValidationRule>

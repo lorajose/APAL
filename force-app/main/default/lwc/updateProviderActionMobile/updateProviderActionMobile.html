@@ -1,0 +1,26 @@
+<template>
+    <header class="slds-modal__header">
+        <h2 class="slds-text-heading_medium">Update Provider</h2>
+    </header>
+
+    <div class="slds-modal__content slds-p-around_medium">
+        <template if:true={isLoading}>
+            <div class="slds-is-relative" style="min-height: 5rem;">
+                <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <c-providerin-case-flow onclearselection={handleClearSelection} onaccountselected={handleAccountSelected}
+                                onloadingend={handleLoadingEnd} record-id={recordId}
+                                class={componentClass}></c-providerin-case-flow>
+        <template if:true={isError}>
+            <c-external-account-creation-error error-header={errorHeader} error-message={errorMessage}></c-external-account-creation-error>
+        </template>
+
+    </div>
+
+    <footer class="slds-modal__footer">
+        <lightning-button disabled={isSaveButtonDisabled} variant="brand" label="Save"
+                          onclick={handleSave}></lightning-button>
+    </footer>
+</template>
