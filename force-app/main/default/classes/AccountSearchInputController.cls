@@ -7,7 +7,7 @@ public with sharing class AccountSearchInputController {
     private static AccountSelector accountSelector = new AccountSelector();
     private static AccountSyncService accountSyncService = new AccountSyncService();
 
-    private static String INPUT_HELP_TEXT_SYNC_ENABLED = 'Search by name, NPI, email, or phone. You can also select a provider from the VMAP system or create a new one if not found.';
+    private static String INPUT_HELP_TEXT_SYNC_ENABLED = 'Search by name, NPI, email, or phone. You can also select a provider from the APAL system or create a new one if not found.';
     private static String INPUT_HELP_TEXT_SYNC_DISABLED = 'Search by name, NPI, email, or phone. Create a new provider if no match is found.';
 
     @AuraEnabled(Cacheable=true)
@@ -30,16 +30,65 @@ public with sharing class AccountSearchInputController {
                         accountSyncService.getExternalAccounts()
                 );
             } catch (Exception ex) {
-                 System.debug('🔥 Error al obtener cuentas externas: ' + ex.getMessage());
                 accountRetrieveResult.isExternalRetrieveSuccessful = false;
             }
         }
-        System.debug('🔥 Cuentas locales: ' + accounts.size() + ', Cuentas externas: ' + accountRetrieveResult.accounts.size());
         return accountRetrieveResult;
     }
 
-    private static List<Account> getLocalAccounts() {
+    @AuraEnabled
+    public static void updateCaseWithNewAccount(Id accountId, Id caseId) {
+        try {
+            update new Case(
+                    Id = caseId,
+                    AccountId = accountId
+            );
+        } catch (Exception ex) {
+            throw new AuraHandledException(ex.getMessage());
+        }
+    }
 
+
+    @AuraEnabled
+    public static ExternalAccountCreator.OutputWrapper createNewExternalAccount(Account accountRecord) {
+        List<ExternalAccountCreator.InputWrapper> inputs = new List<ExternalAccountCreator.InputWrapper>();
+
+        ExternalAccountCreator.InputWrapper wrapper = new ExternalAccountCreator.InputWrapper();
+        wrapper.account = accountRecord;
+        inputs.add(wrapper);
+
+        List<ExternalAccountCreator.OutputWrapper> results = ExternalAccountCreator.insertAccounts(inputs);
+        return results[0];
+    }
+
+    @AuraEnabled
+    public static Account getCurrentAccountRecord(Id recordId) {
+        if (String.isBlank(recordId)) {
+            return null;
+        }
+        Case caseRecord = [
+                SELECT
+                        Id
+                        , AccountId
+                        , Account.Id
+                        , Account.FirstName
+                        , Account.LastName
+                        , Account.AccountSync_Id__c
+                        , Account.pcpnpi__c
+                        , Account.Phone
+                        , Account.PersonEmail
+                FROM Case
+                WHERE Id = :recordId
+        ];
+
+        if (String.isNotBlank(caseRecord.AccountId)) {
+            return caseRecord.Account;
+        }
+
+        return null;
+    }
+
+    private static List<Account> getLocalAccounts() {
         return accountSelector.queryAllPersonAccounts();
     }
 
@@ -53,6 +102,5 @@ public with sharing class AccountSearchInputController {
             this.accounts = accounts;
             this.isExternalRetrieveSuccessful = isExternalRetrieveSuccessful;
         }
-       
     }
 }
