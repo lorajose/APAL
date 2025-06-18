@@ -49,8 +49,10 @@ public with sharing class AccountChangeEventTriggerHandler {
         List<AccountChangeEvent> accountChangeEventsToSync = new List<AccountChangeEvent>();
         Map<String, Account> accountsByChangeEventIds = syncService.getAccountsByChangeEventIds(accountChangeEvents);
 
+        System.debug('change events --> ' + JSON.serializePretty(accountChangeEvents));
+
         for (AccountChangeEvent accountChangeEvent : accountChangeEvents) {
-            if ((!accountChangeEvent.Disable_AccountSync__c && !accountsByChangeEventIds.get(accountChangeEvent.Id).Disable_AccountSync__c)
+            if ((!accountChangeEvent.Disable_AccountSync__c && (accountsByChangeEventIds.containsKey(accountChangeEvent.Id) && !accountsByChangeEventIds.get(accountChangeEvent.Id).Disable_AccountSync__c))
                     && !syncService.shouldBypassSync(accountChangeEvent)
                     && AccountSyncUtil.isRecordTypeInSyncSetting(accountsByChangeEventIds.get(accountChangeEvent.Id))
                     && AccountSyncUtil.isAccountSyncAllowedInCurrentMode(accountsByChangeEventIds.get(accountChangeEvent.Id))

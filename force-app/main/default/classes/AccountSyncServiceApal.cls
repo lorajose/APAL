@@ -174,7 +174,7 @@ public with sharing class AccountSyncServiceApal {
                 Account accountRecord = accountsByIds.get(
                         accountIdsByChangeEventIds.get(accountChangeEvent.Id)
                 );
-                if (String.isNotBlank(accountRecord.AccountSync_Id__c)) {
+                if (String.isNotBlank(accountRecord?.AccountSync_Id__c)) {
                     accountsByChangeEventIds.put(
                             accountChangeEvent.Id,
                             accountRecord
