@@ -103,6 +103,9 @@
     <layoutAssignments>
         <layout>CaseClose-Close Case Layout</layout>
     </layoutAssignments>
+    <layoutAssignments>
+        <layout>Patient_Concern__c-Patient Concern Layout</layout>
+    </layoutAssignments>
     <userLicense>Salesforce</userLicense>
     <userPermissions>
         <enabled>true</enabled>

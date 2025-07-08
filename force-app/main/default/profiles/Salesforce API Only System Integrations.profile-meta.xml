@@ -106,6 +106,9 @@
     <layoutAssignments>
         <layout>CaseInteraction-Case Feed Layout</layout>
     </layoutAssignments>
+    <layoutAssignments>
+        <layout>Patient_Concern__c-Patient Concern Layout</layout>
+    </layoutAssignments>
     <userLicense>Salesforce Integration</userLicense>
     <userPermissions>
         <enabled>true</enabled>
