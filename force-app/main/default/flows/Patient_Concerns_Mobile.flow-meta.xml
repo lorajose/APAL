@@ -987,7 +987,7 @@
             <targetReference>Get_Concerns</targetReference>
         </connector>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <variables>
         <name>ExistingPatientConcernRecords</name>
         <dataType>SObject</dataType>

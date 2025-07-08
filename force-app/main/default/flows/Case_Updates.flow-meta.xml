@@ -613,7 +613,7 @@
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <subflows>
         <name>Case_Owner_Change_Flow</name>
         <label>Case Owner Change Flow</label>
