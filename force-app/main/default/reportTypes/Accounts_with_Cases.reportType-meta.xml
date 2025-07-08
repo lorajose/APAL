@@ -765,11 +765,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Notes__c</field>
-            <table>Account.Cases</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Language</field>
             <table>Account.Cases</table>
         </columns>
@@ -976,6 +971,11 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Unrelated_Call_Details__c</field>
+            <table>Account.Cases</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Notes__c</field>
             <table>Account.Cases</table>
         </columns>
         <masterLabel>Cases</masterLabel>

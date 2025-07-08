@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Report xmlns="http://soap.sforce.com/2006/04/metadata">
     <columns>
+        <field>CASE_NUMBER</field>
+    </columns>
+    <columns>
+        <field>Case.Notes__c</field>
+    </columns>
+    <columns>
         <field>OWNER</field>
     </columns>
     <columns>
         <field>Case.Parent_Case_Provider__c</field>
     </columns>
     <columns>
-        <field>CONTACT.NAME</field>
+        <field>Case.Parent_Case_Patient__c</field>
     </columns>
     <columns>
         <field>CREATED_DATE</field>
