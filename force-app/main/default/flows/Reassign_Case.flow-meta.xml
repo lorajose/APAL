@@ -43,7 +43,6 @@
         </inputParameters>
         <nameSegment>customNotificationAction</nameSegment>
         <offset>0</offset>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>Send_Email_Notification</name>
@@ -79,7 +78,6 @@
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
         <offset>0</offset>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>60.0</apiVersion>
     <assignments>
@@ -346,7 +344,7 @@
         <name>NotificationBody</name>
         <isViewedAsPlainText>true</isViewedAsPlainText>
         <text>You have been assigned as {!Get_Case.Service__c} for Case: {!Get_Case.CaseNumber}
-Instructions: {!Get_Case.Notes__c}
+Instructions: {!Get_Case.Notes_new__c}
 To approve or reject the assignment please review the Case above.</text>
     </textTemplates>
     <textTemplates>

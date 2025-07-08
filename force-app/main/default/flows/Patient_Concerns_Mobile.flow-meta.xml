@@ -28,7 +28,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>PatientConcern.Notes__c</assignToReference>
+            <assignToReference>PatientConcern.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>New_Parent_Patient_Concerns.Concern_Notes_Parent</elementReference>
@@ -81,7 +81,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>UpdatedPatientConcern.Notes__c</assignToReference>
+            <assignToReference>UpdatedPatientConcern.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Update_Parent_Patient_Concerns.Concern_Notes_Parent</elementReference>
@@ -125,7 +125,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>PatientConcern.Notes__c</assignToReference>
+            <assignToReference>PatientConcern.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>New_Patient_Concerns.Concern_Notes</elementReference>
@@ -178,7 +178,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>UpdatedPatientConcern.Notes__c</assignToReference>
+            <assignToReference>UpdatedPatientConcern.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Update_Patient_Concerns.Concern_Notes</elementReference>
@@ -783,7 +783,7 @@
             <fields>
                 <name>Concern_Notes_Parent</name>
                 <defaultValue>
-                    <stringValue>{!Get_Parent_Patient_Concerns[$EachItem].Notes__c}</stringValue>
+                    <stringValue>{!Get_Parent_Patient_Concerns[$EachItem].Notes_new__c}</stringValue>
                 </defaultValue>
                 <fieldText>Notes</fieldText>
                 <fieldType>LargeTextArea</fieldType>
@@ -907,7 +907,7 @@
             <fields>
                 <name>Concern_Notes</name>
                 <defaultValue>
-                    <stringValue>{!Get_Patient_Concerns[$EachItem].Notes__c}</stringValue>
+                    <stringValue>{!Get_Patient_Concerns[$EachItem].Notes_new__c}</stringValue>
                 </defaultValue>
                 <fieldText>Notes</fieldText>
                 <fieldType>LargeTextArea</fieldType>

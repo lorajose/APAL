@@ -43,7 +43,6 @@
         </inputParameters>
         <nameSegment>customNotificationAction</nameSegment>
         <offset>0</offset>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>Send_Email_Notification</name>
@@ -79,7 +78,6 @@
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
         <offset>0</offset>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>60.0</apiVersion>
     <assignments>
@@ -413,7 +411,7 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>Notes__c</field>
+            <field>Notes_new__c</field>
             <value>
                 <elementReference>Notes</elementReference>
             </value>
@@ -484,7 +482,7 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>Notes__c</field>
+            <field>Notes_new__c</field>
             <value>
                 <elementReference>NotesSelf</elementReference>
             </value>
@@ -555,7 +553,7 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>Notes__c</field>
+            <field>Notes_new__c</field>
             <value>
                 <elementReference>NotesSelf</elementReference>
             </value>
@@ -626,7 +624,7 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>Notes__c</field>
+            <field>Notes_new__c</field>
             <value>
                 <elementReference>Notes</elementReference>
             </value>

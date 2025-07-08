@@ -322,11 +322,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Notes__c</field>
-            <table>Case</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Assignment_Timestamp__c</field>
             <table>Case</table>
         </columns>
@@ -388,6 +383,11 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Unrelated_Call_Details__c</field>
+            <table>Case</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Notes_new__c</field>
             <table>Case</table>
         </columns>
         <masterLabel>Cases</masterLabel>

@@ -143,7 +143,7 @@
     <recordDeletes>
         <name>Delete_Team_Member</name>
         <label>Delete Team Member</label>
-        <locationX>264</locationX>
+        <locationX>308</locationX>
         <locationY>1106</locationY>
         <inputReference>Get_Case_Team_Member_Record</inputReference>
     </recordDeletes>
@@ -199,7 +199,7 @@
     <recordLookups>
         <name>Get_Case_Team_Member_Record</name>
         <label>Get Case Team Member Record</label>
-        <locationX>264</locationX>
+        <locationX>308</locationX>
         <locationY>998</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -267,7 +267,7 @@
         <name>ReassignNotificationBody</name>
         <isViewedAsPlainText>true</isViewedAsPlainText>
         <text>You have been assigned as {!Get_Case.Service__c} for Case: {!Get_Case.CaseNumber}
-Instructions: {!Get_Case.Notes__c}</text>
+Instructions: {!Get_Case.Notes_new__c}</text>
     </textTemplates>
     <textTemplates>
         <name>ReassignNotificationTitle</name>

@@ -11,19 +11,28 @@
         <scale>1</scale>
     </aggregates>
     <columns>
+        <field>CASE_NUMBER</field>
+    </columns>
+    <columns>
         <field>OWNER</field>
     </columns>
     <columns>
-        <field>ACCOUNT.NAME</field>
+        <field>SUBJECT</field>
     </columns>
     <columns>
-        <field>SUBJECT</field>
+        <field>Case.Notes_new__c</field>
     </columns>
     <columns>
         <field>CREATED_DATE</field>
     </columns>
     <columns>
         <field>OPEN</field>
+    </columns>
+    <columns>
+        <field>Case.Provider__c</field>
+    </columns>
+    <columns>
+        <field>Case.Parent_Case_Provider__c</field>
     </columns>
     <filter>
         <criteriaItems>

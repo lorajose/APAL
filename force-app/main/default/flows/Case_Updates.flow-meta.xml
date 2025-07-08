@@ -677,7 +677,7 @@
         <inputAssignments>
             <name>NewInstructions</name>
             <value>
-                <elementReference>$Record.Notes__c</elementReference>
+                <elementReference>$Record.Notes_new__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
