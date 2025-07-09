@@ -14,7 +14,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>PatientSafetyRisk.Notes__c</assignToReference>
+            <assignToReference>PatientSafetyRisk.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>New_Parent_Patient_Safety_Risks.Safety_Risk_Notes_Parent</elementReference>
@@ -95,7 +95,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>CurrentSafetyRisk.Notes__c</assignToReference>
+            <assignToReference>CurrentSafetyRisk.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Update_Parent_Patient_Safety_Risks.Safety_Risk_Notes_Parent</elementReference>
@@ -139,7 +139,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>PatientSafetyRisk.Notes__c</assignToReference>
+            <assignToReference>PatientSafetyRisk.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>New_Patient_Safety_Risks.Safety_Risk_Notes</elementReference>
@@ -220,7 +220,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>CurrentSafetyRisk.Notes__c</assignToReference>
+            <assignToReference>CurrentSafetyRisk.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Update_Patient_Safety_Risks.Safety_Risk_Notes</elementReference>
@@ -852,7 +852,7 @@
             <fields>
                 <name>Safety_Risk_Notes_Parent</name>
                 <defaultValue>
-                    <stringValue>{!Get_Parent_Patient_Safety_Risks[$EachItem].Notes__c}</stringValue>
+                    <stringValue>{!Get_Parent_Patient_Safety_Risks[$EachItem].Notes_new__c}</stringValue>
                 </defaultValue>
                 <fieldText>Notes</fieldText>
                 <fieldType>LargeTextArea</fieldType>
@@ -998,7 +998,7 @@
             <fields>
                 <name>Safety_Risk_Notes</name>
                 <defaultValue>
-                    <stringValue>{!Get_Patient_Safety_Risks[$EachItem].Notes__c}</stringValue>
+                    <stringValue>{!Get_Patient_Safety_Risks[$EachItem].Notes_new__c}</stringValue>
                 </defaultValue>
                 <fieldText>Notes</fieldText>
                 <fieldType>LargeTextArea</fieldType>

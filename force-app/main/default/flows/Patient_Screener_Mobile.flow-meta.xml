@@ -14,7 +14,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>PatientScreener.Notes__c</assignToReference>
+            <assignToReference>PatientScreener.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>New_Parent_Patient_Screeners.Screener_Notes_Parent</elementReference>
@@ -102,7 +102,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>CurrentScreener.Notes__c</assignToReference>
+            <assignToReference>CurrentScreener.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Update_Parent_Patient_Screeners.Screener_Notes_Parent</elementReference>
@@ -153,7 +153,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>PatientScreener.Notes__c</assignToReference>
+            <assignToReference>PatientScreener.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>New_Patient_Screeners.Screener_Notes</elementReference>
@@ -241,7 +241,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>CurrentScreener.Notes__c</assignToReference>
+            <assignToReference>CurrentScreener.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Update_Patient_Screeners.Screener_Notes</elementReference>
@@ -891,7 +891,7 @@
             <fields>
                 <name>Screener_Notes_Parent</name>
                 <defaultValue>
-                    <stringValue>{!Get_Parent_Patient_Screeners[$EachItem].Notes__c}</stringValue>
+                    <stringValue>{!Get_Parent_Patient_Screeners[$EachItem].Notes_new__c}</stringValue>
                 </defaultValue>
                 <fieldText>Notes</fieldText>
                 <fieldType>LargeTextArea</fieldType>
@@ -1048,7 +1048,7 @@
             <fields>
                 <name>Screener_Notes</name>
                 <defaultValue>
-                    <stringValue>{!Get_Patient_Screeners[$EachItem].Notes__c}</stringValue>
+                    <stringValue>{!Get_Patient_Screeners[$EachItem].Notes_new__c}</stringValue>
                 </defaultValue>
                 <fieldText>Notes</fieldText>
                 <fieldType>LargeTextArea</fieldType>
