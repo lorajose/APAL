@@ -144,7 +144,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Notes__c</field>
+                <field>Notes_new__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -487,7 +487,7 @@
         <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>Concern_List__c.NAME</fields>
-        <fields>Notes__c</fields>
+        <fields>Notes_new__c</fields>
         <fields>Concern_List__c.Category__c</fields>
         <relatedList>Patient_Concern__c.Case__c</relatedList>
     </relatedLists>
@@ -498,7 +498,7 @@
         <fields>Substance_List__c.NAME</fields>
         <fields>Substance_List__c.Substance_Category__c</fields>
         <fields>Frequency_of_Substance_Use__c</fields>
-        <fields>Notes__c</fields>
+        <fields>Notes_new__c</fields>
         <fields>Current_Substance__c</fields>
         <relatedList>Patient_Substance__c.Case__c</relatedList>
     </relatedLists>
@@ -510,21 +510,21 @@
         <fields>Service__c</fields>
         <fields>OWNER_NAME</fields>
         <fields>CASES.STATUS</fields>
-        <fields>Notes__c</fields>
+        <fields>Notes_new__c</fields>
         <relatedList>RelatedChildCaseList</relatedList>
     </relatedLists>
     <relatedLists>
         <excludeButtons>MassChangeOwner</excludeButtons>
         <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
-        <fields>Notes__c</fields>
+        <fields>Notes_new__c</fields>
         <fields>Service__c</fields>
         <fields>OWNER.ALIAS</fields>
         <relatedList>Care_Note__c.Related_Case__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <fields>Notes__c</fields>
+        <fields>Notes_new__c</fields>
         <fields>Service__c</fields>
         <fields>OWNER.ALIAS</fields>
         <relatedList>Care_Note__c.Case__c</relatedList>
@@ -536,7 +536,7 @@
         <fields>Safety_Risk__c.NAME</fields>
         <fields>Recent__c</fields>
         <fields>Historical__c</fields>
-        <fields>Notes__c</fields>
+        <fields>Notes_new__c</fields>
         <relatedList>Patient_Safety_Risk__c.Case__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -547,7 +547,7 @@
         <fields>Medication__c.Brand_Name_s__c</fields>
         <fields>Current_Medication__c</fields>
         <fields>Medication_Changes__c</fields>
-        <fields>MedicationNotes__c</fields>
+        <fields>Notes__c</fields>
         <fields>Frequency__c</fields>
         <fields>Amount__c</fields>
         <fields>Dosing_Unit__c</fields>
@@ -562,7 +562,7 @@
         <fields>Aproximate_Date_Screened__c</fields>
         <fields>Score__c</fields>
         <fields>Positive_Outcome__c</fields>
-        <fields>Notes__c</fields>
+        <fields>Notes_new__c</fields>
         <relatedList>Patient_Screener__c.Case__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -595,7 +595,7 @@
         <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>Support__c.NAME</fields>
-        <fields>Notes__c</fields>
+        <fields>Notes_new__c</fields>
         <fields>Scheduled__c</fields>
         <relatedList>Patient_Support__c.Case__c</relatedList>
     </relatedLists>

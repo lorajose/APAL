@@ -55,6 +55,16 @@
                 <identifier>RecordIsEscalatedField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Notes_new__c</fieldItem>
+                <identifier>RecordNotes__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-04c66fad-4808-414b-9a49-11ba43614c13</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -796,7 +806,7 @@
                     <name>actionNames</name>
                     <valueList>
                         <valueListItems>
-                            <value>Case.New_Care_Request</value>
+                            <value>Case.New_CareRequest</value>
                             <visibilityRule>
                                 <criteria>
                                     <leftValue>{!Record.Unrelated_Call__c}</leftValue>
