@@ -533,7 +533,7 @@
             <inputParameters>
                 <name>columnFields</name>
                 <value>
-                    <stringValue>ConcernName__c,Notes__c</stringValue>
+                    <stringValue>ConcernName__c,Notes_new__c</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -545,7 +545,7 @@
             <inputParameters>
                 <name>columnWidths</name>
                 <value>
-                    <stringValue>ConcernName__c:0, Notes__c:0</stringValue>
+                    <stringValue>ConcernName__c:0, Notes_new__c:0</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -701,7 +701,7 @@
             <inputParameters>
                 <name>columnWraps</name>
                 <value>
-                    <stringValue>ConcernName__c:true, Notes__c:true</stringValue>
+                    <stringValue>ConcernName__c:true, Notes_new__c:false</stringValue>
                 </value>
             </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>

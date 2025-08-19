@@ -388,7 +388,7 @@
             <name>Yes_InstructionsUpdated</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>$Record.Notes__c</leftValueReference>
+                <leftValueReference>$Record.Notes_new__c</leftValueReference>
                 <operator>IsChanged</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
@@ -677,7 +677,7 @@
         <inputAssignments>
             <name>NewInstructions</name>
             <value>
-                <elementReference>$Record.Notes__c</elementReference>
+                <elementReference>$Record.Notes_new__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>

@@ -331,7 +331,7 @@
             <inputParameters>
                 <name>columnFields</name>
                 <value>
-                    <stringValue>SupportName__c,Scheduled__c,Notes__c</stringValue>
+                    <stringValue>SupportName__c,Scheduled__c,Notes_new__c</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -343,7 +343,7 @@
             <inputParameters>
                 <name>columnWidths</name>
                 <value>
-                    <stringValue>SupportName__c:0, Scheduled__c:0, Notes__c:0</stringValue>
+                    <stringValue>SupportName__c:0, Scheduled__c:0, Notes_new__c:0</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
