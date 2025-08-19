@@ -357,7 +357,7 @@
             <inputParameters>
                 <name>columnFields</name>
                 <value>
-                    <stringValue>Screener_Name__c,Notes__c,Aproximate_Date_Screened__c,Positive_Outcome__c,Score__c</stringValue>
+                    <stringValue>Screener_Name__c,Notes_new__c,Aproximate_Date_Screened__c,Positive_Outcome__c,Score__c</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -369,7 +369,7 @@
             <inputParameters>
                 <name>columnWidths</name>
                 <value>
-                    <stringValue>Screener_Name__c:0, Notes__c:0, Aproximate_Date_Screened__c:0, Positive_Outcome__c:0, Score__c:0</stringValue>
+                    <stringValue>Screener_Name__c:0, Notes_new__c:0, Aproximate_Date_Screened__c:0, Positive_Outcome__c:0, Score__c:0</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
