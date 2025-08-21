@@ -5,7 +5,7 @@
         <name>Assign_Parent_Patient_Screeners_to_Add</name>
         <label>Assign Parent Patient Screeners to Add</label>
         <locationX>1128</locationX>
-        <locationY>1406</locationY>
+        <locationY>1298</locationY>
         <assignmentItems>
             <assignToReference>PatientScreener.Screener__c</assignToReference>
             <operator>Assign</operator>
@@ -14,7 +14,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>PatientScreener.Notes__c</assignToReference>
+            <assignToReference>PatientScreener.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>New_Parent_Patient_Screeners.Screener_Notes_Parent</elementReference>
@@ -77,7 +77,7 @@
         <name>Assign_Parent_Patient_Screeners_to_Delete</name>
         <label>Assign Parent Patient Screeners to Delete</label>
         <locationX>1128</locationX>
-        <locationY>890</locationY>
+        <locationY>782</locationY>
         <assignmentItems>
             <assignToReference>RemovePatientScreeners</assignToReference>
             <operator>Add</operator>
@@ -93,7 +93,7 @@
         <name>Assign_Parent_Patient_Screeners_to_Update</name>
         <label>Assign Parent Patient Screeners to Update</label>
         <locationX>1128</locationX>
-        <locationY>1706</locationY>
+        <locationY>1598</locationY>
         <assignmentItems>
             <assignToReference>CurrentScreener.Id</assignToReference>
             <operator>Assign</operator>
@@ -102,7 +102,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>CurrentScreener.Notes__c</assignToReference>
+            <assignToReference>CurrentScreener.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Update_Parent_Patient_Screeners.Screener_Notes_Parent</elementReference>
@@ -144,7 +144,7 @@
         <name>Assign_Patient_Screeners_to_Add</name>
         <label>Assign Patient Screeners to Add</label>
         <locationX>424</locationX>
-        <locationY>1298</locationY>
+        <locationY>1190</locationY>
         <assignmentItems>
             <assignToReference>PatientScreener.Screener__c</assignToReference>
             <operator>Assign</operator>
@@ -153,7 +153,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>PatientScreener.Notes__c</assignToReference>
+            <assignToReference>PatientScreener.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>New_Patient_Screeners.Screener_Notes</elementReference>
@@ -216,7 +216,7 @@
         <name>Assign_Patient_Screeners_to_Delete</name>
         <label>Assign Patient Screeners to Delete</label>
         <locationX>424</locationX>
-        <locationY>782</locationY>
+        <locationY>674</locationY>
         <assignmentItems>
             <assignToReference>RemovePatientScreeners</assignToReference>
             <operator>Add</operator>
@@ -232,7 +232,7 @@
         <name>Assign_Patient_Screeners_to_Update</name>
         <label>Assign Patient Screeners to Update</label>
         <locationX>424</locationX>
-        <locationY>1598</locationY>
+        <locationY>1490</locationY>
         <assignmentItems>
             <assignToReference>CurrentScreener.Id</assignToReference>
             <operator>Assign</operator>
@@ -241,7 +241,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>CurrentScreener.Notes__c</assignToReference>
+            <assignToReference>CurrentScreener.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Update_Patient_Screeners.Screener_Notes</elementReference>
@@ -283,7 +283,7 @@
         <name>Case_Type</name>
         <label>Case Type</label>
         <locationX>688</locationX>
-        <locationY>350</locationY>
+        <locationY>242</locationY>
         <defaultConnector>
             <targetReference>Get_Parent_Case</targetReference>
         </defaultConnector>
@@ -308,7 +308,7 @@
         <name>Navigationbuttons</name>
         <label>Navigation</label>
         <locationX>336</locationX>
-        <locationY>1790</locationY>
+        <locationY>1682</locationY>
         <defaultConnector>
             <targetReference>cancel_message</targetReference>
         </defaultConnector>
@@ -333,7 +333,7 @@
         <name>NavigationParentButtons</name>
         <label>Navigation</label>
         <locationX>1040</locationX>
-        <locationY>1898</locationY>
+        <locationY>1790</locationY>
         <defaultConnector>
             <isGoTo>true</isGoTo>
             <targetReference>cancel_message</targetReference>
@@ -359,7 +359,7 @@
         <name>Remove_Items</name>
         <label>Remove Items?</label>
         <locationX>182</locationX>
-        <locationY>2006</locationY>
+        <locationY>1898</locationY>
         <defaultConnector>
             <targetReference>Update_Patient_Screener</targetReference>
         </defaultConnector>
@@ -384,7 +384,7 @@
         <name>Remove_Items_Parent</name>
         <label>Remove Items Parent?</label>
         <locationX>886</locationX>
-        <locationY>2114</locationY>
+        <locationY>2006</locationY>
         <defaultConnector>
             <targetReference>Update_Parent_Patient_Screener</targetReference>
         </defaultConnector>
@@ -422,9 +422,32 @@
         <picklistObject>Patient_Substance__c</picklistObject>
     </dynamicChoiceSets>
     <dynamicChoiceSets>
-        <name>Screeners</name>
+        <name>ScreenersAddiction</name>
         <dataType>String</dataType>
         <displayField>Name</displayField>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Addiction_Services__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Screener__c</object>
+        <valueField>Name</valueField>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>ScreenersPsychiatry</name>
+        <dataType>String</dataType>
+        <displayField>Name</displayField>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>General_Psychiatry__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
         <object>Screener__c</object>
         <valueField>Name</valueField>
     </dynamicChoiceSets>
@@ -435,7 +458,7 @@
         <name>Deleted_Parent_Patient_Screeners</name>
         <label>Deleted Parent Patient Screeners</label>
         <locationX>1040</locationX>
-        <locationY>782</locationY>
+        <locationY>674</locationY>
         <collectionReference>ParentPatientScreenersRepeater.RemovedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -449,7 +472,7 @@
         <name>Deleted_Patient_Screeners</name>
         <label>Deleted Patient Screeners</label>
         <locationX>336</locationX>
-        <locationY>674</locationY>
+        <locationY>566</locationY>
         <collectionReference>PatientScreenersRepeater.RemovedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -463,7 +486,7 @@
         <name>New_Parent_Patient_Screeners</name>
         <label>New Parent Patient Screeners</label>
         <locationX>1040</locationX>
-        <locationY>1190</locationY>
+        <locationY>1082</locationY>
         <collectionReference>ParentPatientScreenersRepeater.AddedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -477,7 +500,7 @@
         <name>New_Patient_Screeners</name>
         <label>New Patient Screeners</label>
         <locationX>336</locationX>
-        <locationY>1082</locationY>
+        <locationY>974</locationY>
         <collectionReference>PatientScreenersRepeater.AddedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -491,7 +514,7 @@
         <name>Update_Parent_Patient_Screeners</name>
         <label>Update Parent Patient Screeners</label>
         <locationX>1040</locationX>
-        <locationY>1598</locationY>
+        <locationY>1490</locationY>
         <collectionReference>ParentPatientScreenersRepeater.PrepopulatedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -505,7 +528,7 @@
         <name>Update_Patient_Screeners</name>
         <label>Update Patient Screeners</label>
         <locationX>336</locationX>
-        <locationY>1490</locationY>
+        <locationY>1382</locationY>
         <collectionReference>PatientScreenersRepeater.PrepopulatedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -538,7 +561,7 @@
         <name>Create_Parent_Patient_Screener</name>
         <label>Create Parent Patient Screener</label>
         <locationX>886</locationX>
-        <locationY>2006</locationY>
+        <locationY>1898</locationY>
         <connector>
             <targetReference>Remove_Items_Parent</targetReference>
         </connector>
@@ -548,7 +571,7 @@
         <name>Create_Patient_Screener</name>
         <label>Create Patient Screener</label>
         <locationX>182</locationX>
-        <locationY>1898</locationY>
+        <locationY>1790</locationY>
         <connector>
             <targetReference>Remove_Items</targetReference>
         </connector>
@@ -558,7 +581,7 @@
         <name>Delete_Parent_Patient_Screeners</name>
         <label>Delete Parent Patient Screeners</label>
         <locationX>754</locationX>
-        <locationY>2222</locationY>
+        <locationY>2114</locationY>
         <connector>
             <targetReference>Update_Parent_Patient_Screener</targetReference>
         </connector>
@@ -568,7 +591,7 @@
         <name>Delete_Patient_Screeners</name>
         <label>Delete Patient Screeners</label>
         <locationX>50</locationX>
-        <locationY>2114</locationY>
+        <locationY>2006</locationY>
         <connector>
             <targetReference>Update_Patient_Screener</targetReference>
         </connector>
@@ -578,7 +601,7 @@
         <name>Get_Current_Case</name>
         <label>Get Current Case</label>
         <locationX>688</locationX>
-        <locationY>242</locationY>
+        <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Case_Type</targetReference>
@@ -599,7 +622,7 @@
         <name>Get_Parent_Case</name>
         <label>Get Parent Case</label>
         <locationX>1040</locationX>
-        <locationY>458</locationY>
+        <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Get_Parent_Patient_Screeners</targetReference>
@@ -620,7 +643,7 @@
         <name>Get_Parent_Patient_Screeners</name>
         <label>Get Parent Patient Screeners</label>
         <locationX>1040</locationX>
-        <locationY>566</locationY>
+        <locationY>458</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Existing_Parent_Patient_Screeners</targetReference>
@@ -641,7 +664,7 @@
         <name>Get_Parent_Screener_Selected</name>
         <label>Get Parent Screener Selected</label>
         <locationX>1128</locationX>
-        <locationY>1298</locationY>
+        <locationY>1190</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Assign_Parent_Patient_Screeners_to_Add</targetReference>
@@ -662,7 +685,7 @@
         <name>Get_Patient_Screeners</name>
         <label>Get Patient Screeners</label>
         <locationX>336</locationX>
-        <locationY>458</locationY>
+        <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Existing_Patient_Screeners</targetReference>
@@ -683,7 +706,7 @@
         <name>Get_Screener_Selected</name>
         <label>Get Screener Selected</label>
         <locationX>424</locationX>
-        <locationY>1190</locationY>
+        <locationY>1082</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Assign_Patient_Screeners_to_Add</targetReference>
@@ -693,22 +716,9 @@
             <field>Name</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>New_Patient_Screeners.ScreenerList.selectedChoiceValues</elementReference>
+                <elementReference>New_Patient_Screeners.ScreenerListAddiction.selectedChoiceValues</elementReference>
             </value>
         </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Screener__c</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
-        <name>Get_Screeners</name>
-        <label>Get Screeners</label>
-        <locationX>688</locationX>
-        <locationY>134</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Get_Current_Case</targetReference>
-        </connector>
         <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Screener__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -717,7 +727,7 @@
         <name>ParentPatientRecordstoDelete</name>
         <label>ParentPatientRecordstoDelete</label>
         <locationX>1040</locationX>
-        <locationY>1082</locationY>
+        <locationY>974</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>New_Parent_Patient_Screeners</targetReference>
@@ -738,7 +748,7 @@
         <name>PatientRecordstoDelete</name>
         <label>PatientRecordstoDelete</label>
         <locationX>336</locationX>
-        <locationY>974</locationY>
+        <locationY>866</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>New_Patient_Screeners</targetReference>
@@ -759,7 +769,7 @@
         <name>Update_Parent_Patient_Screener</name>
         <label>Update Parent Patient Screener</label>
         <locationX>886</locationX>
-        <locationY>2414</locationY>
+        <locationY>2306</locationY>
         <connector>
             <targetReference>Success_Message</targetReference>
         </connector>
@@ -769,7 +779,7 @@
         <name>Update_Patient_Screener</name>
         <label>Update Patient Screener</label>
         <locationX>182</locationX>
-        <locationY>2306</locationY>
+        <locationY>2198</locationY>
         <connector>
             <targetReference>Success_Message</targetReference>
         </connector>
@@ -779,7 +789,7 @@
         <name>cancel_message</name>
         <label>cancel message</label>
         <locationX>490</locationX>
-        <locationY>1898</locationY>
+        <locationY>1790</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -795,7 +805,7 @@
         <name>Existing_Parent_Patient_Screeners</name>
         <label>Existing Parent Patient Screeners</label>
         <locationX>1040</locationX>
-        <locationY>674</locationY>
+        <locationY>566</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -807,7 +817,7 @@
             <fieldType>Repeater</fieldType>
             <fields>
                 <name>ScreenerList2</name>
-                <choiceReferences>Screeners</choiceReferences>
+                <choiceReferences>ScreenersAddiction</choiceReferences>
                 <defaultValue>
                     <elementReference>Get_Parent_Patient_Screeners[$EachItem].Screener__r.Name</elementReference>
                 </defaultValue>
@@ -825,6 +835,46 @@
                 <storeOutputAutomatically>true</storeOutputAutomatically>
                 <visibilityRule>
                     <conditionLogic>and</conditionLogic>
+                    <conditions>
+                        <leftValueReference>Get_Parent_Patient_Screeners[$EachItem].Screener__r.Name</leftValueReference>
+                        <operator>EqualTo</operator>
+                    </conditions>
+                    <conditions>
+                        <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                        <operator>EqualTo</operator>
+                        <rightValue>
+                            <stringValue>Addiction Medicine</stringValue>
+                        </rightValue>
+                    </conditions>
+                </visibilityRule>
+            </fields>
+            <fields>
+                <name>ScreenerPsychiatry</name>
+                <choiceReferences>ScreenersPsychiatry</choiceReferences>
+                <defaultValue>
+                    <elementReference>Get_Parent_Patient_Screeners[$EachItem].Screener__r.Name</elementReference>
+                </defaultValue>
+                <extensionName>flowruntime:choiceLookup</extensionName>
+                <fieldText>Screener</fieldText>
+                <fieldType>ComponentChoice</fieldType>
+                <inputParameters>
+                    <name>placeholder</name>
+                    <value>
+                        <stringValue>Select a Screener</stringValue>
+                    </value>
+                </inputParameters>
+                <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                <isRequired>false</isRequired>
+                <storeOutputAutomatically>true</storeOutputAutomatically>
+                <visibilityRule>
+                    <conditionLogic>and</conditionLogic>
+                    <conditions>
+                        <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                        <operator>EqualTo</operator>
+                        <rightValue>
+                            <stringValue>General Psychiatry</stringValue>
+                        </rightValue>
+                    </conditions>
                     <conditions>
                         <leftValueReference>Get_Parent_Patient_Screeners[$EachItem].Screener__r.Name</leftValueReference>
                         <operator>EqualTo</operator>
@@ -891,7 +941,7 @@
             <fields>
                 <name>Screener_Notes_Parent</name>
                 <defaultValue>
-                    <stringValue>{!Get_Parent_Patient_Screeners[$EachItem].Notes__c}</stringValue>
+                    <stringValue>{!Get_Parent_Patient_Screeners[$EachItem].Notes_new__c}</stringValue>
                 </defaultValue>
                 <fieldText>Notes</fieldText>
                 <fieldType>LargeTextArea</fieldType>
@@ -952,7 +1002,7 @@
         <name>Existing_Patient_Screeners</name>
         <label>Existing Patient Screeners</label>
         <locationX>336</locationX>
-        <locationY>566</locationY>
+        <locationY>458</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -963,8 +1013,8 @@
             <name>PatientScreenersRepeater</name>
             <fieldType>Repeater</fieldType>
             <fields>
-                <name>ScreenerList</name>
-                <choiceReferences>Screeners</choiceReferences>
+                <name>ScreenerListAddiction</name>
+                <choiceReferences>ScreenersAddiction</choiceReferences>
                 <defaultValue>
                     <elementReference>Get_Patient_Screeners[$EachItem].Screener__r.Name</elementReference>
                 </defaultValue>
@@ -982,6 +1032,46 @@
                 <storeOutputAutomatically>true</storeOutputAutomatically>
                 <visibilityRule>
                     <conditionLogic>and</conditionLogic>
+                    <conditions>
+                        <leftValueReference>Get_Patient_Screeners[$EachItem].Screener__r.Name</leftValueReference>
+                        <operator>EqualTo</operator>
+                    </conditions>
+                    <conditions>
+                        <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                        <operator>EqualTo</operator>
+                        <rightValue>
+                            <stringValue>Addiction Medicine</stringValue>
+                        </rightValue>
+                    </conditions>
+                </visibilityRule>
+            </fields>
+            <fields>
+                <name>ScreenerListPsychiatry</name>
+                <choiceReferences>ScreenersPsychiatry</choiceReferences>
+                <defaultValue>
+                    <elementReference>Get_Patient_Screeners[$EachItem].Screener__r.Name</elementReference>
+                </defaultValue>
+                <extensionName>flowruntime:choiceLookup</extensionName>
+                <fieldText>Screener</fieldText>
+                <fieldType>ComponentChoice</fieldType>
+                <inputParameters>
+                    <name>placeholder</name>
+                    <value>
+                        <stringValue>Select a Screener</stringValue>
+                    </value>
+                </inputParameters>
+                <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                <isRequired>false</isRequired>
+                <storeOutputAutomatically>true</storeOutputAutomatically>
+                <visibilityRule>
+                    <conditionLogic>and</conditionLogic>
+                    <conditions>
+                        <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                        <operator>EqualTo</operator>
+                        <rightValue>
+                            <stringValue>General Psychiatry</stringValue>
+                        </rightValue>
+                    </conditions>
                     <conditions>
                         <leftValueReference>Get_Patient_Screeners[$EachItem].Screener__r.Name</leftValueReference>
                         <operator>EqualTo</operator>
@@ -1048,7 +1138,7 @@
             <fields>
                 <name>Screener_Notes</name>
                 <defaultValue>
-                    <stringValue>{!Get_Patient_Screeners[$EachItem].Notes__c}</stringValue>
+                    <stringValue>{!Get_Patient_Screeners[$EachItem].Notes_new__c}</stringValue>
                 </defaultValue>
                 <fieldText>Notes</fieldText>
                 <fieldType>LargeTextArea</fieldType>
@@ -1109,7 +1199,7 @@
         <name>Success_Message</name>
         <label>Success Message</label>
         <locationX>688</locationX>
-        <locationY>2690</locationY>
+        <locationY>2582</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -1125,7 +1215,7 @@
         <locationX>562</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Screeners</targetReference>
+            <targetReference>Get_Current_Case</targetReference>
         </connector>
     </start>
     <status>Active</status>
