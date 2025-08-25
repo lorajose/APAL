@@ -5,7 +5,7 @@
         <name>Assign_Parent_Patient_Medications_to_Add</name>
         <label>Assign Parent Patient Medications to Add</label>
         <locationX>1128</locationX>
-        <locationY>1406</locationY>
+        <locationY>1298</locationY>
         <assignmentItems>
             <assignToReference>PatientMedication.Medication_List__c</assignToReference>
             <operator>Assign</operator>
@@ -14,7 +14,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>PatientMedication.MedicationNotes__c</assignToReference>
+            <assignToReference>PatientMedication.Notes__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>New_Parent_Patient_Medications.Medication_Notes_Parent</elementReference>
@@ -98,7 +98,7 @@
         <name>Assign_Parent_Patient_Medications_to_Delete</name>
         <label>Assign Parent Patient Medications to Delete</label>
         <locationX>1128</locationX>
-        <locationY>890</locationY>
+        <locationY>782</locationY>
         <assignmentItems>
             <assignToReference>RemovePatientMedications</assignToReference>
             <operator>Add</operator>
@@ -114,7 +114,7 @@
         <name>Assign_Parent_Patient_Medications_to_Update</name>
         <label>Assign Parent Patient Medications to Update</label>
         <locationX>1128</locationX>
-        <locationY>1706</locationY>
+        <locationY>1598</locationY>
         <assignmentItems>
             <assignToReference>CurrentMedication.Id</assignToReference>
             <operator>Assign</operator>
@@ -130,7 +130,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>CurrentMedication.MedicationNotes__c</assignToReference>
+            <assignToReference>CurrentMedication.Notes__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Update_Parent_Patient_Medications.Medication_Notes_Parent</elementReference>
@@ -186,7 +186,7 @@
         <name>Assign_Patient_Medications_to_Add</name>
         <label>Assign Patient Medications to Add</label>
         <locationX>424</locationX>
-        <locationY>1298</locationY>
+        <locationY>1190</locationY>
         <assignmentItems>
             <assignToReference>PatientMedication.Medication_List__c</assignToReference>
             <operator>Assign</operator>
@@ -195,7 +195,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>PatientMedication.MedicationNotes__c</assignToReference>
+            <assignToReference>PatientMedication.Notes__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>New_Patient_Medications.Medication_Notes</elementReference>
@@ -279,7 +279,7 @@
         <name>Assign_Patient_Medications_to_Delete</name>
         <label>Assign Patient Medications to Delete</label>
         <locationX>424</locationX>
-        <locationY>782</locationY>
+        <locationY>674</locationY>
         <assignmentItems>
             <assignToReference>RemovePatientMedications</assignToReference>
             <operator>Add</operator>
@@ -295,7 +295,7 @@
         <name>Assign_Patient_Medications_to_Update</name>
         <label>Assign Patient Medications to Update</label>
         <locationX>424</locationX>
-        <locationY>1598</locationY>
+        <locationY>1490</locationY>
         <assignmentItems>
             <assignToReference>CurrentMedication.Id</assignToReference>
             <operator>Assign</operator>
@@ -311,7 +311,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>CurrentMedication.MedicationNotes__c</assignToReference>
+            <assignToReference>CurrentMedication.Notes__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Update_Patient_Medications.Medication_Notes</elementReference>
@@ -367,7 +367,7 @@
         <name>Case_Type</name>
         <label>Case Type</label>
         <locationX>688</locationX>
-        <locationY>350</locationY>
+        <locationY>242</locationY>
         <defaultConnector>
             <targetReference>Get_Parent_Case</targetReference>
         </defaultConnector>
@@ -392,7 +392,7 @@
         <name>Navigationbuttons</name>
         <label>Navigation</label>
         <locationX>336</locationX>
-        <locationY>1790</locationY>
+        <locationY>1682</locationY>
         <defaultConnector>
             <targetReference>Cancel_message</targetReference>
         </defaultConnector>
@@ -417,7 +417,7 @@
         <name>NavigationParentButtons</name>
         <label>Navigation</label>
         <locationX>1040</locationX>
-        <locationY>1898</locationY>
+        <locationY>1790</locationY>
         <defaultConnector>
             <targetReference>Copy_1_of_Cancel_message</targetReference>
         </defaultConnector>
@@ -442,7 +442,7 @@
         <name>Remove_Items</name>
         <label>Remove Items?</label>
         <locationX>182</locationX>
-        <locationY>2006</locationY>
+        <locationY>1898</locationY>
         <defaultConnector>
             <targetReference>Update_Patient_Medication</targetReference>
         </defaultConnector>
@@ -467,7 +467,7 @@
         <name>Remove_Items_Parent</name>
         <label>Remove Items Parent?</label>
         <locationX>886</locationX>
-        <locationY>2114</locationY>
+        <locationY>2006</locationY>
         <defaultConnector>
             <targetReference>Update_Parent_Patient_Medication</targetReference>
         </defaultConnector>
@@ -521,9 +521,32 @@
         <picklistObject>Patient_Medication__c</picklistObject>
     </dynamicChoiceSets>
     <dynamicChoiceSets>
-        <name>Medications</name>
+        <name>MedicationsAddiction</name>
         <dataType>String</dataType>
         <displayField>Name</displayField>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Addiction_Services__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Medication__c</object>
+        <valueField>Name</valueField>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>MedicationsPsychiatry</name>
+        <dataType>String</dataType>
+        <displayField>Name</displayField>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>General_Psychiatry__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
         <object>Medication__c</object>
         <valueField>Name</valueField>
     </dynamicChoiceSets>
@@ -534,7 +557,7 @@
         <name>Deleted_Parent_Patient_Medications</name>
         <label>Deleted Parent Patient Medications</label>
         <locationX>1040</locationX>
-        <locationY>782</locationY>
+        <locationY>674</locationY>
         <collectionReference>ParentPatientMedicationRepeater.RemovedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -548,7 +571,7 @@
         <name>Deleted_Patient_Medications</name>
         <label>Deleted Patient Medications</label>
         <locationX>336</locationX>
-        <locationY>674</locationY>
+        <locationY>566</locationY>
         <collectionReference>PatientMedicationRepeater.RemovedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -562,7 +585,7 @@
         <name>New_Parent_Patient_Medications</name>
         <label>New Parent Patient Medications</label>
         <locationX>1040</locationX>
-        <locationY>1190</locationY>
+        <locationY>1082</locationY>
         <collectionReference>ParentPatientMedicationRepeater.AddedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -576,7 +599,7 @@
         <name>New_Patient_Medications</name>
         <label>New Patient Medications</label>
         <locationX>336</locationX>
-        <locationY>1082</locationY>
+        <locationY>974</locationY>
         <collectionReference>PatientMedicationRepeater.AddedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -590,7 +613,7 @@
         <name>Update_Parent_Patient_Medications</name>
         <label>Update Parent Patient Medications</label>
         <locationX>1040</locationX>
-        <locationY>1598</locationY>
+        <locationY>1490</locationY>
         <collectionReference>ParentPatientMedicationRepeater.PrepopulatedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -604,7 +627,7 @@
         <name>Update_Patient_Medications</name>
         <label>Update Patient Medications</label>
         <locationX>336</locationX>
-        <locationY>1490</locationY>
+        <locationY>1382</locationY>
         <collectionReference>PatientMedicationRepeater.PrepopulatedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -637,7 +660,7 @@
         <name>Create_Parent_Patient_Medication</name>
         <label>Create Parent Patient Medication</label>
         <locationX>886</locationX>
-        <locationY>2006</locationY>
+        <locationY>1898</locationY>
         <connector>
             <targetReference>Remove_Items_Parent</targetReference>
         </connector>
@@ -647,7 +670,7 @@
         <name>Create_Patient_Medication</name>
         <label>Create Patient Medication</label>
         <locationX>182</locationX>
-        <locationY>1898</locationY>
+        <locationY>1790</locationY>
         <connector>
             <targetReference>Remove_Items</targetReference>
         </connector>
@@ -657,7 +680,7 @@
         <name>Delete_Parent_Patient_Medications</name>
         <label>Delete Parent Patient Medications</label>
         <locationX>754</locationX>
-        <locationY>2222</locationY>
+        <locationY>2114</locationY>
         <connector>
             <targetReference>Update_Parent_Patient_Medication</targetReference>
         </connector>
@@ -667,7 +690,7 @@
         <name>Delete_Patient_Medications</name>
         <label>Delete Patient Medications</label>
         <locationX>50</locationX>
-        <locationY>2114</locationY>
+        <locationY>2006</locationY>
         <connector>
             <targetReference>Update_Patient_Medication</targetReference>
         </connector>
@@ -677,7 +700,7 @@
         <name>Get_Current_Case</name>
         <label>Get Current Case</label>
         <locationX>688</locationX>
-        <locationY>242</locationY>
+        <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Case_Type</targetReference>
@@ -698,7 +721,7 @@
         <name>Get_Medication_Selected</name>
         <label>Get Medication Selected</label>
         <locationX>424</locationX>
-        <locationY>1190</locationY>
+        <locationY>1082</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Assign_Patient_Medications_to_Add</targetReference>
@@ -708,22 +731,9 @@
             <field>Name</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>New_Patient_Medications.MedicationList.selectedChoiceValues</elementReference>
+                <elementReference>New_Patient_Medications.MedicationListAddiction.selectedChoiceValues</elementReference>
             </value>
         </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Medication__c</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
-        <name>Get_Medications</name>
-        <label>Get Medications</label>
-        <locationX>688</locationX>
-        <locationY>134</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Get_Current_Case</targetReference>
-        </connector>
         <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Medication__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -732,7 +742,7 @@
         <name>Get_Parent_Case</name>
         <label>Get Parent Case</label>
         <locationX>1040</locationX>
-        <locationY>458</locationY>
+        <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Get_Parent_Patient_Medications</targetReference>
@@ -753,7 +763,7 @@
         <name>Get_Parent_Medication_Selected</name>
         <label>Get Parent Medication Selected</label>
         <locationX>1128</locationX>
-        <locationY>1298</locationY>
+        <locationY>1190</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Assign_Parent_Patient_Medications_to_Add</targetReference>
@@ -763,7 +773,7 @@
             <field>Name</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>New_Parent_Patient_Medications.MedicationList2.selectedChoiceValues</elementReference>
+                <elementReference>New_Parent_Patient_Medications.MedicationList2Addiction.selectedChoiceValues</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -774,7 +784,7 @@
         <name>Get_Parent_Patient_Medications</name>
         <label>Get Parent Patient Medications</label>
         <locationX>1040</locationX>
-        <locationY>566</locationY>
+        <locationY>458</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Existing_Parent_Patient_Medications</targetReference>
@@ -795,7 +805,7 @@
         <name>Get_Patient_Medications</name>
         <label>Get Patient Medications</label>
         <locationX>336</locationX>
-        <locationY>458</locationY>
+        <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Existing_Patient_Medications</targetReference>
@@ -816,7 +826,7 @@
         <name>ParentPatientRecordstoDelete</name>
         <label>ParentPatientRecordstoDelete</label>
         <locationX>1040</locationX>
-        <locationY>1082</locationY>
+        <locationY>974</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>New_Parent_Patient_Medications</targetReference>
@@ -837,7 +847,7 @@
         <name>PatientRecordstoDelete</name>
         <label>PatientRecordstoDelete</label>
         <locationX>336</locationX>
-        <locationY>974</locationY>
+        <locationY>866</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>New_Patient_Medications</targetReference>
@@ -858,7 +868,7 @@
         <name>Update_Parent_Patient_Medication</name>
         <label>Update Parent Patient Medication</label>
         <locationX>886</locationX>
-        <locationY>2414</locationY>
+        <locationY>2306</locationY>
         <connector>
             <targetReference>Success_Message</targetReference>
         </connector>
@@ -868,7 +878,7 @@
         <name>Update_Patient_Medication</name>
         <label>Update Patient Medication</label>
         <locationX>182</locationX>
-        <locationY>2306</locationY>
+        <locationY>2198</locationY>
         <connector>
             <targetReference>Success_Message</targetReference>
         </connector>
@@ -878,7 +888,7 @@
         <name>Cancel_message</name>
         <label>Cancel message</label>
         <locationX>490</locationX>
-        <locationY>1898</locationY>
+        <locationY>1790</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -894,7 +904,7 @@
         <name>Copy_1_of_Cancel_message</name>
         <label>Copy 1 of Cancel message</label>
         <locationX>1194</locationX>
-        <locationY>2006</locationY>
+        <locationY>1898</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -910,7 +920,7 @@
         <name>Existing_Parent_Patient_Medications</name>
         <label>Existing Parent Patient Medications</label>
         <locationX>1040</locationX>
-        <locationY>674</locationY>
+        <locationY>566</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -921,8 +931,8 @@
             <name>ParentPatientMedicationRepeater</name>
             <fieldType>Repeater</fieldType>
             <fields>
-                <name>MedicationList2</name>
-                <choiceReferences>Medications</choiceReferences>
+                <name>MedicationList2Addiction</name>
+                <choiceReferences>MedicationsAddiction</choiceReferences>
                 <defaultValue>
                     <elementReference>Get_Parent_Patient_Medications[$EachItem].Medication_List__r.Name</elementReference>
                 </defaultValue>
@@ -940,6 +950,46 @@
                 <storeOutputAutomatically>true</storeOutputAutomatically>
                 <visibilityRule>
                     <conditionLogic>and</conditionLogic>
+                    <conditions>
+                        <leftValueReference>Get_Parent_Patient_Medications[$EachItem].Medication_List__r.Name</leftValueReference>
+                        <operator>EqualTo</operator>
+                    </conditions>
+                    <conditions>
+                        <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                        <operator>EqualTo</operator>
+                        <rightValue>
+                            <stringValue>Addiction Medicine</stringValue>
+                        </rightValue>
+                    </conditions>
+                </visibilityRule>
+            </fields>
+            <fields>
+                <name>MedicationListPsychiatry</name>
+                <choiceReferences>MedicationsPsychiatry</choiceReferences>
+                <defaultValue>
+                    <elementReference>Get_Parent_Patient_Medications[$EachItem].Medication_List__r.Name</elementReference>
+                </defaultValue>
+                <extensionName>flowruntime:choiceLookup</extensionName>
+                <fieldText>Medication</fieldText>
+                <fieldType>ComponentChoice</fieldType>
+                <inputParameters>
+                    <name>placeholder</name>
+                    <value>
+                        <stringValue>Select a Medication</stringValue>
+                    </value>
+                </inputParameters>
+                <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                <isRequired>false</isRequired>
+                <storeOutputAutomatically>true</storeOutputAutomatically>
+                <visibilityRule>
+                    <conditionLogic>and</conditionLogic>
+                    <conditions>
+                        <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                        <operator>EqualTo</operator>
+                        <rightValue>
+                            <stringValue>General Psychiatry</stringValue>
+                        </rightValue>
+                    </conditions>
                     <conditions>
                         <leftValueReference>Get_Parent_Patient_Medications[$EachItem].Medication_List__r.Name</leftValueReference>
                         <operator>EqualTo</operator>
@@ -1055,7 +1105,7 @@
             <fields>
                 <name>Medication_Notes_Parent</name>
                 <defaultValue>
-                    <stringValue>{!Get_Parent_Patient_Medications[$EachItem].MedicationNotes__c}</stringValue>
+                    <stringValue>{!Get_Parent_Patient_Medications[$EachItem].Notes__c}</stringValue>
                 </defaultValue>
                 <fieldText>Medication Notes</fieldText>
                 <fieldType>LargeTextArea</fieldType>
@@ -1116,7 +1166,7 @@
         <name>Existing_Patient_Medications</name>
         <label>Existing Patient Medications</label>
         <locationX>336</locationX>
-        <locationY>566</locationY>
+        <locationY>458</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -1127,8 +1177,8 @@
             <name>PatientMedicationRepeater</name>
             <fieldType>Repeater</fieldType>
             <fields>
-                <name>MedicationList</name>
-                <choiceReferences>Medications</choiceReferences>
+                <name>MedicationListAddiction</name>
+                <choiceReferences>MedicationsAddiction</choiceReferences>
                 <defaultValue>
                     <elementReference>Get_Patient_Medications[$EachItem].Medication_List__r.Name</elementReference>
                 </defaultValue>
@@ -1146,6 +1196,46 @@
                 <storeOutputAutomatically>true</storeOutputAutomatically>
                 <visibilityRule>
                     <conditionLogic>and</conditionLogic>
+                    <conditions>
+                        <leftValueReference>Get_Patient_Medications[$EachItem].Medication__c</leftValueReference>
+                        <operator>EqualTo</operator>
+                    </conditions>
+                    <conditions>
+                        <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                        <operator>EqualTo</operator>
+                        <rightValue>
+                            <stringValue>Addiction Medicine</stringValue>
+                        </rightValue>
+                    </conditions>
+                </visibilityRule>
+            </fields>
+            <fields>
+                <name>MedicationPsychiatry</name>
+                <choiceReferences>MedicationsPsychiatry</choiceReferences>
+                <defaultValue>
+                    <elementReference>Get_Patient_Medications[$EachItem].Medication_List__r.Name</elementReference>
+                </defaultValue>
+                <extensionName>flowruntime:choiceLookup</extensionName>
+                <fieldText>Medication</fieldText>
+                <fieldType>ComponentChoice</fieldType>
+                <inputParameters>
+                    <name>placeholder</name>
+                    <value>
+                        <stringValue>Select a Medication</stringValue>
+                    </value>
+                </inputParameters>
+                <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                <isRequired>false</isRequired>
+                <storeOutputAutomatically>true</storeOutputAutomatically>
+                <visibilityRule>
+                    <conditionLogic>and</conditionLogic>
+                    <conditions>
+                        <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                        <operator>EqualTo</operator>
+                        <rightValue>
+                            <stringValue>General Psychiatry</stringValue>
+                        </rightValue>
+                    </conditions>
                     <conditions>
                         <leftValueReference>Get_Patient_Medications[$EachItem].Medication__c</leftValueReference>
                         <operator>EqualTo</operator>
@@ -1261,7 +1351,7 @@
             <fields>
                 <name>Medication_Notes</name>
                 <defaultValue>
-                    <stringValue>{!Get_Patient_Medications[$EachItem].MedicationNotes__c}</stringValue>
+                    <stringValue>{!Get_Patient_Medications[$EachItem].Notes__c}</stringValue>
                 </defaultValue>
                 <fieldText>Medication Notes</fieldText>
                 <fieldType>LargeTextArea</fieldType>
@@ -1322,7 +1412,7 @@
         <name>Success_Message</name>
         <label>Success Message</label>
         <locationX>688</locationX>
-        <locationY>2690</locationY>
+        <locationY>2582</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -1338,7 +1428,7 @@
         <locationX>562</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Get_Medications</targetReference>
+            <targetReference>Get_Current_Case</targetReference>
         </connector>
     </start>
     <status>Active</status>
