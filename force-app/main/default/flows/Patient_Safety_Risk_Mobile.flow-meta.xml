@@ -14,7 +14,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>PatientSafetyRisk.Notes__c</assignToReference>
+            <assignToReference>PatientSafetyRisk.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>New_Parent_Patient_Safety_Risks.Safety_Risk_Notes_Parent</elementReference>
@@ -95,7 +95,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>CurrentSafetyRisk.Notes__c</assignToReference>
+            <assignToReference>CurrentSafetyRisk.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Update_Parent_Patient_Safety_Risks.Safety_Risk_Notes_Parent</elementReference>
@@ -139,7 +139,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>PatientSafetyRisk.Notes__c</assignToReference>
+            <assignToReference>PatientSafetyRisk.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>New_Patient_Safety_Risks.Safety_Risk_Notes</elementReference>
@@ -220,7 +220,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>CurrentSafetyRisk.Notes__c</assignToReference>
+            <assignToReference>CurrentSafetyRisk.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Update_Patient_Safety_Risks.Safety_Risk_Notes</elementReference>
@@ -394,9 +394,32 @@
         <picklistObject>Patient_Substance__c</picklistObject>
     </dynamicChoiceSets>
     <dynamicChoiceSets>
-        <name>SafetyRisks</name>
+        <name>SafetyRisksAddiction</name>
         <dataType>String</dataType>
         <displayField>Name</displayField>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Addiction_Services__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Safety_Risk__c</object>
+        <valueField>Name</valueField>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>SafetyRisksPsychiatry</name>
+        <dataType>String</dataType>
+        <displayField>Name</displayField>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>General_Psychiatry__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
         <object>Safety_Risk__c</object>
         <valueField>Name</valueField>
     </dynamicChoiceSets>
@@ -623,7 +646,7 @@
             <field>Name</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>New_Parent_Patient_Safety_Risks.SafetyRiskList2.selectedChoiceValues</elementReference>
+                <elementReference>New_Parent_Patient_Safety_Risks.SafetyRiskAddiction.selectedChoiceValues</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -665,7 +688,7 @@
             <field>Name</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>New_Patient_Safety_Risks.SafetyRiskList.selectedChoiceValues</elementReference>
+                <elementReference>New_Patient_Safety_Risks.SafetyRiskListAddiction.selectedChoiceValues</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -778,8 +801,8 @@
             <name>ParentPatientSafetyRisksRepeater</name>
             <fieldType>Repeater</fieldType>
             <fields>
-                <name>SafetyRiskList2</name>
-                <choiceReferences>SafetyRisks</choiceReferences>
+                <name>SafetyRiskAddiction</name>
+                <choiceReferences>SafetyRisksAddiction</choiceReferences>
                 <defaultValue>
                     <elementReference>Get_Parent_Patient_Safety_Risks[$EachItem].Safety_Risk__r.Name</elementReference>
                 </defaultValue>
@@ -797,6 +820,46 @@
                 <storeOutputAutomatically>true</storeOutputAutomatically>
                 <visibilityRule>
                     <conditionLogic>and</conditionLogic>
+                    <conditions>
+                        <leftValueReference>Get_Parent_Patient_Safety_Risks[$EachItem].Safety_Risk__r.Name</leftValueReference>
+                        <operator>EqualTo</operator>
+                    </conditions>
+                    <conditions>
+                        <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                        <operator>EqualTo</operator>
+                        <rightValue>
+                            <stringValue>Addiction Medicine</stringValue>
+                        </rightValue>
+                    </conditions>
+                </visibilityRule>
+            </fields>
+            <fields>
+                <name>Safety_RiskParentPsychiatry</name>
+                <choiceReferences>SafetyRisksPsychiatry</choiceReferences>
+                <defaultValue>
+                    <elementReference>Get_Parent_Patient_Safety_Risks[$EachItem].Safety_Risk__r.Name</elementReference>
+                </defaultValue>
+                <extensionName>flowruntime:choiceLookup</extensionName>
+                <fieldText>Safety Risk</fieldText>
+                <fieldType>ComponentChoice</fieldType>
+                <inputParameters>
+                    <name>placeholder</name>
+                    <value>
+                        <stringValue>Select a Safety Risk</stringValue>
+                    </value>
+                </inputParameters>
+                <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                <isRequired>false</isRequired>
+                <storeOutputAutomatically>true</storeOutputAutomatically>
+                <visibilityRule>
+                    <conditionLogic>and</conditionLogic>
+                    <conditions>
+                        <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                        <operator>EqualTo</operator>
+                        <rightValue>
+                            <stringValue>General Psychiatry</stringValue>
+                        </rightValue>
+                    </conditions>
                     <conditions>
                         <leftValueReference>Get_Parent_Patient_Safety_Risks[$EachItem].Safety_Risk__r.Name</leftValueReference>
                         <operator>EqualTo</operator>
@@ -852,7 +915,7 @@
             <fields>
                 <name>Safety_Risk_Notes_Parent</name>
                 <defaultValue>
-                    <stringValue>{!Get_Parent_Patient_Safety_Risks[$EachItem].Notes__c}</stringValue>
+                    <stringValue>{!Get_Parent_Patient_Safety_Risks[$EachItem].Notes_new__c}</stringValue>
                 </defaultValue>
                 <fieldText>Notes</fieldText>
                 <fieldType>LargeTextArea</fieldType>
@@ -924,8 +987,8 @@
             <name>PatientSafetyRiskRepeater</name>
             <fieldType>Repeater</fieldType>
             <fields>
-                <name>SafetyRiskList</name>
-                <choiceReferences>SafetyRisks</choiceReferences>
+                <name>SafetyRiskListAddiction</name>
+                <choiceReferences>SafetyRisksAddiction</choiceReferences>
                 <defaultValue>
                     <elementReference>Get_Patient_Safety_Risks[$EachItem].Safety_Risk__c</elementReference>
                 </defaultValue>
@@ -943,6 +1006,46 @@
                 <storeOutputAutomatically>true</storeOutputAutomatically>
                 <visibilityRule>
                     <conditionLogic>and</conditionLogic>
+                    <conditions>
+                        <leftValueReference>Get_Patient_Safety_Risks[$EachItem].Safety_Risk__r.Name</leftValueReference>
+                        <operator>EqualTo</operator>
+                    </conditions>
+                    <conditions>
+                        <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                        <operator>EqualTo</operator>
+                        <rightValue>
+                            <stringValue>Addiction Medicine</stringValue>
+                        </rightValue>
+                    </conditions>
+                </visibilityRule>
+            </fields>
+            <fields>
+                <name>Safety_RiskPsychiatry</name>
+                <choiceReferences>SafetyRisksPsychiatry</choiceReferences>
+                <defaultValue>
+                    <elementReference>Get_Patient_Safety_Risks[$EachItem].Safety_Risk__c</elementReference>
+                </defaultValue>
+                <extensionName>flowruntime:choiceLookup</extensionName>
+                <fieldText>Safety Risk</fieldText>
+                <fieldType>ComponentChoice</fieldType>
+                <inputParameters>
+                    <name>placeholder</name>
+                    <value>
+                        <stringValue>Select a Safety Risk</stringValue>
+                    </value>
+                </inputParameters>
+                <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                <isRequired>false</isRequired>
+                <storeOutputAutomatically>true</storeOutputAutomatically>
+                <visibilityRule>
+                    <conditionLogic>and</conditionLogic>
+                    <conditions>
+                        <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                        <operator>EqualTo</operator>
+                        <rightValue>
+                            <stringValue>General Psychiatry</stringValue>
+                        </rightValue>
+                    </conditions>
                     <conditions>
                         <leftValueReference>Get_Patient_Safety_Risks[$EachItem].Safety_Risk__r.Name</leftValueReference>
                         <operator>EqualTo</operator>
@@ -998,7 +1101,7 @@
             <fields>
                 <name>Safety_Risk_Notes</name>
                 <defaultValue>
-                    <stringValue>{!Get_Patient_Safety_Risks[$EachItem].Notes__c}</stringValue>
+                    <stringValue>{!Get_Patient_Safety_Risks[$EachItem].Notes_new__c}</stringValue>
                 </defaultValue>
                 <fieldText>Notes</fieldText>
                 <fieldType>LargeTextArea</fieldType>
