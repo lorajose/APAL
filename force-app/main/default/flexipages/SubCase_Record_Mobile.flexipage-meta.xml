@@ -113,6 +113,16 @@
                 <identifier>RecordIsEscalatedField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Case_Type__c</fieldItem>
+                <identifier>RecordCase_Type_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-79882c16-5261-48b1-bd6d-e673d7cab536</name>
         <type>Facet</type>
     </flexiPageRegions>

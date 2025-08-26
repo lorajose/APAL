@@ -2,15 +2,15 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>62.0</apiVersion>
     <assignments>
-        <name>Assign_Parent_Patient_Concerns_to_Add</name>
-        <label>Assign Parent Patient Concerns to Add</label>
-        <locationX>1128</locationX>
-        <locationY>1298</locationY>
+        <name>Assign_Parent_Patient_Concerns_to_Add_Addiction</name>
+        <label>Assign Parent Patient Concerns to Add - Addiction</label>
+        <locationX>1036</locationX>
+        <locationY>1406</locationY>
         <assignmentItems>
             <assignToReference>PatientConcern.Concern__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Get_Parent_Concern_Selected.Id</elementReference>
+                <elementReference>Get_Parent_Concern_Selected_Addiction.Id</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -31,7 +31,7 @@
             <assignToReference>PatientConcern.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Parent_Patient_Concerns.Concern_Notes_Parent</elementReference>
+                <elementReference>New_Parent_Patient_Concerns_Addiction.Concern_Notes_Parent</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -49,13 +49,64 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>New_Parent_Patient_Concerns</targetReference>
+            <targetReference>New_Parent_Patient_Concerns_Addiction</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Parent_Patient_Concerns_to_Add_Psychiatry</name>
+        <label>Assign Parent Patient Concerns to Add - Psychiatry</label>
+        <locationX>1340</locationX>
+        <locationY>1406</locationY>
+        <assignmentItems>
+            <assignToReference>PatientConcern.Concern__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Parent_Concern_Selected_Psychiatry.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientConcern.Case__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Parent_Case.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientConcern.Patient__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Parent_Case.ContactId</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientConcern.Notes_new__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Parent_Patient_Concerns_Psychiatry.Concern_Notes_Parent</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientConcern.Submission_Completed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>NewPatientConcerns</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>PatientConcern</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>New_Parent_Patient_Concerns_Psychiatry</targetReference>
         </connector>
     </assignments>
     <assignments>
         <name>Assign_Parent_Patient_Concerns_to_Delete</name>
         <label>Assign Parent Patient Concerns to Delete</label>
-        <locationX>1128</locationX>
+        <locationX>1296</locationX>
         <locationY>782</locationY>
         <assignmentItems>
             <assignToReference>RemovePatientConcerns</assignToReference>
@@ -71,8 +122,8 @@
     <assignments>
         <name>Assign_Parent_Patient_Corncern_to_Update</name>
         <label>Assign Parent Patient Corncern to Update</label>
-        <locationX>1128</locationX>
-        <locationY>1598</locationY>
+        <locationX>1296</locationX>
+        <locationY>1790</locationY>
         <assignmentItems>
             <assignToReference>UpdatedPatientConcern.Id</assignToReference>
             <operator>Assign</operator>
@@ -101,13 +152,13 @@
     <assignments>
         <name>Assign_Patient_Concerns_to_Add</name>
         <label>Assign Patient Concerns to Add</label>
-        <locationX>424</locationX>
-        <locationY>1190</locationY>
+        <locationX>164</locationX>
+        <locationY>1298</locationY>
         <assignmentItems>
             <assignToReference>PatientConcern.Concern__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Get_Concern_Selected.Id</elementReference>
+                <elementReference>Get_Concern_Selected_Addiction.Id</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -128,7 +179,7 @@
             <assignToReference>PatientConcern.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Patient_Concerns.Concern_Notes</elementReference>
+                <elementReference>New_Patient_Concerns_Addiction.Concern_Notes</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -146,7 +197,58 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>New_Patient_Concerns</targetReference>
+            <targetReference>New_Patient_Concerns_Addiction</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Patient_Concerns_to_Add_Psychiatry</name>
+        <label>Assign Patient Concerns to Add - Psychiatry</label>
+        <locationX>468</locationX>
+        <locationY>1298</locationY>
+        <assignmentItems>
+            <assignToReference>PatientConcern.Concern__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Concern_Selected_Psychiatry.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientConcern.Case__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientConcern.Patient__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Current_Case.ContactId</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientConcern.Notes_new__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Patient_Concerns_Psychiatry.Concern_Notes</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientConcern.Submission_Completed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>NewPatientConcerns</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>PatientConcern</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>New_Patient_Concerns_Psychiatry</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -169,7 +271,7 @@
         <name>Assign_Patient_Corncern_to_Update</name>
         <label>Assign Patient Corncern to Update</label>
         <locationX>424</locationX>
-        <locationY>1490</locationY>
+        <locationY>1682</locationY>
         <assignmentItems>
             <assignToReference>UpdatedPatientConcern.Id</assignToReference>
             <operator>Assign</operator>
@@ -196,9 +298,83 @@
         </connector>
     </assignments>
     <decisions>
+        <name>Add_Parent_Patient_Concern_by_Case_Type</name>
+        <label>Add Parent Patient Concern by Case Type</label>
+        <locationX>1208</locationX>
+        <locationY>1082</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Addiction_Medicine_Parent</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Parent_Case.Case_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Addiction Medicine</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>New_Parent_Patient_Concerns_Addiction</targetReference>
+            </connector>
+            <label>Addiction Medicine</label>
+        </rules>
+        <rules>
+            <name>General_Psychiatry_Parent</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Parent_Case.Case_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>General Psychiatry</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>New_Parent_Patient_Concerns_Psychiatry</targetReference>
+            </connector>
+            <label>General Psychiatry</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Add_Patient_Concern_by_Case_Type</name>
+        <label>Add Patient Concern by Case Type</label>
+        <locationX>336</locationX>
+        <locationY>974</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Addiction_Medicine</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Addiction Medicine</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>New_Patient_Concerns_Addiction</targetReference>
+            </connector>
+            <label>Addiction Medicine</label>
+        </rules>
+        <rules>
+            <name>General_Psychiatry</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>General Psychiatry</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>New_Patient_Concerns_Psychiatry</targetReference>
+            </connector>
+            <label>General Psychiatry</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Case_Type</name>
         <label>Case Type</label>
-        <locationX>688</locationX>
+        <locationX>772</locationX>
         <locationY>242</locationY>
         <defaultConnector>
             <targetReference>Get_Parent_Case</targetReference>
@@ -224,7 +400,7 @@
         <name>NavigationBar</name>
         <label>Navigation?</label>
         <locationX>336</locationX>
-        <locationY>1682</locationY>
+        <locationY>1874</locationY>
         <defaultConnector>
             <targetReference>Cancel_Message</targetReference>
         </defaultConnector>
@@ -248,8 +424,8 @@
     <decisions>
         <name>NavigationParent</name>
         <label>Navigation?</label>
-        <locationX>1040</locationX>
-        <locationY>1790</locationY>
+        <locationX>1208</locationX>
+        <locationY>1982</locationY>
         <defaultConnector>
             <isGoTo>true</isGoTo>
             <targetReference>Cancel_Message</targetReference>
@@ -275,7 +451,7 @@
         <name>Remove_Items</name>
         <label>Remove Items?</label>
         <locationX>182</locationX>
-        <locationY>1790</locationY>
+        <locationY>1982</locationY>
         <defaultConnector>
             <targetReference>Create_Patient_Concern</targetReference>
         </defaultConnector>
@@ -299,8 +475,8 @@
     <decisions>
         <name>Remove_Items_Parent</name>
         <label>Remove Items Parent?</label>
-        <locationX>886</locationX>
-        <locationY>2006</locationY>
+        <locationX>1054</locationX>
+        <locationY>2198</locationY>
         <defaultConnector>
             <targetReference>Update_Items</targetReference>
         </defaultConnector>
@@ -324,8 +500,8 @@
     <decisions>
         <name>Update_Items</name>
         <label>Update Items?</label>
-        <locationX>886</locationX>
-        <locationY>2306</locationY>
+        <locationX>1054</locationX>
+        <locationY>2498</locationY>
         <defaultConnector>
             <targetReference>Success_Message</targetReference>
         </defaultConnector>
@@ -382,7 +558,7 @@
     <loops>
         <name>Deleted_Parent_Patient_Concerns</name>
         <label>Deleted Parent Patient Concerns</label>
-        <locationX>1040</locationX>
+        <locationX>1208</locationX>
         <locationY>674</locationY>
         <collectionReference>ParentPatientConcernsRepeater.RemovedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
@@ -408,28 +584,56 @@
         </noMoreValuesConnector>
     </loops>
     <loops>
-        <name>New_Parent_Patient_Concerns</name>
-        <label>New Parent Patient Concerns</label>
-        <locationX>1040</locationX>
-        <locationY>1082</locationY>
+        <name>New_Parent_Patient_Concerns_Addiction</name>
+        <label>New Parent Patient Concerns - Addiction</label>
+        <locationX>948</locationX>
+        <locationY>1190</locationY>
         <collectionReference>ParentPatientConcernsRepeater.AddedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Get_Parent_Concern_Selected</targetReference>
+            <targetReference>Get_Parent_Concern_Selected_Addiction</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
             <targetReference>Update_Parent_Patient_Concerns</targetReference>
         </noMoreValuesConnector>
     </loops>
     <loops>
-        <name>New_Patient_Concerns</name>
-        <label>New Patient Concerns</label>
-        <locationX>336</locationX>
-        <locationY>974</locationY>
+        <name>New_Parent_Patient_Concerns_Psychiatry</name>
+        <label>New Parent Patient Concerns - Psychiatry</label>
+        <locationX>1252</locationX>
+        <locationY>1190</locationY>
+        <collectionReference>ParentPatientConcernsRepeater.AddedItems</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Get_Parent_Concern_Selected_Psychiatry</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Update_Parent_Patient_Concerns</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>New_Patient_Concerns_Addiction</name>
+        <label>New Patient Concerns - Addiction</label>
+        <locationX>76</locationX>
+        <locationY>1082</locationY>
         <collectionReference>PatientConcernsRepeater.AddedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Get_Concern_Selected</targetReference>
+            <targetReference>Get_Concern_Selected_Addiction</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Update_Patient_Concerns</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>New_Patient_Concerns_Psychiatry</name>
+        <label>New Patient Concerns - Psychiatry</label>
+        <locationX>380</locationX>
+        <locationY>1082</locationY>
+        <collectionReference>PatientConcernsRepeater.AddedItems</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Get_Concern_Selected_Psychiatry</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
             <targetReference>Update_Patient_Concerns</targetReference>
@@ -438,8 +642,8 @@
     <loops>
         <name>Update_Parent_Patient_Concerns</name>
         <label>Update Parent Patient Concerns</label>
-        <locationX>1040</locationX>
-        <locationY>1490</locationY>
+        <locationX>1208</locationX>
+        <locationY>1682</locationY>
         <collectionReference>ParentPatientConcernsRepeater.PrepopulatedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -453,7 +657,7 @@
         <name>Update_Patient_Concerns</name>
         <label>Update Patient Concerns</label>
         <locationX>336</locationX>
-        <locationY>1382</locationY>
+        <locationY>1574</locationY>
         <collectionReference>PatientConcernsRepeater.PrepopulatedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -485,8 +689,8 @@
     <recordCreates>
         <name>Create_Parent_Patient_Concern</name>
         <label>Create Parent Patient Concern</label>
-        <locationX>886</locationX>
-        <locationY>1898</locationY>
+        <locationX>1054</locationX>
+        <locationY>2090</locationY>
         <connector>
             <targetReference>Remove_Items_Parent</targetReference>
         </connector>
@@ -496,7 +700,7 @@
         <name>Create_Patient_Concern</name>
         <label>Create Patient Concern</label>
         <locationX>182</locationX>
-        <locationY>2090</locationY>
+        <locationY>2282</locationY>
         <connector>
             <targetReference>Update_Patient_Concern</targetReference>
         </connector>
@@ -505,8 +709,8 @@
     <recordDeletes>
         <name>Delete_Parent_Patient_Concerns</name>
         <label>Delete Parent Patient Concerns</label>
-        <locationX>754</locationX>
-        <locationY>2114</locationY>
+        <locationX>922</locationX>
+        <locationY>2306</locationY>
         <connector>
             <targetReference>Update_Items</targetReference>
         </connector>
@@ -516,17 +720,17 @@
         <name>Delete_Patient_Concerns</name>
         <label>Delete Patient Concerns</label>
         <locationX>50</locationX>
-        <locationY>1898</locationY>
+        <locationY>2090</locationY>
         <connector>
             <targetReference>Create_Patient_Concern</targetReference>
         </connector>
         <inputReference>ExistingPatientConcernRecords</inputReference>
     </recordDeletes>
     <recordLookups>
-        <name>Get_Concern_Selected</name>
-        <label>Get Concern Selected</label>
-        <locationX>424</locationX>
-        <locationY>1082</locationY>
+        <name>Get_Concern_Selected_Addiction</name>
+        <label>Get Concern Selected - Addiction</label>
+        <locationX>164</locationX>
+        <locationY>1190</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Assign_Patient_Concerns_to_Add</targetReference>
@@ -536,7 +740,28 @@
             <field>Name</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>New_Patient_Concerns.ConcernListAddiction.selectedChoiceValues</elementReference>
+                <elementReference>New_Patient_Concerns_Addiction.ConcernListAddiction.selectedChoiceValues</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Concern_List__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Concern_Selected_Psychiatry</name>
+        <label>Get Concern Selected - Psychiatry</label>
+        <locationX>468</locationX>
+        <locationY>1190</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_Patient_Concerns_to_Add_Psychiatry</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>New_Patient_Concerns_Psychiatry.ConcernListPsychiatry.selectedChoiceValues</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -546,7 +771,7 @@
     <recordLookups>
         <name>Get_Current_Case</name>
         <label>Get Current Case</label>
-        <locationX>688</locationX>
+        <locationX>772</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -567,7 +792,7 @@
     <recordLookups>
         <name>Get_Parent_Case</name>
         <label>Get Parent Case</label>
-        <locationX>1040</locationX>
+        <locationX>1208</locationX>
         <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -586,20 +811,41 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>Get_Parent_Concern_Selected</name>
-        <label>Get Parent Concern Selected</label>
-        <locationX>1128</locationX>
-        <locationY>1190</locationY>
+        <name>Get_Parent_Concern_Selected_Addiction</name>
+        <label>Get Parent Concern Selected - Addiction</label>
+        <locationX>1036</locationX>
+        <locationY>1298</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Assign_Parent_Patient_Concerns_to_Add</targetReference>
+            <targetReference>Assign_Parent_Patient_Concerns_to_Add_Addiction</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Name</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>New_Parent_Patient_Concerns.ParentConcernListAddiction.selectedChoiceValues</elementReference>
+                <elementReference>New_Parent_Patient_Concerns_Addiction.ParentConcernListAddiction.selectedChoiceValues</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Concern_List__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Parent_Concern_Selected_Psychiatry</name>
+        <label>Get Parent Concern Selected - Psychiatry</label>
+        <locationX>1340</locationX>
+        <locationY>1298</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_Parent_Patient_Concerns_to_Add_Psychiatry</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>New_Parent_Patient_Concerns_Psychiatry.ParentConcernListPsychiatry.selectedChoiceValues</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -609,7 +855,7 @@
     <recordLookups>
         <name>Get_Parent_Patient_Concerns</name>
         <label>Get Parent Patient Concerns</label>
-        <locationX>1040</locationX>
+        <locationX>1208</locationX>
         <locationY>458</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -651,11 +897,11 @@
     <recordLookups>
         <name>ParentPatientRecordstoDelete</name>
         <label>ParentPatientRecordstoDelete</label>
-        <locationX>1040</locationX>
+        <locationX>1208</locationX>
         <locationY>974</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>New_Parent_Patient_Concerns</targetReference>
+            <targetReference>Add_Parent_Patient_Concern_by_Case_Type</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -676,7 +922,7 @@
         <locationY>866</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>New_Patient_Concerns</targetReference>
+            <targetReference>Add_Patient_Concern_by_Case_Type</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -693,8 +939,8 @@
     <recordUpdates>
         <name>Update_Parent_Patient_Concern</name>
         <label>Update Parent Patient Concern</label>
-        <locationX>754</locationX>
-        <locationY>2414</locationY>
+        <locationX>922</locationX>
+        <locationY>2606</locationY>
         <connector>
             <targetReference>Success_Message</targetReference>
         </connector>
@@ -704,7 +950,7 @@
         <name>Update_Patient_Concern</name>
         <label>Update Patient Concern</label>
         <locationX>182</locationX>
-        <locationY>2198</locationY>
+        <locationY>2390</locationY>
         <connector>
             <targetReference>Success_Message</targetReference>
         </connector>
@@ -714,7 +960,7 @@
         <name>Cancel_Message</name>
         <label>Cancel Message</label>
         <locationX>490</locationX>
-        <locationY>1790</locationY>
+        <locationY>1982</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -729,7 +975,7 @@
     <screens>
         <name>Existing_Parent_Patient_Concerns</name>
         <label>Existing Parent Patient Concerns</label>
-        <locationX>1040</locationX>
+        <locationX>1208</locationX>
         <locationY>566</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
@@ -765,7 +1011,7 @@
                         <operator>EqualTo</operator>
                     </conditions>
                     <conditions>
-                        <leftValueReference>Get_Parent_Patient_Concerns[$EachItem].Case__r.Case_Type__c</leftValueReference>
+                        <leftValueReference>Get_Parent_Case.Case_Type__c</leftValueReference>
                         <operator>EqualTo</operator>
                         <rightValue>
                             <stringValue>Addiction Medicine</stringValue>
@@ -794,7 +1040,7 @@
                 <visibilityRule>
                     <conditionLogic>and</conditionLogic>
                     <conditions>
-                        <leftValueReference>Get_Parent_Patient_Concerns[$EachItem].Case__r.Case_Type__c</leftValueReference>
+                        <leftValueReference>Get_Parent_Case.Case_Type__c</leftValueReference>
                         <operator>EqualTo</operator>
                         <rightValue>
                             <stringValue>General Psychiatry</stringValue>
@@ -1057,8 +1303,8 @@
     <screens>
         <name>Success_Message</name>
         <label>Success Message</label>
-        <locationX>688</locationX>
-        <locationY>2774</locationY>
+        <locationX>772</locationX>
+        <locationY>2966</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -1071,7 +1317,7 @@
         <showHeader>false</showHeader>
     </screens>
     <start>
-        <locationX>562</locationX>
+        <locationX>646</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Current_Case</targetReference>
@@ -1131,7 +1377,7 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <value>
-            <elementReference>New_Patient_Concerns.ConcernListAddiction.selectedChoiceValues</elementReference>
+            <elementReference>New_Patient_Concerns_Addiction.ConcernListAddiction.selectedChoiceValues</elementReference>
         </value>
     </variables>
     <variables>

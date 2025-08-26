@@ -2,22 +2,22 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <apiVersion>62.0</apiVersion>
     <assignments>
-        <name>Assign_Parent_Patient_Safety_Risks_to_Add</name>
-        <label>Assign Parent Patient Safety Risks to Add</label>
-        <locationX>1128</locationX>
-        <locationY>1406</locationY>
+        <name>Assign_Parent_Patient_Safety_Risks_to_Add_Addiction</name>
+        <label>Assign Parent Patient Safety Risks to Add - Addiction</label>
+        <locationX>1036</locationX>
+        <locationY>1514</locationY>
         <assignmentItems>
             <assignToReference>PatientSafetyRisk.Safety_Risk__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Get_Parent_Safety_Risk_Selected.Id</elementReference>
+                <elementReference>Get_Parent_Safety_Risk_Selected_Addiction.Id</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>PatientSafetyRisk.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Parent_Patient_Safety_Risks.Safety_Risk_Notes_Parent</elementReference>
+                <elementReference>New_Parent_Patient_Safety_Risks_Addiction.Safety_Risk_Notes_Parent</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -38,14 +38,14 @@
             <assignToReference>PatientSafetyRisk.Historical__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Parent_Patient_Safety_Risks.HistoricalParent</elementReference>
+                <elementReference>New_Parent_Patient_Safety_Risks_Addiction.HistoricalParent</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>PatientSafetyRisk.Recent__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Parent_Patient_Safety_Risks.RecentParent</elementReference>
+                <elementReference>New_Parent_Patient_Safety_Risks_Addiction.RecentParent</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -63,13 +63,78 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>New_Parent_Patient_Safety_Risks</targetReference>
+            <targetReference>New_Parent_Patient_Safety_Risks_Addiction</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Parent_Patient_Safety_Risks_to_Add_Psychiatry</name>
+        <label>Assign Parent Patient Safety Risks to Add - Psychiatry</label>
+        <locationX>1340</locationX>
+        <locationY>1514</locationY>
+        <assignmentItems>
+            <assignToReference>PatientSafetyRisk.Safety_Risk__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Parent_Safety_Risk_Selected_Psychiatry.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientSafetyRisk.Notes_new__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Parent_Patient_Safety_Risks_Psychiatry.Safety_Risk_Notes_Parent</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientSafetyRisk.Case__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Parent_Case.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientSafetyRisk.Patient__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Parent_Case.ContactId</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientSafetyRisk.Historical__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Parent_Patient_Safety_Risks_Psychiatry.HistoricalParent</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientSafetyRisk.Recent__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Parent_Patient_Safety_Risks_Psychiatry.RecentParent</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientSafetyRisk.Submission_Completed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>NewPatientSafetyRisks</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>PatientSafetyRisk</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>New_Parent_Patient_Safety_Risks_Psychiatry</targetReference>
         </connector>
     </assignments>
     <assignments>
         <name>Assign_Parent_Patient_Safety_Risks_to_Delete</name>
         <label>Assign Parent Patient Safety Risks to Delete</label>
-        <locationX>1128</locationX>
+        <locationX>1296</locationX>
         <locationY>890</locationY>
         <assignmentItems>
             <assignToReference>RemovePatientSafetyRisks</assignToReference>
@@ -85,8 +150,8 @@
     <assignments>
         <name>Assign_Parent_Patient_Safety_Risks_to_Update</name>
         <label>Assign Parent Patient Safety Risks to Update</label>
-        <locationX>1128</locationX>
-        <locationY>1706</locationY>
+        <locationX>1296</locationX>
+        <locationY>1898</locationY>
         <assignmentItems>
             <assignToReference>CurrentSafetyRisk.Id</assignToReference>
             <operator>Assign</operator>
@@ -127,22 +192,22 @@
         </connector>
     </assignments>
     <assignments>
-        <name>Assign_Patient_Safety_Risks_to_Add</name>
-        <label>Assign Patient Safety Risks to Add</label>
-        <locationX>424</locationX>
-        <locationY>1298</locationY>
+        <name>Assign_Patient_Safety_Risks_to_Add_Addiction</name>
+        <label>Assign Patient Safety Risks to Add - Addiction</label>
+        <locationX>164</locationX>
+        <locationY>1406</locationY>
         <assignmentItems>
             <assignToReference>PatientSafetyRisk.Safety_Risk__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Get_Safety_Risk_Selected.Id</elementReference>
+                <elementReference>Get_Safety_Risk_Selected_Addiction.Id</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>PatientSafetyRisk.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Patient_Safety_Risks.Safety_Risk_Notes</elementReference>
+                <elementReference>New_Patient_Safety_Risks_Addiction.Safety_Risk_Notes</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -163,14 +228,14 @@
             <assignToReference>PatientSafetyRisk.Recent__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Patient_Safety_Risks.Recent</elementReference>
+                <elementReference>New_Patient_Safety_Risks_Addiction.Recent</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>PatientSafetyRisk.Historical__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Patient_Safety_Risks.Historical</elementReference>
+                <elementReference>New_Patient_Safety_Risks_Addiction.Historical</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -188,7 +253,72 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>New_Patient_Safety_Risks</targetReference>
+            <targetReference>New_Patient_Safety_Risks_Addiction</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Patient_Safety_Risks_to_Add_Psychiatry</name>
+        <label>Assign Patient Safety Risks to Add - Psychiatry</label>
+        <locationX>468</locationX>
+        <locationY>1406</locationY>
+        <assignmentItems>
+            <assignToReference>PatientSafetyRisk.Safety_Risk__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Safety_Risk_Selected_Psychiatry.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientSafetyRisk.Notes_new__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Patient_Safety_Risks_Psychiatry.Safety_Risk_Notes</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientSafetyRisk.Case__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Current_Case.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientSafetyRisk.Patient__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Current_Case.ContactId</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientSafetyRisk.Recent__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Patient_Safety_Risks_Psychiatry.Recent</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientSafetyRisk.Historical__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Patient_Safety_Risks_Psychiatry.Historical</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientSafetyRisk.Submission_Completed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>NewPatientSafetyRisks</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>PatientSafetyRisk</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>New_Patient_Safety_Risks_Psychiatry</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -211,7 +341,7 @@
         <name>Assign_Patient_Safety_Risks_to_Update</name>
         <label>Assign Patient Safety Risks to Update</label>
         <locationX>424</locationX>
-        <locationY>1598</locationY>
+        <locationY>1790</locationY>
         <assignmentItems>
             <assignToReference>CurrentSafetyRisk.Id</assignToReference>
             <operator>Assign</operator>
@@ -252,9 +382,83 @@
         </connector>
     </assignments>
     <decisions>
+        <name>Add_Parent_Patient_Screener_by_Case_Type</name>
+        <label>Add Parent Patient Screener by Case Type</label>
+        <locationX>1208</locationX>
+        <locationY>1190</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Addiction_Medicine_Parent</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Parent_Case.Case_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Addiction Medicine</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>New_Parent_Patient_Safety_Risks_Addiction</targetReference>
+            </connector>
+            <label>Addiction Medicine</label>
+        </rules>
+        <rules>
+            <name>General_Psychiatry_Parent</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Parent_Case.Case_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>General Psychiatry</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>New_Parent_Patient_Safety_Risks_Psychiatry</targetReference>
+            </connector>
+            <label>General Psychiatry</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Add_Patient_Safety_Risk_by_Case_Type</name>
+        <label>Add Patient Safety Risk by Case Type</label>
+        <locationX>336</locationX>
+        <locationY>1082</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Addiction_Medicine</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Addiction Medicine</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>New_Patient_Safety_Risks_Addiction</targetReference>
+            </connector>
+            <label>Addiction Medicine</label>
+        </rules>
+        <rules>
+            <name>General_Psychiatry</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>General Psychiatry</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>New_Patient_Safety_Risks_Psychiatry</targetReference>
+            </connector>
+            <label>General Psychiatry</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Case_Type</name>
         <label>Case Type</label>
-        <locationX>688</locationX>
+        <locationX>772</locationX>
         <locationY>350</locationY>
         <defaultConnector>
             <targetReference>Get_Parent_Case</targetReference>
@@ -280,7 +484,7 @@
         <name>Navigationbuttons</name>
         <label>Navigation</label>
         <locationX>336</locationX>
-        <locationY>1790</locationY>
+        <locationY>1982</locationY>
         <defaultConnector>
             <targetReference>cancel_message</targetReference>
         </defaultConnector>
@@ -304,8 +508,8 @@
     <decisions>
         <name>NavigationParentButtons</name>
         <label>Navigation</label>
-        <locationX>1040</locationX>
-        <locationY>1898</locationY>
+        <locationX>1208</locationX>
+        <locationY>2090</locationY>
         <defaultConnector>
             <isGoTo>true</isGoTo>
             <targetReference>cancel_message</targetReference>
@@ -331,7 +535,7 @@
         <name>Remove_Items</name>
         <label>Remove Items?</label>
         <locationX>182</locationX>
-        <locationY>2006</locationY>
+        <locationY>2198</locationY>
         <defaultConnector>
             <targetReference>Update_Patient_Safety_Risk</targetReference>
         </defaultConnector>
@@ -355,8 +559,8 @@
     <decisions>
         <name>Remove_Items_Parent</name>
         <label>Remove Items Parent?</label>
-        <locationX>886</locationX>
-        <locationY>2114</locationY>
+        <locationX>1054</locationX>
+        <locationY>2306</locationY>
         <defaultConnector>
             <targetReference>Update_Parent_Patient_Safety_Risk</targetReference>
         </defaultConnector>
@@ -429,7 +633,7 @@
     <loops>
         <name>Deleted_Parent_Patient_Safety_Risks</name>
         <label>Deleted Parent Patient Safety Risks</label>
-        <locationX>1040</locationX>
+        <locationX>1208</locationX>
         <locationY>782</locationY>
         <collectionReference>ParentPatientSafetyRisksRepeater.RemovedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
@@ -455,28 +659,56 @@
         </noMoreValuesConnector>
     </loops>
     <loops>
-        <name>New_Parent_Patient_Safety_Risks</name>
-        <label>New Parent Patient Safety Risks</label>
-        <locationX>1040</locationX>
-        <locationY>1190</locationY>
+        <name>New_Parent_Patient_Safety_Risks_Addiction</name>
+        <label>New Parent Patient Safety Risks - Addiction</label>
+        <locationX>948</locationX>
+        <locationY>1298</locationY>
         <collectionReference>ParentPatientSafetyRisksRepeater.AddedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Get_Parent_Safety_Risk_Selected</targetReference>
+            <targetReference>Get_Parent_Safety_Risk_Selected_Addiction</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
             <targetReference>Update_Parent_Patient_Safety_Risks</targetReference>
         </noMoreValuesConnector>
     </loops>
     <loops>
-        <name>New_Patient_Safety_Risks</name>
-        <label>New Patient Safety Risks</label>
-        <locationX>336</locationX>
-        <locationY>1082</locationY>
+        <name>New_Parent_Patient_Safety_Risks_Psychiatry</name>
+        <label>New Parent Patient Safety Risks - Psychiatry</label>
+        <locationX>1252</locationX>
+        <locationY>1298</locationY>
+        <collectionReference>ParentPatientSafetyRisksRepeater.AddedItems</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Get_Parent_Safety_Risk_Selected_Psychiatry</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Update_Parent_Patient_Safety_Risks</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>New_Patient_Safety_Risks_Addiction</name>
+        <label>New Patient Safety Risks - Addiction</label>
+        <locationX>76</locationX>
+        <locationY>1190</locationY>
         <collectionReference>PatientSafetyRiskRepeater.AddedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Get_Safety_Risk_Selected</targetReference>
+            <targetReference>Get_Safety_Risk_Selected_Addiction</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Update_Patient_Safety_Risks</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>New_Patient_Safety_Risks_Psychiatry</name>
+        <label>New Patient Safety Risks - Psychiatry</label>
+        <locationX>380</locationX>
+        <locationY>1190</locationY>
+        <collectionReference>PatientSafetyRiskRepeater.AddedItems</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Get_Safety_Risk_Selected_Psychiatry</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
             <targetReference>Update_Patient_Safety_Risks</targetReference>
@@ -485,8 +717,8 @@
     <loops>
         <name>Update_Parent_Patient_Safety_Risks</name>
         <label>Update Parent Patient Safety Risks</label>
-        <locationX>1040</locationX>
-        <locationY>1598</locationY>
+        <locationX>1208</locationX>
+        <locationY>1790</locationY>
         <collectionReference>ParentPatientSafetyRisksRepeater.PrepopulatedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -500,7 +732,7 @@
         <name>Update_Patient_Safety_Risks</name>
         <label>Update Patient Safety Risks</label>
         <locationX>336</locationX>
-        <locationY>1490</locationY>
+        <locationY>1682</locationY>
         <collectionReference>PatientSafetyRiskRepeater.PrepopulatedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -532,8 +764,8 @@
     <recordCreates>
         <name>Create_Parent_Patient_Safety_Risk</name>
         <label>Create Parent Patient Safety Risk</label>
-        <locationX>886</locationX>
-        <locationY>2006</locationY>
+        <locationX>1054</locationX>
+        <locationY>2198</locationY>
         <connector>
             <targetReference>Remove_Items_Parent</targetReference>
         </connector>
@@ -543,7 +775,7 @@
         <name>Create_Patient_Safety_Risk</name>
         <label>Create Patient Safety Risk</label>
         <locationX>182</locationX>
-        <locationY>1898</locationY>
+        <locationY>2090</locationY>
         <connector>
             <targetReference>Remove_Items</targetReference>
         </connector>
@@ -552,8 +784,8 @@
     <recordDeletes>
         <name>Delete_Parent_Patient_Safety_Risks</name>
         <label>Delete Parent Patient Safety Risks</label>
-        <locationX>754</locationX>
-        <locationY>2222</locationY>
+        <locationX>922</locationX>
+        <locationY>2414</locationY>
         <connector>
             <targetReference>Update_Parent_Patient_Safety_Risk</targetReference>
         </connector>
@@ -563,7 +795,7 @@
         <name>Delete_Patient_Safety_Risks</name>
         <label>Delete Patient Safety Risks</label>
         <locationX>50</locationX>
-        <locationY>2114</locationY>
+        <locationY>2306</locationY>
         <connector>
             <targetReference>Update_Patient_Safety_Risk</targetReference>
         </connector>
@@ -572,7 +804,7 @@
     <recordLookups>
         <name>Get_Current_Case</name>
         <label>Get Current Case</label>
-        <locationX>688</locationX>
+        <locationX>772</locationX>
         <locationY>242</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -593,7 +825,7 @@
     <recordLookups>
         <name>Get_Parent_Case</name>
         <label>Get Parent Case</label>
-        <locationX>1040</locationX>
+        <locationX>1208</locationX>
         <locationY>458</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -614,7 +846,7 @@
     <recordLookups>
         <name>Get_Parent_Patient_Safety_Risks</name>
         <label>Get Parent Patient Safety Risks</label>
-        <locationX>1040</locationX>
+        <locationX>1208</locationX>
         <locationY>566</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -633,20 +865,41 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>Get_Parent_Safety_Risk_Selected</name>
-        <label>Get Parent Safety Risk Selected</label>
-        <locationX>1128</locationX>
-        <locationY>1298</locationY>
+        <name>Get_Parent_Safety_Risk_Selected_Addiction</name>
+        <label>Get Parent Safety Risk Selected - Addiction</label>
+        <locationX>1036</locationX>
+        <locationY>1406</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Assign_Parent_Patient_Safety_Risks_to_Add</targetReference>
+            <targetReference>Assign_Parent_Patient_Safety_Risks_to_Add_Addiction</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Name</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>New_Parent_Patient_Safety_Risks.SafetyRiskAddiction.selectedChoiceValues</elementReference>
+                <elementReference>New_Parent_Patient_Safety_Risks_Addiction.SafetyRiskAddiction.selectedChoiceValues</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Safety_Risk__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Parent_Safety_Risk_Selected_Psychiatry</name>
+        <label>Get Parent Safety Risk Selected - Psychiatry</label>
+        <locationX>1340</locationX>
+        <locationY>1406</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_Parent_Patient_Safety_Risks_to_Add_Psychiatry</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>New_Parent_Patient_Safety_Risks_Psychiatry.Safety_RiskParentPsychiatry.selectedChoiceValues</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -675,20 +928,41 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>Get_Safety_Risk_Selected</name>
-        <label>Get Safety Risk Selected</label>
-        <locationX>424</locationX>
-        <locationY>1190</locationY>
+        <name>Get_Safety_Risk_Selected_Addiction</name>
+        <label>Get Safety Risk Selected - Addiction</label>
+        <locationX>164</locationX>
+        <locationY>1298</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Assign_Patient_Safety_Risks_to_Add</targetReference>
+            <targetReference>Assign_Patient_Safety_Risks_to_Add_Addiction</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Name</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>New_Patient_Safety_Risks.SafetyRiskListAddiction.selectedChoiceValues</elementReference>
+                <elementReference>New_Patient_Safety_Risks_Addiction.SafetyRiskListAddiction.selectedChoiceValues</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Safety_Risk__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Safety_Risk_Selected_Psychiatry</name>
+        <label>Get Safety Risk Selected - Psychiatry</label>
+        <locationX>468</locationX>
+        <locationY>1298</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_Patient_Safety_Risks_to_Add_Psychiatry</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>New_Patient_Safety_Risks_Psychiatry.Safety_RiskPsychiatry.selectedChoiceValues</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -698,7 +972,7 @@
     <recordLookups>
         <name>Get_Safety_Risks</name>
         <label>Get Safety Risks</label>
-        <locationX>688</locationX>
+        <locationX>772</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -711,11 +985,11 @@
     <recordLookups>
         <name>ParentPatientRecordstoDelete</name>
         <label>ParentPatientRecordstoDelete</label>
-        <locationX>1040</locationX>
+        <locationX>1208</locationX>
         <locationY>1082</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>New_Parent_Patient_Safety_Risks</targetReference>
+            <targetReference>Add_Parent_Patient_Screener_by_Case_Type</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -736,7 +1010,7 @@
         <locationY>974</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>New_Patient_Safety_Risks</targetReference>
+            <targetReference>Add_Patient_Safety_Risk_by_Case_Type</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -753,8 +1027,8 @@
     <recordUpdates>
         <name>Update_Parent_Patient_Safety_Risk</name>
         <label>Update Parent Patient Safety Risk</label>
-        <locationX>886</locationX>
-        <locationY>2414</locationY>
+        <locationX>1054</locationX>
+        <locationY>2606</locationY>
         <connector>
             <targetReference>Success_Message</targetReference>
         </connector>
@@ -764,7 +1038,7 @@
         <name>Update_Patient_Safety_Risk</name>
         <label>Update Patient Safety Risk</label>
         <locationX>182</locationX>
-        <locationY>2306</locationY>
+        <locationY>2498</locationY>
         <connector>
             <targetReference>Success_Message</targetReference>
         </connector>
@@ -774,7 +1048,7 @@
         <name>cancel_message</name>
         <label>cancel message</label>
         <locationX>490</locationX>
-        <locationY>1898</locationY>
+        <locationY>2090</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -789,7 +1063,7 @@
     <screens>
         <name>Existing_Parent_Patient_Safety_Risks</name>
         <label>Existing Parent Patient Safety Risks</label>
-        <locationX>1040</locationX>
+        <locationX>1208</locationX>
         <locationY>674</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
@@ -1161,8 +1435,8 @@
     <screens>
         <name>Success_Message</name>
         <label>Success Message</label>
-        <locationX>688</locationX>
-        <locationY>2690</locationY>
+        <locationX>772</locationX>
+        <locationY>2882</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -1175,7 +1449,7 @@
         <showHeader>false</showHeader>
     </screens>
     <start>
-        <locationX>562</locationX>
+        <locationX>646</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Safety_Risks</targetReference>
