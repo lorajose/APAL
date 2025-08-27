@@ -363,16 +363,6 @@
                 <identifier>RecordFollow_Up_Status_cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Case_Type__c</fieldItem>
-                <identifier>RecordCase_Type__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
         <name>Facet-7cc0f84f-285a-432e-8361-fd3c816e1765</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -429,6 +419,16 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Parent_Case_Patient__c</fieldItem>
                 <identifier>RecordParent_Case_Patient__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Case_Type__c</fieldItem>
+                <identifier>RecordCase_Type__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-3a9911f5-167b-4896-8a7f-e337717cf899</name>
