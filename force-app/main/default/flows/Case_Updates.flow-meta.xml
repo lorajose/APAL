@@ -308,6 +308,35 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Case_Type_Update</name>
+        <label>Case Type Update?</label>
+        <locationX>1106</locationX>
+        <locationY>1847</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_CaseType</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Case_Type__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Patient_Case</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Case_Type</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Changed_Owner</name>
         <label>Changed Owner?</label>
         <locationX>1106</locationX>
@@ -383,6 +412,9 @@
         <label>Instructions Updated?</label>
         <locationX>1106</locationX>
         <locationY>1547</locationY>
+        <defaultConnector>
+            <targetReference>Case_Type_Update</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>No</defaultConnectorLabel>
         <rules>
             <name>Yes_InstructionsUpdated</name>
@@ -673,6 +705,9 @@
         <label>Update Case Subject</label>
         <locationX>974</locationX>
         <locationY>1655</locationY>
+        <connector>
+            <targetReference>Case_Type_Update</targetReference>
+        </connector>
         <flowName>Update_Case_Subject</flowName>
         <inputAssignments>
             <name>NewInstructions</name>
@@ -680,6 +715,19 @@
                 <elementReference>$Record.Notes_new__c</elementReference>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <name>recordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <subflows>
+        <name>Update_Case_Type</name>
+        <label>Update Case Type</label>
+        <locationX>974</locationX>
+        <locationY>1955</locationY>
+        <flowName>Update_Case_Type</flowName>
         <inputAssignments>
             <name>recordId</name>
             <value>
