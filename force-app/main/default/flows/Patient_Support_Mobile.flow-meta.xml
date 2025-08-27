@@ -2,22 +2,22 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <apiVersion>62.0</apiVersion>
     <assignments>
-        <name>Assign_Patient_Supports_to_Add</name>
-        <label>Assign Patient Supports to Add</label>
-        <locationX>424</locationX>
-        <locationY>1082</locationY>
+        <name>Assign_Patient_Supports_to_Add_Addiction</name>
+        <label>Assign Patient Supports to Add - Addiction</label>
+        <locationX>164</locationX>
+        <locationY>1190</locationY>
         <assignmentItems>
             <assignToReference>NewPatientSupport.Support__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Get_Support_Selected.Id</elementReference>
+                <elementReference>Get_Support_Selected_Addiction.Id</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>NewPatientSupport.Notes_new__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Patient_Supports.Notes</elementReference>
+                <elementReference>New_Patient_Supports_Addiction.Notes</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -38,42 +38,42 @@
             <assignToReference>NewPatientSupport.Scheduled__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Patient_Supports.Scheduled</elementReference>
+                <elementReference>New_Patient_Supports_Addiction.Scheduled</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>NewPatientSupport.Going__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Patient_Supports.Going</elementReference>
+                <elementReference>New_Patient_Supports_Addiction.Going</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>NewPatientSupport.Appointment_Completed__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Patient_Supports.Appointment_Completed</elementReference>
+                <elementReference>New_Patient_Supports_Addiction.Appointment_Completed</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>NewPatientSupport.Appointment_Completed_Ineffective__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Patient_Supports.Appointment_Completed_Ineffective</elementReference>
+                <elementReference>New_Patient_Supports_Addiction.Appointment_Completed_Ineffective</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>NewPatientSupport.Care_Not_Applicable__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Patient_Supports.Care_Not_Applicable</elementReference>
+                <elementReference>New_Patient_Supports_Addiction.Care_Not_Applicable</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>NewPatientSupport.Suspended__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Patient_Supports.Suspended</elementReference>
+                <elementReference>New_Patient_Supports_Addiction.Suspended</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -91,7 +91,100 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>New_Patient_Supports</targetReference>
+            <targetReference>New_Patient_Supports_Addiction</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Patient_Supports_to_Add_Psychiatry</name>
+        <label>Assign Patient Supports to Add - Psychiatry</label>
+        <locationX>468</locationX>
+        <locationY>1190</locationY>
+        <assignmentItems>
+            <assignToReference>NewPatientSupport.Support__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Support_Selected_Psychiatry.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>NewPatientSupport.Notes_new__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Patient_Supports_Psychiatry.Notes</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>NewPatientSupport.Case__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Current_Case.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>NewPatientSupport.Patient__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Current_Case.ContactId</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>NewPatientSupport.Scheduled__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Patient_Supports_Psychiatry.Scheduled</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>NewPatientSupport.Going__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Patient_Supports_Psychiatry.Going</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>NewPatientSupport.Appointment_Completed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Patient_Supports_Psychiatry.Appointment_Completed</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>NewPatientSupport.Appointment_Completed_Ineffective__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Patient_Supports_Psychiatry.Appointment_Completed_Ineffective</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>NewPatientSupport.Care_Not_Applicable__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Patient_Supports_Psychiatry.Care_Not_Applicable</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>NewPatientSupport.Suspended__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Patient_Supports_Psychiatry.Suspended</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>NewPatientSupport.Submission_Completed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>NewPatientSupports</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>NewPatientSupport</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>New_Patient_Supports_Psychiatry</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -114,7 +207,7 @@
         <name>Assign_Patient_Supports_to_Update</name>
         <label>Assign Patient Supports to Update</label>
         <locationX>424</locationX>
-        <locationY>1382</locationY>
+        <locationY>1574</locationY>
         <assignmentItems>
             <assignToReference>CurrentPatientSupport.Id</assignToReference>
             <operator>Assign</operator>
@@ -183,10 +276,47 @@
         </connector>
     </assignments>
     <decisions>
+        <name>Add_Patient_Support_by_Case_Type</name>
+        <label>Add Patient Support by Case Type</label>
+        <locationX>336</locationX>
+        <locationY>866</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Addiction_Medicine</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Addiction Medicine</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>New_Patient_Supports_Addiction</targetReference>
+            </connector>
+            <label>Addiction Medicine</label>
+        </rules>
+        <rules>
+            <name>General_Psychiatry</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>General Psychiatry</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>New_Patient_Supports_Psychiatry</targetReference>
+            </connector>
+            <label>General Psychiatry</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Navigationbuttons</name>
         <label>Navigation</label>
         <locationX>336</locationX>
-        <locationY>1574</locationY>
+        <locationY>1766</locationY>
         <defaultConnector>
             <targetReference>Cancel_Message</targetReference>
         </defaultConnector>
@@ -211,7 +341,7 @@
         <name>Remove_Items</name>
         <label>Remove Items?</label>
         <locationX>182</locationX>
-        <locationY>1790</locationY>
+        <locationY>1982</locationY>
         <defaultConnector>
             <targetReference>Update_Patient_Support</targetReference>
         </defaultConnector>
@@ -296,14 +426,28 @@
         </noMoreValuesConnector>
     </loops>
     <loops>
-        <name>New_Patient_Supports</name>
-        <label>New Patient Supports</label>
-        <locationX>336</locationX>
-        <locationY>866</locationY>
+        <name>New_Patient_Supports_Addiction</name>
+        <label>New Patient Supports - Addiction</label>
+        <locationX>76</locationX>
+        <locationY>974</locationY>
         <collectionReference>PatientSupportRepeater.AddedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Get_Support_Selected</targetReference>
+            <targetReference>Get_Support_Selected_Addiction</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Update_Patient_Supports</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>New_Patient_Supports_Psychiatry</name>
+        <label>New Patient Supports - Psychiatry</label>
+        <locationX>380</locationX>
+        <locationY>974</locationY>
+        <collectionReference>PatientSupportRepeater.AddedItems</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Get_Support_Selected_Psychiatry</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
             <targetReference>Update_Patient_Supports</targetReference>
@@ -313,7 +457,7 @@
         <name>Update_Patient_Supports</name>
         <label>Update Patient Supports</label>
         <locationX>336</locationX>
-        <locationY>1274</locationY>
+        <locationY>1466</locationY>
         <collectionReference>PatientSupportRepeater.PrepopulatedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -346,7 +490,7 @@
         <name>Create_Patient_Support</name>
         <label>Create Patient Support</label>
         <locationX>182</locationX>
-        <locationY>1682</locationY>
+        <locationY>1874</locationY>
         <connector>
             <targetReference>Remove_Items</targetReference>
         </connector>
@@ -356,7 +500,7 @@
         <name>Delete_Patient_Supports</name>
         <label>Delete Patient Supports</label>
         <locationX>50</locationX>
-        <locationY>1898</locationY>
+        <locationY>2090</locationY>
         <connector>
             <targetReference>Update_Patient_Support</targetReference>
         </connector>
@@ -405,20 +549,41 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>Get_Support_Selected</name>
-        <label>Get Support Selected</label>
-        <locationX>424</locationX>
-        <locationY>974</locationY>
+        <name>Get_Support_Selected_Addiction</name>
+        <label>Get Support Selected - Addiction</label>
+        <locationX>164</locationX>
+        <locationY>1082</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Assign_Patient_Supports_to_Add</targetReference>
+            <targetReference>Assign_Patient_Supports_to_Add_Addiction</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Name</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>New_Patient_Supports.SupportListAddiction.selectedChoiceValues</elementReference>
+                <elementReference>New_Patient_Supports_Addiction.SupportListAddiction.selectedChoiceValues</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Support__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Support_Selected_Psychiatry</name>
+        <label>Get Support Selected - Psychiatry</label>
+        <locationX>468</locationX>
+        <locationY>1082</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_Patient_Supports_to_Add_Psychiatry</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>New_Patient_Supports_Psychiatry.SupportPsychiatry.selectedChoiceValues</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -432,7 +597,7 @@
         <locationY>758</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>New_Patient_Supports</targetReference>
+            <targetReference>Add_Patient_Support_by_Case_Type</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -450,7 +615,7 @@
         <name>Update_Patient_Support</name>
         <label>Update Patient Support</label>
         <locationX>182</locationX>
-        <locationY>2090</locationY>
+        <locationY>2282</locationY>
         <connector>
             <targetReference>Success_Message</targetReference>
         </connector>
@@ -460,7 +625,7 @@
         <name>Cancel_Message</name>
         <label>Cancel Message</label>
         <locationX>490</locationX>
-        <locationY>1682</locationY>
+        <locationY>1874</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -706,7 +871,7 @@
         <name>Success_Message</name>
         <label>Success Message</label>
         <locationX>182</locationX>
-        <locationY>2198</locationY>
+        <locationY>2390</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>

@@ -2,22 +2,22 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <apiVersion>62.0</apiVersion>
     <assignments>
-        <name>Assign_Parent_Patient_Medications_to_Add</name>
-        <label>Assign Parent Patient Medications to Add</label>
-        <locationX>1128</locationX>
-        <locationY>1298</locationY>
+        <name>Assign_Parent_Patient_Medications_to_Add_Addiction</name>
+        <label>Assign Parent Patient Medications to Add - Addiction</label>
+        <locationX>1036</locationX>
+        <locationY>1406</locationY>
         <assignmentItems>
             <assignToReference>PatientMedication.Medication_List__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Get_Parent_Medication_Selected.Id</elementReference>
+                <elementReference>Get_Parent_Medication_Selected_Addiction.Id</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>PatientMedication.Notes__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Parent_Patient_Medications.Medication_Notes_Parent</elementReference>
+                <elementReference>New_Parent_Patient_Medications_Addiction.Medication_Notes_Parent</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -38,35 +38,35 @@
             <assignToReference>PatientMedication.Frequency__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Parent_Patient_Medications.Parent_Frecuency_Label</elementReference>
+                <elementReference>New_Parent_Patient_Medications_Addiction.Parent_Frecuency_Label</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>PatientMedication.Current_Medication__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Parent_Patient_Medications.Current_Medication_Parent</elementReference>
+                <elementReference>New_Parent_Patient_Medications_Addiction.Current_Medication_Parent</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>PatientMedication.Amount__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Parent_Patient_Medications.Amount_Parent</elementReference>
+                <elementReference>New_Parent_Patient_Medications_Addiction.Amount_Parent</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>PatientMedication.Dosing_Unit__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Parent_Patient_Medications.Dosing_Unit_Parent</elementReference>
+                <elementReference>New_Parent_Patient_Medications_Addiction.Dosing_Unit_Parent</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>PatientMedication.Medication_Changes__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Parent_Patient_Medications.Medication_Changes_Parent</elementReference>
+                <elementReference>New_Parent_Patient_Medications_Addiction.Medication_Changes_Parent</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -80,7 +80,7 @@
             <assignToReference>PatientMedication.Allergy__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Parent_Patient_Medications.Allergy_Parent</elementReference>
+                <elementReference>New_Parent_Patient_Medications_Addiction.Allergy_Parent</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -91,13 +91,106 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>New_Parent_Patient_Medications</targetReference>
+            <targetReference>New_Parent_Patient_Medications_Addiction</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Parent_Patient_Medications_to_Add_Psychiatry</name>
+        <label>Assign Parent Patient Medications to Add - Psychiatry</label>
+        <locationX>1340</locationX>
+        <locationY>1406</locationY>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Medication_List__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Parent_Medication_Selected_Psychiatry.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Notes__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Parent_Patient_Medications_Psychiatry.Medication_Notes_Parent</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Case__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Parent_Case.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Patient__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Parent_Case.ContactId</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Frequency__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Parent_Patient_Medications_Psychiatry.Parent_Frecuency_Label</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Current_Medication__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Parent_Patient_Medications_Psychiatry.Current_Medication_Parent</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Amount__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Parent_Patient_Medications_Psychiatry.Amount_Parent</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Dosing_Unit__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Parent_Patient_Medications_Psychiatry.Dosing_Unit_Parent</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Medication_Changes__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Parent_Patient_Medications_Psychiatry.Medication_Changes_Parent</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Submission_Completed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Allergy__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Parent_Patient_Medications_Psychiatry.Allergy_Parent</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>NewPatientMedications</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>PatientMedication</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>New_Parent_Patient_Medications_Psychiatry</targetReference>
         </connector>
     </assignments>
     <assignments>
         <name>Assign_Parent_Patient_Medications_to_Delete</name>
         <label>Assign Parent Patient Medications to Delete</label>
-        <locationX>1128</locationX>
+        <locationX>1296</locationX>
         <locationY>782</locationY>
         <assignmentItems>
             <assignToReference>RemovePatientMedications</assignToReference>
@@ -113,8 +206,8 @@
     <assignments>
         <name>Assign_Parent_Patient_Medications_to_Update</name>
         <label>Assign Parent Patient Medications to Update</label>
-        <locationX>1128</locationX>
-        <locationY>1598</locationY>
+        <locationX>1296</locationX>
+        <locationY>1790</locationY>
         <assignmentItems>
             <assignToReference>CurrentMedication.Id</assignToReference>
             <operator>Assign</operator>
@@ -183,22 +276,22 @@
         </connector>
     </assignments>
     <assignments>
-        <name>Assign_Patient_Medications_to_Add</name>
-        <label>Assign Patient Medications to Add</label>
-        <locationX>424</locationX>
-        <locationY>1190</locationY>
+        <name>Assign_Patient_Medications_to_Add_Addiction</name>
+        <label>Assign Patient Medications to Add - Addiction</label>
+        <locationX>164</locationX>
+        <locationY>1298</locationY>
         <assignmentItems>
             <assignToReference>PatientMedication.Medication_List__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Get_Medication_Selected.Id</elementReference>
+                <elementReference>Get_Medication_Selected_Addiction.Id</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>PatientMedication.Notes__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Patient_Medications.Medication_Notes</elementReference>
+                <elementReference>New_Patient_Medications_Addiction.Medication_Notes</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -219,35 +312,35 @@
             <assignToReference>PatientMedication.Frequency__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Patient_Medications.FrecuencyPicklist</elementReference>
+                <elementReference>New_Patient_Medications_Addiction.FrecuencyPicklist</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>PatientMedication.Current_Medication__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Patient_Medications.Current_Medication</elementReference>
+                <elementReference>New_Patient_Medications_Addiction.Current_Medication</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>PatientMedication.Amount__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Patient_Medications.Amount</elementReference>
+                <elementReference>New_Patient_Medications_Addiction.Amount</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>PatientMedication.Dosing_Unit__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Patient_Medications.Dosing_Unit</elementReference>
+                <elementReference>New_Patient_Medications_Addiction.Dosing_Unit</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>PatientMedication.Medication_Changes__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Patient_Medications.Medication_Changes</elementReference>
+                <elementReference>New_Patient_Medications_Addiction.Medication_Changes</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -261,7 +354,7 @@
             <assignToReference>PatientMedication.Allergy__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>New_Patient_Medications.Allergy</elementReference>
+                <elementReference>New_Patient_Medications_Addiction.Allergy</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -272,7 +365,100 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>New_Patient_Medications</targetReference>
+            <targetReference>New_Patient_Medications_Addiction</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Patient_Medications_to_Add_Psychiatry</name>
+        <label>Assign Patient Medications to Add - Psychiatry</label>
+        <locationX>468</locationX>
+        <locationY>1298</locationY>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Medication_List__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Medication_Selected_Psychiatry.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Notes__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Patient_Medications_Psychiatry.Medication_Notes</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Case__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Patient__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Current_Case.ContactId</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Frequency__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Patient_Medications_Psychiatry.FrecuencyPicklist</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Current_Medication__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Patient_Medications_Psychiatry.Current_Medication</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Amount__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Patient_Medications_Psychiatry.Amount</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Dosing_Unit__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Patient_Medications_Psychiatry.Dosing_Unit</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Medication_Changes__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Patient_Medications_Psychiatry.Medication_Changes</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Submission_Completed__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>PatientMedication.Allergy__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Patient_Medications_Psychiatry.Allergy</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>NewPatientMedications</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>PatientMedication</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>New_Patient_Medications_Psychiatry</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -295,7 +481,7 @@
         <name>Assign_Patient_Medications_to_Update</name>
         <label>Assign Patient Medications to Update</label>
         <locationX>424</locationX>
-        <locationY>1490</locationY>
+        <locationY>1682</locationY>
         <assignmentItems>
             <assignToReference>CurrentMedication.Id</assignToReference>
             <operator>Assign</operator>
@@ -364,9 +550,83 @@
         </connector>
     </assignments>
     <decisions>
+        <name>Add_Parent_Patient_Medication_by_Case_Type</name>
+        <label>Add Parent Patient Medication by Case Type</label>
+        <locationX>1208</locationX>
+        <locationY>1082</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Addiction_Medicine_Parent</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Parent_Case.Case_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Addiction Medicine</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>New_Parent_Patient_Medications_Addiction</targetReference>
+            </connector>
+            <label>Addiction Medicine</label>
+        </rules>
+        <rules>
+            <name>General_Psychiatry_Parent</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Parent_Case.Case_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>General Psychiatry</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>New_Parent_Patient_Medications_Psychiatry</targetReference>
+            </connector>
+            <label>General Psychiatry</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Add_Patient_Medication_by_Case_Type</name>
+        <label>Add Patient Medication by Case Type</label>
+        <locationX>336</locationX>
+        <locationY>974</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Addiction_Medicine</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Addiction Medicine</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>New_Patient_Medications_Addiction</targetReference>
+            </connector>
+            <label>Addiction Medicine</label>
+        </rules>
+        <rules>
+            <name>General_Psychiatry</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>General Psychiatry</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>New_Patient_Medications_Psychiatry</targetReference>
+            </connector>
+            <label>General Psychiatry</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Case_Type</name>
         <label>Case Type</label>
-        <locationX>688</locationX>
+        <locationX>772</locationX>
         <locationY>242</locationY>
         <defaultConnector>
             <targetReference>Get_Parent_Case</targetReference>
@@ -392,7 +652,7 @@
         <name>Navigationbuttons</name>
         <label>Navigation</label>
         <locationX>336</locationX>
-        <locationY>1682</locationY>
+        <locationY>1874</locationY>
         <defaultConnector>
             <targetReference>Cancel_message</targetReference>
         </defaultConnector>
@@ -416,8 +676,8 @@
     <decisions>
         <name>NavigationParentButtons</name>
         <label>Navigation</label>
-        <locationX>1040</locationX>
-        <locationY>1790</locationY>
+        <locationX>1208</locationX>
+        <locationY>1982</locationY>
         <defaultConnector>
             <targetReference>Copy_1_of_Cancel_message</targetReference>
         </defaultConnector>
@@ -442,7 +702,7 @@
         <name>Remove_Items</name>
         <label>Remove Items?</label>
         <locationX>182</locationX>
-        <locationY>1898</locationY>
+        <locationY>2090</locationY>
         <defaultConnector>
             <targetReference>Update_Patient_Medication</targetReference>
         </defaultConnector>
@@ -466,8 +726,8 @@
     <decisions>
         <name>Remove_Items_Parent</name>
         <label>Remove Items Parent?</label>
-        <locationX>886</locationX>
-        <locationY>2006</locationY>
+        <locationX>1054</locationX>
+        <locationY>2198</locationY>
         <defaultConnector>
             <targetReference>Update_Parent_Patient_Medication</targetReference>
         </defaultConnector>
@@ -556,7 +816,7 @@
     <loops>
         <name>Deleted_Parent_Patient_Medications</name>
         <label>Deleted Parent Patient Medications</label>
-        <locationX>1040</locationX>
+        <locationX>1208</locationX>
         <locationY>674</locationY>
         <collectionReference>ParentPatientMedicationRepeater.RemovedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
@@ -582,28 +842,56 @@
         </noMoreValuesConnector>
     </loops>
     <loops>
-        <name>New_Parent_Patient_Medications</name>
-        <label>New Parent Patient Medications</label>
-        <locationX>1040</locationX>
-        <locationY>1082</locationY>
+        <name>New_Parent_Patient_Medications_Addiction</name>
+        <label>New Parent Patient Medications - Addiction</label>
+        <locationX>948</locationX>
+        <locationY>1190</locationY>
         <collectionReference>ParentPatientMedicationRepeater.AddedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Get_Parent_Medication_Selected</targetReference>
+            <targetReference>Get_Parent_Medication_Selected_Addiction</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
             <targetReference>Update_Parent_Patient_Medications</targetReference>
         </noMoreValuesConnector>
     </loops>
     <loops>
-        <name>New_Patient_Medications</name>
-        <label>New Patient Medications</label>
-        <locationX>336</locationX>
-        <locationY>974</locationY>
+        <name>New_Parent_Patient_Medications_Psychiatry</name>
+        <label>New Parent Patient Medications - Psychiatry</label>
+        <locationX>1252</locationX>
+        <locationY>1190</locationY>
+        <collectionReference>ParentPatientMedicationRepeater.AddedItems</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Get_Parent_Medication_Selected_Psychiatry</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Update_Parent_Patient_Medications</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>New_Patient_Medications_Addiction</name>
+        <label>New Patient Medications - Addiction</label>
+        <locationX>76</locationX>
+        <locationY>1082</locationY>
         <collectionReference>PatientMedicationRepeater.AddedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Get_Medication_Selected</targetReference>
+            <targetReference>Get_Medication_Selected_Addiction</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Update_Patient_Medications</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>New_Patient_Medications_Psychiatry</name>
+        <label>New Patient Medications - Psychiatry</label>
+        <locationX>380</locationX>
+        <locationY>1082</locationY>
+        <collectionReference>PatientMedicationRepeater.AddedItems</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Get_Medication_Selected_Psychiatry</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
             <targetReference>Update_Patient_Medications</targetReference>
@@ -612,8 +900,8 @@
     <loops>
         <name>Update_Parent_Patient_Medications</name>
         <label>Update Parent Patient Medications</label>
-        <locationX>1040</locationX>
-        <locationY>1490</locationY>
+        <locationX>1208</locationX>
+        <locationY>1682</locationY>
         <collectionReference>ParentPatientMedicationRepeater.PrepopulatedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -627,7 +915,7 @@
         <name>Update_Patient_Medications</name>
         <label>Update Patient Medications</label>
         <locationX>336</locationX>
-        <locationY>1382</locationY>
+        <locationY>1574</locationY>
         <collectionReference>PatientMedicationRepeater.PrepopulatedItems</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -659,8 +947,8 @@
     <recordCreates>
         <name>Create_Parent_Patient_Medication</name>
         <label>Create Parent Patient Medication</label>
-        <locationX>886</locationX>
-        <locationY>1898</locationY>
+        <locationX>1054</locationX>
+        <locationY>2090</locationY>
         <connector>
             <targetReference>Remove_Items_Parent</targetReference>
         </connector>
@@ -670,7 +958,7 @@
         <name>Create_Patient_Medication</name>
         <label>Create Patient Medication</label>
         <locationX>182</locationX>
-        <locationY>1790</locationY>
+        <locationY>1982</locationY>
         <connector>
             <targetReference>Remove_Items</targetReference>
         </connector>
@@ -679,8 +967,8 @@
     <recordDeletes>
         <name>Delete_Parent_Patient_Medications</name>
         <label>Delete Parent Patient Medications</label>
-        <locationX>754</locationX>
-        <locationY>2114</locationY>
+        <locationX>922</locationX>
+        <locationY>2306</locationY>
         <connector>
             <targetReference>Update_Parent_Patient_Medication</targetReference>
         </connector>
@@ -690,7 +978,7 @@
         <name>Delete_Patient_Medications</name>
         <label>Delete Patient Medications</label>
         <locationX>50</locationX>
-        <locationY>2006</locationY>
+        <locationY>2198</locationY>
         <connector>
             <targetReference>Update_Patient_Medication</targetReference>
         </connector>
@@ -699,7 +987,7 @@
     <recordLookups>
         <name>Get_Current_Case</name>
         <label>Get Current Case</label>
-        <locationX>688</locationX>
+        <locationX>772</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -718,20 +1006,41 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>Get_Medication_Selected</name>
-        <label>Get Medication Selected</label>
-        <locationX>424</locationX>
-        <locationY>1082</locationY>
+        <name>Get_Medication_Selected_Addiction</name>
+        <label>Get Medication Selected - Addiction</label>
+        <locationX>164</locationX>
+        <locationY>1190</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Assign_Patient_Medications_to_Add</targetReference>
+            <targetReference>Assign_Patient_Medications_to_Add_Addiction</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Name</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>New_Patient_Medications.MedicationListAddiction.selectedChoiceValues</elementReference>
+                <elementReference>New_Patient_Medications_Addiction.MedicationListAddiction.selectedChoiceValues</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Medication__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Medication_Selected_Psychiatry</name>
+        <label>Get Medication Selected - Psychiatry</label>
+        <locationX>468</locationX>
+        <locationY>1190</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_Patient_Medications_to_Add_Psychiatry</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>New_Patient_Medications_Psychiatry.MedicationPsychiatry.selectedChoiceValues</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -741,7 +1050,7 @@
     <recordLookups>
         <name>Get_Parent_Case</name>
         <label>Get Parent Case</label>
-        <locationX>1040</locationX>
+        <locationX>1208</locationX>
         <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -760,20 +1069,41 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>Get_Parent_Medication_Selected</name>
-        <label>Get Parent Medication Selected</label>
-        <locationX>1128</locationX>
-        <locationY>1190</locationY>
+        <name>Get_Parent_Medication_Selected_Addiction</name>
+        <label>Get Parent Medication Selected - Addiction</label>
+        <locationX>1036</locationX>
+        <locationY>1298</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Assign_Parent_Patient_Medications_to_Add</targetReference>
+            <targetReference>Assign_Parent_Patient_Medications_to_Add_Addiction</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Name</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>New_Parent_Patient_Medications.MedicationList2Addiction.selectedChoiceValues</elementReference>
+                <elementReference>New_Parent_Patient_Medications_Addiction.MedicationList2Addiction.selectedChoiceValues</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Medication__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Parent_Medication_Selected_Psychiatry</name>
+        <label>Get Parent Medication Selected - Psychiatry</label>
+        <locationX>1340</locationX>
+        <locationY>1298</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_Parent_Patient_Medications_to_Add_Psychiatry</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>New_Parent_Patient_Medications_Psychiatry.MedicationListPsychiatry.selectedChoiceValues</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -783,7 +1113,7 @@
     <recordLookups>
         <name>Get_Parent_Patient_Medications</name>
         <label>Get Parent Patient Medications</label>
-        <locationX>1040</locationX>
+        <locationX>1208</locationX>
         <locationY>458</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -825,11 +1155,11 @@
     <recordLookups>
         <name>ParentPatientRecordstoDelete</name>
         <label>ParentPatientRecordstoDelete</label>
-        <locationX>1040</locationX>
+        <locationX>1208</locationX>
         <locationY>974</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>New_Parent_Patient_Medications</targetReference>
+            <targetReference>Add_Parent_Patient_Medication_by_Case_Type</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -850,7 +1180,7 @@
         <locationY>866</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>New_Patient_Medications</targetReference>
+            <targetReference>Add_Patient_Medication_by_Case_Type</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -867,8 +1197,8 @@
     <recordUpdates>
         <name>Update_Parent_Patient_Medication</name>
         <label>Update Parent Patient Medication</label>
-        <locationX>886</locationX>
-        <locationY>2306</locationY>
+        <locationX>1054</locationX>
+        <locationY>2498</locationY>
         <connector>
             <targetReference>Success_Message</targetReference>
         </connector>
@@ -878,7 +1208,7 @@
         <name>Update_Patient_Medication</name>
         <label>Update Patient Medication</label>
         <locationX>182</locationX>
-        <locationY>2198</locationY>
+        <locationY>2390</locationY>
         <connector>
             <targetReference>Success_Message</targetReference>
         </connector>
@@ -888,7 +1218,7 @@
         <name>Cancel_message</name>
         <label>Cancel message</label>
         <locationX>490</locationX>
-        <locationY>1790</locationY>
+        <locationY>1982</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -903,8 +1233,8 @@
     <screens>
         <name>Copy_1_of_Cancel_message</name>
         <label>Copy 1 of Cancel message</label>
-        <locationX>1194</locationX>
-        <locationY>1898</locationY>
+        <locationX>1362</locationX>
+        <locationY>2090</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -919,7 +1249,7 @@
     <screens>
         <name>Existing_Parent_Patient_Medications</name>
         <label>Existing Parent Patient Medications</label>
-        <locationX>1040</locationX>
+        <locationX>1208</locationX>
         <locationY>566</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
@@ -1411,8 +1741,8 @@
     <screens>
         <name>Success_Message</name>
         <label>Success Message</label>
-        <locationX>688</locationX>
-        <locationY>2582</locationY>
+        <locationX>772</locationX>
+        <locationY>2774</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -1425,7 +1755,7 @@
         <showHeader>false</showHeader>
     </screens>
     <start>
-        <locationX>562</locationX>
+        <locationX>646</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Current_Case</targetReference>
