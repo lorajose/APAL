@@ -79,13 +79,7 @@
                             <value>ChangeOwnerOne</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>Share</value>
-                        </valueListItems>
-                        <valueListItems>
                             <value>Delete</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Case.New_Patient_Case</value>
                         </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
@@ -389,6 +383,16 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.Status</fieldItem>
                 <identifier>RecordStatusField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Case_Type__c</fieldItem>
+                <identifier>RecordCase_Type_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
