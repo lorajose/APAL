@@ -5,11 +5,77 @@
         <name>Create_APAL_Account</name>
         <label>Create APAL Account</label>
         <locationX>50</locationX>
-        <locationY>350</locationY>
+        <locationY>566</locationY>
         <actionName>ExternalAccountCreatorApal</actionName>
         <actionType>apex</actionType>
         <connector>
             <targetReference>Was_VMAP_Account_Created_Successfully</targetReference>
+        </connector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>account</name>
+            <value>
+                <elementReference>accountRecord</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>ExternalAccountCreatorApal</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>new_case.AccountId</assignToReference>
+            <name>accountId</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>accountCreationMessage</assignToReference>
+            <name>message</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>accountCreatedSuccessfully</assignToReference>
+            <name>success</name>
+        </outputParameters>
+    </actionCalls>
+    <actionCalls>
+        <description>Creates an Account record that was retrieved from VMAP organization.</description>
+        <name>Create_APAL_Account_Psychiatry</name>
+        <label>Create APAL Account - Psychiatry</label>
+        <locationX>930</locationX>
+        <locationY>566</locationY>
+        <actionName>ExternalAccountCreatorApal</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Was_VMAP_Account_Created_Successfully_Psychiatry</targetReference>
+        </connector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>account</name>
+            <value>
+                <elementReference>accountRecord</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>ExternalAccountCreatorApal</nameSegment>
+        <offset>0</offset>
+        <outputParameters>
+            <assignToReference>new_case.AccountId</assignToReference>
+            <name>accountId</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>accountCreationMessage</assignToReference>
+            <name>message</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>accountCreatedSuccessfully</assignToReference>
+            <name>success</name>
+        </outputParameters>
+    </actionCalls>
+    <actionCalls>
+        <description>Creates an Account record that was retrieved from VMAP organization.</description>
+        <name>Create_APAL_Account_Unrelated</name>
+        <label>Create APAL Account - Unrelated</label>
+        <locationX>1810</locationX>
+        <locationY>566</locationY>
+        <actionName>ExternalAccountCreatorApal</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Was_VMAP_Account_Created_Successfully_Unrelated</targetReference>
         </connector>
         <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
@@ -38,7 +104,7 @@
         <name>assignNewPatientCase</name>
         <label>assignNewPatientCase</label>
         <locationX>226</locationX>
-        <locationY>908</locationY>
+        <locationY>1124</locationY>
         <assignmentItems>
             <assignToReference>patientCase</assignToReference>
             <operator>Assign</operator>
@@ -47,11 +113,77 @@
             </value>
         </assignmentItems>
     </assignments>
+    <assignments>
+        <name>assignNewPatientCase_Psychiatry</name>
+        <label>assignNewPatientCase - Psychiatry</label>
+        <locationX>1106</locationX>
+        <locationY>1124</locationY>
+        <assignmentItems>
+            <assignToReference>patientCase</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Create_Patient_Case_Psychiatry</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>AssignNewPatientCase_Unrelated</name>
+        <label>AssignNewPatientCase - Unrelated</label>
+        <locationX>1986</locationX>
+        <locationY>1124</locationY>
+        <assignmentItems>
+            <assignToReference>patientCase</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Create_Patient_Case_Unrelated</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
     <decisions>
-        <name>Should_create_VMAP_Account</name>
-        <label>Should create VMAP Account</label>
-        <locationX>226</locationX>
+        <name>Case_Type_Selection</name>
+        <label>Case Type Selection</label>
+        <locationX>1106</locationX>
         <locationY>242</locationY>
+        <defaultConnector>
+            <targetReference>New_Case_Patient_Case_Unrelated_Call</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Unrelated Call</defaultConnectorLabel>
+        <rules>
+            <name>Addiction_Medicine</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Case_Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Addiction Medicine</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>New_Case_Patient_Case_Addiction</targetReference>
+            </connector>
+            <label>Addiction Medicine</label>
+        </rules>
+        <rules>
+            <name>General_Psychiatry</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Case_Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>General Psychiatry</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>New_Case_Patient_Case_Psychiatry</targetReference>
+            </connector>
+            <label>General Psychiatry</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Should_create_VMAP_Account_Addiction</name>
+        <label>Should create VMAP Account - Addiction</label>
+        <locationX>226</locationX>
+        <locationY>458</locationY>
         <defaultConnector>
             <targetReference>Create_Patient_Case</targetReference>
         </defaultConnector>
@@ -73,13 +205,63 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Should_create_VMAP_Account_Psychiatry</name>
+        <label>Should create VMAP Account - Psychiatry</label>
+        <locationX>1106</locationX>
+        <locationY>458</locationY>
+        <defaultConnector>
+            <targetReference>Create_Patient_Case_Psychiatry</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No New Provider Needed</defaultConnectorLabel>
+        <rules>
+            <name>Create_New_Provider_Psychiatry</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>new_case.AccountId</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>vmap</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_APAL_Account_Psychiatry</targetReference>
+            </connector>
+            <label>Create New Provider - Psychiatry</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Should_create_VMAP_Account_Unrelated</name>
+        <label>Should create VMAP Account - Unrelated</label>
+        <locationX>1986</locationX>
+        <locationY>458</locationY>
+        <defaultConnector>
+            <targetReference>Create_Patient_Case_Unrelated</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No New Provider Needed</defaultConnectorLabel>
+        <rules>
+            <name>Create_New_Provider_Unrelated</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>new_case.AccountId</leftValueReference>
+                <operator>StartsWith</operator>
+                <rightValue>
+                    <stringValue>vmap</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_APAL_Account_Unrelated</targetReference>
+            </connector>
+            <label>Create New Provider - Unrelated</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Was_VMAP_Account_Created_Successfully</name>
         <label>Was VMAP Account Created Successfully</label>
         <locationX>50</locationX>
-        <locationY>458</locationY>
+        <locationY>674</locationY>
         <defaultConnector>
             <isGoTo>true</isGoTo>
-            <targetReference>New_Case_Patient_Case</targetReference>
+            <targetReference>New_Case_Patient_Case_Addiction</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Account was not created</defaultConnectorLabel>
         <rules>
@@ -98,12 +280,72 @@
             <label>Account was created</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>Was_VMAP_Account_Created_Successfully_Psychiatry</name>
+        <label>Was VMAP Account Created Successfully - Psychiatry</label>
+        <locationX>930</locationX>
+        <locationY>674</locationY>
+        <defaultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>New_Case_Patient_Case_Psychiatry</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Account was not created</defaultConnectorLabel>
+        <rules>
+            <name>Account_was_created_Psychiatry</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>accountCreatedSuccessfully</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Patient_Case_Psychiatry</targetReference>
+            </connector>
+            <label>Account was created - Psychiatry</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Was_VMAP_Account_Created_Successfully_Unrelated</name>
+        <label>Was VMAP Account Created Successfully - Unrelated</label>
+        <locationX>1810</locationX>
+        <locationY>674</locationY>
+        <defaultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>New_Case_Patient_Case_Unrelated_Call</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Account was not created</defaultConnectorLabel>
+        <rules>
+            <name>Account_was_created_Unrelated</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>accountCreatedSuccessfully</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Patient_Case_Unrelated</targetReference>
+            </connector>
+            <label>Account was created - Unrelated</label>
+        </rules>
+    </decisions>
     <dynamicChoiceSets>
         <name>Are_they_involved_with_the_criminal_just</name>
         <dataType>Picklist</dataType>
         <displayField xsi:nil="true"/>
         <object xsi:nil="true"/>
         <picklistField>Are_they_involved_with_the_criminal_just__c</picklistField>
+        <picklistObject>Case</picklistObject>
+    </dynamicChoiceSets>
+    <dynamicChoiceSets>
+        <name>Casetype</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>Case_Type__c</picklistField>
         <picklistObject>Case</picklistObject>
     </dynamicChoiceSets>
     <dynamicChoiceSets>
@@ -258,7 +500,7 @@
         <name>Create_Patient_Case</name>
         <label>Create Patient Case</label>
         <locationX>226</locationX>
-        <locationY>800</locationY>
+        <locationY>1016</locationY>
         <connector>
             <targetReference>assignNewPatientCase</targetReference>
         </connector>
@@ -275,6 +517,12 @@
             <field>Are_they_involved_with_the_criminal_just__c</field>
             <value>
                 <elementReference>Are_they_involved_with_the_criminal_justice</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Case_Type__c</field>
+            <value>
+                <stringValue>Addiction Medicine</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -374,21 +622,229 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Type</field>
+            <value>
+                <elementReference>Case_Type</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_Patient_Case_Psychiatry</name>
+        <label>Create Patient Case - Psychiatry</label>
+        <locationX>1106</locationX>
+        <locationY>1016</locationY>
+        <connector>
+            <targetReference>assignNewPatientCase_Psychiatry</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>fault_Psychiatry</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>AccountId</field>
+            <value>
+                <elementReference>PracticeId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Are_they_involved_with_the_criminal_just__c</field>
+            <value>
+                <elementReference>Are_they_involved_with_the_criminal_justice</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Case_Type__c</field>
+            <value>
+                <stringValue>General Psychiatry</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Challenges_in_Seeking_Continuing_Tx__c</field>
+            <value>
+                <elementReference>Challenges_in_Seeking_Continuing_Tx</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Co_occurring_Mental_Health_Conditions__c</field>
+            <value>
+                <elementReference>Co_occuring_Mental_Health_Conditions</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContactId</field>
+            <value>
+                <elementReference>PatientId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Current_Treatment_or_Counseling_for_Subs__c</field>
+            <value>
+                <elementReference>Currently_in_TX_Cx_for_Substance_Use</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <elementReference>Description</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Family_Involvement_in_Patient_s_Tx__c</field>
+            <value>
+                <elementReference>Family_Involvement_in_Patient_s_Tx</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Frequency_of_Substance_Use__c</field>
+            <value>
+                <elementReference>Frequency_of_Substance_Use</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>History_of_Substance_Use_Treatment__c</field>
+            <value>
+                <elementReference>History_of_Substance_Use_Treatment</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Patient_Substance_Use_and_Past_Tx__c</field>
+            <value>
+                <elementReference>Patient_Substance_Use_and_Past_Tx</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Patient_Willingness_for_Tx__c</field>
+            <value>
+                <elementReference>Patient_Willingness_for_Tx</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Previous_Substance_Use_Related_Hospitali__c</field>
+            <value>
+                <elementReference>Previous_Substance_Use_Hosp_ER_Visits</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <elementReference>Priority</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Provider__c</field>
+            <value>
+                <elementReference>new_case.AccountId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <elementReference>Status</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <elementReference>Subject</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Substance_Use_in_the_Last_3_Months__c</field>
+            <value>
+                <elementReference>Substance_Use_in_Last_3_Months</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Type</field>
+            <value>
+                <elementReference>Case_Type</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_Patient_Case_Unrelated</name>
+        <label>Create Patient Case - Unrelated</label>
+        <locationX>1986</locationX>
+        <locationY>1016</locationY>
+        <connector>
+            <targetReference>AssignNewPatientCase_Unrelated</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>fault_unrelated</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>AccountId</field>
+            <value>
+                <elementReference>PracticeId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Case_Type__c</field>
+            <value>
+                <stringValue>Unrelated Call</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContactId</field>
+            <value>
+                <elementReference>PatientId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <elementReference>DescriptionUnrelated</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <elementReference>PriorityUnrelated</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Provider__c</field>
+            <value>
+                <elementReference>new_case.AccountId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <elementReference>StatusUnrelated</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <elementReference>SubjectUnrelated</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Type</field>
+            <value>
+                <elementReference>Case_Type</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>Unrelated_Call_Details__c</field>
             <value>
-                <elementReference>Unrelated_Call_Details</elementReference>
+                <elementReference>Copy_1_of_Copy_1_of_Unrelated_Call_Details</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>Unrelated_Call_Reason__c</field>
             <value>
-                <elementReference>Unrelated_Call_Reason</elementReference>
+                <elementReference>Copy_1_of_Copy_1_of_Unrelated_Call_Reason</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>Unrelated_Call__c</field>
             <value>
-                <elementReference>Unrelated_Call_checkbox</elementReference>
+                <booleanValue>true</booleanValue>
             </value>
         </inputAssignments>
         <object>Case</object>
@@ -396,10 +852,33 @@
     </recordCreates>
     <runInMode>DefaultMode</runInMode>
     <screens>
+        <name>Choose_Case_Type</name>
+        <label>Choose Case Type</label>
+        <locationX>1106</locationX>
+        <locationY>134</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Case_Type_Selection</targetReference>
+        </connector>
+        <fields>
+            <name>Case_Type</name>
+            <choiceReferences>Casetype</choiceReferences>
+            <dataType>String</dataType>
+            <fieldText>Case Type</fieldText>
+            <fieldType>RadioButtons</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
         <name>fault</name>
         <label>fault</label>
         <locationX>578</locationX>
-        <locationY>908</locationY>
+        <locationY>1124</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -413,15 +892,49 @@
         <showHeader>true</showHeader>
     </screens>
     <screens>
-        <name>New_Case_Patient_Case</name>
-        <label>New Case: Patient Case</label>
+        <name>fault_Psychiatry</name>
+        <label>fault - Psychiatry</label>
+        <locationX>1458</locationX>
+        <locationY>1124</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <backButtonLabel>Back</backButtonLabel>
+        <fields>
+            <name>Copy_1_of_fault_message</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;color: rgb(234, 0, 0); background-color: rgb(255, 255, 255);&quot;&gt;{!friendlyFaultMessage}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;Press&lt;/span&gt;&lt;strong style=&quot;font-size: 18px;&quot;&gt; Back&lt;/strong&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt; and update the required fields.&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>fault_unrelated</name>
+        <label>fault - unrelated</label>
+        <locationX>2338</locationX>
+        <locationY>1124</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <backButtonLabel>Back</backButtonLabel>
+        <fields>
+            <name>Copy_1_of_Copy_1_of_fault_message</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;color: rgb(234, 0, 0); background-color: rgb(255, 255, 255);&quot;&gt;{!friendlyFaultMessage}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;Press&lt;/span&gt;&lt;strong style=&quot;font-size: 18px;&quot;&gt; Back&lt;/strong&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt; and update the required fields.&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>New_Case_Patient_Case_Addiction</name>
+        <label>New Case: Patient Case - Addiction</label>
         <locationX>226</locationX>
-        <locationY>134</locationY>
+        <locationY>350</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>Should_create_VMAP_Account</targetReference>
+            <targetReference>Should_create_VMAP_Account_Addiction</targetReference>
         </connector>
         <fields>
             <name>Case_Status</name>
@@ -808,6 +1321,663 @@
             <isRequired>false</isRequired>
             <regionContainerType>SectionWithHeader</regionContainerType>
         </fields>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>New_Case_Patient_Case_Psychiatry</name>
+        <label>New Case: Patient Case - Psychiatry</label>
+        <locationX>1106</locationX>
+        <locationY>350</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Should_create_VMAP_Account_Psychiatry</targetReference>
+        </connector>
+        <fields>
+            <name>Case_Status_Psychiatry</name>
+            <fieldText>Case Status</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Case_Status_Psychiatry_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Status_Psychiatry</name>
+                    <choiceReferences>StatusPicklist</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <stringValue>New</stringValue>
+                    </defaultValue>
+                    <fieldText>Status</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>Case_Status_Psychiatry_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Priority_Psychiatry</name>
+                    <choiceReferences>PriorityPicklist</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <stringValue>Medium</stringValue>
+                    </defaultValue>
+                    <fieldText>Priority</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+        </fields>
+        <fields>
+            <name>Case_Details_Psychiatry</name>
+            <fieldText>Case Details</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Case_Details_Psychiatry_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Subject_Psychiatry</name>
+                    <dataType>String</dataType>
+                    <fieldText>Subject</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>Case_Details_Psychiatry_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Description_Psychiatry</name>
+                    <dataType>String</dataType>
+                    <fieldText>Description</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+        </fields>
+        <fields>
+            <name>Intake_Questions_Psychiatry</name>
+            <fieldText>Intake Questions</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Intake_Questions_Psychiatry_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Substance_Use_in_Last_3_Months_Psychiatry</name>
+                    <choiceReferences>Substance_Use_in_the_Last_3_Months_Picklist</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Substance Use in Last 3 Months?</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <fields>
+                    <name>Currently_in_TX_Cx_for_Substance_Use_Psychiatry</name>
+                    <choiceReferences>Current_Treatment_or_Counseling_for_Subs_picklist</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Currently in TX/Cx for Substance Use</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <fields>
+                    <name>Co_occuring_Mental_Health_Conditions_Psychiatry</name>
+                    <choiceReferences>Co_occurring_Mental_Health_Conditions_picklist</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Co-occuring Mental Health Conditions</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <fields>
+                    <name>Patient_Willingness_for_Tx_Psychiatry</name>
+                    <choiceReferences>Patient_Willingness_for_Tx_picklist</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Patient Willingness for Tx</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>Intake_Questions_Psychiatry_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Frequency_of_Substance_Use_Psychiatry</name>
+                    <choiceReferences>Frequency_of_Substance_Use_picklist</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Frequency of Substance Use</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <fields>
+                    <name>History_of_Substance_Use_Treatment_Psychiatry</name>
+                    <choiceReferences>History_of_Substance_Use_Treatment_picklist</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>History of Substance Use Treatment</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <fields>
+                    <name>Previous_Substance_Use_Hosp_ER_Visits_Psychiatry</name>
+                    <choiceReferences>Previous_Substance_Use_Related_Hospitali</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Previous Substance Use Hosp/ER Visits</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <fields>
+                    <name>Are_they_involved_with_the_criminal_justice_Psychiatry</name>
+                    <choiceReferences>Are_they_involved_with_the_criminal_just</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Are they involved with the criminal justice?</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+        </fields>
+        <fields>
+            <name>Open_Ended_Questions_Psychiatry</name>
+            <fieldText>Open-Ended Questions</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Open_Ended_Questions_Psychiatry_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Patient_Substance_Use_and_Past_Tx_Psychiatry</name>
+                    <dataType>String</dataType>
+                    <fieldText>Patient Substance Use and Past Tx</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <fields>
+                    <name>Challenges_in_Seeking_Continuing_Tx_Psychiatry</name>
+                    <dataType>String</dataType>
+                    <fieldText>Challenges in Seeking/Continuing Tx</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <fields>
+                    <name>Family_Involvement_in_Patient_s_Tx_Psychiatry</name>
+                    <dataType>String</dataType>
+                    <fieldText>Family Involvement in Patient&apos;s Tx</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+        </fields>
+        <fields>
+            <name>Provider_Psychiatry</name>
+            <fieldText>Provider</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Provider_Psychiatry_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>providerId_Psychiatry</name>
+                    <extensionName>c:providerinCaseFlow</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>accountRecord</name>
+                        <value>
+                            <elementReference>accountRecord</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>accountId</name>
+                        <value>
+                            <elementReference>new_case.AccountId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>isFromFlow</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <outputParameters>
+                        <assignToReference>accountRecord</assignToReference>
+                        <name>accountRecord</name>
+                    </outputParameters>
+                    <outputParameters>
+                        <assignToReference>new_case.AccountId</assignToReference>
+                        <name>accountId</name>
+                    </outputParameters>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>Provider_Psychiatry_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>AccounCreationError_Psychiatry</name>
+                    <extensionName>c:externalAccountCreationError</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>errorMessage</name>
+                        <value>
+                            <elementReference>accountCreationMessage</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+        </fields>
+        <fields>
+            <name>Practice_Psychiatry</name>
+            <fieldText>Practice</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Practice_Psychiatry_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Name_Practice_Psychiatry</name>
+                    <choiceReferences>Practicelist</choiceReferences>
+                    <extensionName>flowruntime:choiceLookup</extensionName>
+                    <fieldText>Name</fieldText>
+                    <fieldType>ComponentChoice</fieldType>
+                    <inputParameters>
+                        <name>placeholder</name>
+                        <value>
+                            <stringValue>Search Practice</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+        </fields>
+        <fields>
+            <name>Patient_Psychiatry</name>
+            <fieldText>Patient</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Patient_Psychiatry_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Patient_Name_Psychiatry</name>
+                    <choiceReferences>PatientList</choiceReferences>
+                    <extensionName>flowruntime:choiceLookup</extensionName>
+                    <fieldText>Patient Name</fieldText>
+                    <fieldType>ComponentChoice</fieldType>
+                    <inputParameters>
+                        <name>placeholder</name>
+                        <value>
+                            <stringValue>Search Patient</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+        </fields>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>New_Case_Patient_Case_Unrelated_Call</name>
+        <label>New Case: Patient Case - Unrelated Call</label>
+        <locationX>1986</locationX>
+        <locationY>350</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Should_create_VMAP_Account_Unrelated</targetReference>
+        </connector>
+        <fields>
+            <name>Case_Status_Unrelated</name>
+            <fieldText>Case Status</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Case_Status_Unrelated_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>StatusUnrelated</name>
+                    <choiceReferences>StatusPicklist</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <stringValue>New</stringValue>
+                    </defaultValue>
+                    <fieldText>Status</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>Case_Status_Unrelated_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>PriorityUnrelated</name>
+                    <choiceReferences>PriorityPicklist</choiceReferences>
+                    <dataType>String</dataType>
+                    <defaultValue>
+                        <stringValue>Medium</stringValue>
+                    </defaultValue>
+                    <fieldText>Priority</fieldText>
+                    <fieldType>DropdownBox</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+        </fields>
+        <fields>
+            <name>Case_Details_Unrelated</name>
+            <fieldText>Case Details</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Case_Details_Unrelated_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>SubjectUnrelated</name>
+                    <dataType>String</dataType>
+                    <fieldText>Subject</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>Case_Details_Unrelated_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>DescriptionUnrelated</name>
+                    <dataType>String</dataType>
+                    <fieldText>Description</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+        </fields>
+        <fields>
+            <name>Provider_Unrelated</name>
+            <fieldText>Provider</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Provider_Unrelated_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>providerIdUnrelated</name>
+                    <extensionName>c:providerinCaseFlow</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>accountRecord</name>
+                        <value>
+                            <elementReference>accountRecord</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>accountId</name>
+                        <value>
+                            <elementReference>new_case.AccountId</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>isFromFlow</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <outputParameters>
+                        <assignToReference>accountRecord</assignToReference>
+                        <name>accountRecord</name>
+                    </outputParameters>
+                    <outputParameters>
+                        <assignToReference>new_case.AccountId</assignToReference>
+                        <name>accountId</name>
+                    </outputParameters>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>Provider_Unrelated_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>AccounCreationErrorUnrelated</name>
+                    <extensionName>c:externalAccountCreationError</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>errorMessage</name>
+                        <value>
+                            <elementReference>accountCreationMessage</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+        </fields>
+        <fields>
+            <name>Practice_Unrelated</name>
+            <fieldText>Practice</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Practice_Unrelated_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Name_Practice_Unrelated</name>
+                    <choiceReferences>Practicelist</choiceReferences>
+                    <extensionName>flowruntime:choiceLookup</extensionName>
+                    <fieldText>Name</fieldText>
+                    <fieldType>ComponentChoice</fieldType>
+                    <inputParameters>
+                        <name>placeholder</name>
+                        <value>
+                            <stringValue>Search Practice</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+        </fields>
+        <fields>
+            <name>Patient_Unrelated</name>
+            <fieldText>Patient</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Patient_Unrelated_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Patient_Name_Unrelated</name>
+                    <choiceReferences>PatientList</choiceReferences>
+                    <extensionName>flowruntime:choiceLookup</extensionName>
+                    <fieldText>Patient Name</fieldText>
+                    <fieldType>ComponentChoice</fieldType>
+                    <inputParameters>
+                        <name>placeholder</name>
+                        <value>
+                            <stringValue>Search Patient</stringValue>
+                        </value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+        </fields>
         <fields>
             <name>Unrelated_Call</name>
             <fieldText>Unrelated Call</fieldText>
@@ -816,49 +1986,21 @@
                 <name>Unrelated_Call_Column1</name>
                 <fieldType>Region</fieldType>
                 <fields>
-                    <name>Unrelated_Call_checkbox</name>
-                    <dataType>Boolean</dataType>
-                    <fieldText>Unrelated Call</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                </fields>
-                <fields>
-                    <name>Unrelated_Call_Reason</name>
+                    <name>Copy_1_of_Copy_1_of_Unrelated_Call_Reason</name>
                     <choiceReferences>Unrelated_Call_Reason_Picklist</choiceReferences>
                     <dataType>String</dataType>
                     <fieldText>Unrelated Call Reason</fieldText>
                     <fieldType>DropdownBox</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
-                    <visibilityRule>
-                        <conditionLogic>and</conditionLogic>
-                        <conditions>
-                            <leftValueReference>Unrelated_Call_checkbox</leftValueReference>
-                            <operator>EqualTo</operator>
-                            <rightValue>
-                                <booleanValue>true</booleanValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
                 </fields>
                 <fields>
-                    <name>Unrelated_Call_Details</name>
+                    <name>Copy_1_of_Copy_1_of_Unrelated_Call_Details</name>
                     <dataType>String</dataType>
                     <fieldText>Unrelated Call Details</fieldText>
                     <fieldType>InputField</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
-                    <visibilityRule>
-                        <conditionLogic>and</conditionLogic>
-                        <conditions>
-                            <leftValueReference>Unrelated_Call_checkbox</leftValueReference>
-                            <operator>EqualTo</operator>
-                            <rightValue>
-                                <booleanValue>true</booleanValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
                 </fields>
                 <inputParameters>
                     <name>width</name>
@@ -876,10 +2018,10 @@
         <showHeader>false</showHeader>
     </screens>
     <start>
-        <locationX>100</locationX>
+        <locationX>980</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>New_Case_Patient_Case</targetReference>
+            <targetReference>Choose_Case_Type</targetReference>
         </connector>
     </start>
     <status>Active</status>
