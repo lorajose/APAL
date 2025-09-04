@@ -67,6 +67,10 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Case_Type__c</fieldItem>
                 <identifier>RecordCase_Type__cField</identifier>
             </fieldInstance>

@@ -389,7 +389,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>readonly</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Case_Type__c</fieldItem>
                 <identifier>RecordCase_Type_cField</identifier>
