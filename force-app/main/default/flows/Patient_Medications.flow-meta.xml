@@ -663,7 +663,7 @@
             <inputParameters>
                 <name>columnFields</name>
                 <value>
-                    <stringValue>Medication__c,Notes__c,Medication_Changes__c,Current_Medication__c</stringValue>
+                    <stringValue>Medication__c,Notes_short__c,Medication_Changes__c,Current_Medication__c</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -675,7 +675,7 @@
             <inputParameters>
                 <name>columnWidths</name>
                 <value>
-                    <stringValue>Medication__c:0, Notes__c:0, Medication_Changes__c:0, Current_Medication__c:0</stringValue>
+                    <stringValue>Medication__c:0, Notes_short__c:0, Medication_Changes__c:0, Current_Medication__c:0</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>

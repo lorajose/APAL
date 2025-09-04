@@ -461,7 +461,7 @@
             <inputParameters>
                 <name>columnFields</name>
                 <value>
-                    <stringValue>Safety_RiskName__c,Notes_new__c,Recent__c,Historical__c</stringValue>
+                    <stringValue>Safety_RiskName__c,Notes_short__c,Recent__c,Historical__c</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -473,7 +473,7 @@
             <inputParameters>
                 <name>columnWidths</name>
                 <value>
-                    <stringValue>Safety_RiskName__c:0, Notes_new__c:0, Recent__c:0, Historical__c:0</stringValue>
+                    <stringValue>Safety_RiskName__c:0, Notes_short__c:0, Recent__c:0, Historical__c:0</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
