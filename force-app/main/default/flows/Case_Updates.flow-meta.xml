@@ -3,12 +3,12 @@
     <actionCalls>
         <name>In_App_Notification</name>
         <label>In-App Notification</label>
-        <locationX>1634</locationX>
+        <locationX>1898</locationX>
         <locationY>755</locationY>
         <actionName>customNotificationAction</actionName>
         <actionType>customNotificationAction</actionType>
         <connector>
-            <targetReference>Changed_Owner</targetReference>
+            <targetReference>Was_PreScreeningStatus</targetReference>
         </connector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
@@ -44,11 +44,49 @@
         <nameSegment>customNotificationAction</nameSegment>
         <offset>0</offset>
     </actionCalls>
+    <actionCalls>
+        <name>New_Task_to_Case_owner</name>
+        <label>New Task to Case owner</label>
+        <locationX>314</locationX>
+        <locationY>539</locationY>
+        <actionName>NewTask</actionName>
+        <actionType>quickAction</actionType>
+        <connector>
+            <targetReference>Was_PreScreeningStatus</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>Subject</name>
+            <value>
+                <elementReference>TaskSubject</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>ActivityDate</name>
+            <value>
+                <elementReference>TaskDueDate</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>WhatId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>OwnerId</name>
+            <value>
+                <elementReference>$Record.OwnerId</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>NewTask</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
     <apiVersion>61.0</apiVersion>
     <assignments>
         <name>Assign_Owner_to_Recipients</name>
         <label>Assign Owner to Recipients</label>
-        <locationX>1634</locationX>
+        <locationX>1898</locationX>
         <locationY>647</locationY>
         <assignmentItems>
             <assignToReference>RecipientIds</assignToReference>
@@ -64,10 +102,10 @@
     <decisions>
         <name>Case_Status</name>
         <label>Case Status</label>
-        <locationX>1106</locationX>
+        <locationX>1238</locationX>
         <locationY>431</locationY>
         <defaultConnector>
-            <targetReference>Changed_Owner</targetReference>
+            <targetReference>Was_PreScreeningStatus</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -85,6 +123,28 @@
             </connector>
             <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
             <label>New</label>
+        </rules>
+        <rules>
+            <name>PreScreening</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Pre-Screening</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>New</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>New_Task_to_Case_owner</targetReference>
+            </connector>
+            <label>PreScreening</label>
         </rules>
         <rules>
             <name>Closed_Unrelated_Call</name>
@@ -310,8 +370,8 @@
     <decisions>
         <name>Case_Type_Update</name>
         <label>Case Type Update?</label>
-        <locationX>1106</locationX>
-        <locationY>1847</locationY>
+        <locationX>1238</locationX>
+        <locationY>2255</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Yes_CaseType</name>
@@ -339,8 +399,8 @@
     <decisions>
         <name>Changed_Owner</name>
         <label>Changed Owner?</label>
-        <locationX>1106</locationX>
-        <locationY>947</locationY>
+        <locationX>1238</locationX>
+        <locationY>1355</locationY>
         <defaultConnector>
             <targetReference>Changed_Patient</targetReference>
         </defaultConnector>
@@ -385,8 +445,8 @@
     <decisions>
         <name>Changed_Patient</name>
         <label>Changed Patient?</label>
-        <locationX>1106</locationX>
-        <locationY>1247</locationY>
+        <locationX>1238</locationX>
+        <locationY>1655</locationY>
         <defaultConnector>
             <targetReference>Instructions_Updated</targetReference>
         </defaultConnector>
@@ -410,8 +470,8 @@
     <decisions>
         <name>Instructions_Updated</name>
         <label>Instructions Updated?</label>
-        <locationX>1106</locationX>
-        <locationY>1547</locationY>
+        <locationX>1238</locationX>
+        <locationY>1955</locationY>
         <defaultConnector>
             <targetReference>Case_Type_Update</targetReference>
         </defaultConnector>
@@ -439,7 +499,44 @@
             <label>Yes</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>Was_PreScreeningStatus</name>
+        <label>Was PreScreening</label>
+        <locationX>1238</locationX>
+        <locationY>947</locationY>
+        <defaultConnector>
+            <targetReference>Changed_Owner</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Prescreening_Status</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Pre-Screening</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Pre-Screening</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Open_Follow_Up_Task</targetReference>
+            </connector>
+            <label>Prescreening</label>
+        </rules>
+    </decisions>
     <environments>Default</environments>
+    <formulas>
+        <name>TaskDueDate</name>
+        <dataType>Date</dataType>
+        <expression>{!$Flow.CurrentDate} + 7</expression>
+    </formulas>
     <formulas>
         <name>toggle</name>
         <dataType>Boolean</dataType>
@@ -469,7 +566,7 @@
     <recordLookups>
         <name>Get_Notification_Type</name>
         <label>Get Notification Type</label>
-        <locationX>1106</locationX>
+        <locationX>1238</locationX>
         <locationY>323</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -487,13 +584,72 @@
         <object>CustomNotificationType</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordLookups>
+        <name>Get_Open_Follow_Up_Task</name>
+        <label>Get Open Follow Up Task</label>
+        <locationX>1106</locationX>
+        <locationY>1055</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Complete_task</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>WhatId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Subject</field>
+            <operator>StartsWith</operator>
+            <value>
+                <stringValue>Follow up on pre-screening for Case</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Complete_task</name>
+        <label>Complete task</label>
+        <locationX>1106</locationX>
+        <locationY>1163</locationY>
+        <connector>
+            <targetReference>Changed_Owner</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Open_Follow_Up_Task.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+    </recordUpdates>
     <recordUpdates>
         <name>Update_case_if_Escalated</name>
         <label>Update case if Escalated</label>
-        <locationX>578</locationX>
+        <locationX>842</locationX>
         <locationY>539</locationY>
         <connector>
-            <targetReference>Changed_Owner</targetReference>
+            <targetReference>Was_PreScreeningStatus</targetReference>
         </connector>
         <inputAssignments>
             <field>Status</field>
@@ -512,7 +668,7 @@
     <recordUpdates>
         <name>Update_Stage_to_Assigned</name>
         <label>Update Stage to Assigned</label>
-        <locationX>1634</locationX>
+        <locationX>1898</locationX>
         <locationY>539</locationY>
         <connector>
             <targetReference>Assign_Owner_to_Recipients</targetReference>
@@ -534,10 +690,10 @@
     <recordUpdates>
         <name>Update_Stage_to_Closed</name>
         <label>Update Stage to Closed</label>
-        <locationX>1370</locationX>
+        <locationX>1634</locationX>
         <locationY>539</locationY>
         <connector>
-            <targetReference>Changed_Owner</targetReference>
+            <targetReference>Was_PreScreeningStatus</targetReference>
         </connector>
         <inputAssignments>
             <field>Status</field>
@@ -556,10 +712,10 @@
     <recordUpdates>
         <name>Update_Stage_to_Consultation_Completed_Pending_CN</name>
         <label>Update Stage to Consultation Completed Pending CN</label>
-        <locationX>1106</locationX>
+        <locationX>1370</locationX>
         <locationY>539</locationY>
         <connector>
-            <targetReference>Changed_Owner</targetReference>
+            <targetReference>Was_PreScreeningStatus</targetReference>
         </connector>
         <inputAssignments>
             <field>Status</field>
@@ -578,10 +734,10 @@
     <recordUpdates>
         <name>Update_Stage_to_In_Progress</name>
         <label>Update Stage to In Progress</label>
-        <locationX>842</locationX>
+        <locationX>1106</locationX>
         <locationY>539</locationY>
         <connector>
-            <targetReference>Changed_Owner</targetReference>
+            <targetReference>Was_PreScreeningStatus</targetReference>
         </connector>
         <inputAssignments>
             <field>Status</field>
@@ -600,10 +756,10 @@
     <recordUpdates>
         <name>Update_Stage_toIn_Progress</name>
         <label>Update Stage to In Progress</label>
-        <locationX>1898</locationX>
+        <locationX>2162</locationX>
         <locationY>539</locationY>
         <connector>
-            <targetReference>Changed_Owner</targetReference>
+            <targetReference>Was_PreScreeningStatus</targetReference>
         </connector>
         <inputAssignments>
             <field>Status</field>
@@ -625,7 +781,7 @@
         <locationX>50</locationX>
         <locationY>539</locationY>
         <connector>
-            <targetReference>Changed_Owner</targetReference>
+            <targetReference>Was_PreScreeningStatus</targetReference>
         </connector>
         <inputAssignments>
             <field>Status</field>
@@ -636,7 +792,7 @@
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <start>
-        <locationX>980</locationX>
+        <locationX>1112</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Notification_Type</targetReference>
@@ -649,8 +805,8 @@
     <subflows>
         <name>Case_Owner_Change_Flow</name>
         <label>Case Owner Change Flow</label>
-        <locationX>974</locationX>
-        <locationY>1055</locationY>
+        <locationX>1106</locationX>
+        <locationY>1463</locationY>
         <connector>
             <targetReference>Changed_Patient</targetReference>
         </connector>
@@ -671,8 +827,8 @@
     <subflows>
         <name>Patient_Update_on_Case</name>
         <label>Patient Update on Case</label>
-        <locationX>974</locationX>
-        <locationY>1355</locationY>
+        <locationX>1106</locationX>
+        <locationY>1763</locationY>
         <connector>
             <targetReference>Instructions_Updated</targetReference>
         </connector>
@@ -687,10 +843,10 @@
     <subflows>
         <name>Unrelated_Call_Cleanup</name>
         <label>Unrelated Call Cleanup</label>
-        <locationX>314</locationX>
+        <locationX>578</locationX>
         <locationY>539</locationY>
         <connector>
-            <targetReference>Changed_Owner</targetReference>
+            <targetReference>Was_PreScreeningStatus</targetReference>
         </connector>
         <flowName>Unrelated_Call_Cleanup</flowName>
         <inputAssignments>
@@ -703,8 +859,8 @@
     <subflows>
         <name>Update_Case_Subject</name>
         <label>Update Case Subject</label>
-        <locationX>974</locationX>
-        <locationY>1655</locationY>
+        <locationX>1106</locationX>
+        <locationY>2063</locationY>
         <connector>
             <targetReference>Case_Type_Update</targetReference>
         </connector>
@@ -725,8 +881,8 @@
     <subflows>
         <name>Update_Case_Type</name>
         <label>Update Case Type</label>
-        <locationX>974</locationX>
-        <locationY>1955</locationY>
+        <locationX>1106</locationX>
+        <locationY>2363</locationY>
         <flowName>Update_Case_Type</flowName>
         <inputAssignments>
             <name>recordId</name>
@@ -744,6 +900,11 @@
         <name>NotificationTitle</name>
         <isViewedAsPlainText>true</isViewedAsPlainText>
         <text>Case Removed From Queue</text>
+    </textTemplates>
+    <textTemplates>
+        <name>TaskSubject</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Follow up on pre-screening for Case: {!$Record.CaseNumber}</text>
     </textTemplates>
     <variables>
         <name>AllOwners</name>
