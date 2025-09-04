@@ -1742,7 +1742,7 @@
             <targetReference>Choose_Case_Type</targetReference>
         </connector>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <variables>
         <name>accountCreatedSuccessfully</name>
         <dataType>Boolean</dataType>
