@@ -8,6 +8,12 @@
         <closed>false</closed>
     </standardValue>
     <standardValue>
+        <fullName>Pre-Screening</fullName>
+        <default>false</default>
+        <label>Pre-Screening</label>
+        <closed>false</closed>
+    </standardValue>
+    <standardValue>
         <fullName>In Progress</fullName>
         <default>false</default>
         <label>In Progress</label>
