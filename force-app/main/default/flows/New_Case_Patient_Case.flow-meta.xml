@@ -392,6 +392,14 @@
         <name>PatientList</name>
         <dataType>String</dataType>
         <displayField>Name</displayField>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>IsPersonAccount</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
         <object>Contact</object>
         <outputAssignments>
             <assignToReference>PatientId</assignToReference>
@@ -1734,7 +1742,7 @@
             <targetReference>Choose_Case_Type</targetReference>
         </connector>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
     <variables>
         <name>accountCreatedSuccessfully</name>
         <dataType>Boolean</dataType>
