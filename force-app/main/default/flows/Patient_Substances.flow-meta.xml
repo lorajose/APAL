@@ -473,7 +473,7 @@
             <inputParameters>
                 <name>columnFields</name>
                 <value>
-                    <stringValue>Substance__c,Notes_new__c,Frequency_of_Substance_Use__c,Current_Substance__c</stringValue>
+                    <stringValue>Substance__c,Notes_short__c,Frequency_of_Substance_Use__c,Current_Substance__c</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -485,7 +485,7 @@
             <inputParameters>
                 <name>columnWidths</name>
                 <value>
-                    <stringValue>Substance__c:0, Notes_new__c:0, Frequency_of_Substance_Use__c:0, Current_Substance__c:0</stringValue>
+                    <stringValue>Substance__c:0, Notes_short__c:0, Frequency_of_Substance_Use__c:0, Current_Substance__c:0</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
