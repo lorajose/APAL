@@ -292,6 +292,10 @@
             <fullName>LMHP</fullName>
             <default>false</default>
         </values>
+        <values>
+            <fullName>Psychiatrist</fullName>
+            <default>false</default>
+        </values>
     </picklistValues>
     <picklistValues>
         <picklist>Substance_Use_in_the_Last_3_Months__c</picklist>
