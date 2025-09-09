@@ -281,15 +281,15 @@
             <default>false</default>
         </values>
         <values>
+            <fullName>General Psychiatrist</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>LCSW</fullName>
             <default>false</default>
         </values>
         <values>
             <fullName>LMHP</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Psychiatrist</fullName>
             <default>false</default>
         </values>
     </picklistValues>
