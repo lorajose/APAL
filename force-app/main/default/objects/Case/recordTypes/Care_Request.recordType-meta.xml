@@ -21,6 +21,21 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Case_Type__c</picklist>
+        <values>
+            <fullName>Addiction Medicine</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>General Psychiatry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unrelated Call</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>Co_occurring_Mental_Health_Conditions__c</picklist>
         <values>
             <fullName>Don%27t Know</fullName>
@@ -263,6 +278,10 @@
         </values>
         <values>
             <fullName>Care Navigator</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>General Psychiatrist</fullName>
             <default>false</default>
         </values>
         <values>

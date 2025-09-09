@@ -281,6 +281,10 @@
             <default>false</default>
         </values>
         <values>
+            <fullName>General Psychiatrist</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>LCSW</fullName>
             <default>false</default>
         </values>

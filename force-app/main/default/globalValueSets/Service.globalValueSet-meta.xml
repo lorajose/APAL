@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>General Psychiatrist</fullName>
+        <default>false</default>
+        <label>General Psychiatrist</label>
+    </customValue>
+    <customValue>
+        <fullName>Addiction Medicine Specialist</fullName>
+        <default>false</default>
+        <label>Addiction Medicine Specialist</label>
+    </customValue>
+    <customValue>
+        <fullName>LMHP</fullName>
+        <default>false</default>
+        <label>LMHP</label>
+    </customValue>
+    <customValue>
+        <fullName>LCSW</fullName>
+        <default>false</default>
+        <label>LCSW</label>
+    </customValue>
+    <customValue>
+        <fullName>Care Navigator</fullName>
+        <default>false</default>
+        <label>Care Navigator</label>
+    </customValue>
+    <customValue>
+        <fullName>Psychiatrist</fullName>
+        <default>false</default>
+        <label>Psychiatrist</label>
+    </customValue>
+    <masterLabel>Service</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>
