@@ -26,6 +26,11 @@
                 <default>false</default>
                 <label>Wrong Number</label>
             </value>
+            <value>
+                <fullName>Could Not Reach Provider</fullName>
+                <default>false</default>
+                <label>Could Not Reach Provider</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>
