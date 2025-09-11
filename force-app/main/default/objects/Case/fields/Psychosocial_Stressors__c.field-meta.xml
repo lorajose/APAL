@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Psychosocial_Stressors__c</fullName>
+    <label>Psychosocial Stressors</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Housing insecurity</fullName>
+                <default>false</default>
+                <label>Housing insecurity</label>
+            </value>
+            <value>
+                <fullName>Food insecurity</fullName>
+                <default>false</default>
+                <label>Food insecurity</label>
+            </value>
+            <value>
+                <fullName>Caregiver burden</fullName>
+                <default>false</default>
+                <label>Caregiver burden</label>
+            </value>
+            <value>
+                <fullName>Legal issues</fullName>
+                <default>false</default>
+                <label>Legal issues</label>
+            </value>
+            <value>
+                <fullName>Job/school risk</fullName>
+                <default>false</default>
+                <label>Job/school risk</label>
+            </value>
+            <value>
+                <fullName>Relationship conflict</fullName>
+                <default>false</default>
+                <label>Relationship conflict</label>
+            </value>
+            <value>
+                <fullName>Limited supports</fullName>
+                <default>false</default>
+                <label>Limited supports</label>
+            </value>
+            <value>
+                <fullName>Reliable support present</fullName>
+                <default>false</default>
+                <label>Reliable support present</label>
+            </value>
+            <value>
+                <fullName>Financial stress</fullName>
+                <default>false</default>
+                <label>Financial stress</label>
+            </value>
+            <value>
+                <fullName>Other/Unknown</fullName>
+                <default>false</default>
+                <label>Other/Unknown</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>
