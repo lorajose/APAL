@@ -1275,7 +1275,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Medical_Notes__c</fieldItem>
                 <identifier>RecordMedical_Notes_cField</identifier>
@@ -1347,7 +1347,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Family_History_Notes__c</fieldItem>
                 <identifier>RecordFamily_History_Notes_cField</identifier>
@@ -1357,7 +1357,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.IPV_Concern__c</fieldItem>
                 <identifier>RecordIPV_Concern_cField</identifier>
@@ -1449,7 +1449,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Means_Safety_Plan__c</fieldItem>
                 <identifier>RecordMeans_Safety_Plan_cField</identifier>
@@ -1580,7 +1580,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Supports_Notes__c</fieldItem>
                 <identifier>RecordSupports_Notes_cField</identifier>
