@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Medical_Red_Flags__c</fullName>
+    <label>Medical Red Flags</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Fever/infection</fullName>
+                <default>false</default>
+                <label>Fever/infection</label>
+            </value>
+            <value>
+                <fullName>Head injury</fullName>
+                <default>false</default>
+                <label>Head injury</label>
+            </value>
+            <value>
+                <fullName>Seizure</fullName>
+                <default>false</default>
+                <label>Seizure</label>
+            </value>
+            <value>
+                <fullName>Thyroid/endocrine</fullName>
+                <default>false</default>
+                <label>Thyroid/endocrine</label>
+            </value>
+            <value>
+                <fullName>Pain/untreated</fullName>
+                <default>false</default>
+                <label>Pain/untreated</label>
+            </value>
+            <value>
+                <fullName>Steroid or stimulant use</fullName>
+                <default>false</default>
+                <label>Steroid or stimulant use</label>
+            </value>
+            <value>
+                <fullName>Medication started/stopped</fullName>
+                <default>false</default>
+                <label>Medication started/stopped</label>
+            </value>
+            <value>
+                <fullName>Delirium suspected</fullName>
+                <default>false</default>
+                <label>Delirium suspected</label>
+            </value>
+            <value>
+                <fullName>Sleep apnea</fullName>
+                <default>false</default>
+                <label>Sleep apnea</label>
+            </value>
+            <value>
+                <fullName>Other/Unknown</fullName>
+                <default>false</default>
+                <label>Other/Unknown</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

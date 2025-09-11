@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Access_to_Means__c</fullName>
+    <label>Access to Means</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>None</fullName>
+                <default>false</default>
+                <label>None</label>
+            </value>
+            <value>
+                <fullName>Firearms - Unlocked</fullName>
+                <default>false</default>
+                <label>Firearms - Unlocked</label>
+            </value>
+            <value>
+                <fullName>Firearms - Locked</fullName>
+                <default>false</default>
+                <label>Firearms - Locked</label>
+            </value>
+            <value>
+                <fullName>Large medication supply</fullName>
+                <default>false</default>
+                <label>Large medication supply</label>
+            </value>
+            <value>
+                <fullName>Ligature risk</fullName>
+                <default>false</default>
+                <label>Ligature risk</label>
+            </value>
+            <value>
+                <fullName>Other/Unknown</fullName>
+                <default>false</default>
+                <label>Other/Unknown</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Psychosis_Symptoms__c</fullName>
+    <label>Psychosis Symptoms</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Auditory hallucinations</fullName>
+                <default>false</default>
+                <label>Auditory hallucinations</label>
+            </value>
+            <value>
+                <fullName>Visual hallucinations</fullName>
+                <default>false</default>
+                <label>Visual hallucinations</label>
+            </value>
+            <value>
+                <fullName>Tactile/other hallucinations</fullName>
+                <default>false</default>
+                <label>Tactile/other hallucinations</label>
+            </value>
+            <value>
+                <fullName>Persecutory delusions</fullName>
+                <default>false</default>
+                <label>Persecutory delusions</label>
+            </value>
+            <value>
+                <fullName>Ideas of reference</fullName>
+                <default>false</default>
+                <label>Ideas of reference</label>
+            </value>
+            <value>
+                <fullName>Grandiosity</fullName>
+                <default>false</default>
+                <label>Grandiosity</label>
+            </value>
+            <value>
+                <fullName>Thought disorganization</fullName>
+                <default>false</default>
+                <label>Thought disorganization</label>
+            </value>
+            <value>
+                <fullName>Bizarre behavior</fullName>
+                <default>false</default>
+                <label>Bizarre behavior</label>
+            </value>
+            <value>
+                <fullName>Catatonia</fullName>
+                <default>false</default>
+                <label>Catatonia</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

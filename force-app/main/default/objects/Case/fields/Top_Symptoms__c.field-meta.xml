@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Top_Symptoms__c</fullName>
+    <label>Top Symptoms</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Depressed mood</fullName>
+                <default>false</default>
+                <label>Depressed mood</label>
+            </value>
+            <value>
+                <fullName>Anhedonia</fullName>
+                <default>false</default>
+                <label>Anhedonia</label>
+            </value>
+            <value>
+                <fullName>Anxiety</fullName>
+                <default>false</default>
+                <label>Anxiety</label>
+            </value>
+            <value>
+                <fullName>Panic</fullName>
+                <default>false</default>
+                <label>Panic</label>
+            </value>
+            <value>
+                <fullName>Insomnia</fullName>
+                <default>false</default>
+                <label>Insomnia</label>
+            </value>
+            <value>
+                <fullName>Hypersomnia</fullName>
+                <default>false</default>
+                <label>Hypersomnia</label>
+            </value>
+            <value>
+                <fullName>Appetite change</fullName>
+                <default>false</default>
+                <label>Appetite change</label>
+            </value>
+            <value>
+                <fullName>Low energy</fullName>
+                <default>false</default>
+                <label>Low energy</label>
+            </value>
+            <value>
+                <fullName>Poor concentration</fullName>
+                <default>false</default>
+                <label>Poor concentration</label>
+            </value>
+            <value>
+                <fullName>Psychosis</fullName>
+                <default>false</default>
+                <label>Psychosis</label>
+            </value>
+            <value>
+                <fullName>Mania/hypomania</fullName>
+                <default>false</default>
+                <label>Mania/hypomania</label>
+            </value>
+            <value>
+                <fullName>Agitation/violence</fullName>
+                <default>false</default>
+                <label>Agitation/violence</label>
+            </value>
+            <value>
+                <fullName>Cognitive change</fullName>
+                <default>false</default>
+                <label>Cognitive change</label>
+            </value>
+            <value>
+                <fullName>Trauma symptoms</fullName>
+                <default>false</default>
+                <label>Trauma symptoms</label>
+            </value>
+            <value>
+                <fullName>Substance-related</fullName>
+                <default>false</default>
+                <label>Substance-related</label>
+            </value>
+            <value>
+                <fullName>Suicidal thoughts</fullName>
+                <default>false</default>
+                <label>Suicidal thoughts</label>
+            </value>
+            <value>
+                <fullName>Homicidal thoughts</fullName>
+                <default>false</default>
+                <label>Homicidal thoughts</label>
+            </value>
+            <value>
+                <fullName>Somatic symptoms</fullName>
+                <default>false</default>
+                <label>Somatic symptoms</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>
