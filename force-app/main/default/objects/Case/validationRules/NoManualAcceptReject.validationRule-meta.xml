@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NoManualAcceptReject</fullName>
+    <active>true</active>
+    <description>A user should use the buttons to accept or reject a case.</description>
+    <errorConditionFormula>AND(
+  ISCHANGED(Status),
+		 (RecordType.DeveloperName = &apos;Care_Request&apos; ||
+				RecordType.DeveloperName = &apos;Care_Navigation&apos;),
+  OR(
+    ISPICKVAL(Status, &quot;Accepted&quot;),
+    ISPICKVAL(Status, &quot;Rejected&quot;)
+  ),
+  Not(isChanged(Toggle__c))
+)</errorConditionFormula>
+    <errorDisplayField>Status</errorDisplayField>
+    <errorMessage>You must use the buttons to accept or reject a case. You can&apos;t do it manually.</errorMessage>
+</ValidationRule>

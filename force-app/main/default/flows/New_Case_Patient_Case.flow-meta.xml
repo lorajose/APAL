@@ -1892,6 +1892,9 @@
                     <name>Suicidal_Ideation</name>
                     <choiceReferences>SuicidalIdeation</choiceReferences>
                     <dataType>String</dataType>
+                    <defaultValue>
+                        <stringValue>None</stringValue>
+                    </defaultValue>
                     <fieldText>Suicidal Ideation</fieldText>
                     <fieldType>DropdownBox</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
@@ -2028,6 +2031,9 @@
                     <name>Homicidal_Ideation</name>
                     <choiceReferences>HomicidalIdeation</choiceReferences>
                     <dataType>String</dataType>
+                    <defaultValue>
+                        <stringValue>None</stringValue>
+                    </defaultValue>
                     <fieldText>Homicidal Ideation</fieldText>
                     <fieldType>DropdownBox</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CompactLayout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SubCase</fullName>
+    <fields>Status</fields>
+    <fields>CaseNumber</fields>
+    <fields>Parent_Case_Provider__c</fields>
+    <fields>Parent_Case_Patient__c</fields>
+    <fields>ParentId</fields>
+    <label>SubCase</label>
+</CompactLayout>
