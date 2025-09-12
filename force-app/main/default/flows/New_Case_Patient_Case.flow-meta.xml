@@ -2085,6 +2085,9 @@
                 <fields>
                     <name>Weapons_Access</name>
                     <dataType>Boolean</dataType>
+                    <defaultValue>
+                        <booleanValue>false</booleanValue>
+                    </defaultValue>
                     <fieldText>Weapons Access</fieldText>
                     <fieldType>InputField</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
@@ -2346,6 +2349,9 @@
                 <fields>
                     <name>IPV_Concern</name>
                     <dataType>Boolean</dataType>
+                    <defaultValue>
+                        <booleanValue>false</booleanValue>
+                    </defaultValue>
                     <fieldText>IPV Concern</fieldText>
                     <fieldType>InputField</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
@@ -2363,7 +2369,7 @@
                             <leftValueReference>Primary_Clinical_Question_Types</leftValueReference>
                             <operator>Contains</operator>
                             <rightValue>
-                                <stringValue>Legal/safety</stringValue>
+                                <stringValue>Legal/safety (IPV, abuse, duty to warn)</stringValue>
                             </rightValue>
                         </conditions>
                     </visibilityRule>
@@ -2459,6 +2465,9 @@
                 <fields>
                     <name>Means_Safety_Plan_Agreed</name>
                     <dataType>Boolean</dataType>
+                    <defaultValue>
+                        <booleanValue>false</booleanValue>
+                    </defaultValue>
                     <fieldText>Means Safety Plan Agreed</fieldText>
                     <fieldType>InputField</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
