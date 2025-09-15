@@ -1101,7 +1101,7 @@
         <inputAssignments>
             <field>Means_Safety_Plan__c</field>
             <value>
-                <elementReference>Means_Safety_Plan_Agreed</elementReference>
+                <elementReference>MeansSafetyPlaneAgreedBoolean</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
