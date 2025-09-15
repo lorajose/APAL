@@ -329,6 +329,13 @@
                     <stringValue>On Hold</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Pre-Screening</stringValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Update_Stage_to_Closed</targetReference>
             </connector>
