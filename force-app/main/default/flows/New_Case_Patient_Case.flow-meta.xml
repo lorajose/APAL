@@ -1101,7 +1101,7 @@
         <inputAssignments>
             <field>Means_Safety_Plan__c</field>
             <value>
-                <elementReference>Means_Safety_Plan_Agreed</elementReference>
+                <elementReference>MeansSafetyPlaneAgreedBoolean</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -3025,7 +3025,7 @@
             <targetReference>Choose_Case_Type</targetReference>
         </connector>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
     <variables>
         <name>accountCreatedSuccessfully</name>
         <dataType>Boolean</dataType>
