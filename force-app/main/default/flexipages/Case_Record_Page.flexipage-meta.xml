@@ -980,7 +980,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Suicidal_Intent__c</fieldItem>
                 <identifier>RecordSuicidal_Intent_cField</identifier>

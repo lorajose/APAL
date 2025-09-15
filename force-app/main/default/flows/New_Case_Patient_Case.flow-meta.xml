@@ -2614,7 +2614,7 @@
                     <fieldText>Lethal Means Access</fieldText>
                     <fieldType>MultiSelectPicklist</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
+                    <isRequired>true</isRequired>
                     <visibilityRule>
                         <conditionLogic>or</conditionLogic>
                         <conditions>
@@ -3025,7 +3025,7 @@
             <targetReference>Choose_Case_Type</targetReference>
         </connector>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
     <variables>
         <name>accountCreatedSuccessfully</name>
         <dataType>Boolean</dataType>
