@@ -80,7 +80,7 @@
     <picklistValues>
         <picklist>Course__c</picklist>
         <values>
-            <fullName>Abrupt %28hours%E2%80%9AÄìdays%29</fullName>
+            <fullName>Abrupt %28hours%29</fullName>
             <default>false</default>
         </values>
         <values>
@@ -88,7 +88,7 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>Subacute %28days%E2%80%9AÄìweeks%29</fullName>
+            <fullName>Subacute %28days%29</fullName>
             <default>false</default>
         </values>
         <values>

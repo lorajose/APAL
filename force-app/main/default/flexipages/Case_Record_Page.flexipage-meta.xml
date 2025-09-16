@@ -1106,7 +1106,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Weapons_Access__c</fieldItem>
                 <identifier>RecordWeapons_Access_cField</identifier>
@@ -1580,7 +1580,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>required</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Supports_Notes__c</fieldItem>
                 <identifier>RecordSupports_Notes_cField</identifier>
