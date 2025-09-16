@@ -751,10 +751,10 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.StopStartDate</fieldItem>
-                <identifier>RecordStopStartDateField</identifier>
+                <fieldItem>Record.Top_Symptoms__c</fieldItem>
+                <identifier>RecordTop_Symptoms_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
