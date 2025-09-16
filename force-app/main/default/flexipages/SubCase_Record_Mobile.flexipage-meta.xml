@@ -679,8 +679,8 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Parent.StopStartDate</fieldItem>
-                <identifier>RecordParentStopStartDateField</identifier>
+                <fieldItem>Record.Parent.Top_Symptoms__c</fieldItem>
+                <identifier>RecordParentTop_Symptoms_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -928,7 +928,7 @@
                 <fieldItem>Record.Parent.Violence_Details__c</fieldItem>
                 <identifier>RecordParentViolence_Details_cField</identifier>
                 <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
+                    <booleanFilter>1 OR 2</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.Parent.Homicidal_Ideation__c}</leftValue>
                         <operator>NE</operator>
@@ -957,7 +957,7 @@
                 <fieldItem>Record.Parent.Weapons_Access__c</fieldItem>
                 <identifier>RecordParentWeapons_Access_cField</identifier>
                 <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
+                    <booleanFilter>1 OR 2</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.Parent.Homicidal_Ideation__c}</leftValue>
                         <operator>NE</operator>
@@ -1221,7 +1221,7 @@
                 <fieldItem>Record.Parent.Lethal_Means_Access__c</fieldItem>
                 <identifier>RecordParentLethal_Means_Access_cField</identifier>
                 <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
+                    <booleanFilter>1 OR 2</booleanFilter>
                     <criteria>
                         <leftValue>{!Record.Parent.Home_Safety__c}</leftValue>
                         <operator>EQUAL</operator>
@@ -1346,19 +1346,6 @@
             <fieldInstance>
                 <fieldItem>Record.Parent.Supports_Notes__c</fieldItem>
                 <identifier>RecordParentSupports_Notes_cField</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 AND 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!Record.Parent.Reliable_Supports__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>No</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Parent.Reliable_Supports__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Limited</rightValue>
-                    </criteria>
-                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <name>Facet-72f4a46a-0c1d-4c80-bed8-ec80964eb495</name>

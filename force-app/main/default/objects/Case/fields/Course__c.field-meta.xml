@@ -12,14 +12,14 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>Abrupt (hours‚Äìdays)</fullName>
+                <fullName>Abrupt (hours)</fullName>
                 <default>false</default>
-                <label>Abrupt (hours‚Äìdays)</label>
+                <label>Abrupt (hours)</label>
             </value>
             <value>
-                <fullName>Subacute (days‚Äìweeks)</fullName>
+                <fullName>Subacute (days)</fullName>
                 <default>false</default>
-                <label>Subacute (days‚Äìweeks)</label>
+                <label>Subacute (days)</label>
             </value>
             <value>
                 <fullName>Chronic (months+)</fullName>

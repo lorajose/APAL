@@ -657,8 +657,8 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Parent.StopStartDate</fieldItem>
-                <identifier>RecordParentStopStartDateField</identifier>
+                <fieldItem>Record.Parent.Top_Symptoms__c</fieldItem>
+                <identifier>RecordParentTop_Symptoms_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -1324,19 +1324,6 @@
             <fieldInstance>
                 <fieldItem>Record.Parent.Supports_Notes__c</fieldItem>
                 <identifier>RecordParentSupports_Notes_cField</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 OR 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!Record.Parent.Reliable_Supports__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>No</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Parent.Reliable_Supports__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Limited</rightValue>
-                    </criteria>
-                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <name>Facet-25908d8a-6bb0-4be2-bc4f-9e6f123b0797</name>
