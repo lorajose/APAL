@@ -1580,23 +1580,10 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Supports_Notes__c</fieldItem>
                 <identifier>RecordSupports_Notes_cField</identifier>
-                <visibilityRule>
-                    <booleanFilter>1 OR 2</booleanFilter>
-                    <criteria>
-                        <leftValue>{!Record.Reliable_Supports__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>No</rightValue>
-                    </criteria>
-                    <criteria>
-                        <leftValue>{!Record.Reliable_Supports__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Limited</rightValue>
-                    </criteria>
-                </visibilityRule>
             </fieldInstance>
         </itemInstances>
         <name>Facet-d035cfde-960e-4538-82f4-9bf11bef362b</name>
