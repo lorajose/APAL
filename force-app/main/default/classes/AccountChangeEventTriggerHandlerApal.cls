@@ -44,14 +44,14 @@ public with sharing class AccountChangeEventTriggerHandlerApal {
 
         System.debug('change events --> ' + JSON.serializePretty(accountChangeEvents));
 
-        for (AccountChangeEvent accountChangeEvent : accountChangeEvents) {
-            if ((!accountChangeEvent.Disable_AccountSync__c && !accountsByChangeEventIds.get(accountChangeEvent.Id).Disable_AccountSync__c)
+         for (AccountChangeEvent accountChangeEvent : accountChangeEvents) {
+            if ((!accountChangeEvent.Disable_AccountSync__c && (accountsByChangeEventIds.containsKey(accountChangeEvent.Id) && !accountsByChangeEventIds.get(accountChangeEvent.Id).Disable_AccountSync__c))
                     && !syncService.shouldBypassSync(accountChangeEvent)
-                    && AccountSyncUtilApal.isRecordTypeInSyncSetting(accountsByChangeEventIds.get(accountChangeEvent.Id))
-                    && AccountSyncUtilApal.isAccountSyncAllowedInCurrentMode(accountsByChangeEventIds.get(accountChangeEvent.Id))
-                    && AccountSyncUtilApal.CDC_EVENTS_TO_TRACK.contains(accountChangeEvent.ChangeEventHeader.getChangeType())
+                    && AccountSyncUtil.isRecordTypeInSyncSetting(accountsByChangeEventIds.get(accountChangeEvent.Id))
+                    && AccountSyncUtil.isAccountSyncAllowedInCurrentMode(accountsByChangeEventIds.get(accountChangeEvent.Id))
+                    && AccountSyncUtil.CDC_EVENTS_TO_TRACK.contains(accountChangeEvent.ChangeEventHeader.getChangeType())
             ) {
-                syncLogger.setDebug(AccountSyncUtilApal.DEBUG_HEADER_CHANGE_EVENT, accountChangeEvent);
+                syncLogger.setDebug(AccountSyncUtil.DEBUG_HEADER_CHANGE_EVENT, accountChangeEvent);
                 accountChangeEventsToSync.add(accountChangeEvent);
             }
         }

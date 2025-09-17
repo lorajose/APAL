@@ -17,6 +17,26 @@
                     <name>uiBehavior</name>
                     <value>readonly</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.Case_Type__c</fieldItem>
+                <identifier>RecordCase_Type__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.IsEscalated</fieldItem>
+                <identifier>RecordIsEscalatedField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Number_of_Care_Requests_Offered__c</fieldItem>
                 <identifier>RecordNumber_of_Services_Offered_cField</identifier>
                 <visibilityRule>
@@ -49,10 +69,10 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>readonly</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.IsEscalated</fieldItem>
-                <identifier>RecordIsEscalatedField</identifier>
+                <fieldItem>Record.Notes_new__c</fieldItem>
+                <identifier>RecordNotes__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-04c66fad-4808-414b-9a49-11ba43614c13</name>
@@ -67,6 +87,16 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.OwnerId</fieldItem>
                 <identifier>RecordOwnerIdField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Priority</fieldItem>
+                <identifier>RecordPriorityField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -101,16 +131,6 @@
                         <rightValue>System Administrator</rightValue>
                     </criteria>
                 </visibilityRule>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Priority</fieldItem>
-                <identifier>RecordPriorityField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-2c65b2ea-efa9-4bb4-9fed-517c4f1d0ec7</name>
@@ -405,6 +425,13 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection5</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Case_Type__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Addiction Medicine</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -423,6 +450,13 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection7</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Case_Type__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>Addiction Medicine</rightValue>
+                    </criteria>
+                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -796,7 +830,7 @@
                     <name>actionNames</name>
                     <valueList>
                         <valueListItems>
-                            <value>Case.New_Care_Request</value>
+                            <value>Case.New_CareRequest</value>
                             <visibilityRule>
                                 <criteria>
                                     <leftValue>{!Record.Unrelated_Call__c}</leftValue>

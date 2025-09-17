@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Primary_Clinical_Question_Types__c</fullName>
+    <inlineHelpText>Select all that apply to focus the psychiatrist consult.</inlineHelpText>
+    <label>Primary Clinical Question Types</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Diagnosis clarification</fullName>
+                <default>false</default>
+                <label>Diagnosis clarification</label>
+            </value>
+            <value>
+                <fullName>Medication strategy</fullName>
+                <default>false</default>
+                <label>Medication strategy</label>
+            </value>
+            <value>
+                <fullName>Safety risk assessment</fullName>
+                <default>false</default>
+                <label>Safety risk assessment</label>
+            </value>
+            <value>
+                <fullName>Psychosis evaluation</fullName>
+                <default>false</default>
+                <label>Psychosis evaluation</label>
+            </value>
+            <value>
+                <fullName>Mania/hypomania evaluation</fullName>
+                <default>false</default>
+                <label>Mania/hypomania evaluation</label>
+            </value>
+            <value>
+                <fullName>Substance use/withdrawal management</fullName>
+                <default>false</default>
+                <label>Substance use/withdrawal management</label>
+            </value>
+            <value>
+                <fullName>Medical contributor/clearance guidance</fullName>
+                <default>false</default>
+                <label>Medical contributor/clearance guidance</label>
+            </value>
+            <value>
+                <fullName>Therapy/referral options</fullName>
+                <default>false</default>
+                <label>Therapy/referral options</label>
+            </value>
+            <value>
+                <fullName>Treatment-resistant depression strategy</fullName>
+                <default>false</default>
+                <label>Treatment-resistant depression strategy</label>
+            </value>
+            <value>
+                <fullName>ADHD evaluation</fullName>
+                <default>false</default>
+                <label>ADHD evaluation</label>
+            </value>
+            <value>
+                <fullName>Anxiety differential</fullName>
+                <default>false</default>
+                <label>Anxiety differential</label>
+            </value>
+            <value>
+                <fullName>Sleep disturbance management</fullName>
+                <default>false</default>
+                <label>Sleep disturbance management</label>
+            </value>
+            <value>
+                <fullName>PTSD/trauma evaluation</fullName>
+                <default>false</default>
+                <label>PTSD/trauma evaluation</label>
+            </value>
+            <value>
+                <fullName>Disposition guidance (OP vs ED)</fullName>
+                <default>false</default>
+                <label>Disposition guidance (OP vs ED)</label>
+            </value>
+            <value>
+                <fullName>Legal/safety (IPV, abuse, duty to warn)</fullName>
+                <default>false</default>
+                <label>Legal/safety (IPV, abuse, duty to warn)</label>
+            </value>
+            <value>
+                <fullName>Cognitive change/delirium</fullName>
+                <default>false</default>
+                <label>Cognitive change/delirium</label>
+            </value>
+            <value>
+                <fullName>Perinatal/postpartum concerns</fullName>
+                <default>false</default>
+                <label>Perinatal/postpartum concerns</label>
+            </value>
+            <value>
+                <fullName>Child/adolescent concern</fullName>
+                <default>false</default>
+                <label>Child/adolescent concern</label>
+            </value>
+            <value>
+                <fullName>Capacity assessment</fullName>
+                <default>false</default>
+                <label>Capacity assessment</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

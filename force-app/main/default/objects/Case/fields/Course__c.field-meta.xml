@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Course__c</fullName>
+    <label>Course</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Abrupt (hours)</fullName>
+                <default>false</default>
+                <label>Abrupt (hours)</label>
+            </value>
+            <value>
+                <fullName>Subacute (days)</fullName>
+                <default>false</default>
+                <label>Subacute (days)</label>
+            </value>
+            <value>
+                <fullName>Chronic (months+)</fullName>
+                <default>false</default>
+                <label>Chronic (months+)</label>
+            </value>
+            <value>
+                <fullName>Waxing/waning</fullName>
+                <default>false</default>
+                <label>Waxing/waning</label>
+            </value>
+            <value>
+                <fullName>Unknown</fullName>
+                <default>false</default>
+                <label>Unknown</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

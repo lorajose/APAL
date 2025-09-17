@@ -4,7 +4,7 @@
         <name>In_App_Notification</name>
         <label>In-App Notification</label>
         <locationX>1304</locationX>
-        <locationY>2054</locationY>
+        <locationY>2162</locationY>
         <actionName>customNotificationAction</actionName>
         <actionType>customNotificationAction</actionType>
         <connector>
@@ -43,13 +43,100 @@
         </inputParameters>
         <nameSegment>customNotificationAction</nameSegment>
         <offset>0</offset>
-        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>In_App_Notification_GP</name>
+        <label>In-App Notification</label>
+        <locationX>3680</locationX>
+        <locationY>2270</locationY>
+        <actionName>customNotificationAction</actionName>
+        <actionType>customNotificationAction</actionType>
+        <connector>
+            <targetReference>Send_Email_Notification_GP</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>customNotifTypeId</name>
+            <value>
+                <elementReference>Get_Notification_Type_GP.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientIds</name>
+            <value>
+                <elementReference>RecipientsIds</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>title</name>
+            <value>
+                <elementReference>NotificationTitle</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <elementReference>NotificationBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>targetId</name>
+            <value>
+                <elementReference>NewRecordId</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>customNotificationAction</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>In_App_Notification_GPUsers</name>
+        <label>In-App Notification</label>
+        <locationX>3108</locationX>
+        <locationY>1970</locationY>
+        <actionName>customNotificationAction</actionName>
+        <actionType>customNotificationAction</actionType>
+        <connector>
+            <targetReference>Send_Email_Notification_GPUsers</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>customNotifTypeId</name>
+            <value>
+                <elementReference>Get_Notification_Type_GPUsers.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientIds</name>
+            <value>
+                <elementReference>RecipientsIds</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>title</name>
+            <value>
+                <elementReference>NotificationTitle</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>body</name>
+            <value>
+                <elementReference>NotificationBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>targetId</name>
+            <value>
+                <elementReference>NewRecordId</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>customNotificationAction</nameSegment>
+        <offset>0</offset>
     </actionCalls>
     <actionCalls>
         <name>Send_Email_Notification</name>
         <label>Send Email Notification</label>
         <locationX>1304</locationX>
-        <locationY>2162</locationY>
+        <locationY>2270</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -79,14 +166,83 @@
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
         <offset>0</offset>
-        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Email_Notification_GP</name>
+        <label>Send Email Notification</label>
+        <locationX>3680</locationX>
+        <locationY>2378</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddressesArray</name>
+            <value>
+                <elementReference>RecipientEmails</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>NotificationTitle</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>NotificationBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>relatedRecordId</name>
+            <value>
+                <elementReference>NewRecordId</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Email_Notification_GPUsers</name>
+        <label>Send Email Notification</label>
+        <locationX>3108</locationX>
+        <locationY>2078</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddressesArray</name>
+            <value>
+                <elementReference>RecipientEmails</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>NotificationTitle</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>NotificationBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>relatedRecordId</name>
+            <value>
+                <elementReference>NewRecordId</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
     </actionCalls>
     <apiVersion>60.0</apiVersion>
     <assignments>
         <name>Assign_new_Record</name>
         <label>Assign new Record</label>
         <locationX>1172</locationX>
-        <locationY>1646</locationY>
+        <locationY>1754</locationY>
         <assignmentItems>
             <assignToReference>NewRecordId</assignToReference>
             <operator>Assign</operator>
@@ -102,7 +258,7 @@
         <name>Assign_new_Record2</name>
         <label>Assign new Record</label>
         <locationX>1436</locationX>
-        <locationY>1646</locationY>
+        <locationY>1754</locationY>
         <assignmentItems>
             <assignToReference>NewRecordId</assignToReference>
             <operator>Assign</operator>
@@ -115,10 +271,58 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Assign_new_Record_GP</name>
+        <label>Assign new Record</label>
+        <locationX>3548</locationX>
+        <locationY>1862</locationY>
+        <assignmentItems>
+            <assignToReference>NewRecordId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Create_Care_Navigation_Case_GP2</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assign_Selected_User_GP</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_new_Record_GP2</name>
+        <label>Assign new Record</label>
+        <locationX>3812</locationX>
+        <locationY>1862</locationY>
+        <assignmentItems>
+            <assignToReference>NewRecordId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Create_Care_Team_Member_GP</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assign_Selected_User_GP</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_new_Record_GPUsers</name>
+        <label>Assign new Record</label>
+        <locationX>3108</locationX>
+        <locationY>1646</locationY>
+        <assignmentItems>
+            <assignToReference>NewRecordId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Create_Care_Team_Member_GPUsers</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assign_Selected_User_GPUsers</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assign_Selected_User</name>
         <label>Assign Selected User</label>
         <locationX>1304</locationX>
-        <locationY>1838</locationY>
+        <locationY>1946</locationY>
         <assignmentItems>
             <assignToReference>RecipientsIds</assignToReference>
             <operator>Add</operator>
@@ -138,10 +342,56 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Assign_Selected_User_GP</name>
+        <label>Assign Selected User</label>
+        <locationX>3680</locationX>
+        <locationY>2054</locationY>
+        <assignmentItems>
+            <assignToReference>RecipientsIds</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>User_Data_Table_GP.firstSelectedRow.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>RecipientEmails</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>User_Data_Table_GP.firstSelectedRow.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Notification_Type_GP</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Selected_User_GPUsers</name>
+        <label>Assign Selected User</label>
+        <locationX>3108</locationX>
+        <locationY>1754</locationY>
+        <assignmentItems>
+            <assignToReference>RecipientsIds</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>User_Data_Table_GPUsers.firstSelectedRow.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>RecipientEmails</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>User_Data_Table_GPUsers.firstSelectedRow.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Notification_Type_GPUsers</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Count_Records</name>
         <label>Count Records</label>
         <locationX>50</locationX>
-        <locationY>890</locationY>
+        <locationY>998</locationY>
         <assignmentItems>
             <assignToReference>CountRecords</assignToReference>
             <operator>AssignCount</operator>
@@ -154,10 +404,58 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Count_Records_GP</name>
+        <label>Count Records</label>
+        <locationX>1986</locationX>
+        <locationY>998</locationY>
+        <assignmentItems>
+            <assignToReference>CountRecords</assignToReference>
+            <operator>AssignCount</operator>
+            <value>
+                <elementReference>RecordCollection</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Open_Case_ExistsSELF_GP</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Count_Records_GP2</name>
+        <label>Count Records</label>
+        <locationX>3526</locationX>
+        <locationY>1430</locationY>
+        <assignmentItems>
+            <assignToReference>CountRecords</assignToReference>
+            <operator>AssignCount</operator>
+            <value>
+                <elementReference>RecordCollection</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Open_Case_Exists_GP</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Count_Records_GPUsers</name>
+        <label>Count Records</label>
+        <locationX>3020</locationX>
+        <locationY>1322</locationY>
+        <assignmentItems>
+            <assignToReference>CountRecords</assignToReference>
+            <operator>AssignCount</operator>
+            <value>
+                <elementReference>RecordCollection</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Open_Case_Exists_GPUsers</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Count_Records_Other</name>
         <label>Count Records</label>
         <locationX>1150</locationX>
-        <locationY>1214</locationY>
+        <locationY>1322</locationY>
         <assignmentItems>
             <assignToReference>CountRecords</assignToReference>
             <operator>AssignCount</operator>
@@ -169,11 +467,59 @@
             <targetReference>Open_Case_Exists_Other</targetReference>
         </connector>
     </assignments>
+    <choices>
+        <name>Addiction_Medicine_Specialist</name>
+        <choiceText>Addiction Medicine Specialist</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Addiction Medicine Specialist</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Care_NavigatorGP</name>
+        <choiceText>Care Navigator</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Care Navigator</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>General_Psychiatrist</name>
+        <choiceText>General Psychiatrist</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>General Psychiatrist</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>LCSW</name>
+        <choiceText>LCSW</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>LCSW</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>LMHP</name>
+        <choiceText>LMHP</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>LMHP</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>Psychiatrist</name>
+        <choiceText>Psychiatrist</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Psychiatrist</stringValue>
+        </value>
+    </choices>
     <decisions>
         <name>Check_Record_Type</name>
         <label>Check Record Type</label>
         <locationX>1304</locationX>
-        <locationY>1430</locationY>
+        <locationY>1538</locationY>
         <defaultConnector>
             <targetReference>Create_Care_Team_Member</targetReference>
         </defaultConnector>
@@ -195,10 +541,35 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Check_Record_Type_GP</name>
+        <label>Check Record Type</label>
+        <locationX>3680</locationX>
+        <locationY>1646</locationY>
+        <defaultConnector>
+            <targetReference>Create_Care_Team_Member_GP</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Care Request</defaultConnectorLabel>
+        <rules>
+            <name>Care_Navigation_GP</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Service_GP</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Care Navigator</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Care_Navigation_Case_GP2</targetReference>
+            </connector>
+            <label>Care Navigation</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>CN_Team_Member_Exists</name>
         <label>CN Team Member Exists</label>
         <locationX>72</locationX>
-        <locationY>1430</locationY>
+        <locationY>1538</locationY>
         <defaultConnector>
             <targetReference>Create_Case_Team_Member_CN</targetReference>
         </defaultConnector>
@@ -217,10 +588,32 @@
         </rules>
     </decisions>
     <decisions>
+        <name>CN_Team_Member_Exists_GP</name>
+        <label>CN Team Member Exists</label>
+        <locationX>2008</locationX>
+        <locationY>1538</locationY>
+        <defaultConnector>
+            <targetReference>Create_Case_Team_Member_CN_GP</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Exists_GP</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Existing_Team_Member_GP</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Yes Exists</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>CR_Team_Member_Exists</name>
         <label>CR Team Member Exists</label>
         <locationX>600</locationX>
-        <locationY>1430</locationY>
+        <locationY>1538</locationY>
         <defaultConnector>
             <targetReference>Create_Case_Team_Member_CR</targetReference>
         </defaultConnector>
@@ -239,10 +632,94 @@
         </rules>
     </decisions>
     <decisions>
+        <name>CR_Team_Member_Exists_GP</name>
+        <label>CR Team Member Exists</label>
+        <locationX>2536</locationX>
+        <locationY>1538</locationY>
+        <defaultConnector>
+            <targetReference>Create_Case_Team_Member_CR_GP</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_CR_Exists_GP</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Existing_Team_Member</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Yes Exists</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>General_Psychiatrist_Selected</name>
+        <label>General Psychiatrist Selected</label>
+        <locationX>3273</locationX>
+        <locationY>890</locationY>
+        <defaultConnector>
+            <targetReference>Get_Roles_GP</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_General_Psychiatrist</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Service_GP</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>General_Psychiatrist</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_General_Psychiatrist_Users</targetReference>
+            </connector>
+            <label>Yes General Psychiatrist</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>GP_or_AM_Care_Request</name>
+        <label>GP or AM Care Request?</label>
+        <locationX>2338</locationX>
+        <locationY>566</locationY>
+        <defaultConnectorLabel>Unrelated</defaultConnectorLabel>
+        <rules>
+            <name>AM</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Case.Case_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Addiction Medicine</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Care_Team_Member</targetReference>
+            </connector>
+            <label>AM</label>
+        </rules>
+        <rules>
+            <name>GP</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Case.Case_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>General Psychiatry</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Care_Team_Member_GP</targetReference>
+            </connector>
+            <label>GP</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Is_Self</name>
         <label>Is Self?</label>
         <locationX>600</locationX>
-        <locationY>674</locationY>
+        <locationY>782</locationY>
         <defaultConnector>
             <targetReference>Get_Roles</targetReference>
         </defaultConnector>
@@ -264,10 +741,35 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Is_Self_GP</name>
+        <label>Is Self?</label>
+        <locationX>2629</locationX>
+        <locationY>782</locationY>
+        <defaultConnector>
+            <targetReference>General_Psychiatrist_Selected</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_GP</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Assign_to_Self_GP</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Sub_Cases_Self_GP</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Open_Case_Exists</name>
         <label>Open Case Exists?</label>
         <locationX>50</locationX>
-        <locationY>998</locationY>
+        <locationY>1106</locationY>
         <defaultConnector>
             <targetReference>Get_Existing_Team_Member</targetReference>
         </defaultConnector>
@@ -289,10 +791,60 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Open_Case_Exists_GP</name>
+        <label>Open Case Exists?</label>
+        <locationX>3526</locationX>
+        <locationY>1538</locationY>
+        <defaultConnector>
+            <targetReference>Check_Record_Type_GP</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>YesOpenCaseExist_GP</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>CountRecords</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Error</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Open_Case_Exists_GPUsers</name>
+        <label>Open Case Exists?</label>
+        <locationX>3020</locationX>
+        <locationY>1430</locationY>
+        <defaultConnector>
+            <targetReference>Create_Care_Team_Member_GPUsers</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_OpenCaseExists_GPUsers</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>CountRecords</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Error</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Open_Case_Exists_Other</name>
         <label>Open Case Exists?</label>
         <locationX>1150</locationX>
-        <locationY>1322</locationY>
+        <locationY>1430</locationY>
         <defaultConnector>
             <targetReference>Check_Record_Type</targetReference>
         </defaultConnector>
@@ -314,10 +866,35 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Open_Case_ExistsSELF_GP</name>
+        <label>Open Case Exists?</label>
+        <locationX>1986</locationX>
+        <locationY>1106</locationY>
+        <defaultConnector>
+            <targetReference>Get_Existing_Team_Member_GP</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>OpenCaseExists_GP</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>CountRecords</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Error</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Self_Record_Type</name>
         <label>Self Record Type</label>
         <locationX>336</locationX>
-        <locationY>1214</locationY>
+        <locationY>1322</locationY>
         <defaultConnector>
             <targetReference>Create_Care_Team_Case</targetReference>
         </defaultConnector>
@@ -334,6 +911,31 @@
             </conditions>
             <connector>
                 <targetReference>Create_Care_Navigation_Case2</targetReference>
+            </connector>
+            <label>Care Navigator</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Self_Record_Type_GP</name>
+        <label>Self Record Type</label>
+        <locationX>2272</locationX>
+        <locationY>1322</locationY>
+        <defaultConnector>
+            <targetReference>Create_Care_Team_Case_GP</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Other</defaultConnectorLabel>
+        <rules>
+            <name>Care_Navigator_GP</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$UserRole.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Care Navigator</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Care_Navigation_Case_GP</targetReference>
             </connector>
             <label>Care Navigator</label>
         </rules>
@@ -390,7 +992,7 @@
         <name>Create_Care_Navigation_Case</name>
         <label>Create Care Navigation Case</label>
         <locationX>1172</locationX>
-        <locationY>1538</locationY>
+        <locationY>1646</locationY>
         <connector>
             <targetReference>Assign_new_Record</targetReference>
         </connector>
@@ -407,13 +1009,19 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Case_Type__c</field>
+            <value>
+                <elementReference>Get_Case.Case_Type__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>ContactId</field>
             <value>
                 <elementReference>Get_Case.ContactId</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>Notes__c</field>
+            <field>Notes_new__c</field>
             <value>
                 <elementReference>Notes</elementReference>
             </value>
@@ -461,7 +1069,7 @@
         <name>Create_Care_Navigation_Case2</name>
         <label>Create Care Navigation Case</label>
         <locationX>72</locationX>
-        <locationY>1322</locationY>
+        <locationY>1430</locationY>
         <connector>
             <targetReference>CN_Team_Member_Exists</targetReference>
         </connector>
@@ -478,13 +1086,19 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Case_Type__c</field>
+            <value>
+                <elementReference>Get_Case.Case_Type__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>ContactId</field>
             <value>
                 <elementReference>Get_Case.ContactId</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>Notes__c</field>
+            <field>Notes_new__c</field>
             <value>
                 <elementReference>NotesSelf</elementReference>
             </value>
@@ -529,10 +1143,164 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
     <recordCreates>
+        <name>Create_Care_Navigation_Case_GP</name>
+        <label>Create Care Navigation Case</label>
+        <locationX>2008</locationX>
+        <locationY>1430</locationY>
+        <connector>
+            <targetReference>CN_Team_Member_Exists_GP</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Assignment_Timestamp__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Call_Back_and_Communication_Preference__c</field>
+            <value>
+                <elementReference>Call_Back_and_Communication_Preference_GP</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Case_Type__c</field>
+            <value>
+                <elementReference>Get_Case.Case_Type__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContactId</field>
+            <value>
+                <elementReference>Get_Case.ContactId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Notes_new__c</field>
+            <value>
+                <elementReference>NotesSelf_GP</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ParentId</field>
+            <value>
+                <elementReference>Get_Case.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_Care_Navigation_Record_Type.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Service__c</field>
+            <value>
+                <elementReference>$UserRole.Name</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Accepted</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <elementReference>SubjectSelfText</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_Care_Navigation_Case_GP2</name>
+        <label>Create Care Navigation Case</label>
+        <locationX>3548</locationX>
+        <locationY>1754</locationY>
+        <connector>
+            <targetReference>Assign_new_Record_GP</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Assignment_Timestamp__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Call_Back_and_Communication_Preference__c</field>
+            <value>
+                <elementReference>Call_Back_and_Communication_Preference2_GP</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Case_Type__c</field>
+            <value>
+                <elementReference>Get_Case.Case_Type__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContactId</field>
+            <value>
+                <elementReference>Get_Case.ContactId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Notes_new__c</field>
+            <value>
+                <elementReference>Call_Back_and_Communication_Preference2_GP</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>User_Data_Table_GP.firstSelectedRow.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ParentId</field>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_Care_Navigation_Record_Type.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Service__c</field>
+            <value>
+                <elementReference>Service_GP</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Assigned</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <elementReference>SubjectText</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
         <name>Create_Care_Team_Case</name>
         <label>Create Care Team Case</label>
         <locationX>600</locationX>
-        <locationY>1322</locationY>
+        <locationY>1430</locationY>
         <connector>
             <targetReference>CR_Team_Member_Exists</targetReference>
         </connector>
@@ -549,15 +1317,98 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Case_Type__c</field>
+            <value>
+                <elementReference>Get_Case.Case_Type__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>ContactId</field>
             <value>
                 <elementReference>Get_Case.ContactId</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>Notes__c</field>
+            <field>Notes_new__c</field>
             <value>
                 <elementReference>NotesSelf</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ParentId</field>
+            <value>
+                <elementReference>Get_Case.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_Care_Request_Record_Type.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Service__c</field>
+            <value>
+                <elementReference>$UserRole.Name</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Accepted</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <elementReference>SubjectSelfText</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_Care_Team_Case_GP</name>
+        <label>Create Care Team Case</label>
+        <locationX>2536</locationX>
+        <locationY>1430</locationY>
+        <connector>
+            <targetReference>CR_Team_Member_Exists_GP</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Assignment_Timestamp__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Call_Back_and_Communication_Preference__c</field>
+            <value>
+                <elementReference>Call_Back_and_Communication_Preference_GP</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Case_Type__c</field>
+            <value>
+                <elementReference>Get_Case.Case_Type__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContactId</field>
+            <value>
+                <elementReference>Get_Case.ContactId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Notes_new__c</field>
+            <value>
+                <elementReference>NotesSelf_GP</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -603,7 +1454,7 @@
         <name>Create_Care_Team_Member</name>
         <label>Create Care Team Member</label>
         <locationX>1436</locationX>
-        <locationY>1538</locationY>
+        <locationY>1646</locationY>
         <connector>
             <targetReference>Assign_new_Record2</targetReference>
         </connector>
@@ -620,13 +1471,19 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Case_Type__c</field>
+            <value>
+                <elementReference>Get_Case.Case_Type__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>ContactId</field>
             <value>
                 <elementReference>Get_Case.ContactId</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
-            <field>Notes__c</field>
+            <field>Notes_new__c</field>
             <value>
                 <elementReference>Notes</elementReference>
             </value>
@@ -671,10 +1528,190 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
     <recordCreates>
+        <name>Create_Care_Team_Member_GP</name>
+        <label>Create Care Team Member</label>
+        <locationX>3812</locationX>
+        <locationY>1754</locationY>
+        <connector>
+            <targetReference>Assign_new_Record_GP2</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Assignment_Timestamp__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Call_Back_and_Communication_Preference__c</field>
+            <value>
+                <elementReference>Call_Back_and_Communication_Preference2_GP</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Case_Type__c</field>
+            <value>
+                <elementReference>Get_Case.Case_Type__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContactId</field>
+            <value>
+                <elementReference>Get_Case.ContactId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Notes_new__c</field>
+            <value>
+                <elementReference>Notes_GP</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>User_Data_Table_GP.firstSelectedRow.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ParentId</field>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_Care_Request_Record_Type.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Service__c</field>
+            <value>
+                <elementReference>Service_GP</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Assigned</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <elementReference>SubjectText</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_Care_Team_Member_GPUsers</name>
+        <label>Create Care Team Member</label>
+        <locationX>3108</locationX>
+        <locationY>1538</locationY>
+        <connector>
+            <targetReference>Assign_new_Record_GPUsers</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Assignment_Timestamp__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Call_Back_and_Communication_Preference__c</field>
+            <value>
+                <elementReference>Call_Back_and_Communication_Preference_GPUsers</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Case_Type__c</field>
+            <value>
+                <elementReference>Get_Case.Case_Type__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContactId</field>
+            <value>
+                <elementReference>Get_Case.ContactId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Notes_new__c</field>
+            <value>
+                <elementReference>Notes_GPUsers</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>User_Data_Table_GPUsers.firstSelectedRow.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ParentId</field>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RecordTypeId</field>
+            <value>
+                <elementReference>Get_Care_Request_Record_Type.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Service__c</field>
+            <value>
+                <stringValue>General Psychiatrist</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Assigned</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <elementReference>SubjectText</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
         <name>Create_Case_Team_Member_CN</name>
         <label>Create Case Team Member CN</label>
         <locationX>204</locationX>
-        <locationY>1538</locationY>
+        <locationY>1646</locationY>
+        <inputAssignments>
+            <field>MemberId</field>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ParentId</field>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>TeamRoleId</field>
+            <value>
+                <elementReference>Get_Case_Team_Role.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>CaseTeamMember</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_Case_Team_Member_CN_GP</name>
+        <label>Create Case Team Member CN</label>
+        <locationX>2140</locationX>
+        <locationY>1646</locationY>
         <inputAssignments>
             <field>MemberId</field>
             <value>
@@ -700,7 +1737,33 @@
         <name>Create_Case_Team_Member_CR</name>
         <label>Create Case Team Member CR</label>
         <locationX>732</locationX>
-        <locationY>1538</locationY>
+        <locationY>1646</locationY>
+        <inputAssignments>
+            <field>MemberId</field>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ParentId</field>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>TeamRoleId</field>
+            <value>
+                <elementReference>Get_Case_Team_Role.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>CaseTeamMember</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_Case_Team_Member_CR_GP</name>
+        <label>Create Case Team Member CR</label>
+        <locationX>2668</locationX>
+        <locationY>1646</locationY>
         <inputAssignments>
             <field>MemberId</field>
             <value>
@@ -725,7 +1788,7 @@
     <recordLookups>
         <name>Get_Care_Navigation_Record_Type</name>
         <label>Get Care Navigation Record Type</label>
-        <locationX>600</locationX>
+        <locationX>2338</locationX>
         <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -746,7 +1809,7 @@
     <recordLookups>
         <name>Get_Care_Request_Record_Type</name>
         <label>Get Care Request Record Type</label>
-        <locationX>600</locationX>
+        <locationX>2338</locationX>
         <locationY>242</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -767,7 +1830,7 @@
     <recordLookups>
         <name>Get_Case</name>
         <label>Get Case</label>
-        <locationX>600</locationX>
+        <locationX>2338</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -788,11 +1851,11 @@
     <recordLookups>
         <name>Get_Case_Team_Role</name>
         <label>Get Case Team Role</label>
-        <locationX>600</locationX>
+        <locationX>2338</locationX>
         <locationY>458</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Assign_Care_Team_Member</targetReference>
+            <targetReference>GP_or_AM_Care_Request</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -810,7 +1873,7 @@
         <name>Get_Existing_Team_Member</name>
         <label>Get Existing Team Member</label>
         <locationX>336</locationX>
-        <locationY>1106</locationY>
+        <locationY>1214</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Self_Record_Type</targetReference>
@@ -835,10 +1898,66 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <name>Get_Existing_Team_Member_GP</name>
+        <label>Get Existing Team Member</label>
+        <locationX>2272</locationX>
+        <locationY>1214</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Self_Record_Type_GP</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>ParentId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Case.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>MemberId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CaseTeamMember</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_General_Psychiatrist_Users</name>
+        <label>Get General Psychiatrist Users</label>
+        <locationX>3020</locationX>
+        <locationY>998</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Show_GP_Users</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Is_General_Psychiatrist__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>IsActive</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>User</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Notification_Type</name>
         <label>Get Notification Type</label>
         <locationX>1304</locationX>
-        <locationY>1946</locationY>
+        <locationY>2054</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>In_App_Notification</targetReference>
@@ -856,10 +1975,52 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <name>Get_Notification_Type_GP</name>
+        <label>Get Notification Type</label>
+        <locationX>3680</locationX>
+        <locationY>2162</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>In_App_Notification_GP</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Desktop_and_Mobile</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CustomNotificationType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Notification_Type_GPUsers</name>
+        <label>Get Notification Type</label>
+        <locationX>3108</locationX>
+        <locationY>1862</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>In_App_Notification_GPUsers</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Desktop_and_Mobile</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CustomNotificationType</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Roles</name>
         <label>Get Roles</label>
         <locationX>1150</locationX>
-        <locationY>782</locationY>
+        <locationY>890</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Get_Users</targetReference>
@@ -877,10 +2038,31 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <name>Get_Roles_GP</name>
+        <label>Get Roles</label>
+        <locationX>3526</locationX>
+        <locationY>998</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Users_GP</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Service_GP</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>UserRole</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Sub_Cases_Other_Users</name>
         <label>Get Sub Cases - Other Users</label>
         <locationX>1150</locationX>
-        <locationY>1106</locationY>
+        <locationY>1214</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Count_Records_Other</targetReference>
@@ -926,10 +2108,108 @@
         <queriedFields>Id</queriedFields>
     </recordLookups>
     <recordLookups>
+        <name>Get_Sub_Cases_Other_Users_GP</name>
+        <label>Get Sub Cases - Other Users</label>
+        <locationX>3526</locationX>
+        <locationY>1322</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Count_Records_GP2</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>ParentId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Case.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>OwnerId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>User_Data_Table_GP.firstSelectedRow.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Unconfirmed Navigation</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Successful Navigation</stringValue>
+            </value>
+        </filters>
+        <object>Case</object>
+        <outputReference>RecordCollection</outputReference>
+        <queriedFields>Id</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Sub_Cases_Other_Users_GPUsers</name>
+        <label>Get Sub Cases - Other Users</label>
+        <locationX>3020</locationX>
+        <locationY>1214</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Count_Records_GPUsers</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>ParentId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Case.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>OwnerId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>User_Data_Table_GPUsers.firstSelectedRow.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Unconfirmed Navigation</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Successful Navigation</stringValue>
+            </value>
+        </filters>
+        <object>Case</object>
+        <outputReference>RecordCollection</outputReference>
+        <queriedFields>Id</queriedFields>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Sub_Cases_Self</name>
         <label>Get Sub Cases - Self</label>
         <locationX>50</locationX>
-        <locationY>782</locationY>
+        <locationY>890</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Count_Records</targetReference>
@@ -975,10 +2255,59 @@
         <queriedFields>Id</queriedFields>
     </recordLookups>
     <recordLookups>
+        <name>Get_Sub_Cases_Self_GP</name>
+        <label>Get Sub Cases - Self</label>
+        <locationX>1986</locationX>
+        <locationY>890</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Count_Records_GP</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>ParentId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Case.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>OwnerId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Unconfirmed Navigation</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Successful Navigation</stringValue>
+            </value>
+        </filters>
+        <object>Case</object>
+        <outputReference>RecordCollection</outputReference>
+        <queriedFields>Id</queriedFields>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Users</name>
         <label>Get Users</label>
         <locationX>1150</locationX>
-        <locationY>890</locationY>
+        <locationY>998</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Show_Users</targetReference>
@@ -1002,12 +2331,40 @@
         <object>User</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordLookups>
+        <name>Get_Users_GP</name>
+        <label>Get Users</label>
+        <locationX>3526</locationX>
+        <locationY>1106</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Show_Users_GP</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>UserRoleId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Roles_GP.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>IsActive</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>User</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <runInMode>SystemModeWithoutSharing</runInMode>
     <screens>
         <name>Assign_Care_Team_Member</name>
         <label>Assign Care Team Member</label>
         <locationX>600</locationX>
-        <locationY>566</locationY>
+        <locationY>674</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -1066,7 +2423,11 @@
                 <fieldType>Region</fieldType>
                 <fields>
                     <name>Service</name>
-                    <choiceReferences>CaseServices</choiceReferences>
+                    <choiceReferences>Addiction_Medicine_Specialist</choiceReferences>
+                    <choiceReferences>Care_NavigatorGP</choiceReferences>
+                    <choiceReferences>LCSW</choiceReferences>
+                    <choiceReferences>LMHP</choiceReferences>
+                    <choiceReferences>Psychiatrist</choiceReferences>
                     <dataType>String</dataType>
                     <fieldText>Service</fieldText>
                     <fieldType>RadioButtons</fieldType>
@@ -1098,10 +2459,107 @@
         <showHeader>true</showHeader>
     </screens>
     <screens>
+        <name>Assign_Care_Team_Member_GP</name>
+        <label>Assign Care Team Member</label>
+        <locationX>2629</locationX>
+        <locationY>674</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Is_Self_GP</targetReference>
+        </connector>
+        <fields>
+            <name>Assign_to_Self_GP</name>
+            <dataType>Boolean</dataType>
+            <fieldText>Assign to Self</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>NotesSelf_GP</name>
+            <dataType>String</dataType>
+            <fieldText>Instructions</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Assign_to_Self_GP</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <booleanValue>true</booleanValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>Call_Back_and_Communication_Preference_GP</name>
+            <dataType>String</dataType>
+            <fieldText>Call Back and Communication Preference</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Assign_to_Self_GP</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue>
+                        <booleanValue>true</booleanValue>
+                    </rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>Assign_Care_Team_Member_GP_Section1</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Assign_Care_Team_Member_GP_Section1_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Service_GP</name>
+                    <choiceReferences>General_Psychiatrist</choiceReferences>
+                    <choiceReferences>LMHP</choiceReferences>
+                    <choiceReferences>LCSW</choiceReferences>
+                    <choiceReferences>Care_NavigatorGP</choiceReferences>
+                    <dataType>String</dataType>
+                    <fieldText>Service</fieldText>
+                    <fieldType>RadioButtons</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>Assign_to_Self_GP</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <booleanValue>false</booleanValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
         <name>Error</name>
         <label>Error</label>
-        <locationX>600</locationX>
-        <locationY>2546</locationY>
+        <locationX>2338</locationX>
+        <locationY>2930</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -1114,10 +2572,89 @@
         <showHeader>true</showHeader>
     </screens>
     <screens>
+        <name>Show_GP_Users</name>
+        <label>Show GP Users</label>
+        <locationX>3020</locationX>
+        <locationY>1106</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Get_Sub_Cases_Other_Users_GPUsers</targetReference>
+        </connector>
+        <fields>
+            <name>User_Data_Table_GPUsers</name>
+            <dataTypeMappings>
+                <typeName>T</typeName>
+                <typeValue>User</typeValue>
+            </dataTypeMappings>
+            <extensionName>flowruntime:datatable</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value>
+                    <stringValue>User Data Table</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>selectionMode</name>
+                <value>
+                    <stringValue>SINGLE_SELECT</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>minRowSelection</name>
+                <value>
+                    <numberValue>1.0</numberValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>tableData</name>
+                <value>
+                    <elementReference>Get_General_Psychiatrist_Users</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>columns</name>
+                <value>
+                    <stringValue>[{&quot;apiName&quot;:&quot;Name&quot;,&quot;guid&quot;:&quot;column-d176&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:0,&quot;label&quot;:&quot;Full Name&quot;,&quot;type&quot;:&quot;text&quot;},{&quot;apiName&quot;:&quot;Phone&quot;,&quot;guid&quot;:&quot;column-4476&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:1,&quot;label&quot;:&quot;Phone&quot;,&quot;type&quot;:&quot;phone&quot;},{&quot;apiName&quot;:&quot;Email&quot;,&quot;guid&quot;:&quot;column-d34e&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:2,&quot;label&quot;:&quot;Email&quot;,&quot;type&quot;:&quot;email&quot;}]</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>maxRowSelection</name>
+                <value>
+                    <numberValue>1.0</numberValue>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+        </fields>
+        <fields>
+            <name>Notes_GPUsers</name>
+            <dataType>String</dataType>
+            <fieldText>Instructions</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>Call_Back_and_Communication_Preference_GPUsers</name>
+            <dataType>String</dataType>
+            <fieldText>Call Back and Communication Preference</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+        </fields>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
         <name>Show_Users</name>
         <label>Show Users</label>
         <locationX>1150</locationX>
-        <locationY>998</locationY>
+        <locationY>1106</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -1192,8 +2729,87 @@
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
     </screens>
+    <screens>
+        <name>Show_Users_GP</name>
+        <label>Show Users</label>
+        <locationX>3526</locationX>
+        <locationY>1214</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Get_Sub_Cases_Other_Users_GP</targetReference>
+        </connector>
+        <fields>
+            <name>User_Data_Table_GP</name>
+            <dataTypeMappings>
+                <typeName>T</typeName>
+                <typeValue>User</typeValue>
+            </dataTypeMappings>
+            <extensionName>flowruntime:datatable</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value>
+                    <stringValue>User Data Table</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>selectionMode</name>
+                <value>
+                    <stringValue>SINGLE_SELECT</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>minRowSelection</name>
+                <value>
+                    <numberValue>1.0</numberValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>tableData</name>
+                <value>
+                    <elementReference>Get_Users_GP</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>columns</name>
+                <value>
+                    <stringValue>[{&quot;apiName&quot;:&quot;Name&quot;,&quot;guid&quot;:&quot;column-d176&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:0,&quot;label&quot;:&quot;Full Name&quot;,&quot;type&quot;:&quot;text&quot;},{&quot;apiName&quot;:&quot;Phone&quot;,&quot;guid&quot;:&quot;column-4476&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:1,&quot;label&quot;:&quot;Phone&quot;,&quot;type&quot;:&quot;phone&quot;},{&quot;apiName&quot;:&quot;Email&quot;,&quot;guid&quot;:&quot;column-d34e&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:2,&quot;label&quot;:&quot;Email&quot;,&quot;type&quot;:&quot;email&quot;}]</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>maxRowSelection</name>
+                <value>
+                    <numberValue>1.0</numberValue>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+        </fields>
+        <fields>
+            <name>Notes_GP</name>
+            <dataType>String</dataType>
+            <fieldText>Instructions</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>Call_Back_and_Communication_Preference2_GP</name>
+            <dataType>String</dataType>
+            <fieldText>Call Back and Communication Preference</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+        </fields>
+        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
     <start>
-        <locationX>474</locationX>
+        <locationX>2212</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Case</targetReference>

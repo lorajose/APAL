@@ -6,6 +6,33 @@
     <compactLayoutAssignment>CaseLayout</compactLayoutAssignment>
     <label>Patient Case</label>
     <picklistValues>
+        <picklist>Access_to_Means__c</picklist>
+        <values>
+            <fullName>Firearms - Locked</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Firearms - Unlocked</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Large medication supply</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ligature risk</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>None</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other%2FUnknown</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>Are_they_involved_with_the_criminal_just__c</picklist>
         <values>
             <fullName>Don%27t Know</fullName>
@@ -17,6 +44,21 @@
         </values>
         <values>
             <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Case_Type__c</picklist>
+        <values>
+            <fullName>Addiction Medicine</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>General Psychiatry</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unrelated Call</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -36,6 +78,29 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Course__c</picklist>
+        <values>
+            <fullName>Abrupt %28hours%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Chronic %28months%2B%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Subacute %28days%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unknown</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Waxing%2Fwaning</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>Current_Treatment_or_Counseling_for_Subs__c</picklist>
         <values>
             <fullName>Don%27t Know</fullName>
@@ -47,6 +112,37 @@
         </values>
         <values>
             <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Family_History__c</picklist>
+        <values>
+            <fullName>Bipolar</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Depression%2FAnxiety</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>None</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Psychosis%2FSchizophrenia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SUD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Suicide</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unknown</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -100,6 +196,249 @@
         </values>
         <values>
             <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Home_Safety__c</picklist>
+        <values>
+            <fullName>Safe</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unknown</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unsafe</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Homicidal_Ideation__c</picklist>
+        <values>
+            <fullName>Active - No Plan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Active - With Plan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>None</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Passive</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unknown</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Impaired_Domains__c</picklist>
+        <values>
+            <fullName>ADLs</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Appetite</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Concentration</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Energy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Relationships</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>School</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sleep</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Work</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Impairment_Level__c</picklist>
+        <values>
+            <fullName>Mild</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Moderate</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>None</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Severe</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unknown</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Lethal_Means_Access__c</picklist>
+        <values>
+            <fullName>Firearms - Locked</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Firearms - Unlocked</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Large medication supply</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>None</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Mania_Symptoms__c</picklist>
+        <values>
+            <fullName>Decreased need for sleep</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Distractibility</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Grandiosity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Increased goal-directed activity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Irritability</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pressured speech</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Racing thoughts</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Risky spending%2Fsex%2Fdriving</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Medical_Red_Flags__c</picklist>
+        <values>
+            <fullName>Delirium suspected</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fever%2Finfection</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Head injury</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medication started%2Fstopped</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other%2FUnknown</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pain%2Funtreated</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Seizure</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sleep apnea</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Steroid or stimulant use</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Thyroid%2Fendocrine</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Neuromod_History__c</picklist>
+        <values>
+            <fullName>ECT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ketamine%2FEsketamine</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MAOI</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>None</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>TMS</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Orientation__c</picklist>
+        <values>
+            <fullName>Alert %26 oriented %28x3%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Confused%2Fwaxing-waning</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Disoriented</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Memory impairment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unknown</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -160,6 +499,148 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Primary_Clinical_Question_Types__c</picklist>
+        <values>
+            <fullName>ADHD evaluation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Anxiety differential</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Capacity assessment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Child%2Fadolescent concern</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cognitive change%2Fdelirium</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Diagnosis clarification</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Disposition guidance %28OP vs ED%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Legal%2Fsafety %28IPV%2C abuse%2C duty to warn%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mania%2Fhypomania evaluation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medical contributor%2Fclearance guidance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medication strategy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PTSD%2Ftrauma evaluation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Perinatal%2Fpostpartum concerns</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Psychosis evaluation</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Safety risk assessment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sleep disturbance management</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Substance use%2Fwithdrawal management</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Therapy%2Freferral options</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Treatment-resistant depression strategy</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Prior_Diagnoses__c</picklist>
+        <values>
+            <fullName>ADHD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bipolar I</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bipolar II</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Eating Disorder</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>GAD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MDD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OCD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PTSD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Panic Disorder</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Personality Disorder</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Psychotic Disorder</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SUD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unknown</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>Priority</picklist>
         <values>
             <fullName>High</fullName>
@@ -214,6 +695,88 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Psychosis_Symptoms__c</picklist>
+        <values>
+            <fullName>Auditory hallucinations</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bizarre behavior</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Catatonia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Grandiosity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Ideas of reference</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Persecutory delusions</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tactile%2Fother hallucinations</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Thought disorganization</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Visual hallucinations</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Psychosocial_Stressors__c</picklist>
+        <values>
+            <fullName>Caregiver burden</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Financial stress</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Food insecurity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Housing insecurity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Job%2Fschool risk</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Legal issues</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Limited supports</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other%2FUnknown</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Relationship conflict</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reliable support present</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>Reason</picklist>
         <values>
             <fullName>Breakdown</fullName>
@@ -245,6 +808,25 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Reliable_Supports__c</picklist>
+        <values>
+            <fullName>Limited</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unknown</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>SLAViolation__c</picklist>
         <values>
             <fullName>No</fullName>
@@ -256,6 +838,29 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Self_Harm_History__c</picklist>
+        <values>
+            <fullName>Both</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NSSI only</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>None</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Prior suicide attempt</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unknown</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>Service__c</picklist>
         <values>
             <fullName>Addiction Medicine Specialist</fullName>
@@ -263,6 +868,10 @@
         </values>
         <values>
             <fullName>Care Navigator</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>General Psychiatrist</fullName>
             <default>false</default>
         </values>
         <values>
@@ -294,6 +903,104 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>Suicidal_Ideation__c</picklist>
+        <values>
+            <fullName>Active - No Plan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Active - With Plan</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>None</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Passive</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Unknown</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Top_Symptoms__c</picklist>
+        <values>
+            <fullName>Agitation%2Fviolence</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Anhedonia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Anxiety</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Appetite change</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Cognitive change</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Depressed mood</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Homicidal thoughts</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hypersomnia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Insomnia</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Low energy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mania%2Fhypomania</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Panic</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Poor concentration</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Psychosis</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Somatic symptoms</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Substance-related</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Suicidal thoughts</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Trauma symptoms</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>Type</picklist>
         <values>
             <fullName>Electrical</fullName>
@@ -318,6 +1025,10 @@
     </picklistValues>
     <picklistValues>
         <picklist>Unrelated_Call_Reason__c</picklist>
+        <values>
+            <fullName>Could Not Reach Provider</fullName>
+            <default>false</default>
+        </values>
         <values>
             <fullName>MOMs Call</fullName>
             <default>false</default>

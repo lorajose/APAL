@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Mania_Symptoms__c</fullName>
+    <label>Mania/Hypomania Symptoms</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Decreased need for sleep</fullName>
+                <default>false</default>
+                <label>Decreased need for sleep</label>
+            </value>
+            <value>
+                <fullName>Pressured speech</fullName>
+                <default>false</default>
+                <label>Pressured speech</label>
+            </value>
+            <value>
+                <fullName>Racing thoughts</fullName>
+                <default>false</default>
+                <label>Racing thoughts</label>
+            </value>
+            <value>
+                <fullName>Grandiosity</fullName>
+                <default>false</default>
+                <label>Grandiosity</label>
+            </value>
+            <value>
+                <fullName>Risky spending/sex/driving</fullName>
+                <default>false</default>
+                <label>Risky spending/sex/driving</label>
+            </value>
+            <value>
+                <fullName>Increased goal-directed activity</fullName>
+                <default>false</default>
+                <label>Increased goal-directed activity</label>
+            </value>
+            <value>
+                <fullName>Irritability</fullName>
+                <default>false</default>
+                <label>Irritability</label>
+            </value>
+            <value>
+                <fullName>Distractibility</fullName>
+                <default>false</default>
+                <label>Distractibility</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>
