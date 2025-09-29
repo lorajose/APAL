@@ -4,7 +4,7 @@
         <name>In_App_Notification</name>
         <label>In-App Notification</label>
         <locationX>842</locationX>
-        <locationY>1106</locationY>
+        <locationY>1406</locationY>
         <actionName>customNotificationAction</actionName>
         <actionType>customNotificationAction</actionType>
         <connector>
@@ -42,13 +42,13 @@
             </value>
         </inputParameters>
         <nameSegment>customNotificationAction</nameSegment>
-        <versionSegment>1</versionSegment>
+        <offset>0</offset>
     </actionCalls>
     <actionCalls>
         <name>Send_Rejection_Email_Notification</name>
         <label>Send Rejection Email Notification</label>
         <locationX>842</locationX>
-        <locationY>1214</locationY>
+        <locationY>1514</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <connector>
@@ -80,14 +80,46 @@
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
-        <versionSegment>1</versionSegment>
+        <offset>0</offset>
     </actionCalls>
     <apiVersion>60.0</apiVersion>
+    <assignments>
+        <name>Assign_GP_Role</name>
+        <label>Assign GP Role</label>
+        <locationX>380</locationX>
+        <locationY>674</locationY>
+        <assignmentItems>
+            <assignToReference>RoleId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_GP_Case_Team_Role</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Existing_Case_Team_Member</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Role</name>
+        <label>Assign Role</label>
+        <locationX>644</locationX>
+        <locationY>674</locationY>
+        <assignmentItems>
+            <assignToReference>RoleId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Case_Team_Role</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Existing_Case_Team_Member</targetReference>
+        </connector>
+    </assignments>
     <assignments>
         <name>Assign_User_ID_Email</name>
         <label>Assign User ID &amp; Email</label>
         <locationX>842</locationX>
-        <locationY>890</locationY>
+        <locationY>1190</locationY>
         <assignmentItems>
             <assignToReference>RecipientIds</assignToReference>
             <operator>Add</operator>
@@ -126,7 +158,7 @@
         <name>Case_Team_Member_Exists</name>
         <label>Case Team Member Exists?</label>
         <locationX>182</locationX>
-        <locationY>890</locationY>
+        <locationY>1190</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Yes</name>
@@ -145,10 +177,35 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Is_General_Psychiatrist_Role</name>
+        <label>Is General Psychiatrist Role</label>
+        <locationX>512</locationX>
+        <locationY>458</locationY>
+        <defaultConnector>
+            <targetReference>Get_Case_Team_Role</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_GP_Role</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$User.Is_General_Psychiatrist__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_GP_Case_Team_Role</targetReference>
+            </connector>
+            <label>Yes - GP Role</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Status_of_Acceptance</name>
         <label>Status of Acceptance</label>
         <locationX>512</locationX>
-        <locationY>674</locationY>
+        <locationY>974</locationY>
         <defaultConnector>
             <targetReference>Update_Rejected_Case</targetReference>
         </defaultConnector>
@@ -200,7 +257,7 @@
         <name>Create_Case_Team_Member</name>
         <label>Create Case Team Member</label>
         <locationX>50</locationX>
-        <locationY>998</locationY>
+        <locationY>1298</locationY>
         <inputAssignments>
             <field>MemberId</field>
             <value>
@@ -216,7 +273,7 @@
         <inputAssignments>
             <field>TeamRoleId</field>
             <value>
-                <elementReference>Get_Case_Team_Role.Id</elementReference>
+                <elementReference>RoleId.Id</elementReference>
             </value>
         </inputAssignments>
         <object>CaseTeamMember</object>
@@ -246,11 +303,11 @@
     <recordLookups>
         <name>Get_Case_Team_Role</name>
         <label>Get Case Team Role</label>
-        <locationX>512</locationX>
-        <locationY>458</locationY>
+        <locationX>644</locationX>
+        <locationY>566</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Get_Existing_Case_Team_Member</targetReference>
+            <targetReference>Assign_Role</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -268,7 +325,7 @@
         <name>Get_Existing_Case_Team_Member</name>
         <label>Get Existing Case Team Member</label>
         <locationX>512</locationX>
-        <locationY>566</locationY>
+        <locationY>866</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Status_of_Acceptance</targetReference>
@@ -293,10 +350,31 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <name>Get_GP_Case_Team_Role</name>
+        <label>Get GP Case Team Role</label>
+        <locationX>380</locationX>
+        <locationY>566</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_GP_Role</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>General Psychiatrist</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CaseTeamRole</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Notification_Type</name>
         <label>Get Notification Type</label>
         <locationX>842</locationX>
-        <locationY>998</locationY>
+        <locationY>1298</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>In_App_Notification</targetReference>
@@ -320,7 +398,7 @@
         <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Get_Case_Team_Role</targetReference>
+            <targetReference>Is_General_Psychiatrist_Role</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -338,7 +416,7 @@
         <name>Update_Case</name>
         <label>Update Case</label>
         <locationX>182</locationX>
-        <locationY>782</locationY>
+        <locationY>1082</locationY>
         <connector>
             <targetReference>Case_Team_Member_Exists</targetReference>
         </connector>
@@ -371,7 +449,7 @@
         <name>Update_Rejected_Case</name>
         <label>Update Rejected Case</label>
         <locationX>842</locationX>
-        <locationY>782</locationY>
+        <locationY>1082</locationY>
         <connector>
             <targetReference>Assign_User_ID_Email</targetReference>
         </connector>
@@ -405,7 +483,7 @@
         <name>Update_Rejected_Case_Owner</name>
         <label>Update Rejected Case Owner</label>
         <locationX>842</locationX>
-        <locationY>1322</locationY>
+        <locationY>1622</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -513,7 +591,7 @@
         <name>Error</name>
         <label>Error</label>
         <locationX>578</locationX>
-        <locationY>890</locationY>
+        <locationY>1190</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -563,5 +641,13 @@
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>RoleId</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>CaseTeamRole</objectType>
     </variables>
 </Flow>
