@@ -4,7 +4,7 @@
         <name>In_App_Notification</name>
         <label>In-App Notification</label>
         <locationX>1304</locationX>
-        <locationY>2162</locationY>
+        <locationY>2462</locationY>
         <actionName>customNotificationAction</actionName>
         <actionType>customNotificationAction</actionType>
         <connector>
@@ -48,7 +48,7 @@
         <name>In_App_Notification_GP</name>
         <label>In-App Notification</label>
         <locationX>3680</locationX>
-        <locationY>2270</locationY>
+        <locationY>2570</locationY>
         <actionName>customNotificationAction</actionName>
         <actionType>customNotificationAction</actionType>
         <connector>
@@ -92,7 +92,7 @@
         <name>In_App_Notification_GPUsers</name>
         <label>In-App Notification</label>
         <locationX>3108</locationX>
-        <locationY>1970</locationY>
+        <locationY>2270</locationY>
         <actionName>customNotificationAction</actionName>
         <actionType>customNotificationAction</actionType>
         <connector>
@@ -136,7 +136,7 @@
         <name>Send_Email_Notification</name>
         <label>Send Email Notification</label>
         <locationX>1304</locationX>
-        <locationY>2270</locationY>
+        <locationY>2570</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -171,7 +171,7 @@
         <name>Send_Email_Notification_GP</name>
         <label>Send Email Notification</label>
         <locationX>3680</locationX>
-        <locationY>2378</locationY>
+        <locationY>2678</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -206,7 +206,7 @@
         <name>Send_Email_Notification_GPUsers</name>
         <label>Send Email Notification</label>
         <locationX>3108</locationX>
-        <locationY>2078</locationY>
+        <locationY>2378</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -239,10 +239,26 @@
     </actionCalls>
     <apiVersion>60.0</apiVersion>
     <assignments>
+        <name>Assign_GP_Team_Role_Self</name>
+        <label>Assign GP Team Role - Self</label>
+        <locationX>2206</locationX>
+        <locationY>674</locationY>
+        <assignmentItems>
+            <assignToReference>RoleId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Case_Team_Role_GP</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>GP_or_AM_Care_Request</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assign_new_Record</name>
         <label>Assign new Record</label>
         <locationX>1172</locationX>
-        <locationY>1754</locationY>
+        <locationY>2054</locationY>
         <assignmentItems>
             <assignToReference>NewRecordId</assignToReference>
             <operator>Assign</operator>
@@ -258,7 +274,7 @@
         <name>Assign_new_Record2</name>
         <label>Assign new Record</label>
         <locationX>1436</locationX>
-        <locationY>1754</locationY>
+        <locationY>2054</locationY>
         <assignmentItems>
             <assignToReference>NewRecordId</assignToReference>
             <operator>Assign</operator>
@@ -274,7 +290,7 @@
         <name>Assign_new_Record_GP</name>
         <label>Assign new Record</label>
         <locationX>3548</locationX>
-        <locationY>1862</locationY>
+        <locationY>2162</locationY>
         <assignmentItems>
             <assignToReference>NewRecordId</assignToReference>
             <operator>Assign</operator>
@@ -290,7 +306,7 @@
         <name>Assign_new_Record_GP2</name>
         <label>Assign new Record</label>
         <locationX>3812</locationX>
-        <locationY>1862</locationY>
+        <locationY>2162</locationY>
         <assignmentItems>
             <assignToReference>NewRecordId</assignToReference>
             <operator>Assign</operator>
@@ -306,7 +322,7 @@
         <name>Assign_new_Record_GPUsers</name>
         <label>Assign new Record</label>
         <locationX>3108</locationX>
-        <locationY>1646</locationY>
+        <locationY>1946</locationY>
         <assignmentItems>
             <assignToReference>NewRecordId</assignToReference>
             <operator>Assign</operator>
@@ -322,7 +338,7 @@
         <name>Assign_Selected_User</name>
         <label>Assign Selected User</label>
         <locationX>1304</locationX>
-        <locationY>1946</locationY>
+        <locationY>2246</locationY>
         <assignmentItems>
             <assignToReference>RecipientsIds</assignToReference>
             <operator>Add</operator>
@@ -345,7 +361,7 @@
         <name>Assign_Selected_User_GP</name>
         <label>Assign Selected User</label>
         <locationX>3680</locationX>
-        <locationY>2054</locationY>
+        <locationY>2354</locationY>
         <assignmentItems>
             <assignToReference>RecipientsIds</assignToReference>
             <operator>Add</operator>
@@ -368,7 +384,7 @@
         <name>Assign_Selected_User_GPUsers</name>
         <label>Assign Selected User</label>
         <locationX>3108</locationX>
-        <locationY>1754</locationY>
+        <locationY>2054</locationY>
         <assignmentItems>
             <assignToReference>RecipientsIds</assignToReference>
             <operator>Add</operator>
@@ -388,10 +404,26 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Assign_Team_Role_Self</name>
+        <label>Assign Team Role - Self</label>
+        <locationX>2470</locationX>
+        <locationY>674</locationY>
+        <assignmentItems>
+            <assignToReference>RoleId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Case_Team_Role</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>GP_or_AM_Care_Request</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Count_Records</name>
         <label>Count Records</label>
         <locationX>50</locationX>
-        <locationY>998</locationY>
+        <locationY>1298</locationY>
         <assignmentItems>
             <assignToReference>CountRecords</assignToReference>
             <operator>AssignCount</operator>
@@ -407,7 +439,7 @@
         <name>Count_Records_GP</name>
         <label>Count Records</label>
         <locationX>1986</locationX>
-        <locationY>998</locationY>
+        <locationY>1298</locationY>
         <assignmentItems>
             <assignToReference>CountRecords</assignToReference>
             <operator>AssignCount</operator>
@@ -423,7 +455,7 @@
         <name>Count_Records_GP2</name>
         <label>Count Records</label>
         <locationX>3526</locationX>
-        <locationY>1430</locationY>
+        <locationY>1730</locationY>
         <assignmentItems>
             <assignToReference>CountRecords</assignToReference>
             <operator>AssignCount</operator>
@@ -439,7 +471,7 @@
         <name>Count_Records_GPUsers</name>
         <label>Count Records</label>
         <locationX>3020</locationX>
-        <locationY>1322</locationY>
+        <locationY>1622</locationY>
         <assignmentItems>
             <assignToReference>CountRecords</assignToReference>
             <operator>AssignCount</operator>
@@ -455,7 +487,7 @@
         <name>Count_Records_Other</name>
         <label>Count Records</label>
         <locationX>1150</locationX>
-        <locationY>1322</locationY>
+        <locationY>1622</locationY>
         <assignmentItems>
             <assignToReference>CountRecords</assignToReference>
             <operator>AssignCount</operator>
@@ -519,7 +551,7 @@
         <name>Check_Record_Type</name>
         <label>Check Record Type</label>
         <locationX>1304</locationX>
-        <locationY>1538</locationY>
+        <locationY>1838</locationY>
         <defaultConnector>
             <targetReference>Create_Care_Team_Member</targetReference>
         </defaultConnector>
@@ -544,7 +576,7 @@
         <name>Check_Record_Type_GP</name>
         <label>Check Record Type</label>
         <locationX>3680</locationX>
-        <locationY>1646</locationY>
+        <locationY>1946</locationY>
         <defaultConnector>
             <targetReference>Create_Care_Team_Member_GP</targetReference>
         </defaultConnector>
@@ -569,7 +601,7 @@
         <name>CN_Team_Member_Exists</name>
         <label>CN Team Member Exists</label>
         <locationX>72</locationX>
-        <locationY>1538</locationY>
+        <locationY>1838</locationY>
         <defaultConnector>
             <targetReference>Create_Case_Team_Member_CN</targetReference>
         </defaultConnector>
@@ -591,7 +623,7 @@
         <name>CN_Team_Member_Exists_GP</name>
         <label>CN Team Member Exists</label>
         <locationX>2008</locationX>
-        <locationY>1538</locationY>
+        <locationY>1838</locationY>
         <defaultConnector>
             <targetReference>Create_Case_Team_Member_CN_GP</targetReference>
         </defaultConnector>
@@ -613,7 +645,7 @@
         <name>CR_Team_Member_Exists</name>
         <label>CR Team Member Exists</label>
         <locationX>600</locationX>
-        <locationY>1538</locationY>
+        <locationY>1838</locationY>
         <defaultConnector>
             <targetReference>Create_Case_Team_Member_CR</targetReference>
         </defaultConnector>
@@ -635,7 +667,7 @@
         <name>CR_Team_Member_Exists_GP</name>
         <label>CR Team Member Exists</label>
         <locationX>2536</locationX>
-        <locationY>1538</locationY>
+        <locationY>1838</locationY>
         <defaultConnector>
             <targetReference>Create_Case_Team_Member_CR_GP</targetReference>
         </defaultConnector>
@@ -657,7 +689,7 @@
         <name>General_Psychiatrist_Selected</name>
         <label>General Psychiatrist Selected</label>
         <locationX>3273</locationX>
-        <locationY>890</locationY>
+        <locationY>1190</locationY>
         <defaultConnector>
             <targetReference>Get_Roles_GP</targetReference>
         </defaultConnector>
@@ -682,7 +714,7 @@
         <name>GP_or_AM_Care_Request</name>
         <label>GP or AM Care Request?</label>
         <locationX>2338</locationX>
-        <locationY>566</locationY>
+        <locationY>866</locationY>
         <defaultConnectorLabel>Unrelated</defaultConnectorLabel>
         <rules>
             <name>AM</name>
@@ -716,10 +748,35 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Is_General_Psychiatry_User</name>
+        <label>Is General Psychiatry User?</label>
+        <locationX>2338</locationX>
+        <locationY>458</locationY>
+        <defaultConnector>
+            <targetReference>Get_Case_Team_Role</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_GP_User</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$User.Is_General_Psychiatrist__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Case_Team_Role_GP</targetReference>
+            </connector>
+            <label>Yes- GP User</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Is_Self</name>
         <label>Is Self?</label>
         <locationX>600</locationX>
-        <locationY>782</locationY>
+        <locationY>1082</locationY>
         <defaultConnector>
             <targetReference>Get_Roles</targetReference>
         </defaultConnector>
@@ -744,7 +801,7 @@
         <name>Is_Self_GP</name>
         <label>Is Self?</label>
         <locationX>2629</locationX>
-        <locationY>782</locationY>
+        <locationY>1082</locationY>
         <defaultConnector>
             <targetReference>General_Psychiatrist_Selected</targetReference>
         </defaultConnector>
@@ -769,7 +826,7 @@
         <name>Open_Case_Exists</name>
         <label>Open Case Exists?</label>
         <locationX>50</locationX>
-        <locationY>1106</locationY>
+        <locationY>1406</locationY>
         <defaultConnector>
             <targetReference>Get_Existing_Team_Member</targetReference>
         </defaultConnector>
@@ -794,7 +851,7 @@
         <name>Open_Case_Exists_GP</name>
         <label>Open Case Exists?</label>
         <locationX>3526</locationX>
-        <locationY>1538</locationY>
+        <locationY>1838</locationY>
         <defaultConnector>
             <targetReference>Check_Record_Type_GP</targetReference>
         </defaultConnector>
@@ -819,7 +876,7 @@
         <name>Open_Case_Exists_GPUsers</name>
         <label>Open Case Exists?</label>
         <locationX>3020</locationX>
-        <locationY>1430</locationY>
+        <locationY>1730</locationY>
         <defaultConnector>
             <targetReference>Create_Care_Team_Member_GPUsers</targetReference>
         </defaultConnector>
@@ -844,7 +901,7 @@
         <name>Open_Case_Exists_Other</name>
         <label>Open Case Exists?</label>
         <locationX>1150</locationX>
-        <locationY>1430</locationY>
+        <locationY>1730</locationY>
         <defaultConnector>
             <targetReference>Check_Record_Type</targetReference>
         </defaultConnector>
@@ -869,7 +926,7 @@
         <name>Open_Case_ExistsSELF_GP</name>
         <label>Open Case Exists?</label>
         <locationX>1986</locationX>
-        <locationY>1106</locationY>
+        <locationY>1406</locationY>
         <defaultConnector>
             <targetReference>Get_Existing_Team_Member_GP</targetReference>
         </defaultConnector>
@@ -894,7 +951,7 @@
         <name>Self_Record_Type</name>
         <label>Self Record Type</label>
         <locationX>336</locationX>
-        <locationY>1322</locationY>
+        <locationY>1622</locationY>
         <defaultConnector>
             <targetReference>Create_Care_Team_Case</targetReference>
         </defaultConnector>
@@ -919,7 +976,7 @@
         <name>Self_Record_Type_GP</name>
         <label>Self Record Type</label>
         <locationX>2272</locationX>
-        <locationY>1322</locationY>
+        <locationY>1622</locationY>
         <defaultConnector>
             <targetReference>Create_Care_Team_Case_GP</targetReference>
         </defaultConnector>
@@ -992,7 +1049,7 @@
         <name>Create_Care_Navigation_Case</name>
         <label>Create Care Navigation Case</label>
         <locationX>1172</locationX>
-        <locationY>1646</locationY>
+        <locationY>1946</locationY>
         <connector>
             <targetReference>Assign_new_Record</targetReference>
         </connector>
@@ -1069,7 +1126,7 @@
         <name>Create_Care_Navigation_Case2</name>
         <label>Create Care Navigation Case</label>
         <locationX>72</locationX>
-        <locationY>1430</locationY>
+        <locationY>1730</locationY>
         <connector>
             <targetReference>CN_Team_Member_Exists</targetReference>
         </connector>
@@ -1146,7 +1203,7 @@
         <name>Create_Care_Navigation_Case_GP</name>
         <label>Create Care Navigation Case</label>
         <locationX>2008</locationX>
-        <locationY>1430</locationY>
+        <locationY>1730</locationY>
         <connector>
             <targetReference>CN_Team_Member_Exists_GP</targetReference>
         </connector>
@@ -1223,7 +1280,7 @@
         <name>Create_Care_Navigation_Case_GP2</name>
         <label>Create Care Navigation Case</label>
         <locationX>3548</locationX>
-        <locationY>1754</locationY>
+        <locationY>2054</locationY>
         <connector>
             <targetReference>Assign_new_Record_GP</targetReference>
         </connector>
@@ -1300,7 +1357,7 @@
         <name>Create_Care_Team_Case</name>
         <label>Create Care Team Case</label>
         <locationX>600</locationX>
-        <locationY>1430</locationY>
+        <locationY>1730</locationY>
         <connector>
             <targetReference>CR_Team_Member_Exists</targetReference>
         </connector>
@@ -1377,7 +1434,7 @@
         <name>Create_Care_Team_Case_GP</name>
         <label>Create Care Team Case</label>
         <locationX>2536</locationX>
-        <locationY>1430</locationY>
+        <locationY>1730</locationY>
         <connector>
             <targetReference>CR_Team_Member_Exists_GP</targetReference>
         </connector>
@@ -1454,7 +1511,7 @@
         <name>Create_Care_Team_Member</name>
         <label>Create Care Team Member</label>
         <locationX>1436</locationX>
-        <locationY>1646</locationY>
+        <locationY>1946</locationY>
         <connector>
             <targetReference>Assign_new_Record2</targetReference>
         </connector>
@@ -1531,7 +1588,7 @@
         <name>Create_Care_Team_Member_GP</name>
         <label>Create Care Team Member</label>
         <locationX>3812</locationX>
-        <locationY>1754</locationY>
+        <locationY>2054</locationY>
         <connector>
             <targetReference>Assign_new_Record_GP2</targetReference>
         </connector>
@@ -1608,7 +1665,7 @@
         <name>Create_Care_Team_Member_GPUsers</name>
         <label>Create Care Team Member</label>
         <locationX>3108</locationX>
-        <locationY>1538</locationY>
+        <locationY>1838</locationY>
         <connector>
             <targetReference>Assign_new_Record_GPUsers</targetReference>
         </connector>
@@ -1685,7 +1742,7 @@
         <name>Create_Case_Team_Member_CN</name>
         <label>Create Case Team Member CN</label>
         <locationX>204</locationX>
-        <locationY>1646</locationY>
+        <locationY>1946</locationY>
         <inputAssignments>
             <field>MemberId</field>
             <value>
@@ -1701,7 +1758,7 @@
         <inputAssignments>
             <field>TeamRoleId</field>
             <value>
-                <elementReference>Get_Case_Team_Role.Id</elementReference>
+                <elementReference>RoleId.Id</elementReference>
             </value>
         </inputAssignments>
         <object>CaseTeamMember</object>
@@ -1711,7 +1768,7 @@
         <name>Create_Case_Team_Member_CN_GP</name>
         <label>Create Case Team Member CN</label>
         <locationX>2140</locationX>
-        <locationY>1646</locationY>
+        <locationY>1946</locationY>
         <inputAssignments>
             <field>MemberId</field>
             <value>
@@ -1727,7 +1784,7 @@
         <inputAssignments>
             <field>TeamRoleId</field>
             <value>
-                <elementReference>Get_Case_Team_Role.Id</elementReference>
+                <elementReference>RoleId.Id</elementReference>
             </value>
         </inputAssignments>
         <object>CaseTeamMember</object>
@@ -1737,7 +1794,7 @@
         <name>Create_Case_Team_Member_CR</name>
         <label>Create Case Team Member CR</label>
         <locationX>732</locationX>
-        <locationY>1646</locationY>
+        <locationY>1946</locationY>
         <inputAssignments>
             <field>MemberId</field>
             <value>
@@ -1753,7 +1810,7 @@
         <inputAssignments>
             <field>TeamRoleId</field>
             <value>
-                <elementReference>Get_Case_Team_Role.Id</elementReference>
+                <elementReference>RoleId.Id</elementReference>
             </value>
         </inputAssignments>
         <object>CaseTeamMember</object>
@@ -1763,7 +1820,7 @@
         <name>Create_Case_Team_Member_CR_GP</name>
         <label>Create Case Team Member CR</label>
         <locationX>2668</locationX>
-        <locationY>1646</locationY>
+        <locationY>1946</locationY>
         <inputAssignments>
             <field>MemberId</field>
             <value>
@@ -1779,7 +1836,7 @@
         <inputAssignments>
             <field>TeamRoleId</field>
             <value>
-                <elementReference>Get_Case_Team_Role.Id</elementReference>
+                <elementReference>RoleId.Id</elementReference>
             </value>
         </inputAssignments>
         <object>CaseTeamMember</object>
@@ -1792,7 +1849,7 @@
         <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Get_Case_Team_Role</targetReference>
+            <targetReference>Is_General_Psychiatry_User</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -1851,11 +1908,11 @@
     <recordLookups>
         <name>Get_Case_Team_Role</name>
         <label>Get Case Team Role</label>
-        <locationX>2338</locationX>
-        <locationY>458</locationY>
+        <locationX>2470</locationX>
+        <locationY>566</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>GP_or_AM_Care_Request</targetReference>
+            <targetReference>Assign_Team_Role_Self</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -1870,10 +1927,31 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <name>Get_Case_Team_Role_GP</name>
+        <label>Get Case Team Role - GP</label>
+        <locationX>2206</locationX>
+        <locationY>566</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_GP_Team_Role_Self</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>General Psychiatrist</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CaseTeamRole</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>Get_Existing_Team_Member</name>
         <label>Get Existing Team Member</label>
         <locationX>336</locationX>
-        <locationY>1214</locationY>
+        <locationY>1514</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Self_Record_Type</targetReference>
@@ -1901,7 +1979,7 @@
         <name>Get_Existing_Team_Member_GP</name>
         <label>Get Existing Team Member</label>
         <locationX>2272</locationX>
-        <locationY>1214</locationY>
+        <locationY>1514</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Self_Record_Type_GP</targetReference>
@@ -1929,7 +2007,7 @@
         <name>Get_General_Psychiatrist_Users</name>
         <label>Get General Psychiatrist Users</label>
         <locationX>3020</locationX>
-        <locationY>998</locationY>
+        <locationY>1298</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Show_GP_Users</targetReference>
@@ -1957,7 +2035,7 @@
         <name>Get_Notification_Type</name>
         <label>Get Notification Type</label>
         <locationX>1304</locationX>
-        <locationY>2054</locationY>
+        <locationY>2354</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>In_App_Notification</targetReference>
@@ -1978,7 +2056,7 @@
         <name>Get_Notification_Type_GP</name>
         <label>Get Notification Type</label>
         <locationX>3680</locationX>
-        <locationY>2162</locationY>
+        <locationY>2462</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>In_App_Notification_GP</targetReference>
@@ -1999,7 +2077,7 @@
         <name>Get_Notification_Type_GPUsers</name>
         <label>Get Notification Type</label>
         <locationX>3108</locationX>
-        <locationY>1862</locationY>
+        <locationY>2162</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>In_App_Notification_GPUsers</targetReference>
@@ -2020,7 +2098,7 @@
         <name>Get_Roles</name>
         <label>Get Roles</label>
         <locationX>1150</locationX>
-        <locationY>890</locationY>
+        <locationY>1190</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Get_Users</targetReference>
@@ -2041,7 +2119,7 @@
         <name>Get_Roles_GP</name>
         <label>Get Roles</label>
         <locationX>3526</locationX>
-        <locationY>998</locationY>
+        <locationY>1298</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Get_Users_GP</targetReference>
@@ -2062,7 +2140,7 @@
         <name>Get_Sub_Cases_Other_Users</name>
         <label>Get Sub Cases - Other Users</label>
         <locationX>1150</locationX>
-        <locationY>1214</locationY>
+        <locationY>1514</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Count_Records_Other</targetReference>
@@ -2111,7 +2189,7 @@
         <name>Get_Sub_Cases_Other_Users_GP</name>
         <label>Get Sub Cases - Other Users</label>
         <locationX>3526</locationX>
-        <locationY>1322</locationY>
+        <locationY>1622</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Count_Records_GP2</targetReference>
@@ -2160,7 +2238,7 @@
         <name>Get_Sub_Cases_Other_Users_GPUsers</name>
         <label>Get Sub Cases - Other Users</label>
         <locationX>3020</locationX>
-        <locationY>1214</locationY>
+        <locationY>1514</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Count_Records_GPUsers</targetReference>
@@ -2209,7 +2287,7 @@
         <name>Get_Sub_Cases_Self</name>
         <label>Get Sub Cases - Self</label>
         <locationX>50</locationX>
-        <locationY>890</locationY>
+        <locationY>1190</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Count_Records</targetReference>
@@ -2258,7 +2336,7 @@
         <name>Get_Sub_Cases_Self_GP</name>
         <label>Get Sub Cases - Self</label>
         <locationX>1986</locationX>
-        <locationY>890</locationY>
+        <locationY>1190</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Count_Records_GP</targetReference>
@@ -2307,7 +2385,7 @@
         <name>Get_Users</name>
         <label>Get Users</label>
         <locationX>1150</locationX>
-        <locationY>998</locationY>
+        <locationY>1298</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Show_Users</targetReference>
@@ -2335,7 +2413,7 @@
         <name>Get_Users_GP</name>
         <label>Get Users</label>
         <locationX>3526</locationX>
-        <locationY>1106</locationY>
+        <locationY>1406</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Show_Users_GP</targetReference>
@@ -2364,7 +2442,7 @@
         <name>Assign_Care_Team_Member</name>
         <label>Assign Care Team Member</label>
         <locationX>600</locationX>
-        <locationY>674</locationY>
+        <locationY>974</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -2462,7 +2540,7 @@
         <name>Assign_Care_Team_Member_GP</name>
         <label>Assign Care Team Member</label>
         <locationX>2629</locationX>
-        <locationY>674</locationY>
+        <locationY>974</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -2559,7 +2637,7 @@
         <name>Error</name>
         <label>Error</label>
         <locationX>2338</locationX>
-        <locationY>2930</locationY>
+        <locationY>3230</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -2575,7 +2653,7 @@
         <name>Show_GP_Users</name>
         <label>Show GP Users</label>
         <locationX>3020</locationX>
-        <locationY>1106</locationY>
+        <locationY>1406</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -2654,7 +2732,7 @@
         <name>Show_Users</name>
         <label>Show Users</label>
         <locationX>1150</locationX>
-        <locationY>1106</locationY>
+        <locationY>1406</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -2733,7 +2811,7 @@
         <name>Show_Users_GP</name>
         <label>Show Users</label>
         <locationX>3526</locationX>
-        <locationY>1214</locationY>
+        <locationY>1514</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -2881,6 +2959,14 @@ To approve or reject the assignment please review the Case above.</text>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>RoleId</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>CaseTeamRole</objectType>
     </variables>
     <variables>
         <name>SetRecordType</name>
