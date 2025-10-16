@@ -2,6 +2,22 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>60.0</apiVersion>
     <assignments>
+        <name>Assign_Addiction_Medications</name>
+        <label>Assign Addiction Medications</label>
+        <locationX>138</locationX>
+        <locationY>1058</locationY>
+        <assignmentItems>
+            <assignToReference>AvailableMedications</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Medication_List_Addiction</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Medication</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assign_Current_Record_ID</name>
         <label>Assign Current Record ID</label>
         <locationX>182</locationX>
@@ -30,7 +46,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Get_Medication_List</targetReference>
+            <targetReference>Get_Case_Type</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -62,14 +78,30 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Get_Medication_List</targetReference>
+            <targetReference>Get_Case_Type</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Psychiatry_Medications</name>
+        <label>Assign Psychiatry Medications</label>
+        <locationX>402</locationX>
+        <locationY>1058</locationY>
+        <assignmentItems>
+            <assignToReference>AvailableMedications</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Medication_List_Psychiatry</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Medication</targetReference>
         </connector>
     </assignments>
     <assignments>
         <name>Assign_Updated_Record</name>
         <label>Assign Updated Record</label>
         <locationX>490</locationX>
-        <locationY>2306</locationY>
+        <locationY>2606</locationY>
         <assignmentItems>
             <assignToReference>UpdatedPatientMedications</assignToReference>
             <operator>Add</operator>
@@ -85,7 +117,7 @@
         <name>Patient_Medication_List</name>
         <label>Patient Medication List</label>
         <locationX>490</locationX>
-        <locationY>1382</locationY>
+        <locationY>1682</locationY>
         <assignmentItems>
             <assignToReference>PatientMedications</assignToReference>
             <operator>Add</operator>
@@ -103,7 +135,7 @@
         <locationX>182</locationX>
         <locationY>458</locationY>
         <defaultConnector>
-            <targetReference>Get_Medication_List</targetReference>
+            <targetReference>Get_Case_Type</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No Patient</defaultConnectorLabel>
         <rules>
@@ -126,7 +158,7 @@
         <name>check_action_button</name>
         <label>check action button</label>
         <locationX>402</locationX>
-        <locationY>1682</locationY>
+        <locationY>1982</locationY>
         <defaultConnector>
             <targetReference>Updated_Patient_Medications_Search</targetReference>
         </defaultConnector>
@@ -166,7 +198,7 @@
         <name>check_action_button_Part_2</name>
         <label>check action button Part 2</label>
         <locationX>402</locationX>
-        <locationY>2606</locationY>
+        <locationY>2906</locationY>
         <defaultConnectorLabel>default</defaultConnectorLabel>
         <rules>
             <name>CancelPart2</name>
@@ -200,12 +232,49 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Get_Case_Type</name>
+        <label>Get Case Type</label>
+        <locationX>402</locationX>
+        <locationY>842</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Addiction_Medicine</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Addiction Medicine</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Medication_List_Addiction</targetReference>
+            </connector>
+            <label>Addiction Medicine</label>
+        </rules>
+        <rules>
+            <name>General_Psychiatry</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>General Psychiatry</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Medication_List_Psychiatry</targetReference>
+            </connector>
+            <label>General Psychiatry</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Parent_Case_Has_Patient</name>
         <label>Parent Case Has Patient</label>
         <locationX>622</locationX>
         <locationY>458</locationY>
         <defaultConnector>
-            <targetReference>Get_Medication_List</targetReference>
+            <targetReference>Get_Case_Type</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No Parent Patient</defaultConnectorLabel>
         <rules>
@@ -256,7 +325,7 @@
         <name>Loop_1</name>
         <label>Loop 1</label>
         <locationX>402</locationX>
-        <locationY>1058</locationY>
+        <locationY>1358</locationY>
         <collectionReference>MedicationListDatatable.outputSelectedRows</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -270,7 +339,7 @@
         <name>Updated_Patient_Medications</name>
         <label>Updated Patient Medications</label>
         <locationX>446</locationX>
-        <locationY>2822</locationY>
+        <locationY>3122</locationY>
         <collectionReference>PatientMedications</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -281,7 +350,7 @@
         <name>Updated_Patient_Medications_Search</name>
         <label>Updated Patient Medications Search</label>
         <locationX>402</locationX>
-        <locationY>2090</locationY>
+        <locationY>2390</locationY>
         <collectionReference>PatientMedications</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -314,7 +383,7 @@
         <name>Create_Patient_Medications</name>
         <label>Create Patient Medications</label>
         <locationX>490</locationX>
-        <locationY>1166</locationY>
+        <locationY>1466</locationY>
         <assignRecordIdToReference>CreatedPatientMedication.Id</assignRecordIdToReference>
         <connector>
             <targetReference>Get_Patient_Medication</targetReference>
@@ -343,21 +412,21 @@
         <name>Delete_Records_1</name>
         <label>Delete Records 1</label>
         <locationX>138</locationX>
-        <locationY>1790</locationY>
+        <locationY>2090</locationY>
         <inputReference>PatientMedications</inputReference>
     </recordDeletes>
     <recordDeletes>
         <name>Delete_Records_2</name>
         <label>Delete Records 2</label>
         <locationX>94</locationX>
-        <locationY>2714</locationY>
+        <locationY>3014</locationY>
         <inputReference>UpdatedPatientMedications</inputReference>
     </recordDeletes>
     <recordLookups>
         <name>Copy_1_of_Get_Updated_Patient_Medication</name>
         <label>Get Updated Patient Medication</label>
         <locationX>534</locationX>
-        <locationY>2930</locationY>
+        <locationY>3230</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Update_Submission_Completed</targetReference>
@@ -396,14 +465,43 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>Get_Medication_List</name>
-        <label>Get Medication List</label>
-        <locationX>402</locationX>
-        <locationY>842</locationY>
+        <name>Get_Medication_List_Addiction</name>
+        <label>Get Medication List - Addiction</label>
+        <locationX>138</locationX>
+        <locationY>950</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Medication</targetReference>
+            <targetReference>Assign_Addiction_Medications</targetReference>
         </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Addiction_Services__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Medication__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Medication_List_Psychiatry</name>
+        <label>Get Medication List - Psychiatry</label>
+        <locationX>402</locationX>
+        <locationY>950</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_Psychiatry_Medications</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>General_Psychiatry__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>Medication__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -412,7 +510,7 @@
         <name>Get_Patient_Medication</name>
         <label>Get Patient Medication</label>
         <locationX>490</locationX>
-        <locationY>1274</locationY>
+        <locationY>1574</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Patient_Medication_List</targetReference>
@@ -433,7 +531,7 @@
         <name>Get_Updated_Patient_Medication</name>
         <label>Get Updated Patient Medication</label>
         <locationX>490</locationX>
-        <locationY>2198</locationY>
+        <locationY>2498</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Assign_Updated_Record</targetReference>
@@ -454,7 +552,7 @@
         <name>Update_Submission_Completed</name>
         <label>Update Submission Completed</label>
         <locationX>534</locationX>
-        <locationY>3038</locationY>
+        <locationY>3338</locationY>
         <connector>
             <targetReference>Updated_Patient_Medications</targetReference>
         </connector>
@@ -467,6 +565,12 @@
             </value>
         </filters>
         <inputAssignments>
+            <field>Notes__c</field>
+            <value>
+                <elementReference>Copy_1_of_Get_Updated_Patient_Medication.Notes_short__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>Submission_Completed__c</field>
             <value>
                 <booleanValue>true</booleanValue>
@@ -478,7 +582,7 @@
         <name>UpdateEdits</name>
         <label>UpdateEdits</label>
         <locationX>402</locationX>
-        <locationY>1790</locationY>
+        <locationY>2090</locationY>
         <connector>
             <targetReference>Updated_Patient_Medications_Search</targetReference>
         </connector>
@@ -488,7 +592,7 @@
         <name>UpdateEdits_Part_2</name>
         <label>UpdateEdits Part 2</label>
         <locationX>446</locationX>
-        <locationY>2714</locationY>
+        <locationY>3014</locationY>
         <connector>
             <targetReference>Updated_Patient_Medications</targetReference>
         </connector>
@@ -498,7 +602,7 @@
         <name>Input</name>
         <label>Input</label>
         <locationX>402</locationX>
-        <locationY>1574</locationY>
+        <locationY>1874</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -559,7 +663,7 @@
             <inputParameters>
                 <name>columnFields</name>
                 <value>
-                    <stringValue>Medication__c,MedicationNotes__c,Medication_Changes__c,Current_Medication__c</stringValue>
+                    <stringValue>Medication__c,Notes_short__c,Medication_Changes__c,Current_Medication__c</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -571,7 +675,7 @@
             <inputParameters>
                 <name>columnWidths</name>
                 <value>
-                    <stringValue>Medication__c:0, MedicationNotes__c:0, Medication_Changes__c:0, Current_Medication__c:0</stringValue>
+                    <stringValue>Medication__c:0, Notes_short__c:0, Medication_Changes__c:0, Current_Medication__c:0</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -768,7 +872,7 @@
         <name>Input_Part_2</name>
         <label>Input Part 2</label>
         <locationX>402</locationX>
-        <locationY>2498</locationY>
+        <locationY>2798</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -1038,7 +1142,7 @@
         <name>Medication</name>
         <label>Medication</label>
         <locationX>402</locationX>
-        <locationY>950</locationY>
+        <locationY>1250</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -1057,12 +1161,6 @@
                 <name>objectName</name>
                 <value>
                     <stringValue>Medication__c</stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
-                <name>tableData</name>
-                <value>
-                    <elementReference>Get_Medication_List</elementReference>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -1179,6 +1277,12 @@
                     <stringValue>Name:true, Brand_Name_s__c:true, Category__c:true, Description__c:true</stringValue>
                 </value>
             </inputParameters>
+            <inputParameters>
+                <name>tableData</name>
+                <value>
+                    <elementReference>AvailableMedications</elementReference>
+                </value>
+            </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -1194,6 +1298,14 @@
         </connector>
     </start>
     <status>Active</status>
+    <variables>
+        <name>AvailableMedications</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Medication__c</objectType>
+    </variables>
     <variables>
         <name>caseID</name>
         <dataType>String</dataType>

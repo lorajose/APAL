@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
-    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
-    <excludeButtons>RequestUseSfdc</excludeButtons>
+    <excludeButtons>DataDotComClean</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
@@ -424,8 +423,8 @@
         <fields>NAME</fields>
         <fields>Case__c</fields>
         <fields>Medication_List__c</fields>
-        <fields>MedicationNotes__c</fields>
         <fields>Medication_Changes__c</fields>
+        <fields>Notes__c</fields>
         <fields>Current_Medication__c</fields>
         <relatedList>Patient_Medication__c.Patient__c</relatedList>
     </relatedLists>
@@ -435,7 +434,7 @@
         <fields>NAME</fields>
         <fields>Case__c</fields>
         <fields>Concern__c</fields>
-        <fields>Notes__c</fields>
+        <fields>Notes_new__c</fields>
         <relatedList>Patient_Concern__c.Patient__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -444,9 +443,9 @@
         <fields>NAME</fields>
         <fields>Case__c</fields>
         <fields>Safety_Risk__c</fields>
-        <fields>Notes__c</fields>
         <fields>Recent__c</fields>
         <fields>Historical__c</fields>
+        <fields>Notes_new__c</fields>
         <relatedList>Patient_Safety_Risk__c.Patient__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -456,7 +455,8 @@
         <fields>Case__c</fields>
         <fields>Substance_Listing__c</fields>
         <fields>Frequency_of_Substance_Use__c</fields>
-        <fields>Notes__c</fields>
+        <fields>Notes_new__c</fields>
+        <fields>Current_Substance__c</fields>
         <relatedList>Patient_Substance__c.Patient__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -465,8 +465,8 @@
         <fields>NAME</fields>
         <fields>Case__c</fields>
         <fields>Support__c</fields>
+        <fields>Notes_new__c</fields>
         <fields>Scheduled__c</fields>
-        <fields>Notes__c</fields>
         <relatedList>Patient_Support__c.Patient__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -478,7 +478,7 @@
         <fields>Aproximate_Date_Screened__c</fields>
         <fields>Score__c</fields>
         <fields>Positive_Outcome__c</fields>
-        <fields>Notes__c</fields>
+        <fields>Notes_new__c</fields>
         <relatedList>Patient_Screener__c.Patient__c</relatedList>
     </relatedLists>
     <relatedObjects>AccountId</relatedObjects>

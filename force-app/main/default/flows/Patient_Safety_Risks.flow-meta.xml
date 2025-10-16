@@ -2,6 +2,22 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>60.0</apiVersion>
     <assignments>
+        <name>Assign_Addiction_Safety_Risks</name>
+        <label>Assign Addiction Safety Risks</label>
+        <locationX>94</locationX>
+        <locationY>758</locationY>
+        <assignmentItems>
+            <assignToReference>AvailableSafetyRisks</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Safety_Risk_List_Addiction</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Safety_Risks</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Assign_Current_Record_ID</name>
         <label>Assign Current Record ID</label>
         <locationX>226</locationX>
@@ -14,7 +30,7 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Get_Safety_Risk_List</targetReference>
+            <targetReference>Get_Case_Type</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -30,14 +46,30 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Get_Safety_Risk_List</targetReference>
+            <targetReference>Get_Case_Type</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Psychiatry_Safety_Risks</name>
+        <label>Assign Psychiatry Safety Risks</label>
+        <locationX>358</locationX>
+        <locationY>758</locationY>
+        <assignmentItems>
+            <assignToReference>AvailableSafetyRisks</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Safety_Risk_List_Psychiatry</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Safety_Risks</targetReference>
         </connector>
     </assignments>
     <assignments>
         <name>Patient_Safety_Risk_List</name>
         <label>Patient Safety Risk List</label>
         <locationX>446</locationX>
-        <locationY>1082</locationY>
+        <locationY>1382</locationY>
         <assignmentItems>
             <assignToReference>PatientSafetyRisks</assignToReference>
             <operator>Add</operator>
@@ -53,7 +85,7 @@
         <name>check_action_button</name>
         <label>check action button</label>
         <locationX>358</locationX>
-        <locationY>1382</locationY>
+        <locationY>1682</locationY>
         <defaultConnectorLabel>default</defaultConnectorLabel>
         <rules>
             <name>Cancel</name>
@@ -84,6 +116,43 @@
                 <targetReference>UpdateEdits</targetReference>
             </connector>
             <label>Save</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Get_Case_Type</name>
+        <label>Get Case Type</label>
+        <locationX>358</locationX>
+        <locationY>542</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Addiction_Medicine</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Addiction Medicine</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Safety_Risk_List_Addiction</targetReference>
+            </connector>
+            <label>Addiction Medicine</label>
+        </rules>
+        <rules>
+            <name>General_Psychiatry</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>General Psychiatry</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Safety_Risk_List_Psychiatry</targetReference>
+            </connector>
+            <label>General Psychiatry</label>
         </rules>
     </decisions>
     <decisions>
@@ -118,7 +187,7 @@
         <name>Selected_Safety_Risks</name>
         <label>Selected Safety Risks</label>
         <locationX>358</locationX>
-        <locationY>758</locationY>
+        <locationY>1058</locationY>
         <collectionReference>SafetyRiskListDatatable.outputSelectedRows</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -132,7 +201,7 @@
         <name>Updated_Patient_Safety_Risks</name>
         <label>Updated Patient Safety Risks</label>
         <locationX>402</locationX>
-        <locationY>1598</locationY>
+        <locationY>1898</locationY>
         <collectionReference>PatientSafetyRisks</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -162,7 +231,7 @@
         <name>Create_Patient_Safety_Risk</name>
         <label>Create Patient Safety Risk</label>
         <locationX>446</locationX>
-        <locationY>866</locationY>
+        <locationY>1166</locationY>
         <assignRecordIdToReference>CreatedPatientSafetyRisk.Id</assignRecordIdToReference>
         <connector>
             <targetReference>Get_Patient_Safety_Risk</targetReference>
@@ -191,7 +260,7 @@
         <name>Delete_Records_1</name>
         <label>Delete Records 1</label>
         <locationX>50</locationX>
-        <locationY>1490</locationY>
+        <locationY>1790</locationY>
         <inputReference>PatientSafetyRisks</inputReference>
     </recordDeletes>
     <recordLookups>
@@ -219,7 +288,7 @@
         <name>Get_Patient_Safety_Risk</name>
         <label>Get Patient Safety Risk</label>
         <locationX>446</locationX>
-        <locationY>974</locationY>
+        <locationY>1274</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Patient_Safety_Risk_List</targetReference>
@@ -237,14 +306,43 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>Get_Safety_Risk_List</name>
-        <label>Get Safety Risk List</label>
-        <locationX>358</locationX>
-        <locationY>542</locationY>
+        <name>Get_Safety_Risk_List_Addiction</name>
+        <label>Get Safety Risk List - Addiction</label>
+        <locationX>94</locationX>
+        <locationY>650</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Safety_Risks</targetReference>
+            <targetReference>Assign_Addiction_Safety_Risks</targetReference>
         </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Addiction_Services__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Safety_Risk__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Safety_Risk_List_Psychiatry</name>
+        <label>Get Safety Risk List - Psychiatry</label>
+        <locationX>358</locationX>
+        <locationY>650</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_Psychiatry_Safety_Risks</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>General_Psychiatry__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>Safety_Risk__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -253,7 +351,7 @@
         <name>Get_Updated_Patient_Safety_Sisks</name>
         <label>Get Updated Patient Safety Sisks</label>
         <locationX>490</locationX>
-        <locationY>1706</locationY>
+        <locationY>2006</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Update_Submission_Completed</targetReference>
@@ -274,7 +372,7 @@
         <name>Update_Submission_Completed</name>
         <label>Update Submission Completed</label>
         <locationX>490</locationX>
-        <locationY>1814</locationY>
+        <locationY>2114</locationY>
         <connector>
             <targetReference>Updated_Patient_Safety_Risks</targetReference>
         </connector>
@@ -287,6 +385,12 @@
             </value>
         </filters>
         <inputAssignments>
+            <field>Notes_new__c</field>
+            <value>
+                <elementReference>Get_Updated_Patient_Safety_Sisks.Notes_short__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>Submission_Completed__c</field>
             <value>
                 <booleanValue>true</booleanValue>
@@ -298,7 +402,7 @@
         <name>UpdateEdits</name>
         <label>UpdateEdits</label>
         <locationX>402</locationX>
-        <locationY>1490</locationY>
+        <locationY>1790</locationY>
         <connector>
             <targetReference>Updated_Patient_Safety_Risks</targetReference>
         </connector>
@@ -308,7 +412,7 @@
         <name>Input</name>
         <label>Input</label>
         <locationX>358</locationX>
-        <locationY>1274</locationY>
+        <locationY>1574</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -357,7 +461,7 @@
             <inputParameters>
                 <name>columnFields</name>
                 <value>
-                    <stringValue>Safety_RiskName__c,Notes__c,Recent__c,Historical__c</stringValue>
+                    <stringValue>Safety_RiskName__c,Notes_short__c,Recent__c,Historical__c</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -369,7 +473,7 @@
             <inputParameters>
                 <name>columnWidths</name>
                 <value>
-                    <stringValue>Safety_RiskName__c:0, Notes__c:0, Recent__c:0, Historical__c:0</stringValue>
+                    <stringValue>Safety_RiskName__c:0, Notes_short__c:0, Recent__c:0, Historical__c:0</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -572,7 +676,7 @@
         <name>Safety_Risks</name>
         <label>Safety Risks</label>
         <locationX>358</locationX>
-        <locationY>650</locationY>
+        <locationY>950</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -708,12 +812,6 @@
                 </value>
             </inputParameters>
             <inputParameters>
-                <name>tableData</name>
-                <value>
-                    <elementReference>Get_Safety_Risk_List</elementReference>
-                </value>
-            </inputParameters>
-            <inputParameters>
                 <name>isDisplayHeader</name>
                 <value>
                     <booleanValue>true</booleanValue>
@@ -737,6 +835,12 @@
                     <stringValue>Name:true, Category__c:true</stringValue>
                 </value>
             </inputParameters>
+            <inputParameters>
+                <name>tableData</name>
+                <value>
+                    <elementReference>AvailableSafetyRisks</elementReference>
+                </value>
+            </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -752,6 +856,14 @@
         </connector>
     </start>
     <status>Active</status>
+    <variables>
+        <name>AvailableSafetyRisks</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Safety_Risk__c</objectType>
+    </variables>
     <variables>
         <name>caseID</name>
         <dataType>String</dataType>

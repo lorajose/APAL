@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>OnlyOwnerCanAccept</fullName>
+    <active>true</active>
+    <errorConditionFormula>(RecordType.DeveloperName = &quot;Care_Request&quot; ||  
+	RecordType.DeveloperName = &quot;Care_Navigation&quot;) &amp;&amp;
+ISCHANGED(Status) &amp;&amp;
+(Text(Status) = &quot;Accepted&quot; || Text(Status) = &quot;Rejected&quot;) &amp;&amp;
+ OwnerId &lt;&gt; $User.Id</errorConditionFormula>
+    <errorDisplayField>Status</errorDisplayField>
+    <errorMessage>Only the owner of the record can accept it.</errorMessage>
+</ValidationRule>

@@ -2,10 +2,42 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>60.0</apiVersion>
     <assignments>
+        <name>Assign_Addiction_Supports</name>
+        <label>Assign Addiction Supports</label>
+        <locationX>94</locationX>
+        <locationY>458</locationY>
+        <assignmentItems>
+            <assignToReference>AvailableSupports</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Supports_Addiction</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Supports</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Psychiatry_Supports</name>
+        <label>Assign Psychiatry Supports</label>
+        <locationX>358</locationX>
+        <locationY>458</locationY>
+        <assignmentItems>
+            <assignToReference>AvailableSupports</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Supports_Psychiatry</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Supports</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Patient_Support_List</name>
         <label>Patient Support List</label>
         <locationX>446</locationX>
-        <locationY>782</locationY>
+        <locationY>1082</locationY>
         <assignmentItems>
             <assignToReference>PatientSupports</assignToReference>
             <operator>Add</operator>
@@ -21,7 +53,7 @@
         <name>check_action_button</name>
         <label>check action button</label>
         <locationX>358</locationX>
-        <locationY>1082</locationY>
+        <locationY>1382</locationY>
         <defaultConnectorLabel>Default</defaultConnectorLabel>
         <rules>
             <name>Cancel</name>
@@ -54,6 +86,43 @@
             <label>Save</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>Get_Case_Type</name>
+        <label>Get Case Type</label>
+        <locationX>358</locationX>
+        <locationY>242</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Addiction_Medicine</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Addiction Medicine</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Supports_Addiction</targetReference>
+            </connector>
+            <label>Addiction Medicine</label>
+        </rules>
+        <rules>
+            <name>General_Psychiatry</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Current_Case.Case_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>General Psychiatry</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Supports_Psychiatry</targetReference>
+            </connector>
+            <label>General Psychiatry</label>
+        </rules>
+    </decisions>
     <environments>Default</environments>
     <interviewLabel>Patient Support {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Patient Support</label>
@@ -61,7 +130,7 @@
         <name>Create_Patient_Supports</name>
         <label>Create Patient Supports</label>
         <locationX>358</locationX>
-        <locationY>458</locationY>
+        <locationY>758</locationY>
         <collectionReference>Support1.outputSelectedRows</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -75,7 +144,7 @@
         <name>Get_Updated_Supports</name>
         <label>Get Updated Supports</label>
         <locationX>402</locationX>
-        <locationY>1298</locationY>
+        <locationY>1598</locationY>
         <collectionReference>PatientSupports</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -105,7 +174,7 @@
         <name>Create_Support</name>
         <label>Create Support</label>
         <locationX>446</locationX>
-        <locationY>566</locationY>
+        <locationY>866</locationY>
         <assignRecordIdToReference>CreatedPatientSupport.Id</assignRecordIdToReference>
         <connector>
             <targetReference>Get_Patient_Support</targetReference>
@@ -134,7 +203,7 @@
         <name>Delete_Supports</name>
         <label>Delete Supports</label>
         <locationX>50</locationX>
-        <locationY>1190</locationY>
+        <locationY>1490</locationY>
         <inputReference>PatientSupports</inputReference>
     </recordDeletes>
     <recordLookups>
@@ -144,7 +213,7 @@
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Get_Supports</targetReference>
+            <targetReference>Get_Case_Type</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -162,7 +231,7 @@
         <name>Get_Patient_Support</name>
         <label>Get Patient Support</label>
         <locationX>446</locationX>
-        <locationY>674</locationY>
+        <locationY>974</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Patient_Support_List</targetReference>
@@ -180,14 +249,43 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>Get_Supports</name>
-        <label>Get Supports</label>
-        <locationX>358</locationX>
-        <locationY>242</locationY>
+        <name>Get_Supports_Addiction</name>
+        <label>Get Supports - Addiction</label>
+        <locationX>94</locationX>
+        <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Supports</targetReference>
+            <targetReference>Assign_Addiction_Supports</targetReference>
         </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Addiction_Services__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Support__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Supports_Psychiatry</name>
+        <label>Get Supports - Psychiatry</label>
+        <locationX>358</locationX>
+        <locationY>350</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_Psychiatry_Supports</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>General_Psychiatry__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
         <object>Support__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -196,7 +294,7 @@
         <name>Get_Updated_Patient_Supports</name>
         <label>Get Updated Patient Supports</label>
         <locationX>490</locationX>
-        <locationY>1406</locationY>
+        <locationY>1706</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Update_Submission_Completed</targetReference>
@@ -217,7 +315,7 @@
         <name>Update_Submission_Completed</name>
         <label>Update Submission Completed</label>
         <locationX>490</locationX>
-        <locationY>1514</locationY>
+        <locationY>1814</locationY>
         <connector>
             <targetReference>Get_Updated_Supports</targetReference>
         </connector>
@@ -230,6 +328,12 @@
             </value>
         </filters>
         <inputAssignments>
+            <field>Notes_new__c</field>
+            <value>
+                <elementReference>Get_Updated_Patient_Supports.Notes_short__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>Submission_Completed__c</field>
             <value>
                 <booleanValue>true</booleanValue>
@@ -241,7 +345,7 @@
         <name>UpdateEdits</name>
         <label>UpdateEdits</label>
         <locationX>402</locationX>
-        <locationY>1190</locationY>
+        <locationY>1490</locationY>
         <connector>
             <targetReference>Get_Updated_Supports</targetReference>
         </connector>
@@ -252,7 +356,7 @@
         <name>Input</name>
         <label>Input</label>
         <locationX>358</locationX>
-        <locationY>974</locationY>
+        <locationY>1274</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -331,7 +435,7 @@
             <inputParameters>
                 <name>columnFields</name>
                 <value>
-                    <stringValue>SupportName__c,Scheduled__c,Notes__c</stringValue>
+                    <stringValue>SupportName__c,Scheduled__c,Notes_short__c</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -343,7 +447,7 @@
             <inputParameters>
                 <name>columnWidths</name>
                 <value>
-                    <stringValue>SupportName__c:0, Scheduled__c:0, Notes__c:0</stringValue>
+                    <stringValue>SupportName__c:0, Scheduled__c:0, Notes_short__c:0</stringValue>
                 </value>
             </inputParameters>
             <inputParameters>
@@ -534,7 +638,7 @@
         <name>Supports</name>
         <label>Supports</label>
         <locationX>358</locationX>
-        <locationY>350</locationY>
+        <locationY>650</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -670,12 +774,6 @@
                 </value>
             </inputParameters>
             <inputParameters>
-                <name>tableData</name>
-                <value>
-                    <elementReference>Get_Supports</elementReference>
-                </value>
-            </inputParameters>
-            <inputParameters>
                 <name>cb_not_suppressNameFieldLink</name>
                 <value>
                     <stringValue>CB_FALSE</stringValue>
@@ -699,6 +797,12 @@
                     <stringValue>Name:true, Category__c:true, Description__c:true</stringValue>
                 </value>
             </inputParameters>
+            <inputParameters>
+                <name>tableData</name>
+                <value>
+                    <elementReference>AvailableSupports</elementReference>
+                </value>
+            </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -714,6 +818,14 @@
         </connector>
     </start>
     <status>Active</status>
+    <variables>
+        <name>AvailableSupports</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Support__c</objectType>
+    </variables>
     <variables>
         <name>CreatedPatientSupport</name>
         <dataType>SObject</dataType>
