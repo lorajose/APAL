@@ -216,6 +216,14 @@
                 <behavior>Edit</behavior>
                 <field>Comments</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Other_Symptoms__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Other_Prior_Diagnosis__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>
     </layoutSections>
@@ -599,7 +607,7 @@
         <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>Support__c.NAME</fields>
-        <fields>Notes_new__c</fields>
+        <fields>Notes_short__c</fields>
         <fields>Scheduled__c</fields>
         <relatedList>Patient_Support__c.Case__c</relatedList>
     </relatedLists>
