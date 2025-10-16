@@ -695,6 +695,12 @@
                 <identifier>RecordParentImpaired_Domains_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Parent.Other_Symptoms__c</fieldItem>
+                <identifier>RecordParentOther_Symptoms_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-0621c2f1-e25f-48a2-8746-68beb86ea9b9</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -749,6 +755,12 @@
             <fieldInstance>
                 <fieldItem>Record.Parent.ED_Visits_Count__c</fieldItem>
                 <identifier>RecordParentED_Visits_Count_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Parent.Other_Prior_Diagnosis__c</fieldItem>
+                <identifier>RecordParentOther_Prior_Diagnosis_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-d8f3eb73-b471-4b42-a55b-2f456d9d1690</name>

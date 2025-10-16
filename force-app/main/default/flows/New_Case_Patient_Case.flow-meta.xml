@@ -1180,6 +1180,18 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Other_Prior_Diagnosis__c</field>
+            <value>
+                <elementReference>Other_Prior_Diagnosis</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Other_Symptoms__c</field>
+            <value>
+                <elementReference>Other_Symptoms</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>Past_Suicide_Attempts__c</field>
             <value>
                 <elementReference>Past_Suicide_Attempts</elementReference>
@@ -2033,6 +2045,13 @@
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                 </fields>
+                <fields>
+                    <name>Other_Symptoms</name>
+                    <fieldText>Other Symptoms</fieldText>
+                    <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                </fields>
                 <inputParameters>
                     <name>width</name>
                     <value>
@@ -2097,6 +2116,13 @@
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <scale>0</scale>
+                </fields>
+                <fields>
+                    <name>Other_Prior_Diagnosis</name>
+                    <fieldText>Other Prior Diagnosis</fieldText>
+                    <fieldType>LargeTextArea</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
                 </fields>
                 <inputParameters>
                     <name>width</name>
