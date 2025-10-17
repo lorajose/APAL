@@ -1,7 +1,8 @@
 public with sharing class AccountSearchInputControllerApal {
 
     private static AccountSelectorApal accountSelector = new AccountSelectorApal();
-    private static AccountSyncServiceApal accountSyncService = new AccountSyncServiceApal();
+    //private static AccountSyncServiceApal accountSyncService = new AccountSyncServiceApal();
+    private static AccountSyncService accountSyncService = new AccountSyncService();
 
     private static String INPUT_HELP_TEXT_SYNC_ENABLED = 'Search by name, NPI, email, or phone. You can also select a provider from the VMAP system or create a new one if not found.';
     private static String INPUT_HELP_TEXT_SYNC_DISABLED = 'Search by name, NPI, email, or phone. Create a new provider if no match is found.';
