@@ -139,10 +139,10 @@
             <name>Yes_GP_Case</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Get_Case.Case_Type__c</leftValueReference>
+                <leftValueReference>Get_Case.Service__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>General Psychiatry</stringValue>
+                    <stringValue>General Psychiatrist</stringValue>
                 </rightValue>
             </conditions>
             <connector>
