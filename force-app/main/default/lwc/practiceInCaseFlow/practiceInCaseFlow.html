@@ -1,0 +1,24 @@
+<template>
+    <lightning-layout multiple-rows>
+        <lightning-layout-item size="12" class="slds-p-bottom_none">
+            <c-practice-search-input
+                practice-id={practiceId}
+                practice-record={practiceRecord}
+                is-from-flow={isFromFlow}
+                onpracticeselected={handleValueChange}
+                onclearselection={handleClearSelection}
+                oninitialpopulation={handleInitialPopulate}>
+            </c-practice-search-input>
+        </lightning-layout-item>
+
+        <!-- Botón New Practice igual que Provider -->
+        <lightning-layout-item size="12" class="button-left">
+            <c-flow-button-modal
+                label="New Practice"
+                variant="brand"
+                flow-api-name="New_Practice"
+                finish-action={finishAction}>
+            </c-flow-button-modal>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

@@ -1,0 +1,25 @@
+<template>
+    <lightning-button
+        label={label}
+        variant={variant}
+        onclick={openModal}>
+    </lightning-button>
+
+    <template if:true={isModalOpen}>
+        <section class="slds-modal slds-fade-in-open" role="dialog" tabindex="-1">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 class="slds-modal__title slds-hyphenate">{label}</h2>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning-flow
+                        flow-api-name={flowApiName}
+                        onstatuschange={handleStatusChange}>
+                    </lightning-flow>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

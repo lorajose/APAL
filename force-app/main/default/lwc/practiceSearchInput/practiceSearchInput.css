@@ -1,0 +1,24 @@
+/* 🔹 Sin bordes ni fondo extra */
+.practice-container {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* 🔹 Ajuste de separación visual como “Provider” */
+.slds-form-element {
+    margin-bottom: 0.25rem !important; /* mismo espaciado exacto del provider */
+}
+
+/* 🔹 Input estilo Salesforce estándar */
+.slds-input {
+    border-radius: 0.25rem;
+}
+
+/* 🔹 Hover más sutil */
+.slds-text-link:hover {
+    background-color: #f3f3f3;
+    cursor: pointer;
+}
