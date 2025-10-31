@@ -1,0 +1,25 @@
+<template>
+    <lightning-layout multiple-rows>
+        <!-- Campo de búsqueda de Patient -->
+        <lightning-layout-item size="12" class="slds-p-bottom_none">
+            <c-patient-search-input
+                patient-id={patientId}
+                patient-record={patientRecord}
+                is-from-flow={isFromFlow}
+                onpatientselected={handleValueChange}
+                onclearselection={handleClearSelection}
+                oninitialpopulation={handleInitialPopulate}>
+            </c-patient-search-input>
+        </lightning-layout-item>
+
+        <!-- Botón New Patient -->
+        <lightning-layout-item size="12" class="button-left">
+            <c-flow-button-modal
+                label="New Patient"
+                variant="brand"
+                flow-api-name="New_Patient"
+                finish-action={finishAction}>
+            </c-flow-button-modal>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>
