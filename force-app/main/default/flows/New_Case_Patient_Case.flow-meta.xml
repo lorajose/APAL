@@ -898,7 +898,7 @@
         <inputAssignments>
             <field>AccountId</field>
             <value>
-                <elementReference>PracticeId</elementReference>
+                <elementReference>practiceRecord.Id</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -928,7 +928,7 @@
         <inputAssignments>
             <field>ContactId</field>
             <value>
-                <elementReference>PatientId</elementReference>
+                <elementReference>patientRecord.Id</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -1044,7 +1044,7 @@
         <inputAssignments>
             <field>AccountId</field>
             <value>
-                <elementReference>PracticeId</elementReference>
+                <elementReference>practiceRecord.Id</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -1062,7 +1062,7 @@
         <inputAssignments>
             <field>ContactId</field>
             <value>
-                <elementReference>PatientId</elementReference>
+                <elementReference>patientRecord.Id</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -1786,27 +1786,44 @@
             <regionContainerType>SectionWithHeader</regionContainerType>
         </fields>
         <fields>
-            <name>Practice</name>
+            <name>Practices</name>
             <fieldText>Practice</fieldText>
             <fieldType>RegionContainer</fieldType>
             <fields>
-                <name>Practice_Column1</name>
+                <name>Practices_Column1</name>
                 <fieldType>Region</fieldType>
                 <fields>
-                    <name>Name_Practice</name>
-                    <choiceReferences>Practicelist</choiceReferences>
-                    <extensionName>flowruntime:choiceLookup</extensionName>
-                    <fieldText>Name</fieldText>
-                    <fieldType>ComponentChoice</fieldType>
+                    <name>practiceInCaseFlowAdd</name>
+                    <extensionName>c:practiceInCaseFlow</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
                     <inputParameters>
-                        <name>placeholder</name>
+                        <name>isFromFlow</name>
                         <value>
-                            <stringValue>Search Practice</stringValue>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>practiceId</name>
+                        <value>
+                            <elementReference>practiceRecord.Id</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>practiceRecord</name>
+                        <value>
+                            <elementReference>practiceRecord</elementReference>
                         </value>
                     </inputParameters>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <isRequired>true</isRequired>
+                    <outputParameters>
+                        <assignToReference>practiceRecord.Id</assignToReference>
+                        <name>practiceId</name>
+                    </outputParameters>
+                    <outputParameters>
+                        <assignToReference>practiceRecord</assignToReference>
+                        <name>practiceRecord</name>
+                    </outputParameters>
                 </fields>
                 <inputParameters>
                     <name>width</name>
@@ -1820,27 +1837,44 @@
             <regionContainerType>SectionWithHeader</regionContainerType>
         </fields>
         <fields>
-            <name>Patient</name>
+            <name>Patientss</name>
             <fieldText>Patient</fieldText>
             <fieldType>RegionContainer</fieldType>
             <fields>
-                <name>Patient_Column1</name>
+                <name>Patientss_Column1</name>
                 <fieldType>Region</fieldType>
                 <fields>
-                    <name>Patient_Name</name>
-                    <choiceReferences>PatientList</choiceReferences>
-                    <extensionName>flowruntime:choiceLookup</extensionName>
-                    <fieldText>Patient Name</fieldText>
-                    <fieldType>ComponentChoice</fieldType>
+                    <name>patientInCaseFlowAdd</name>
+                    <extensionName>c:patientInCaseFlow</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
                     <inputParameters>
-                        <name>placeholder</name>
+                        <name>patientId</name>
                         <value>
-                            <stringValue>Search Patient</stringValue>
+                            <elementReference>patientRecord.Id</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>patientRecord</name>
+                        <value>
+                            <elementReference>patientRecord</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>isFromFlow</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
                         </value>
                     </inputParameters>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <isRequired>true</isRequired>
+                    <outputParameters>
+                        <assignToReference>patientRecord.Id</assignToReference>
+                        <name>patientId</name>
+                    </outputParameters>
+                    <outputParameters>
+                        <assignToReference>patientRecord</assignToReference>
+                        <name>patientRecord</name>
+                    </outputParameters>
                 </fields>
                 <inputParameters>
                     <name>width</name>
@@ -2990,27 +3024,44 @@
             <regionContainerType>SectionWithHeader</regionContainerType>
         </fields>
         <fields>
-            <name>Practice_Psychiatry</name>
+            <name>Practicec</name>
             <fieldText>Practice</fieldText>
             <fieldType>RegionContainer</fieldType>
             <fields>
-                <name>Practice_Psychiatry_Column1</name>
+                <name>Practicec_Column1</name>
                 <fieldType>Region</fieldType>
                 <fields>
-                    <name>Name_Practice_Psychiatry</name>
-                    <choiceReferences>Practicelist</choiceReferences>
-                    <extensionName>flowruntime:choiceLookup</extensionName>
-                    <fieldText>Name</fieldText>
-                    <fieldType>ComponentChoice</fieldType>
+                    <name>practiceInCaseFlowPsy</name>
+                    <extensionName>c:practiceInCaseFlow</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
                     <inputParameters>
-                        <name>placeholder</name>
+                        <name>practiceId</name>
                         <value>
-                            <stringValue>Search Practice</stringValue>
+                            <elementReference>practiceRecord.Id</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>practiceRecord</name>
+                        <value>
+                            <elementReference>practiceRecord</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>isFromFlow</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
                         </value>
                     </inputParameters>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <isRequired>true</isRequired>
+                    <outputParameters>
+                        <assignToReference>practiceRecord</assignToReference>
+                        <name>practiceRecord</name>
+                    </outputParameters>
+                    <outputParameters>
+                        <assignToReference>practiceRecord.Id</assignToReference>
+                        <name>practiceId</name>
+                    </outputParameters>
                 </fields>
                 <inputParameters>
                     <name>width</name>
@@ -3024,27 +3075,44 @@
             <regionContainerType>SectionWithHeader</regionContainerType>
         </fields>
         <fields>
-            <name>Patient_Psychiatry</name>
+            <name>Patients</name>
             <fieldText>Patient</fieldText>
             <fieldType>RegionContainer</fieldType>
             <fields>
-                <name>Patient_Psychiatry_Column1</name>
+                <name>Patients_Column1</name>
                 <fieldType>Region</fieldType>
                 <fields>
-                    <name>Patient_Name_Psychiatry</name>
-                    <choiceReferences>PatientList</choiceReferences>
-                    <extensionName>flowruntime:choiceLookup</extensionName>
-                    <fieldText>Patient Name</fieldText>
-                    <fieldType>ComponentChoice</fieldType>
+                    <name>patientInCaseFlowPsy</name>
+                    <extensionName>c:patientInCaseFlow</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
                     <inputParameters>
-                        <name>placeholder</name>
+                        <name>isFromFlow</name>
                         <value>
-                            <stringValue>Search Patient</stringValue>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>patientId</name>
+                        <value>
+                            <elementReference>patientRecord.Id</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>patientRecord</name>
+                        <value>
+                            <elementReference>patientRecord</elementReference>
                         </value>
                     </inputParameters>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <isRequired>true</isRequired>
+                    <outputParameters>
+                        <assignToReference>patientRecord</assignToReference>
+                        <name>patientRecord</name>
+                    </outputParameters>
+                    <outputParameters>
+                        <assignToReference>patientRecord.Id</assignToReference>
+                        <name>patientId</name>
+                    </outputParameters>
                 </fields>
                 <inputParameters>
                     <name>width</name>
@@ -3181,6 +3249,14 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
+        <name>patientRecord</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Contact</objectType>
+    </variables>
+    <variables>
         <name>PracticeId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
@@ -3188,11 +3264,41 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
+        <name>practiceRecord</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Account</objectType>
+    </variables>
+    <variables>
         <name>ProviderAccountId</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>selectedPatientOutput</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>selectedPracticeId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>selectedPracticeOutput</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Account</objectType>
     </variables>
     <variables>
         <name>selectedSearchTerm</name>
