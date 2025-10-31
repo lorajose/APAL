@@ -20,19 +20,19 @@
         </div>
 
         <!-- Lista de resultados -->
-        <template if:true={patients}>
-            <div class="slds-p-top_x-small">
-                <template for:each={patients} for:item="patient">
-                    <div
-                        key={patient.Id}
-                        onclick={handleSelect}
-                        class="slds-p-vertical_x-small slds-border_bottom slds-text-body_regular slds-text-link"
-                    >
-                        {patient.Name}
-                    </div>
-                </template>
-            </div>
-        </template>
+      <template for:each={patients} for:item="patient">
+  <div key={patient.Id}>
+    <button
+      class="slds-button slds-text-link slds-p-vertical_x-small slds-border_bottom slds-text-body_regular"
+      data-id={patient.Id}
+      data-name={patient.Name}
+      onclick={handleSelect}
+    >
+      {patient.Name}
+    </button>
+  </div>
+</template>
+
 
         <!-- Spinner visible durante la carga -->
         <template if:true={showLoading}>

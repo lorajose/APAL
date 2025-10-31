@@ -6,7 +6,8 @@ public with sharing class PatientSearchController {
         return [
             SELECT Id, Name, Email, Phone
             FROM Contact
-            WHERE Name LIKE :('%' + searchKey + '%')
+            WHERE IsPersonAccount = false
+            AND Name LIKE :('%' + searchKey + '%') 
             ORDER BY CreatedDate DESC
             LIMIT 10
         ];

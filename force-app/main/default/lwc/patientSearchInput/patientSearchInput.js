@@ -8,6 +8,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 export default class PatientSearchInput extends NavigationMixin(LightningElement) {
     @api selectedPatientId;
     @api selectedPatientOutput;
+    @api patientId;
 
     @track searchKey = '';
     @track patients = [];
@@ -71,19 +72,29 @@ export default class PatientSearchInput extends NavigationMixin(LightningElement
     }
 
     // 🖱️ Seleccionar paciente de la lista
-    handleSelect(event) {
-        const selected = event.target.textContent.trim();
-        const selectedObj = this.patients.find((p) => p.Name === selected);
-        if (!selectedObj) return;
+   handleSelect(event) {
+  const id = event.target.dataset.id;
+  const name = event.target.dataset.name;
 
-        this.selectedPatientId = selectedObj.Id;
-        this.searchKey = selectedObj.Name;
-        this.patients = [];
+  console.log('🧩 handleSelect disparado con:', id, name);
 
-        this.dispatchEvent(
-            new FlowAttributeChangeEvent('selectedPatientOutput', this.selectedPatientId)
-        );
-    }
+  const selectedObj = this.patients.find((p) => p.Id === id);
+  if (!selectedObj) {
+    console.warn('⚠️ No se encontró el paciente con Id:', id);
+    return;
+  }
+
+  this.selectedPatientId = id;
+  this.searchKey = name;
+  this.patients = [];
+
+  console.log('✅ Paciente seleccionado:', selectedObj);
+  console.log('🚀 Lanzando FlowAttributeChangeEvent con:', this.selectedPatientId); 
+  this.dispatchEvent(
+    new FlowAttributeChangeEvent('patientId', this.selectedPatientId)
+  );
+}
+
 
     // ➕ Crear nuevo Patient
     handleNewPatient() {
