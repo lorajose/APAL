@@ -7,133 +7,145 @@ import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class PracticeSearchInput extends NavigationMixin(LightningElement) {
-    @api selectedPracticeId;
-    @api selectedPracticeOutput;
-    @api practiceRecordTypeId;
+@api selectedPracticeId;
+@api selectedPracticeOutput;
+@api practiceRecordTypeId;
+@api practiceId;
 
-    @track searchKey = '';
-    @track practices = [];
-    @track showLoading = false;
+@track searchKey = '';
+@track practices = [];
+@track showLoading = false;
 
-    connectedCallback() {
-        getPracticeRecordTypeId()
-            .then((id) => (this.practiceRecordTypeId = id))
-            .catch((err) => console.error('Error fetching Practice RecordTypeId', err));
-    }
+connectedCallback() {
+getPracticeRecordTypeId()
+.then((id) => (this.practiceRecordTypeId = id))
+.catch((err) => console.error('Error fetching Practice RecordTypeId', err));
 
-    // 🔹 Auto-rellenar tras crear nuevo Practice
-    @api
-    addNewPractice(newPractice) {
-        if (!newPractice || !newPractice.Id) return;
+}
 
-        console.log('✅ Nuevo Practice recibido:', newPractice);
+// 🔹 Auto-rellenar tras crear nuevo Practice
+@api
+addNewPractice(newPractice) {
+if (!newPractice || !newPractice.Id) return;
 
-        this.selectedPracticeId = newPractice.Id;
-        this.searchKey = newPractice.Name;
-        this.practices = [];
-        this.showLoading = false;
+console.log('✅ Nuevo Practice recibido:', newPractice);
 
-        // 🔁 Forzar render inmediato
-        requestAnimationFrame(() => {
-            // 1️⃣ Reactividad nativa
-            this.searchKey = newPractice.Name;
+this.selectedPracticeId = newPractice.Id;
+this.searchKey = newPractice.Name;
+this.practices = [];
+this.showLoading = false;
 
-            // 2️⃣ Asignación manual al input (respaldo inmediato)
-            const input = this.template.querySelector('input.slds-input');
-            if (input) {
-                input.value = newPractice.Name;
-            }
+// 🔁 Forzar render inmediato
+requestAnimationFrame(() => {
+// 1️⃣ Reactividad nativa
+this.searchKey = newPractice.Name;
 
-            // 3️⃣ Notificar al Flow
-            this.dispatchEvent(
-                new FlowAttributeChangeEvent('selectedPracticeOutput', this.selectedPracticeId)
-            );
+// 2️⃣ Asignación manual al input (respaldo inmediato)
+const input = this.template.querySelector('input.slds-input');
+if (input) {
+input.value = newPractice.Name;
+}
 
-            // 4️⃣ Toast confirmación
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: 'Practice Selected',
-                    message: `"${newPractice.Name}" has been created and selected.`,
-                    variant: 'success'
-                })
-            );
-        });
-    }
+// 3️⃣ Notificar al Flow
+this.dispatchEvent(
+new FlowAttributeChangeEvent('selectedPracticeOutput', this.selectedPracticeId)
+);
 
-    // 🔍 Buscar prácticas
-    handleSearchChange(event) {
-        this.searchKey = event.target.value;
+// 4️⃣ Toast confirmación
+this.dispatchEvent(
+new ShowToastEvent({
+title: 'Practice Selected',
+message: `"${newPractice.Name}" has been created and selected.`,
+variant: 'success'
+})
+);
+});
+}
 
-        if (this.searchKey.length >= 2) {
-            searchPractices({ searchKey: this.searchKey })
-                .then((result) => (this.practices = result))
-                .catch((error) => {
-                    console.error('Error searching practices:', error);
-                    this.practices = [];
-                });
-        } else {
-            this.practices = [];
-        }
-    }
+// 🔍 Buscar prácticas
+handleSearchChange(event) {
+this.searchKey = event.target.value;
 
-    // 🖱️ Seleccionar práctica de la lista
-    handleSelect(event) {
-        const selected = event.target.textContent.trim();
-        const selectedObj = this.practices.find((p) => p.Name === selected);
-        if (!selectedObj) return;
+if (this.searchKey.length >= 2) {
+searchPractices({ searchKey: this.searchKey })
+.then((result) => (this.practices = result))
+.catch((error) => {
+console.error('Error searching practices:', error);
+this.practices = [];
+});
+} else {
+this.practices = [];
+}
+}
 
-        this.selectedPracticeId = selectedObj.Id;
-        this.searchKey = selectedObj.Name;
-        this.practices = [];
+ // 🖱️ Seleccionar paciente de la lista
+   handleSelect(event) {
+  const id = event.target.dataset.id;
+  const name = event.target.dataset.name;
 
-        this.dispatchEvent(
-            new FlowAttributeChangeEvent('selectedPracticeOutput', this.selectedPracticeId)
-        );
-    }
+  console.log('🧩 handleSelect disparado con:', id, name);
 
-    // ➕ Crear nueva práctica
-    handleNewPractice() {
-        this.showLoading = true;
+  const selectedObj = this.practices.find((p) => p.Id === id);
+  if (!selectedObj) {
+    console.warn('⚠️ No se encontró el practice con Id:', id);
+    return;
+  }
 
-        try {
-            this[NavigationMixin.Navigate]({
-                type: 'standard__recordPage',
-                attributes: {
-                    objectApiName: 'Account',
-                    actionName: 'new'
-                },
-                state: {
-                    recordTypeId: this.practiceRecordTypeId || null,
-                    navigationLocation: 'RELATED_LIST',
-                    useRecordTypeCheck: 1
-                }
-            });
+  this.selectedPracticeId = id;
+  this.searchKey = name;
+  this.practices = [];
 
-            // Esperar cierre del modal, luego obtener el nuevo registro
-            setTimeout(() => {
-                getLastCreatedPractice()
-                    .then((practice) => {
-                        if (practice && practice.Id) {
-                            this.addNewPractice(practice);
-                        }
-                        this.showLoading = false;
-                    })
-                    .catch((err) => {
-                        this.showLoading = false;
-                        console.error('Error fetching last created practice:', err);
-                    });
-            }, 2500);
-        } catch (error) {
-            this.showLoading = false;
-            console.error('Error opening New Practice modal:', error);
+  console.log('✅ Practice seleccionado:', selectedObj);
+  console.log('🚀 Lanzando FlowAttributeChangeEvent con:', this.selectedPracticeId); 
+  this.dispatchEvent(
+    new FlowAttributeChangeEvent('practiceId', this.selectedPracticeId)
+  );
+}
 
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: 'Error',
-                    message: 'Unable to open the New Practice modal.',
-                    variant: 'error'
-                })
-            );
-        }
-    }
+
+// ➕ Crear nueva práctica
+handleNewPractice() {
+this.showLoading = true;
+
+try {
+this[NavigationMixin.Navigate]({
+type: 'standard__recordPage',
+attributes: {
+objectApiName: 'Account',
+actionName: 'new'
+},
+state: {
+recordTypeId: this.practiceRecordTypeId || null,
+navigationLocation: 'RELATED_LIST',
+useRecordTypeCheck: 1
+}
+});
+
+// Esperar cierre del modal, luego obtener el nuevo registro
+setTimeout(() => {
+getLastCreatedPractice()
+.then((practice) => {
+if (practice && practice.Id) {
+this.addNewPractice(practice);
+}
+this.showLoading = false;
+})
+.catch((err) => {
+this.showLoading = false;
+console.error('Error fetching last created practice:', err);
+});
+}, 2500);
+} catch (error) {
+this.showLoading = false;
+console.error('Error opening New Practice modal:', error);
+
+this.dispatchEvent(
+new ShowToastEvent({
+title: 'Error',
+message: 'Unable to open the New Practice modal.',
+variant: 'error'
+})
+);
+}
+}
 }

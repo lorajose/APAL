@@ -1,0 +1,17 @@
+.slds-modal__close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 2;
+}
+
+.slds-modal__header {
+    position: relative;
+    padding: 1rem 1.5rem;
+    background: #f3f3f3;
+    border-bottom: 1px solid #ddd;
+}
+
+.slds-modal__content {
+    background: white;
+}

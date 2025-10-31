@@ -11,11 +11,18 @@
     <targetConfigs>
         <targetConfig targets="lightning__FlowScreen">
             <property
+                name="selectedPracticeId"
+                type="String"
+                label="Selected Practice Id (Input)"
+                role="inputOnly"
+                description="Recibe el Id del Practice desde el Flow padre (para auto completar)."
+            />
+            <property
                 name="selectedPracticeOutput"
                 type="String"
                 role="outputOnly"
-                label="Selected Practice Id"
-                description="The Id of the selected Practice record."
+                label="Selected Patient Id"
+                description="The Id of the selected Patient record."
             />
             <!-- ✅ deja esta propiedad, aunque no la uses -->
             <property
