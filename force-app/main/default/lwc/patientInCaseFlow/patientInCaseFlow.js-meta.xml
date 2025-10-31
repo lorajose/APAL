@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <isExposed>true</isExposed>
+
+    <targets>
+        <!-- Flow screen component -->
+        <target>lightning__FlowScreen</target>
+
+        <!-- Optional: para poder usarlo en páginas o acciones -->
+        <target>lightning__RecordAction</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__AppPage</target>
+    </targets>
+
+    <targetConfigs>
+        <!-- Configuración cuando el componente se usa en un Flow -->
+        <targetConfig targets="lightning__FlowScreen">
+            <property
+                name="patientId"
+                label="Patient Id"
+                type="String" />
+
+            <property
+                name="isFromFlow"
+                label="Flow Mode"
+                type="Boolean"
+                default="false" />
+
+            <property
+                name="patientRecord"
+                label="Patient Record"
+                type="@salesforce/schema/Contact" />
+        </targetConfig>
+
+        <!-- Configuración para páginas de registro (opcional, igual que Provider) -->
+        <targetConfig targets="lightning__RecordPage">
+            <supportedFormFactors>
+                <supportedFormFactor type="Small" />
+                <supportedFormFactor type="Large" />
+            </supportedFormFactors>
+            <objects>
+                <object>Case</object>
+            </objects>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
