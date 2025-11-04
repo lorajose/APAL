@@ -1,4 +1,4 @@
-import { LightningElement, api, track } from 'lwc';
+/*import { LightningElement, api, track } from 'lwc';
 import searchPractices from '@salesforce/apex/PracticeSearchController.searchPractices';
 import getPracticeRecordTypeId from '@salesforce/apex/PracticeSearchController.getPracticeRecordTypeId';
 import getLastCreatedPractice from '@salesforce/apex/PracticeSearchController.getLastCreatedPractice';
@@ -148,4 +148,241 @@ variant: 'error'
 );
 }
 }
+} */
+
+import { LightningElement, api, track } from 'lwc';
+import searchPractices from '@salesforce/apex/PracticeSearchController.searchPractices';
+import getPracticeRecordTypeId from '@salesforce/apex/PracticeSearchController.getPracticeRecordTypeId';
+import getLastCreatedPractice from '@salesforce/apex/PracticeSearchController.getLastCreatedPractice';
+import { FlowAttributeChangeEvent } from 'lightning/flowSupport';
+import { NavigationMixin } from 'lightning/navigation';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+
+export default class PracticeSearchInput extends NavigationMixin(LightningElement) {
+  // ⚙️ Props usadas en Flow
+  @api selectedPracticeId;
+  @api selectedPracticeOutput;
+  @api practiceRecordTypeId;
+  @api practiceId;
+
+  // 🧠 Estado interno del componente
+  @track searchKey = '';
+  @track practices = [];
+  @track showLoading = false;
+  @track isDropdownOpen = false;
+
+  connectedCallback() {
+    getPracticeRecordTypeId()
+      .then((id) => (this.practiceRecordTypeId = id))
+      .catch((err) => console.error('Error fetching Practice RecordTypeId', err));
+  }
+
+  // ✅ Computed class para el dropdown SLDS
+  get comboboxClass() {
+    return this.isDropdownOpen
+      ? 'slds-combobox_container slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open'
+      : 'slds-combobox_container slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click';
+  }
+
+  // 🔍 Buscar prácticas con Apex
+  handleSearchChange(event) {
+    this.searchKey = event.target.value;
+
+    if (this.searchKey.length >= 2) {
+      this.isDropdownOpen = true;
+      this.showLoading = true;
+
+      searchPractices({ searchKey: this.searchKey })
+        .then((result) => {
+          this.practices = result;
+        })
+        .catch((error) => {
+          console.error('Error searching practices:', error);
+          this.practices = [];
+        })
+        .finally(() => {
+          this.showLoading = false;
+        });
+    } else {
+      this.isDropdownOpen = false;
+      this.practices = [];
+    }
+  }
+
+  // 🔽 Mostrar dropdown si hay texto y resultados
+  handleFocus() {
+    if (this.searchKey.length >= 2 && this.practices.length > 0) {
+      this.isDropdownOpen = true;
+    }
+  }
+
+  // ❌ Cerrar dropdown al perder foco (con retraso para permitir clic)
+  handleBlur() {
+    setTimeout(() => (this.isDropdownOpen = false), 200);
+  }
+
+  // 🖱️ Seleccionar práctica de la lista
+  handleSelect(event) {
+    const id = event.currentTarget.dataset.id;
+    const name = event.currentTarget.dataset.name;
+
+    console.log('🧩 handleSelect disparado con:', id, name);
+
+    const selectedObj = this.practices.find((p) => p.Id === id);
+    if (!selectedObj) {
+      console.warn('⚠️ No se encontró el practice con Id:', id);
+      return;
+    }
+
+    this.selectedPracticeId = id;
+    this.searchKey = name;
+    this.practices = [];
+    this.isDropdownOpen = false;
+
+    console.log('✅ Practice seleccionado:', selectedObj);
+
+    // 🚀 Notificar al Flow padre
+    this.dispatchEvent(
+      new FlowAttributeChangeEvent('practiceId', this.selectedPracticeId)
+    );
+
+    // ✅ Toast visual opcional
+    this.dispatchEvent(
+      new ShowToastEvent({
+        title: 'Practice Selected',
+        message: `"${name}" has been selected.`,
+        variant: 'success'
+      })
+    );
+  }
+
+  @api
+addNewPractice(newPractice) {
+  if (!newPractice || !newPractice.Id) return;
+
+  console.log('✅ Nuevo Practice recibido:', newPractice);
+
+  this.selectedPracticeId = newPractice.Id;
+  this.searchKey = newPractice.Name;
+  this.practices = [];
+  this.showLoading = false;
+
+  requestAnimationFrame(() => {
+    const input = this.template.querySelector('input.slds-input');
+    if (input) input.value = newPractice.Name;
+
+    // 🔄 Notificar a todos los posibles Flows (por si usan distinto atributo)
+    this.dispatchEvent(new FlowAttributeChangeEvent('selectedPracticeOutput', this.selectedPracticeId));
+    this.dispatchEvent(new FlowAttributeChangeEvent('practiceId', this.selectedPracticeId));
+    this.dispatchEvent(new FlowAttributeChangeEvent('selectedPracticeId', this.selectedPracticeId));
+
+    // 🌐 Emitir evento global para PracticeInCaseFlow
+    window.dispatchEvent(new CustomEvent('practicecreated', {
+      detail: {
+        practiceId: newPractice.Id,
+        practiceRecord: newPractice
+      }
+    }));
+
+    console.log('🌐 Evento global practicecreated despachado:', newPractice.Name);
+
+    // ✅ Toast visual
+    this.dispatchEvent(
+      new ShowToastEvent({
+        title: 'Practice Selected',
+        message: `"${newPractice.Name}" has been created and selected.`,
+        variant: 'success'
+      })
+    );
+  });
+}
+
+  // 🔹 Auto-rellenar tras crear nuevo Practice
+ /* @api
+  addNewPractice(newPractice) {
+    if (!newPractice || !newPractice.Id) return;
+
+    console.log('✅ Nuevo Practice recibido:', newPractice);
+
+    this.selectedPracticeId = newPractice.Id;
+    this.searchKey = newPractice.Name;
+    this.practices = [];
+    this.showLoading = false;
+
+    requestAnimationFrame(() => {
+      const input = this.template.querySelector('input.slds-input');
+      if (input) input.value = newPractice.Name;
+
+      this.dispatchEvent(
+        new FlowAttributeChangeEvent('selectedPracticeOutput', this.selectedPracticeId)
+      );
+
+      // 🌐 Emitir evento global para sincronizar con PracticeInCaseFlow
+window.dispatchEvent(
+  new CustomEvent('practicecreated', {
+    detail: {
+      practiceId: newPractice.Id,
+      practiceRecord: newPractice
+    }
+  })
+);
+
+console.log('🌐 Evento global practicecreated despachado:', newPractice.Name);
+
+
+      this.dispatchEvent(
+        new ShowToastEvent({
+          title: 'Practice Selected',
+          message: `"${newPractice.Name}" has been created and selected.`,
+          variant: 'success'
+        })
+      );
+    });
+  }*/
+
+  // ➕ Crear nueva práctica (abre modal estándar)
+  handleNewPractice() {
+    this.showLoading = true;
+
+    try {
+      this[NavigationMixin.Navigate]({
+        type: 'standard__recordPage',
+        attributes: {
+          objectApiName: 'Account',
+          actionName: 'new'
+        },
+        state: {
+          recordTypeId: this.practiceRecordTypeId || null,
+          navigationLocation: 'RELATED_LIST',
+          useRecordTypeCheck: 1
+        }
+      });
+
+      // Esperar cierre del modal, luego obtener el nuevo registro
+      setTimeout(() => {
+        getLastCreatedPractice()
+          .then((practice) => {
+            if (practice && practice.Id) {
+              this.addNewPractice(practice);
+            }
+            this.showLoading = false;
+          })
+          .catch((err) => {
+            this.showLoading = false;
+            console.error('Error fetching last created practice:', err);
+          });
+      }, 2500);
+    } catch (error) {
+      this.showLoading = false;
+      console.error('Error opening New Practice modal:', error);
+
+      this.dispatchEvent(
+        new ShowToastEvent({
+          title: 'Error',
+          message: 'Unable to open the New Practice modal.',
+          variant: 'error'
+        })
+      );
+    }
+  }
 }

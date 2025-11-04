@@ -5,7 +5,7 @@
         <name>Add_URL</name>
         <label>Add URL</label>
         <locationX>50</locationX>
-        <locationY>566</locationY>
+        <locationY>674</locationY>
         <assignmentItems>
             <assignToReference>URL</assignToReference>
             <operator>Assign</operator>
@@ -21,7 +21,7 @@
         <name>CheckURL</name>
         <label>CheckURL</label>
         <locationX>182</locationX>
-        <locationY>458</locationY>
+        <locationY>566</locationY>
         <defaultConnector>
             <targetReference>Create_New_Practice</targetReference>
         </defaultConnector>
@@ -43,10 +43,35 @@
         </rules>
     </decisions>
     <decisions>
+        <name>Navigation_Save</name>
+        <label>Navigation</label>
+        <locationX>380</locationX>
+        <locationY>458</locationY>
+        <defaultConnector>
+            <targetReference>Cancel_Screen</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Cancel</defaultConnectorLabel>
+        <rules>
+            <name>Save</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Navigation.value</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Save</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>CheckURL</targetReference>
+            </connector>
+            <label>Save</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Parent_Case</name>
         <label>Parent Case</label>
         <locationX>182</locationX>
-        <locationY>974</locationY>
+        <locationY>1082</locationY>
         <defaultConnector>
             <targetReference>Update_Case_on_Parent</targetReference>
         </defaultConnector>
@@ -133,7 +158,7 @@
         <name>Create_New_Practice</name>
         <label>Create New Practice</label>
         <locationX>182</locationX>
-        <locationY>758</locationY>
+        <locationY>866</locationY>
         <assignRecordIdToReference>practiceRecordId</assignRecordIdToReference>
         <connector>
             <targetReference>Get_Created_Practice</targetReference>
@@ -311,7 +336,7 @@
     <recordLookups>
         <name>Get_Case</name>
         <label>Get Case</label>
-        <locationX>182</locationX>
+        <locationX>380</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -333,7 +358,7 @@
         <name>Get_Created_Practice</name>
         <label>Get Created Practice</label>
         <locationX>182</locationX>
-        <locationY>866</locationY>
+        <locationY>974</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Parent_Case</targetReference>
@@ -354,7 +379,7 @@
     <recordLookups>
         <name>Get_Practice_Record_Type</name>
         <label>Get Practice Record Type</label>
-        <locationX>182</locationX>
+        <locationX>380</locationX>
         <locationY>242</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -376,7 +401,7 @@
         <name>Update_Case</name>
         <label>Update Case</label>
         <locationX>50</locationX>
-        <locationY>1082</locationY>
+        <locationY>1190</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -397,7 +422,7 @@
         <name>Update_Case_on_Parent</name>
         <label>Update Case on Parent</label>
         <locationX>314</locationX>
-        <locationY>1082</locationY>
+        <locationY>1190</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -415,15 +440,31 @@
         <object>Case</object>
     </recordUpdates>
     <screens>
+        <name>Cancel_Screen</name>
+        <label>Cancel Screen</label>
+        <locationX>578</locationX>
+        <locationY>566</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>message</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;You have canceled your transaction. No changes have been made. Please click the X button above to return to the Case record being created.&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>false</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
         <name>New_Practice</name>
         <label>New Practice</label>
-        <locationX>182</locationX>
+        <locationX>380</locationX>
         <locationY>350</locationY>
-        <allowBack>false</allowBack>
+        <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
-        <allowPause>false</allowPause>
+        <allowPause>true</allowPause>
         <connector>
-            <targetReference>CheckURL</targetReference>
+            <targetReference>Navigation_Save</targetReference>
         </connector>
         <fields>
             <name>Name</name>
@@ -693,12 +734,49 @@
             <isRequired>true</isRequired>
             <storeOutputAutomatically>true</storeOutputAutomatically>
         </fields>
-        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
-        <showFooter>true</showFooter>
+        <fields>
+            <name>Navigation</name>
+            <extensionName>c:fsc_flowButtonBar</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>alignment</name>
+                <value>
+                    <stringValue>right</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>orientation</name>
+                <value>
+                    <stringValue>horizontal</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>showLines</name>
+                <value>
+                    <stringValue>neither</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>actionMode</name>
+                <value>
+                    <stringValue>navigation</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>buttons</name>
+                <value>
+                    <stringValue>[{&quot;label&quot;:&quot;Cancel&quot;,&quot;value&quot;:&quot;Cancel&quot;,&quot;iconPosition&quot;:&quot;left&quot;,&quot;variant&quot;:&quot;neutral&quot;,&quot;index&quot;:0},{&quot;label&quot;:&quot;Save&quot;,&quot;value&quot;:&quot;Save&quot;,&quot;iconPosition&quot;:&quot;left&quot;,&quot;variant&quot;:&quot;brand&quot;,&quot;index&quot;:1}]</stringValue>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+        </fields>
+        <showFooter>false</showFooter>
         <showHeader>true</showHeader>
     </screens>
     <start>
-        <locationX>56</locationX>
+        <locationX>254</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Case</targetReference>
