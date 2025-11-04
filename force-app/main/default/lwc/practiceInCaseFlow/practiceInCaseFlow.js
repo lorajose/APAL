@@ -14,6 +14,7 @@ disconnectedCallback() {
     window.removeEventListener('practiceselected', this.handlePracticeSelected.bind(this));
 }
 
+
 handlePracticeSelected(event) {
     const { practiceId, practiceRecord } = event.detail;
     console.log('📡 Recibido desde modal New Provider:', practiceId, practiceRecord);
@@ -21,6 +22,7 @@ handlePracticeSelected(event) {
     const searchInput = this.template.querySelector('c-practice-search-input');
     if (searchInput && typeof searchInput.addNewPractice === 'function') {
         searchInput.addNewPractice(practiceRecord);
+        console.log('🎯 Practice sincronizado desde modal:', practiceRecord.Name);
     }
 }
 
@@ -90,7 +92,7 @@ finishAction = async ({ outputVariables }) => {
 };
 
 // 🧩 Función reutilizable para aplicar el nuevo Practice
-_applyNewPractice(practice, searchInput) {
+/* _applyNewPractice(practice, searchInput) {
     this.practiceRecord = practice;
     this.practiceId = practice.Id;
 
@@ -114,5 +116,39 @@ _applyNewPractice(practice, searchInput) {
     );
 
     console.log(`✨ Practice autocompletado: ${practice.Name}`);
+} */
+
+  _applyNewPractice(practice, searchInput) {
+    this.practiceRecord = practice;
+    this.practiceId = practice.Id;
+
+    // Esperar al DOM antes de autocompletar
+    setTimeout(() => {
+        try {
+            const input = this.template.querySelector('c-practice-search-input');
+            if (input && typeof input.addNewPractice === 'function') {
+                input.addNewPractice(practice);
+                console.log(`✨ Practice autocompletado: ${practice.Name}`);
+            } else {
+                console.warn('⚠️ El componente de búsqueda no está disponible aún.');
+            }
+
+            // 🔊 Evento global o LMS
+            window.dispatchEvent(new CustomEvent('practicecreated', {
+                detail: { practiceId: practice.Id, practiceRecord: practice }
+            }));
+
+            // 📩 Notificar al Flow padre
+      this.dispatchEvent(new FlowAttributeChangeEvent('practiceRecord', this.practiceRecord));
+      this.dispatchEvent(new FlowAttributeChangeEvent('practiceId', this.practiceId));
+
+      console.log('📩 Flow principal actualizado con nuevo Practice.');
+
+
+        } catch (e) {
+            console.error('❌ Error al autocompletar el practice:', e);
+        }
+    }, 400); // pequeño delay para asegurar que el Flow modal cerró
 }
+  
 }

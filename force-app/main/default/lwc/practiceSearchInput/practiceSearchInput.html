@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 <div class="practice-container">
 <div class="slds-form-element">
 <label class="slds-form-element__label" for="practiceSearch">Name</label>
@@ -19,7 +19,7 @@ oninput={handleSearchChange}
 </div>
 </div>
 
-      <!-- Lista de resultados -->
+       Lista de resultados 
       <template for:each={practices} for:item="practice">
   <div key={practice.Id}>
     <button
@@ -33,11 +33,118 @@ oninput={handleSearchChange}
   </div>
 </template>
 
-<!-- Spinner visible durante la carga -->
+ Spinner visible durante la carga 
 <template if:true={showLoading}>
 <div class="slds-p-top_x-small">
 <lightning-spinner alternative-text="Opening New Practice..." size="small"></lightning-spinner>
 </div>
 </template>
 </div>
+</template> -->
+
+<template>
+  <div class="practice-container">
+    <div class="slds-form-element">
+      <label class="slds-form-element__label" for="practiceSearch">Name</label>
+
+      <!-- Contenedor tipo combobox (lookup dropdown) -->
+      <div
+        class={comboboxClass}
+        aria-expanded={isDropdownOpen}
+        aria-haspopup="listbox"
+        role="combobox"
+      >
+        <!-- Campo de búsqueda -->
+        <div
+          class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right"
+          role="none"
+        >
+        <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_left">
+  <lightning-icon 
+      icon-name="standard:account" 
+      size="x-small"
+      class="slds-icon slds-input__icon slds-input__icon_left slds-icon-text-default">
+  </lightning-icon>
+
+  <input 
+    type="text"
+    id="practiceSearch"
+    class="slds-input slds-combobox__input"
+    placeholder="Search Practice..."
+    value={searchKey}
+    oninput={handleSearchChange}
+    onfocus={handleFocus}
+    onblur={handleBlur}
+    aria-autocomplete="list"
+    aria-controls="practice-listbox"
+  />
+</div>
+
+          <span
+            class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right"
+          >
+            <lightning-icon icon-name="utility:search" size="x-small"></lightning-icon>
+          </span>
+        </div>
+
+        <!-- 🔽 Dropdown de resultados -->
+        <div
+          if:true={isDropdownOpen}
+          id="practice-listbox"
+          class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid"
+          role="listbox"
+        >
+          <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+            <template if:true={practices.length}>
+              <template for:each={practices} for:item="practice">
+                <li key={practice.Id} role="presentation" class="slds-listbox__item">
+                  <div
+                    class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
+                    role="option"
+                    data-id={practice.Id}
+                    data-name={practice.Name}
+                    onclick={handleSelect}
+                  >
+                    <span class="slds-media__figure slds-listbox__option-icon">
+                      <lightning-icon
+                        icon-name="standard:account"
+                        size="small"
+                      ></lightning-icon>
+                    </span>
+                    <span class="slds-media__body">
+                      <span
+                        class="slds-listbox__option-text slds-listbox__option-text_entity"
+                      >
+                        {practice.Name}
+                      </span>
+                      <span class="slds-listbox__option-meta">{practice.Phone}</span>
+                    </span>
+                  </div>
+                </li>
+              </template>
+            </template>
+
+            <!-- Mensaje cuando no hay resultados -->
+            <template if:false={practices.length}>
+              <li class="slds-listbox__item">
+                <span class="slds-text-color_weak slds-p-around_x-small"
+                  >No results found</span
+                >
+              </li>
+            </template>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🔄 Spinner visible durante la carga -->
+    <template if:true={showLoading}>
+      <div class="slds-p-top_x-small">
+        <lightning-spinner
+          alternative-text="Opening New Practice..."
+          size="small"
+        ></lightning-spinner>
+      </div>
+    </template>
+  </div>
 </template>
