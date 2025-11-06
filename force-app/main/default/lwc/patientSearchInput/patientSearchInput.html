@@ -309,15 +309,16 @@
           <!-- ❌ Clear button -->
           <template if:true={isInputFilled}>
             <button
-              class="slds-button slds-button_icon slds-input__icon slds-input__icon_right"
+              class="slds-button slds-button_icon slds-input__icon slds-input__icon_right slds-icon-text-default clear-btn"
               title="Clear selection"
               onclick={clearSelection}
               type="button"
+              disabled={isButtonDisabled}
             >
               <lightning-icon
                 icon-name="utility:close"
                 size="x-small"
-                class="slds-icon slds-icon-text-default"
+                class="slds-icon"
               ></lightning-icon>
             </button>
           </template>

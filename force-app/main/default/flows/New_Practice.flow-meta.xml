@@ -649,6 +649,10 @@
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <storeOutputAutomatically>true</storeOutputAutomatically>
+            <validationRule>
+                <errorMessage>&lt;p&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;Please enter a valid email address (example: user@example.com)&lt;/span&gt;&lt;/p&gt;</errorMessage>
+                <formulaExpression>ISBLANK({!Practice_Email.value}) ||REGEX({!Practice_Email.value}, &quot;^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}$&quot;)</formulaExpression>
+            </validationRule>
         </fields>
         <fields>
             <name>Billing_Address</name>
@@ -733,6 +737,10 @@
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <storeOutputAutomatically>true</storeOutputAutomatically>
+            <validationRule>
+                <errorMessage>&lt;p&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;Please enter a valid email address (example: user@example.com)&lt;/span&gt;&lt;/p&gt;</errorMessage>
+                <formulaExpression>ISBLANK({!PracticeLeadPhysiciansEmail.value}) || REGEX({!PracticeLeadPhysiciansEmail.value}, &quot;^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}$&quot;)</formulaExpression>
+            </validationRule>
         </fields>
         <fields>
             <name>Navigation</name>
