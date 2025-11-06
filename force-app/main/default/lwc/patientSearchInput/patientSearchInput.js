@@ -429,6 +429,10 @@ export default class PatientSearchInput extends LightningElement {
       })
     );
   }
+  get isButtonDisabled() {
+  return !this.isInputFilled; // Deshabilita si no hay texto o selección
+  }
+
 
   // ❌ Limpia manualmente el campo
   clearSelection() {

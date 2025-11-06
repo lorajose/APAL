@@ -748,6 +748,10 @@ export default class PracticeSearchInput extends NavigationMixin(LightningElemen
     console.log('✅ Practice seleccionado:', name);
   }
 
+  get isButtonDisabled() {
+  return !this.isInputFilled; // Deshabilita si no hay texto o selección
+  }
+
   // ❌ Limpiar manualmente
   clearSelection() {
     this.selectedPracticeId = null;

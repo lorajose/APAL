@@ -22,3 +22,19 @@
     background-color: #f3f3f3;
     cursor: pointer;
 }
+.clear-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  height: 100%;
+  right: 0.5rem;
+}
+
+.clear-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
