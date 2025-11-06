@@ -142,6 +142,8 @@ export default class PatientSearchInput extends NavigationMixin(LightningElement
     }
 }
 */
+
+/*
 import { LightningElement, api, track } from 'lwc';
 import searchPatients from '@salesforce/apex/PatientSearchController.searchPatients';
 import getLastCreatedPatient from '@salesforce/apex/PatientSearchController.getLastCreatedPatient';
@@ -239,6 +241,24 @@ export default class PatientSearchInput extends NavigationMixin(LightningElement
     );
   }
 
+     clearSelection() {
+        this.selectedAccount = null;
+        this.searchTerm = '';
+        this.showDropdown = false;
+        this.showError = false;
+
+        const clearSelectionEvent = new CustomEvent('clearselection', {
+            bubbles: true,
+            composed: true
+        });
+
+        this.dispatchEvent(clearSelectionEvent);
+
+        setTimeout(() => {
+            this.template.querySelector('input').focus();
+        }, 0);
+    }
+
   // 🔹 Auto-rellenar tras crear un nuevo Patient
   @api
   addNewPatient(newPatient) {
@@ -318,5 +338,106 @@ export default class PatientSearchInput extends NavigationMixin(LightningElement
         })
       );
     }
+  }
+} */
+
+import { LightningElement, api, track } from 'lwc';
+import { FlowAttributeChangeEvent } from 'lightning/flowSupport';
+import searchPatients from '@salesforce/apex/PatientSearchController.searchPatients';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+
+const STORAGE_KEY = 'currentCasePatient';
+
+export default class PatientSearchInput extends LightningElement {
+  @api selectedPatientId;
+  @api selectedPatientOutput;
+  @api patientId;
+
+  @track searchKey = '';
+  @track patients = [];
+  @track showLoading = false;
+  @track isDropdownOpen = false;
+
+  // 👁️ Propiedad reactiva para mostrar el icono X
+  get isInputFilled() {
+    return this.searchKey && this.searchKey.trim() !== '';
+  }
+
+  connectedCallback() {
+    console.log('🧩 patientSearchInput conectado');
+
+    // Restaurar si hubo error de validación
+    const saved = sessionStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      this.selectedPatientId = parsed.id;
+      this.searchKey = parsed.name;
+      console.log('♻️ Restaurado paciente tras error:', parsed.name);
+    }
+
+    // Escucha cuando el Flow termina con éxito
+    window.addEventListener('flowfinished', this.handleFlowFinished.bind(this));
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener('flowfinished', this.handleFlowFinished.bind(this));
+  }
+
+  // 🧹 Limpiar todo cuando el Flow se guarda correctamente
+  handleFlowFinished() {
+    console.log('💾 Flow guardado → limpiando campo Patient');
+    sessionStorage.removeItem(STORAGE_KEY);
+    this.clearSelection();
+  }
+
+  handleSearchChange(event) {
+    this.searchKey = event.target.value;
+    if (this.searchKey.length >= 2) {
+      this.isDropdownOpen = true;
+      this.showLoading = true;
+      searchPatients({ searchKey: this.searchKey })
+        .then((result) => (this.patients = result))
+        .catch((error) => console.error('❌ Error searching patients:', error))
+        .finally(() => (this.showLoading = false));
+    } else {
+      this.isDropdownOpen = false;
+      this.patients = [];
+    }
+  }
+
+  handleSelect(event) {
+    const id = event.currentTarget.dataset.id;
+    const name = event.currentTarget.dataset.name;
+
+    this.selectedPatientId = id;
+    this.selectedPatientOutput = name;
+    this.searchKey = name;
+    this.isDropdownOpen = false;
+    this.patients = [];
+
+    // 💾 Guardar en sesión para restaurar si no se guarda el caso
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ id, name }));
+
+    this.dispatchEvent(new FlowAttributeChangeEvent('patientId', id));
+    this.dispatchEvent(new FlowAttributeChangeEvent('selectedPatientOutput', name));
+
+    this.dispatchEvent(
+      new ShowToastEvent({
+        title: 'Patient Selected',
+        message: `"${name}" seleccionado.`,
+        variant: 'success'
+      })
+    );
+  }
+
+  // ❌ Limpia manualmente el campo
+  clearSelection() {
+    this.selectedPatientId = null;
+    this.selectedPatientOutput = null;
+    this.searchKey = '';
+    this.patients = [];
+    this.isDropdownOpen = false;
+    sessionStorage.removeItem(STORAGE_KEY);
+    console.log('🧹 Limpieza manual ejecutada');
   }
 }
