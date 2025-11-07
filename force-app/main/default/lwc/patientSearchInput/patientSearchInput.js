@@ -1,393 +1,138 @@
-/*import { LightningElement, api, track } from 'lwc';
-import searchPatients from '@salesforce/apex/PatientSearchController.searchPatients';
-import getLastCreatedPatient from '@salesforce/apex/PatientSearchController.getLastCreatedPatient';
-import { FlowAttributeChangeEvent } from 'lightning/flowSupport';
-import { NavigationMixin } from 'lightning/navigation';
-import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-
-export default class PatientSearchInput extends NavigationMixin(LightningElement) {
-    @api selectedPatientId;
-    @api selectedPatientOutput;
-    @api patientId;
-
-    @track searchKey = '';
-    @track patients = [];
-    @track showLoading = false;
-
-    // 🔹 Auto-rellenar tras crear nuevo Patient
-    @api
-    addNewPatient(newPatient) {
-        if (!newPatient || !newPatient.Id) return;
-
-        console.log('✅ Nuevo Patient recibido:', newPatient);
-
-        this.selectedPatientId = newPatient.Id;
-        this.searchKey = newPatient.Name;
-        this.patients = [];
-        this.showLoading = false;
-
-        // 🔁 Forzar render inmediato
-        requestAnimationFrame(() => {
-            // 1️⃣ Reactividad nativa
-            this.searchKey = newPatient.Name;
-
-            // 2️⃣ Asignación manual al input (respaldo inmediato)
-            const input = this.template.querySelector('input.slds-input');
-            if (input) {
-                input.value = newPatient.Name;
-            }
-
-            // 3️⃣ Notificar al Flow
-            this.dispatchEvent(
-                new FlowAttributeChangeEvent('selectedPatientOutput', this.selectedPatientId)
-            );
-
-            // 4️⃣ Toast confirmación
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: 'Patient Selected',
-                    message: `"${newPatient.Name}" has been created and selected.`,
-                    variant: 'success'
-                })
-            );
-        });
-    }
-
-    // 🔍 Buscar pacientes
-    handleSearchChange(event) {
-        this.searchKey = event.target.value;
-
-        if (this.searchKey.length >= 2) {
-            searchPatients({ searchKey: this.searchKey })
-                .then((result) => {
-                    this.patients = result;
-                })
-                .catch((error) => {
-                    console.error('Error searching patients:', error);
-                    this.patients = [];
-                });
-        } else {
-            this.patients = [];
-        }
-    }
-
-    // 🖱️ Seleccionar paciente de la lista
-   handleSelect(event) {
-  const id = event.target.dataset.id;
-  const name = event.target.dataset.name;
-
-  console.log('🧩 handleSelect disparado con:', id, name);
-
-  const selectedObj = this.patients.find((p) => p.Id === id);
-  if (!selectedObj) {
-    console.warn('⚠️ No se encontró el paciente con Id:', id);
-    return;
-  }
-
-  this.selectedPatientId = id;
-  this.searchKey = name;
-  this.patients = [];
-
-  console.log('✅ Paciente seleccionado:', selectedObj);
-  console.log('🚀 Lanzando FlowAttributeChangeEvent con:', this.selectedPatientId); 
-  this.dispatchEvent(
-    new FlowAttributeChangeEvent('patientId', this.selectedPatientId)
-  );
-}
-
-
-    // ➕ Crear nuevo Patient
-    handleNewPatient() {
-        this.showLoading = true;
-
-        try {
-            this[NavigationMixin.Navigate]({
-                type: 'standard__recordPage',
-                attributes: {
-                    objectApiName: 'Contact',
-                    actionName: 'new'
-                },
-                state: {
-                    navigationLocation: 'RELATED_LIST',
-                    useRecordTypeCheck: 1
-                }
-            });
-
-            // Esperar cierre del modal, luego obtener el nuevo registro
-            setTimeout(() => {
-                getLastCreatedPatient()
-                    .then((patient) => {
-                        if (patient && patient.Id) {
-                            this.addNewPatient(patient);
-                        }
-                        this.showLoading = false;
-                    })
-                    .catch((err) => {
-                        this.showLoading = false;
-                        console.error('Error fetching last created patient:', err);
-                    });
-            }, 2500);
-        } catch (error) {
-            this.showLoading = false;
-            console.error('Error opening New Patient modal:', error);
-
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: 'Error',
-                    message: 'Unable to open the New Patient modal.',
-                    variant: 'error'
-                })
-            );
-        }
-    }
-}
-*/
-
-/*
-import { LightningElement, api, track } from 'lwc';
-import searchPatients from '@salesforce/apex/PatientSearchController.searchPatients';
-import getLastCreatedPatient from '@salesforce/apex/PatientSearchController.getLastCreatedPatient';
-import { FlowAttributeChangeEvent } from 'lightning/flowSupport';
-import { NavigationMixin } from 'lightning/navigation';
-import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-
-export default class PatientSearchInput extends NavigationMixin(LightningElement) {
-  @api selectedPatientId;
-  @api selectedPatientOutput;
-  @api patientId;
-
-  @track searchKey = '';
-  @track patients = [];
-  @track showLoading = false;
-  @track isDropdownOpen = false;
-
-  // 🎨 Computed class para mostrar/ocultar el dropdown estilo lookup
-  get comboboxClass() {
-    return this.isDropdownOpen
-      ? 'slds-combobox_container slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open'
-      : 'slds-combobox_container slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click';
-  }
-
-  // 🔍 Buscar pacientes desde Apex
-  handleSearchChange(event) {
-    this.searchKey = event.target.value;
-
-    if (this.searchKey.length >= 2) {
-      this.isDropdownOpen = true;
-      this.showLoading = true;
-
-      searchPatients({ searchKey: this.searchKey })
-        .then((result) => {
-          this.patients = result;
-        })
-        .catch((error) => {
-          console.error('❌ Error searching patients:', error);
-          this.patients = [];
-        })
-        .finally(() => {
-          this.showLoading = false;
-        });
-    } else {
-      this.isDropdownOpen = false;
-      this.patients = [];
-    }
-  }
-
-  // 👁️‍🗨️ Mostrar dropdown al enfocar si hay datos
-  handleFocus() {
-    if (this.searchKey.length >= 2 && this.patients.length > 0) {
-      this.isDropdownOpen = true;
-    }
-  }
-
-  // ❌ Cerrar dropdown al perder foco (con un pequeño delay para permitir clics)
-  handleBlur() {
-    setTimeout(() => (this.isDropdownOpen = false), 200);
-  }
-
-  // 🖱️ Seleccionar paciente de la lista
-  handleSelect(event) {
-    const id = event.currentTarget.dataset.id;
-    const name = event.currentTarget.dataset.name;
-
-    console.log('🧩 handleSelect disparado con:', id, name);
-
-    const selectedObj = this.patients.find((p) => p.Id === id);
-    if (!selectedObj) {
-      console.warn('⚠️ No se encontró el paciente con Id:', id);
-      return;
-    }
-
-    this.selectedPatientId = id;
-    this.searchKey = name;
-    this.patients = [];
-    this.isDropdownOpen = false;
-
-    console.log('✅ Paciente seleccionado:', selectedObj);
-    console.log('🚀 Lanzando FlowAttributeChangeEvent con:', this.selectedPatientId);
-
-    // 🔁 Actualiza la variable de salida del Flow
-    this.dispatchEvent(
-      new FlowAttributeChangeEvent('patientId', this.selectedPatientId)
-    );
-
-    // ✅ Muestra un toast
-    this.dispatchEvent(
-      new ShowToastEvent({
-        title: 'Patient Selected',
-        message: `"${name}" has been selected.`,
-        variant: 'success'
-      })
-    );
-  }
-
-     clearSelection() {
-        this.selectedAccount = null;
-        this.searchTerm = '';
-        this.showDropdown = false;
-        this.showError = false;
-
-        const clearSelectionEvent = new CustomEvent('clearselection', {
-            bubbles: true,
-            composed: true
-        });
-
-        this.dispatchEvent(clearSelectionEvent);
-
-        setTimeout(() => {
-            this.template.querySelector('input').focus();
-        }, 0);
-    }
-
-  // 🔹 Auto-rellenar tras crear un nuevo Patient
-  @api
-  addNewPatient(newPatient) {
-    if (!newPatient || !newPatient.Id) return;
-
-    console.log('✅ Nuevo Patient recibido:', newPatient);
-
-    this.selectedPatientId = newPatient.Id;
-    this.searchKey = newPatient.Name;
-    this.patients = [];
-    this.showLoading = false;
-
-    // 🔁 Forzar render inmediato
-    requestAnimationFrame(() => {
-      // Asignación manual al input
-      const input = this.template.querySelector('input.slds-input');
-      if (input) {
-        input.value = newPatient.Name;
-      }
-
-      // 🔊 Notificar al Flow
-      this.dispatchEvent(
-        new FlowAttributeChangeEvent('selectedPatientOutput', this.selectedPatientId)
-      );
-
-      // 🎉 Mostrar confirmación
-      this.dispatchEvent(
-        new ShowToastEvent({
-          title: 'Patient Selected',
-          message: `"${newPatient.Name}" has been created and selected.`,
-          variant: 'success'
-        })
-      );
-    });
-  }
-
-  // ➕ Crear nuevo Patient
-  handleNewPatient() {
-    this.showLoading = true;
-
-    try {
-      this[NavigationMixin.Navigate]({
-        type: 'standard__recordPage',
-        attributes: {
-          objectApiName: 'Contact',
-          actionName: 'new'
-        },
-        state: {
-          navigationLocation: 'RELATED_LIST',
-          useRecordTypeCheck: 1
-        }
-      });
-
-      // Esperar cierre del modal, luego obtener el nuevo registro
-      setTimeout(() => {
-        getLastCreatedPatient()
-          .then((patient) => {
-            if (patient && patient.Id) {
-              this.addNewPatient(patient);
-            }
-            this.showLoading = false;
-          })
-          .catch((err) => {
-            this.showLoading = false;
-            console.error('❌ Error fetching last created patient:', err);
-          });
-      }, 2500);
-    } catch (error) {
-      this.showLoading = false;
-      console.error('❌ Error opening New Patient modal:', error);
-
-      this.dispatchEvent(
-        new ShowToastEvent({
-          title: 'Error',
-          message: 'Unable to open the New Patient modal.',
-          variant: 'error'
-        })
-      );
-    }
-  }
-} */
-
 import { LightningElement, api, track } from 'lwc';
 import { FlowAttributeChangeEvent } from 'lightning/flowSupport';
 import searchPatients from '@salesforce/apex/PatientSearchController.searchPatients';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-
-const STORAGE_KEY = 'currentCasePatient';
 
 export default class PatientSearchInput extends LightningElement {
+  // ⚙️ Variables públicas
   @api selectedPatientId;
   @api selectedPatientOutput;
   @api patientId;
 
+  // 🧠 Estado interno
   @track searchKey = '';
   @track patients = [];
   @track showLoading = false;
   @track isDropdownOpen = false;
+  isServiceConsole = false;
+  saveListenerAttached = false;
 
-  // 👁️ Propiedad reactiva para mostrar el icono X
+  get comboboxClass() {
+    return `slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click ${this.isDropdownOpen ? 'slds-is-open' : ''}`;
+  }
+
   get isInputFilled() {
     return this.searchKey && this.searchKey.trim() !== '';
   }
+  
+  get isButtonDisabled() {
+    return !this.isInputFilled;
+  }
+
+  // 🔑 Clave única por tab y registro
+  get storageKey() {
+    const tabKey = window.name || 'mainTab';
+    const recordKey = this.patientId || 'newCase';
+    return `patient_${tabKey}_${recordKey}`;
+  }
 
   connectedCallback() {
-    console.log('🧩 patientSearchInput conectado');
+    console.log('🧩 patientSearchInput conectado con persistencia robusta');
 
-    // Restaurar si hubo error de validación
-    const saved = sessionStorage.getItem(STORAGE_KEY);
-    if (saved) {
+    const url = window.location.href.toLowerCase();
+    const isNewCase =
+      url.includes('/new') || url.includes('/newcase') || url.includes('/case/create');
+
+    const pendingSave = localStorage.getItem('pendingSave');
+    const lastAttempt = localStorage.getItem('lastSaveAttempt');
+
+    // ⏱️ Solo consideramos intentos dentro de los últimos 10 segundos
+    const validAttempt =
+      pendingSave && lastAttempt && Date.now() - parseInt(lastAttempt, 10) < 10000;
+
+    const saved = localStorage.getItem(this.storageKey);
+
+    // ♻️ Caso 1: intento previo detectado
+    if (validAttempt && saved) {
+        const parsed = JSON.parse(saved);
+        
+        // Asumimos que hubo un error (ya que estamos aquí después de un "Save" reciente)
+        // y restauramos el valor SIN intentar detectar errores en el DOM.
+        this.selectedPatientId = parsed.id;
+        this.searchKey = parsed.name;
+        console.log('⚠️ Intento de guardado detectado → se conserva Patient:', parsed.name);
+
+        // Eliminamos las banderas inmediatamente después de restaurar.
+        localStorage.removeItem('pendingSave');
+        localStorage.removeItem('lastSaveAttempt');
+        
+        // SI EL CAMPO DEBE LIMPIARSE TRAS UN GUARDADO EXITOSO, 
+        // NECESITAS OTRA FORMA DE SABER SI EL GUARDADO FUE EXITOSO (e.g., parámetro de URL de éxito).
+        // Por ahora, siempre restaurará si se hizo clic en guardar recientemente.
+        return; 
+    }
+    
+    // ♻️ Caso 2: recarga normal o error previo persistente
+    if (saved && !validAttempt) {
       const parsed = JSON.parse(saved);
       this.selectedPatientId = parsed.id;
       this.searchKey = parsed.name;
-      console.log('♻️ Restaurado paciente tras error:', parsed.name);
+      console.log('♻️ Restaurado Patient persistente:', parsed.name);
     }
 
-    // Escucha cuando el Flow termina con éxito
-    window.addEventListener('flowfinished', this.handleFlowFinished.bind(this));
+    // 🆕 Caso nuevo → limpiar
+    if (isNewCase && !validAttempt) {
+      this.clearSelection();
+      console.log('🆕 Nuevo Case → limpio inicial');
+    }
+
+    // 💾 Detectar intento de guardado (Save / Guardar)
+    if (!this.saveListenerAttached) {
+        document.addEventListener('click', (e) => {
+            const label = (e.target.innerText || '').toLowerCase();
+            if (label.includes('save') || label.includes('guardar')) {
+                console.log('💾 Intento de guardar detectado');
+                // Guardamos el estado ANTES del intento de guardado
+                if (this.searchKey && this.selectedPatientId) {
+                   localStorage.setItem(
+                        this.storageKey,
+                        JSON.stringify({ id: this.selectedPatientId, name: this.searchKey })
+                    );
+                    localStorage.setItem('pendingSave', 'true');
+                    localStorage.setItem('lastSaveAttempt', Date.now().toString());
+                    console.log('📦 Guardado temporal de Patient antes del intento:', this.searchKey);
+                } else {
+                    // Si no hay nada seleccionado, no hay nada que persistir en caso de error
+                    localStorage.removeItem(this.storageKey); 
+                }
+            }
+        });
+        this.saveListenerAttached = true;
+    }
+
+    // 🚫 No limpiar al cambiar de tab en Service Console
+    this.isServiceConsole = window.location.href.includes('console');
+    if (!this.isServiceConsole) {
+      window.addEventListener('beforeunload', () => {
+        console.log('🔁 Cierre completo → limpieza');
+        localStorage.removeItem(this.storageKey);
+      });
+    }
   }
 
-  disconnectedCallback() {
-    window.removeEventListener('flowfinished', this.handleFlowFinished.bind(this));
+  // Métodos handleFocus, handleBlur, handleSearchChange, handleSelect, clearSelection y getters permanecen iguales.
+  // ... (copia los métodos de la respuesta anterior aquí) ...
+  
+  handleFocus() {
+    if (this.patients.length > 0 || this.searchKey.length >= 2) {
+        this.isDropdownOpen = true;
+    }
   }
 
-  // 🧹 Limpiar todo cuando el Flow se guarda correctamente
-  handleFlowFinished() {
-    console.log('💾 Flow guardado → limpiando campo Patient');
-    sessionStorage.removeItem(STORAGE_KEY);
-    this.clearSelection();
+  handleBlur() {
+    setTimeout(() => {
+        this.isDropdownOpen = false;
+    }, 300);
   }
 
   handleSearchChange(event) {
@@ -395,6 +140,7 @@ export default class PatientSearchInput extends LightningElement {
     if (this.searchKey.length >= 2) {
       this.isDropdownOpen = true;
       this.showLoading = true;
+
       searchPatients({ searchKey: this.searchKey })
         .then((result) => (this.patients = result))
         .catch((error) => console.error('❌ Error searching patients:', error))
@@ -415,8 +161,8 @@ export default class PatientSearchInput extends LightningElement {
     this.isDropdownOpen = false;
     this.patients = [];
 
-    // 💾 Guardar en sesión para restaurar si no se guarda el caso
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ id, name }));
+    localStorage.setItem(this.storageKey, JSON.stringify({ id, name }));
+    console.log(`✅ Patient "${name}" guardado en ${this.storageKey}`);
 
     this.dispatchEvent(new FlowAttributeChangeEvent('patientId', id));
     this.dispatchEvent(new FlowAttributeChangeEvent('selectedPatientOutput', name));
@@ -429,19 +175,14 @@ export default class PatientSearchInput extends LightningElement {
       })
     );
   }
-  get isButtonDisabled() {
-  return !this.isInputFilled; // Deshabilita si no hay texto o selección
-  }
 
-
-  // ❌ Limpia manualmente el campo
   clearSelection() {
     this.selectedPatientId = null;
     this.selectedPatientOutput = null;
     this.searchKey = '';
     this.patients = [];
     this.isDropdownOpen = false;
-    sessionStorage.removeItem(STORAGE_KEY);
-    console.log('🧹 Limpieza manual ejecutada');
+    localStorage.removeItem(this.storageKey);
+    console.log(`🧹 Limpieza ejecutada (${this.storageKey})`);
   }
 }
