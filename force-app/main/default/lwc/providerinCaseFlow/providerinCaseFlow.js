@@ -39,9 +39,89 @@ export default class ProviderinCaseFlow extends LightningElement {
             }
         }
     }
+finishAction = ({ outputVariables }) => {
+    const searchInput = this.template.querySelector('c-account-search-input');
+    console.log('🎯 outputVariables del Flow:', JSON.stringify(outputVariables));
 
-    finishAction = ({ outputVariables }) => {
+    setTimeout(() => {
+        try {
+            let providerRecord = null;
+            let practiceRecord = null;
+
+            // 🧩 Leer variables devueltas del Flow
+            outputVariables.forEach(outputVar => {
+                if (outputVar.name === 'provider' && outputVar.value) {
+                    providerRecord = outputVar.value;
+                }
+                if (outputVar.name === 'practiceRecordFull' && outputVar.value) {
+                    practiceRecord = outputVar.value;
+                }
+            });
+
+            // ✅ Provider principal
+            if (providerRecord) {
+                this.accountId = providerRecord.Id;
+                this.accountRecord = null;
+
+                if (searchInput && typeof searchInput.addNewAccount === 'function') {
+                    searchInput.addNewAccount(providerRecord);
+                }
+
+                this.dispatchEvent(
+                    new CustomEvent('accountselected', {
+                        detail: {
+                            accountId: providerRecord.Id,
+                            accountRecord: providerRecord
+                        },
+                        bubbles: true,
+                        composed: true
+                    })
+                );
+
+                console.log(
+                    '✅ Provider agregado correctamente:',
+                    providerRecord.Name || `${providerRecord.FirstName || ''} ${providerRecord.LastName || ''}`
+                );
+            }
+
+            // 🌐 Evento global Practice
+            if (practiceRecord) {
+                const displayName =
+                    practiceRecord.Name ||
+                    `${practiceRecord.FirstName || ''} ${practiceRecord.LastName || ''}`.trim();
+
+                window.dispatchEvent(
+                    new CustomEvent('practiceselected', {
+                        detail: {
+                            practiceId: practiceRecord.Id,
+                            practiceRecord: practiceRecord
+                        }
+                    })
+                );
+
+                // 🔁 Notificar al Flow principal para persistirlo
+            this.dispatchEvent(new FlowAttributeChangeEvent('practiceRecord', this.practiceRecord));
+            this.dispatchEvent(new FlowAttributeChangeEvent('practiceId', this.practiceId));
+
+            console.log('📩 Flow principal actualizado con nuevo Practice.');
+
+                console.log('🌐 Practice global event dispatched:', displayName);
+            } else {
+                console.warn('⚠️ No se encontró practiceRecord en outputVariables');
+            }
+
+        } catch (e) {
+            console.warn('⚠️ Error controlado en finishAction:', e);
+        }
+    }, 350);
+};
+
+
+
+
+  /*  finishAction = ({ outputVariables }) => {
         let searchInput = this.template.querySelector('c-account-search-input');
+
         outputVariables.forEach(outputVar => {
             if (outputVar.name == "provider") {
                 const newAccount = outputVar.value;
@@ -57,7 +137,11 @@ export default class ProviderinCaseFlow extends LightningElement {
                     composed: true
                 });
                 this.dispatchEvent(accountSelectedEvent);
+                        // 🔊 Notificar globalmente el nuevo Practice
+window.dispatchEvent(new CustomEvent('practicecreated', {
+  detail: { practiceId: practice.Id, practiceRecord: practice }
+}));
             }
         });
-    }
+    } */
 }

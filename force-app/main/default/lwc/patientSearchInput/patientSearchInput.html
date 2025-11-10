@@ -1,0 +1,125 @@
+<template>
+  <div class="patient-container">
+    <div class="slds-form-element">
+      <label class="slds-form-element__label" for="patientSearch">Patient Name</label>
+
+      <!-- 🔍 Campo de búsqueda -->
+      <div
+        class="slds-combobox_container"
+        aria-expanded={isDropdownOpen}
+        aria-haspopup="listbox"
+        role="combobox"
+      >
+        <div
+          class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right"
+          role="none"
+        >
+          <!-- 👤 Ícono a la izquierda -->
+          <lightning-icon
+            icon-name="standard:contact"
+            size="x-small"
+            class="slds-input__icon slds-input__icon_left slds-icon-text-default"
+          ></lightning-icon>
+
+          <!-- 🧭 Input principal -->
+          <input
+            type="text"
+            id="patientSearch"
+            class="slds-input slds-combobox__input"
+            placeholder="Search Patient..."
+            value={searchKey}
+            oninput={handleSearchChange}
+            onfocus={handleFocus}
+            onblur={handleBlur}
+            aria-autocomplete="list"
+            aria-controls="patient-listbox"
+          />
+
+          <!-- ❌ Botón limpiar -->
+          <template if:true={isInputFilled}>
+            <button
+              class="slds-button slds-button_icon slds-input__icon slds-input__icon_right slds-icon-text-default clear-btn"
+              title="Clear selection"
+              onclick={clearSelection}
+              type="button"
+            >
+              <lightning-icon
+                icon-name="utility:close"
+                size="x-small"
+                class="slds-icon"
+              ></lightning-icon>
+            </button>
+          </template>
+
+          <!-- 🔍 Ícono buscar -->
+          <template if:false={isInputFilled}>
+            <lightning-icon
+              icon-name="utility:search"
+              size="x-small"
+              class="slds-input__icon slds-input__icon_right slds-icon-text-default"
+            ></lightning-icon>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🔽 Dropdown de resultados (fuera del input) -->
+    <template if:true={isDropdownOpen}>
+      <div
+        id="patient-listbox"
+        class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid"
+        role="listbox"
+      >
+        <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+          <template if:true={patients.length}>
+            <template for:each={patients} for:item="patient">
+              <li key={patient.Id} class="slds-listbox__item" role="presentation">
+                <div
+                  class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
+                  role="option"
+                  data-id={patient.Id}
+                  data-name={patient.Name}
+                  onclick={handleSelect}
+                >
+                  <span class="slds-media__figure slds-listbox__option-icon">
+                    <lightning-icon
+                      icon-name="standard:contact"
+                      size="small"
+                    ></lightning-icon>
+                  </span>
+                  <span class="slds-media__body">
+                    <span
+                      class="slds-listbox__option-text slds-listbox__option-text_entity"
+                    >
+                      {patient.Name}
+                    </span>
+                    <span class="slds-listbox__option-meta">{patient.Email}</span>
+                  </span>
+                </div>
+              </li>
+            </template>
+          </template>
+
+          <!-- 🕳️ Sin resultados -->
+          <template if:false={patients.length}>
+            <li class="slds-listbox__item">
+              <span class="slds-text-color_weak slds-p-around_x-small">
+                No results found
+              </span>
+            </li>
+          </template>
+        </ul>
+      </div>
+    </template>
+
+    <!-- ⏳ Spinner -->
+    <template if:true={showLoading}>
+      <div class="slds-p-top_x-small">
+        <lightning-spinner
+          alternative-text="Loading Patient..."
+          size="small"
+        ></lightning-spinner>
+      </div>
+    </template>
+  </div>
+</template>

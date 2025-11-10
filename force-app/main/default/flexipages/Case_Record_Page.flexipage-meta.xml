@@ -811,6 +811,16 @@
                 <identifier>RecordImpaired_Domains_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Other_Symptoms__c</fieldItem>
+                <identifier>RecordOther_Symptoms__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-5fa56816-cc75-4956-9232-e8c5981d5294</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -881,6 +891,16 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.ED_Visits_Count__c</fieldItem>
                 <identifier>RecordED_Visits_Count_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Other_Prior_Diagnosis__c</fieldItem>
+                <identifier>RecordOther_Prior_Diagnosis__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-52eb0bee-b026-41a3-a0da-90bec6244b2c</name>

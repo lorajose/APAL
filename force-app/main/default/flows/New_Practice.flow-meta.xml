@@ -46,7 +46,7 @@
         <name>Parent_Case</name>
         <label>Parent Case</label>
         <locationX>182</locationX>
-        <locationY>866</locationY>
+        <locationY>974</locationY>
         <defaultConnector>
             <targetReference>Update_Case_on_Parent</targetReference>
         </defaultConnector>
@@ -134,8 +134,9 @@
         <label>Create New Practice</label>
         <locationX>182</locationX>
         <locationY>758</locationY>
+        <assignRecordIdToReference>practiceRecordId</assignRecordIdToReference>
         <connector>
-            <targetReference>Parent_Case</targetReference>
+            <targetReference>Get_Created_Practice</targetReference>
         </connector>
         <inputAssignments>
             <field>BillingCity</field>
@@ -306,7 +307,6 @@
             </value>
         </inputAssignments>
         <object>Account</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
     <recordLookups>
         <name>Get_Case</name>
@@ -328,6 +328,28 @@
         <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>Case</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Created_Practice</name>
+        <label>Get Created Practice</label>
+        <locationX>182</locationX>
+        <locationY>866</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Parent_Case</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>practiceid__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>practiceRecordId</elementReference>
+            </value>
+        </filters>
+        <object>Account</object>
+        <outputReference>practiceRecord</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Name</queriedFields>
     </recordLookups>
     <recordLookups>
         <name>Get_Practice_Record_Type</name>
@@ -354,7 +376,7 @@
         <name>Update_Case</name>
         <label>Update Case</label>
         <locationX>50</locationX>
-        <locationY>974</locationY>
+        <locationY>1082</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -375,7 +397,7 @@
         <name>Update_Case_on_Parent</name>
         <label>Update Case on Parent</label>
         <locationX>314</locationX>
-        <locationY>974</locationY>
+        <locationY>1082</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -586,6 +608,10 @@
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <storeOutputAutomatically>true</storeOutputAutomatically>
+            <validationRule>
+                <errorMessage>&lt;p&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;Please enter a valid email address (example: user@example.com)&lt;/span&gt;&lt;/p&gt;</errorMessage>
+                <formulaExpression>ISBLANK({!Practice_Email.value}) ||REGEX({!Practice_Email.value}, &quot;^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}$&quot;)</formulaExpression>
+            </validationRule>
         </fields>
         <fields>
             <name>Billing_Address</name>
@@ -670,6 +696,10 @@
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <storeOutputAutomatically>true</storeOutputAutomatically>
+            <validationRule>
+                <errorMessage>&lt;p&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;Please enter a valid email address (example: user@example.com)&lt;/span&gt;&lt;/p&gt;</errorMessage>
+                <formulaExpression>ISBLANK({!PracticeLeadPhysiciansEmail.value}) || REGEX({!PracticeLeadPhysiciansEmail.value}, &quot;^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}$&quot;)</formulaExpression>
+            </validationRule>
         </fields>
         <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
         <showFooter>true</showFooter>
@@ -683,6 +713,21 @@
         </connector>
     </start>
     <status>Active</status>
+    <variables>
+        <name>practiceRecord</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Account</objectType>
+    </variables>
+    <variables>
+        <name>practiceRecordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
     <variables>
         <name>recordId</name>
         <dataType>String</dataType>
