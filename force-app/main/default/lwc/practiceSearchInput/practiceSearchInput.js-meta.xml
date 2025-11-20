@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Practice Search Input</masterLabel>
+
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property
+                name="selectedPracticeId"
+                type="String"
+                label="Selected Practice Id (Input)"
+                role="inputOnly"
+                description="Recibe el Id del Practice desde el Flow padre (para auto completar)."
+            />
+            <property
+                name="selectedPracticeOutput"
+                type="String"
+                role="outputOnly"
+                label="Selected Patient Id"
+                description="The Id of the selected Patient record."
+            />
+            <!-- ✅ deja esta propiedad, aunque no la uses -->
+            <property
+                name="practiceRecordTypeId"
+                type="String"
+                label="Practice Record Type Id"
+                description="Optional Record Type Id for 'Practice'."
+            />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

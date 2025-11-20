@@ -1,0 +1,40 @@
+/* 🔹 Contenedor principal sin bordes ni fondo extra */
+.patient-container {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* 🔹 Ajuste de separación visual igual que en Provider */
+.slds-form-element {
+    margin-bottom: 0.25rem !important; /* mantiene alineación con otros campos */
+}
+
+/* 🔹 Input estilo Salesforce estándar */
+.slds-input {
+    border-radius: 0.25rem;
+}
+
+/* 🔹 Hover más sutil en resultados */
+.slds-text-link:hover {
+    background-color: #f3f3f3;
+    cursor: pointer;
+}
+.clear-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  height: 100%;
+  right: 0.5rem;
+}
+
+.clear-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}

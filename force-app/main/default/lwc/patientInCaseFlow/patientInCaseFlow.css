@@ -1,0 +1,7 @@
+.button-left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: 0.15rem !important; /* 🔹 igual al espaciado visual del “Provider” */
+    margin-left: 0 !important;
+}
