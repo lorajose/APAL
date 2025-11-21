@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DigitalExperienceConfig xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>register-for-healthhaven</label>
+    <site>
+        <urlPathPrefix>registerforhealthhaven</urlPathPrefix>
+    </site>
+    <space>site/register_for_healthhaven1</space>
+</DigitalExperienceConfig>

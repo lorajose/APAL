@@ -1,0 +1,16 @@
+{
+  "type" : "sfdc_cms__trustedSites",
+  "title" : "trustedSites",
+  "contentBody" : {
+    "trustedSites" : [ {
+      "isActive" : true,
+      "source" : "https://www.google.com",
+      "sourceName" : "google_recaptcha"
+    }, {
+      "isActive" : true,
+      "source" : "https://www.gstatic.com",
+      "sourceName" : "google_recaptcha_api2"
+    } ]
+  },
+  "urlName" : "trustedsites"
+}
