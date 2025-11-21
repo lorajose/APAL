@@ -21,8 +21,11 @@
            <!-- <form action="https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00D820000008huw"
                 method="POST" id="multi-step-form"> PROD-->
 
-                <form id="multi-step-form" action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00Dcn00000462T3" method="POST"
-                     onsubmit={handleSubmit}>
+              <!--  <form id="multi-step-form" action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00Dcn00000462T3" method="POST"
+                     onsubmit={handleSubmit}> DEV-->
+
+                <form id="multi-step-form"  action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00Dcn00000462Uf" method="POST"
+                    onsubmit={handleSubmit}> 
 
                 <!-- Salesforce Hidden Fields -->
                 <!--<input type="hidden" name="oid" value="00D820000008huw" /> PROD-->
@@ -219,16 +222,16 @@
                             value="true" /> Presentation or Exhibit</label>
 
                     <label>
-                        <input type="checkbox" id="otherCheck" name="Other__c" value="true"
+                        <input type="checkbox" id="otherCheck"  data-id="otherCheck" name="Other__c" value="true"
                             onchange={handleToggleFields} />
                         Other
                     </label>
 
-                    <label id="heard_other_label" for="heard_other" class="hidden">
+                    <label id="heard_other_label"  data-id="heard_other_label" for="heard_other" class="hidden">
                         How did you hear about APAL? (Other) <span style="color:red">*</span>
                     </label>
 
-                    <input type="text" id="heard_other" name="heard_other__c" class="hidden"
+                    <input type="text" id="heard_other"  data-id="heard_other" name="heard_other__c" class="hidden"
                         placeholder="Please specify" oninput={handleFieldInput} />
 
                     <div class="button-container">

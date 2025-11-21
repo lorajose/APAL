@@ -1198,8 +1198,31 @@ setupLeadSource() {
             }
         }
 
+       const qs = (name) =>
+    this.template.querySelector(`[data-id="${name}"]`);
+
+
+
+// ---- Hear Other ----
+const otherCheck = qs('otherCheck');
+const heardLabel = qs('heard_other_label');
+const heardInput = qs('heard_other');
+
+if (otherCheck && otherCheck.checked) {
+    heardLabel?.classList.remove('hidden');
+    heardInput?.classList.remove('hidden');
+    if (heardInput) heardInput.required = true;
+} else {
+    heardLabel?.classList.add('hidden');
+    if (heardInput) {
+        heardInput.classList.add('hidden');
+        heardInput.required = false;
+        heardInput.value = '';
+    }
+}
+
         // ---- Hear Other ----
-        const otherCheck = get('otherCheck');
+       /* const otherCheck = get('otherCheck');
         const heardLabel = get('heard_other_label');
         const heardInput = get('heard_other');
 
@@ -1216,7 +1239,7 @@ setupLeadSource() {
                 heardInput.required = false;
                 heardInput.value = '';
             }
-        }
+        } */ 
 
         // ---- Race Other ----
         const raceSelect = get('How_do_You_Identify_with_Respect_to_Race__c');
