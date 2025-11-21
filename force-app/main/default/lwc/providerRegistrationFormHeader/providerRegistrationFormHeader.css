@@ -1,0 +1,73 @@
+/* ======================= TOP BLUE BAR ======================= */
+.top-bar {
+    background: #005481;
+    color: white;
+    font-size: 14px;
+    padding: 8px 20px;
+    text-align: center;
+}
+
+/* ======================= MAIN HEADER ======================= */
+.main-header {
+    width: 100%;
+    background: white;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* Container layout */
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1300px;
+    margin: auto;
+    padding: 12px 20px;
+}
+
+/* Logo */
+.logo-img {
+    height: 55px;
+}
+
+.logo-link {
+    display: flex;
+    align-items: center;
+}
+
+/* Menu */
+.menu {
+    display: flex;
+    gap: 24px;
+}
+
+.menu a {
+    text-decoration: none;
+    font-size: 16px;
+    color: #005481;
+    font-weight: bold;
+    transition: 0.2s ease-in-out;
+}
+
+.menu a:hover {
+    color: #003d61;
+    text-decoration: underline;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .menu {
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: center;
+    }
+
+    .logo-img {
+        height: 48px;
+    }
+}
