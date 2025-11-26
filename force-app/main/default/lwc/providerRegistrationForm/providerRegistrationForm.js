@@ -89,7 +89,7 @@ export default class ProviderRegistrationForm extends LightningElement {
         }
 
         // Fecha de fin de entrenamiento
-        const dateInput = this.getByIdPrefix('trainenddate');
+        const dateInput = this.template.querySelector('input[type="date"][id^="trainenddate"]');
         const hiddenDate = this.getByIdPrefix('trainenddate_hidden');
 
         if (dateInput && hiddenDate) {
@@ -313,7 +313,7 @@ export default class ProviderRegistrationForm extends LightningElement {
         const otherTraineeInput = get('Other_Medical_Trainee_Description__c');
         const otherTraineeLabel = get('otherMedicalTraineeDescriptionid');
 
-        const endDateInput = get('trainenddate');
+        const endDateInput = this.template.querySelector('input[type="date"][id^="trainenddate"]');
         const endDateLabel = get('trainenddate_label');
 
         // ---- Trainee YES/NO ----
@@ -353,7 +353,11 @@ export default class ProviderRegistrationForm extends LightningElement {
                     otherTraineeInput.required = true;
                 }
                 if (endDateLabel) endDateLabel.classList.add('hidden');
-                if (endDateInput) endDateInput.required = false;
+                if (endDateInput) {
+                    endDateInput.classList.add('hidden');
+                    endDateInput.required = false;
+                    endDateInput.value = '';
+                }
 
             } else if (traineeType.value.includes('Student')) {
                 if (endDateLabel) endDateLabel.classList.remove('hidden');
@@ -362,7 +366,11 @@ export default class ProviderRegistrationForm extends LightningElement {
                     endDateInput.required = true;
                 }
                 if (otherTraineeLabel) otherTraineeLabel.classList.add('hidden');
-                if (otherTraineeInput) otherTraineeInput.required = false;
+                if (otherTraineeInput) {
+                    otherTraineeInput.classList.add('hidden');
+                    otherTraineeInput.required = false;
+                    otherTraineeInput.value = '';
+                }
 
             } else {
                 if (otherTraineeLabel) otherTraineeLabel.classList.add('hidden');
@@ -461,7 +469,7 @@ export default class ProviderRegistrationForm extends LightningElement {
         // ---- Race Other ----
         const raceSelect = get('How_do_You_Identify_with_Respect_to_Race__c');
         const raceLabel = get('pcpracedesc-id');
-        const raceInput = get('pcpracedesc');
+        const raceInput = this.template.querySelector('input[id^="pcpracedesc"]');
 
         if (raceSelect && raceSelect.value === 'Prefer to self-describe (option not listed)') {
             if (raceLabel) raceLabel.classList.remove('hidden');
@@ -1073,7 +1081,7 @@ setupLeadSource() {
         const otherTraineeInput = get('Other_Medical_Trainee_Description__c');
         const otherTraineeLabel = get('otherMedicalTraineeDescriptionid');
 
-        const endDateInput = get('trainenddate');
+        const endDateInput = this.template.querySelector('input[type="date"][id^="trainenddate"]');
         const endDateLabel = get('trainenddate_label');
 
         // ---- Trainee YES/NO ----
@@ -1113,7 +1121,11 @@ setupLeadSource() {
                     otherTraineeInput.required = true;
                 }
                 if (endDateLabel) endDateLabel.classList.add('hidden');
-                if (endDateInput) endDateInput.required = false;
+                if (endDateInput) {
+                    endDateInput.classList.add('hidden');
+                    endDateInput.required = false;
+                    endDateInput.value = '';
+                }
 
             } else if (traineeType.value.includes('Student')) {
                 if (endDateLabel) endDateLabel.classList.remove('hidden');
@@ -1122,7 +1134,11 @@ setupLeadSource() {
                     endDateInput.required = true;
                 }
                 if (otherTraineeLabel) otherTraineeLabel.classList.add('hidden');
-                if (otherTraineeInput) otherTraineeInput.required = false;
+                if (otherTraineeInput) {
+                    otherTraineeInput.classList.add('hidden');
+                    otherTraineeInput.required = false;
+                    otherTraineeInput.value = '';
+                }
 
             } else {
                 if (otherTraineeLabel) otherTraineeLabel.classList.add('hidden');
@@ -1244,7 +1260,7 @@ if (otherCheck && otherCheck.checked) {
         // ---- Race Other ----
         const raceSelect = get('How_do_You_Identify_with_Respect_to_Race__c');
         const raceLabel = get('pcpracedesc-id');
-        const raceInput = get('pcpracedesc');
+        const raceInput = this.template.querySelector('input[id^="pcpracedesc"]');
 
         if (raceSelect && raceSelect.value === 'Prefer to self-describe (option not listed)') {
             if (raceLabel) raceLabel.classList.remove('hidden');
