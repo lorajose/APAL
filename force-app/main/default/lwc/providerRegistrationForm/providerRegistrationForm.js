@@ -315,6 +315,7 @@ export default class ProviderRegistrationForm extends LightningElement {
 
         const endDateInput = this.template.querySelector('input[type="date"][id^="trainenddate"]');
         const endDateLabel = get('trainenddate_label');
+        const endDateHint = this.template.querySelector('[id^="trainenddate_hint"]');
 
         // ---- Trainee YES/NO ----
         if (traineeSelect && traineeSelect.value === 'Yes') {
@@ -337,6 +338,7 @@ export default class ProviderRegistrationForm extends LightningElement {
                 otherTraineeInput.value = '';
             }
             if (endDateLabel) endDateLabel.classList.add('hidden');
+            if (endDateHint) endDateHint.classList.add('hidden');
             if (endDateInput) {
                 endDateInput.classList.add('hidden');
                 endDateInput.required = false;
@@ -353,6 +355,7 @@ export default class ProviderRegistrationForm extends LightningElement {
                     otherTraineeInput.required = true;
                 }
                 if (endDateLabel) endDateLabel.classList.add('hidden');
+                if (endDateHint) endDateHint.classList.add('hidden');
                 if (endDateInput) {
                     endDateInput.classList.add('hidden');
                     endDateInput.required = false;
@@ -361,6 +364,7 @@ export default class ProviderRegistrationForm extends LightningElement {
 
             } else if (traineeType.value.includes('Student')) {
                 if (endDateLabel) endDateLabel.classList.remove('hidden');
+                if (endDateHint) endDateHint.classList.remove('hidden');
                 if (endDateInput) {
                     endDateInput.classList.remove('hidden');
                     endDateInput.required = true;
@@ -379,6 +383,7 @@ export default class ProviderRegistrationForm extends LightningElement {
                     otherTraineeInput.required = false;
                 }
                 if (endDateLabel) endDateLabel.classList.add('hidden');
+                if (endDateHint) endDateHint.classList.add('hidden');
                 if (endDateInput) {
                     endDateInput.classList.add('hidden');
                     endDateInput.required = false;
@@ -1147,6 +1152,7 @@ setupLeadSource() {
                     otherTraineeInput.required = false;
                 }
                 if (endDateLabel) endDateLabel.classList.add('hidden');
+                if (endDateHint) endDateHint.classList.add('hidden');
                 if (endDateInput) {
                     endDateInput.classList.add('hidden');
                     endDateInput.required = false;
