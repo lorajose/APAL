@@ -1,0 +1,254 @@
+/* ------------------------------------------------------------ */
+/* GLOBAL LIGHTNING WHITE BACKGROUND                            */
+/* ------------------------------------------------------------ */
+:host {
+	display: block;
+	background: #ffffff;
+	min-height: 100vh;
+	padding: 1.5rem;
+	font-family: "Salesforce Sans", Arial, sans-serif;
+}
+
+/* ------------------------------------------------------------ */
+/* HEADER TEXT                                                  */
+/* ------------------------------------------------------------ */
+.wizard-title {
+	font-size: 1.75rem;
+	font-weight: 700;
+	color: #032d60;
+	margin-bottom: 0.25rem;
+}
+
+.wizard-subtitle {
+	font-size: 0.9rem;
+	color: #4b5563;
+	margin-bottom: 1.5rem;
+}
+
+/* ------------------------------------------------------------ */
+/* MAIN LAYOUT                                                  */
+/* ------------------------------------------------------------ */
+.wizard-layout {
+	display: grid;
+	grid-template-columns: 260px 1fr;
+	gap: 1.5rem;
+}
+
+/* ------------------------------------------------------------ */
+/* SIDEBAR PANEL                                                */
+/* ------------------------------------------------------------ */
+.sidebar {
+	background: white;
+	border: 1px solid #e5e7eb;
+	padding: 1rem 0.75rem;
+	border-radius: 0.75rem;
+}
+
+.sidebar-title {
+	font-size: 1.25rem;
+	font-weight: 700;
+	color: #032d60;
+	margin-bottom: 0.75rem;
+}
+
+/* ------------------------------------------------------------ */
+/* STEP BUTTON BASE                                             */
+/* ------------------------------------------------------------ */
+.step-item {
+	width: 100%;
+	padding: 0.65rem 0.75rem;
+	border-radius: 0.5rem;
+	border: 1px solid #d1d5db;
+	background: white;
+	color: #4b5563;
+	font-size: 0.85rem;
+	text-align: left;
+	/* Usado para alinear el número, etiqueta y el icono de check */
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	margin-bottom: 0.45rem;
+	transition: all 0.15s ease;
+}
+
+.step-item:hover {
+	background: #f3f4f6;
+}
+
+/* ------------------------------------------------------------ */
+/* ACTIVE STEP (Current Step - Green)                            */
+/* ------------------------------------------------------------ */
+.step-active {
+	border: 2px solid #22c55e !important;
+	/* Green-600 */
+	background: #ffffff;
+	color: #15803d !important;
+	/* Green-700 */
+	font-weight: 600;
+}
+
+/* ------------------------------------------------------------ */
+/* COMPLETED STEP (Hard Validated OK, No Soft Warnings - Gray)  */
+/* NOTA: Este estado se usa para pasos que se marcan como 'completados'
+        pero que no son los pasos de interés (2, 4, 5, 8, 9, 13). */
+/* ------------------------------------------------------------ */
+.step-completed {
+	border: 1px solid #a8a8a8;
+	background: #ffffff;
+	color: #374151;
+	font-weight: 500;
+}
+
+/* ------------------------------------------------------------ */
+/* FINAL COMPLETED STEP (Hard OK, Soft OK - Green with Check) */
+/* Este es el estado deseado para los pasos requeridos (2, 4, 5, 8, 9, 13) */
+/* ------------------------------------------------------------ */
+.step-final-completed {
+	border: 1px solid #00c765;
+	/* Verde brillante */
+	background: #e6f7ef;
+	/* Fondo verde muy suave */
+	color: #04844b !important;
+	/* Texto verde oscuro */
+	font-weight: 600;
+}
+
+/* ------------------------------------------------------------ */
+/* WARNING STEP (Hard Validated OK, HAS Soft Warnings - Amber)   */
+/* ------------------------------------------------------------ */
+.step-warning {
+	border: 2px solid #f59e0b !important;
+	/* Amber-500 */
+	background: #fef3c7;
+	/* Amber-100 */
+	color: #b45309 !important;
+	/* Amber-700 */
+	font-weight: 600;
+}
+
+/* ------------------------------------------------------------ */
+/* IN PROGRESS (Hard Validation Fails - Red)                    */
+/* ------------------------------------------------------------ */
+.step-in-progress {
+	border: 2px solid #ef4444 !important;
+	/* Red-500 */
+	background: #fef2f2;
+	/* Red-50 */
+	color: #b91c1c !important;
+	/* Red-800 */
+	font-weight: 600;
+}
+
+
+/* ------------------------------------------------------------ */
+/* LOCKED STEP (Greyed-out, no click)                           */
+/* ------------------------------------------------------------ */
+.step-locked {
+	opacity: 0.45;
+	cursor: not-allowed;
+	border: 1px solid #d1d5db;
+	color: #6b7280;
+	background: #f9fafb;
+}
+
+/* ------------------------------------------------------------ */
+/* RIGHT PANEL STYLE                                            */
+/* ------------------------------------------------------------ */
+.step-panel {
+	background: white;
+	border: 1px solid #e5e7eb;
+	padding: 1.25rem;
+	border-radius: 0.75rem;
+}
+
+.step-title {
+	font-size: 1.35rem;
+	font-weight: 700;
+	color: #032d60;
+	margin-bottom: 0.25rem;
+}
+
+.step-description {
+	font-size: 0.82rem;
+	color: #555;
+	margin-bottom: 1rem;
+}
+.inline-alert {
+	border: 1px solid #fca5a5;
+	background: #fef2f2;
+	color: #b91c1c;
+	padding: 0.75rem;
+	border-radius: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	margin-bottom: 1rem;
+	font-size: 0.85rem;
+}
+.inline-alert-title {
+	font-weight: 700;
+}
+.inline-alert-message {
+	font-weight: 500;
+}
+
+/* ------------------------------------------------------------ */
+/* FOOTER NOTE                                                  */
+/* ------------------------------------------------------------ */
+.footer-note {
+	font-size: 0.8rem;
+	color: #6b7280;
+	margin-top: 1rem;
+}
+/* ------------------------------------------------------------ */
+/* CHECK ICON – Verde, alineado, animación fade-in              */
+/* ------------------------------------------------------------ */
+.step-check-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 999px;
+    background: #dff5ea;
+    color: #04844b;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-left: 0.3rem;
+    opacity: 0;
+    transform: scale(0.6);
+    animation: checkFadeIn 0.25s ease-out forwards;
+}
+@keyframes checkFadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.6);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+.step-label-container {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+.step-number-badge {
+    background: #e6f7ef;      /* verde ultra suave */
+    color: #04844b;           /* green Salesforce */
+    border: 1px solid #00c765;
+    padding: 0.1rem 0.45rem;
+    font-size: 0.75rem;
+    border-radius: 999px;
+    font-weight: 600;
+}
+.step-label-text {
+    font-size: 0.85rem;
+    color: inherit;
+}
+.step-active,
+.step-final-completed {
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+}
