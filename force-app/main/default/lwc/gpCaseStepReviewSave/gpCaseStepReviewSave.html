@@ -1,0 +1,356 @@
+<template>
+    <div class="step-section">
+       <!-- <div class="section-header">
+            <div class="section-heading">
+                <h2>Step 15 — Review &amp; Save</h2>
+                <p>Final check before saving. Use the edit links to jump back if something needs attention.</p>
+            </div>
+        </div> -->
+        <section class="card intro-card">
+            <p>{introMessage}</p>
+        </section>
+
+        <template if:true={showSummary}>
+        <section class="card summary-card">
+            <div class="summary-header">
+                <h3>Basics</h3>
+                <button class="link-button" data-step="1" onclick={handleEditStep}>Edit Basics</button>
+            </div>
+            <dl class="summary-list">
+                <template for:each={basicsSummary} for:item="row">
+                    <div key={row.label} class="summary-row">
+                        <dt>{row.label}</dt>
+                        <dd>{row.value}</dd>
+                    </div>
+                </template>
+            </dl>
+        </section>
+
+        <section class="card summary-card">
+            <div class="summary-header">
+                <h3>Presenting &amp; Availability</h3>
+                <button class="link-button" data-step="2" onclick={handleEditStep}>Edit Presenting</button>
+            </div>
+            <dl class="summary-list">
+                <template for:each={presentingSummary} for:item="row">
+                    <div key={row.label} class="summary-row">
+                        <dt>{row.label}</dt>
+                        <dd>{row.value}</dd>
+                    </div>
+                </template>
+            </dl>
+        </section>
+
+        <section class="card summary-card">
+            <div class="summary-header">
+                <h3>Prior Dx &amp; Utilization</h3>
+                <button class="link-button" data-step="3" onclick={handleEditStep}>Edit Prior Dx</button>
+            </div>
+            <dl class="summary-list">
+                <template for:each={priorSummary} for:item="row">
+                    <div key={row.label} class="summary-row">
+                        <dt>{row.label}</dt>
+                        <dd>{row.value}</dd>
+                    </div>
+                </template>
+            </dl>
+        </section>
+
+        <section class="card summary-card">
+            <div class="summary-header">
+                <h3>Safety — Suicide</h3>
+                <button class="link-button" data-step="4" onclick={handleEditStep}>Edit Suicide Risk</button>
+            </div>
+            <dl class="summary-list">
+                <template for:each={suicideSummary} for:item="row">
+                    <div key={row.label} class="summary-row">
+                        <dt>{row.label}</dt>
+                        <dd>{row.value}</dd>
+                    </div>
+                </template>
+            </dl>
+        </section>
+
+        <section class="card summary-card">
+            <div class="summary-header">
+                <h3>Safety — Homicide / Violence</h3>
+                <button class="link-button" data-step="5" onclick={handleEditStep}>Edit Homicide Risk</button>
+            </div>
+            <dl class="summary-list">
+                <template for:each={homicideSummary} for:item="row">
+                    <div key={row.label} class="summary-row">
+                        <dt>{row.label}</dt>
+                        <dd>{row.value}</dd>
+                    </div>
+                </template>
+            </dl>
+        </section>
+
+        <section class="card summary-card">
+            <div class="summary-header">
+                <h3>Psychosis, Mania &amp; Red Flags</h3>
+                <button class="link-button" data-step="6" onclick={handleEditStep}>Edit Psychosis/Mania</button>
+            </div>
+            <dl class="summary-list">
+                <template for:each={psychosisSummary} for:item="row">
+                    <div key={row.label} class="summary-row">
+                        <dt>{row.label}</dt>
+                        <dd>{row.value}</dd>
+                    </div>
+                </template>
+            </dl>
+        </section>
+
+        <section class="card summary-card">
+            <div class="summary-header">
+                <h3>Family &amp; Trauma</h3>
+                <button class="link-button" data-step="7" onclick={handleEditStep}>Edit Family/Trauma</button>
+            </div>
+            <dl class="summary-list">
+                <template for:each={familySummary} for:item="row">
+                    <div key={row.label} class="summary-row">
+                        <dt>{row.label}</dt>
+                        <dd>{row.value}</dd>
+                    </div>
+                </template>
+            </dl>
+        </section>
+
+        <section class="card summary-card">
+            <div class="summary-header">
+                <h3>Home Safety, Stressors &amp; Supports</h3>
+                <button class="link-button" data-step="8" onclick={handleEditStep}>Edit Home Safety</button>
+            </div>
+            <dl class="summary-list">
+                <template for:each={homeSafetySummary} for:item="row">
+                    <div key={row.label} class="summary-row">
+                        <dt>{row.label}</dt>
+                        <dd>{row.value}</dd>
+                    </div>
+                </template>
+            </dl>
+        </section>
+
+        <section class="card summary-card">
+            <div class="summary-header">
+                <h3>Orientation &amp; Cognition</h3>
+                <button class="link-button" data-step="9" onclick={handleEditStep}>Edit Cognition</button>
+            </div>
+            <dl class="summary-list">
+                <template for:each={cognitionSummary} for:item="row">
+                    <div key={row.label} class="summary-row">
+                        <dt>{row.label}</dt>
+                        <dd>{row.value}</dd>
+                    </div>
+                </template>
+            </dl>
+        </section>
+
+        <section class="card grid-card">
+            <div class="summary-header">
+                <h3>Concerns</h3>
+                <button class="link-button" data-step="13" onclick={handleEditStep}>Edit Concerns</button>
+            </div>
+            <template if:true={concerns.length}>
+                <div class="grid-list">
+                    <template for:each={concerns} for:item="concern">
+                        <article key={concern.id} class="grid-item">
+                            <header>
+                                <h4>{concern.label}</h4>
+                                <p>{concern.category}</p>
+                            </header>
+                            <p class="grid-notes">
+                                Source:
+                                <span>
+                                    <template if:true={concern.source}>{concern.source}</template>
+                                    <template if:false={concern.source}>manual</template>
+                                </span>
+                            </p>
+                            <p class="grid-notes">
+                                Notes:
+                                <span>
+                                    <template if:true={concern.notes}>{concern.notes}</template>
+                                    <template if:false={concern.notes}>—</template>
+                                </span>
+                            </p>
+                        </article>
+                    </template>
+                </div>
+            </template>
+            <template if:false={concerns.length}>
+                <p class="empty-subtitle">No concerns captured.</p>
+            </template>
+        </section>
+
+        <section class="card grid-card">
+            <div class="summary-header">
+                <h3>Medications</h3>
+                <button class="link-button" data-step="10" onclick={handleEditStep}>Edit Medications</button>
+            </div>
+            <template if:true={medications.length}>
+                <div class="grid-list">
+                    <template for:each={medications} for:item="med">
+                        <article key={med.id} class="grid-item">
+                            <header>
+                                <h4>{med.meta.title}</h4>
+                                <p>{med.meta.brand}</p>
+                            </header>
+                            <div class="pill-row">
+                                <span class="summary-pill">
+                                    <template if:true={med.action}>{med.action}</template>
+                                    <template if:false={med.action}>—</template>
+                                </span>
+                                <template if:true={med.frequency}>
+                                    <span class="summary-pill">{med.frequency}</span>
+                                </template>
+                                <template if:true={med.amount}>
+                                    <span class="summary-pill">{med.amount} {med.unit}</span>
+                                </template>
+                                <span class="summary-pill">{med.meta.category}</span>
+                                <template if:true={med.current}>
+                                    <span class="summary-pill positive">Current</span>
+                                </template>
+                                <template if:true={med.allergy}>
+                                    <span class="summary-pill warning">Allergy</span>
+                                </template>
+                            </div>
+                            <p class="grid-notes">
+                                Notes:
+                                <span>
+                                    <template if:true={med.notes}>{med.notes}</template>
+                                    <template if:false={med.notes}>—</template>
+                                </span>
+                            </p>
+                        </article>
+                    </template>
+                </div>
+            </template>
+            <template if:false={medications.length}>
+                <p class="empty-subtitle">No medications captured.</p>
+            </template>
+        </section>
+
+        <section class="card grid-card">
+            <div class="summary-header">
+                <h3>Substances</h3>
+                <button class="link-button" data-step="11" onclick={handleEditStep}>Edit Substances</button>
+            </div>
+            <template if:true={substances.length}>
+                <div class="grid-list">
+                    <template for:each={substances} for:item="item">
+                        <article key={item.id} class="grid-item">
+                            <header>
+                                <h4>{item.meta.name}</h4>
+                            </header>
+                            <div class="pill-row">
+                                <template if:true={item.frequency}>
+                                    <span class="summary-pill">{item.frequency}</span>
+                                </template>
+                                <template if:true={item.current}>
+                                    <span class="summary-pill positive">Current</span>
+                                </template>
+                            </div>
+                            <p class="grid-notes">
+                                Notes:
+                                <span>
+                                    <template if:true={item.notes}>{item.notes}</template>
+                                    <template if:false={item.notes}>—</template>
+                                </span>
+                            </p>
+                        </article>
+                    </template>
+                </div>
+            </template>
+            <template if:false={substances.length}>
+                <p class="empty-subtitle">No substances captured.</p>
+            </template>
+        </section>
+
+        <section class="card grid-card">
+            <div class="summary-header">
+                <h3>Screeners</h3>
+                <button class="link-button" data-step="12" onclick={handleEditStep}>Edit Screeners</button>
+            </div>
+            <template if:true={screeners.length}>
+                <div class="grid-list">
+                    <template for:each={screeners} for:item="scr">
+                        <article key={scr.id} class="grid-item">
+                            <header>
+                                <h4>{scr.meta.name}</h4>
+                                <p>{scr.meta.type}</p>
+                            </header>
+                            <div class="pill-row">
+                                <template if:true={scr.date}>
+                                    <span class="summary-pill">{scr.date}</span>
+                                </template>
+                                <template if:true={scr.score}>
+                                    <span class="summary-pill">Score: {scr.score}</span>
+                                </template>
+                                <template if:true={scr.positive}>
+                                    <span class="summary-pill positive">Positive</span>
+                                </template>
+                            </div>
+                            <p class="grid-notes">
+                                Notes:
+                                <span>
+                                    <template if:true={scr.notes}>{scr.notes}</template>
+                                    <template if:false={scr.notes}>—</template>
+                                </span>
+                            </p>
+                        </article>
+                    </template>
+                </div>
+            </template>
+            <template if:false={screeners.length}>
+                <p class="empty-subtitle">No screeners captured.</p>
+            </template>
+        </section>
+
+        <section class="card grid-card">
+            <div class="summary-header">
+                <h3>Safety Risks</h3>
+                <button class="link-button" data-step="14" onclick={handleEditStep}>Edit Safety Risks</button>
+            </div>
+            <template if:true={safetyRisks.length}>
+                <div class="grid-list">
+                    <template for:each={safetyRisks} for:item="risk">
+                        <article key={risk.id} class="grid-item">
+                            <header>
+                                <h4>{risk.meta.name}</h4>
+                                <p>{risk.meta.category}</p>
+                            </header>
+                            <div class="pill-row">
+                                <span class="summary-pill">
+                                    Recent:
+                                    <template if:true={risk.recent}>Yes</template>
+                                    <template if:false={risk.recent}>No</template>
+                                </span>
+                                <span class="summary-pill">
+                                    Historical:
+                                    <template if:true={risk.historical}>Yes</template>
+                                    <template if:false={risk.historical}>No</template>
+                                </span>
+                            </div>
+                            <p class="grid-notes">
+                                Notes:
+                                <span>
+                                    <template if:true={risk.notes}>{risk.notes}</template>
+                                    <template if:false={risk.notes}>—</template>
+                                </span>
+                            </p>
+                        </article>
+                    </template>
+                </div>
+            </template>
+            <template if:false={safetyRisks.length}>
+                <p class="empty-subtitle">No safety risks captured.</p>
+            </template>
+        </section>
+        </template>
+
+        <div class="actions">
+            <button class="secondary" type="button" onclick={handleBack}>Back</button>
+            <button class="primary" type="button" onclick={handleFinish}>{primaryLabel}</button>
+        </div>
+    </div>
+</template>
