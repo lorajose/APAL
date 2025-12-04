@@ -1,0 +1,212 @@
+<template>
+  <div class="wizard-title">Case Creation Wizard — Container</div>
+  <div class="wizard-subtitle">
+    All steps implemented. Review renders the Medications, Substances & Screeners grids;
+    you can jump back to edit any section.
+  </div>
+  <div class="wizard-layout">
+    <div class="sidebar">
+      <div class="sidebar-title">Steps</div>
+      <template if:true={stepsReady}>
+      <template for:each={stepsFormatted} for:item="s">
+        <div
+          key={s.value}
+          class={s.cssClass}
+          data-step={s.value}
+          onclick={handleJumpToStep}
+          >
+          <div class="slds-grid slds-grid_align-start slds-grow slds-p-around_x-small">
+            <span class="step-label-container slds-grid slds-grid_align-start slds-grow">
+            <span class="step-number-badge slds-var-m-right_x-small">{s.value}</span>
+            <span class="step-label-text">{s.label}</span> 
+            </span>
+            <!-- RIGHT: CHECK ICON -->
+            <!-- ICON → protegido -->
+            <template if:true={s.isCompleteAndChecked}>
+                <span class="step-check-icon" aria-label="Step complete">&#10003;</span>
+            </template>
+
+          </div>
+        </div>
+      </template>
+      </template>
+    </div>
+    <div class="step-panel">
+      <h2 class="step-title">Step {currentStep} — {currentSectionName}</h2>
+      <p class="step-description">{currentDescription}</p>
+      <template if:true={inlineMessage}>
+        <div class="inline-alert" role="alert">
+          <span class="inline-alert-title">{inlineMessage.title}</span>
+          <span class="inline-alert-message">{inlineMessage.message}</span>
+        </div>
+      </template>
+      <template if:true={isStep1}>
+        <c-gp-case-step-basics
+          case-id={caseId}
+          data={currentStepData}
+          onnext={handleNext}
+          onsaveprescreen={handleSavePreScreen}
+          ondataupdated={handleDataUpdated}
+          onprevious={handlePrevious}
+          errors={currentStepErrors}
+          ></c-gp-case-step-basics>
+      </template>
+      <template if:true={isStep2}>
+        <c-gp-case-step-presenting
+          case-id={caseId}
+          case-type={caseType}
+          data={currentStepData}
+          onnext={handleNext}
+          ondataupdated={handleDataUpdated}
+          onprevious={handlePrevious}
+          errors={currentStepErrors}
+          ></c-gp-case-step-presenting>
+      </template>
+      <template if:true={isStep3}>
+        <c-gp-case-step-prior-dx
+          case-id={caseId}
+          case-type={caseType}
+          data={currentStepData}
+          onnext={handleNext}
+          ondataupdated={handleDataUpdated}
+          onprevious={handlePrevious}
+          errors={currentStepErrors}
+          ></c-gp-case-step-prior-dx>
+      </template>
+      <template if:true={isStep4}>
+        <c-gp-case-step-safety-suicide
+          case-id={caseId}
+          data={currentStepData}
+          onnext={handleNext}
+          ondataupdated={handleDataUpdated}
+          onprevious={handlePrevious}
+          errors={currentStepErrors}
+          ></c-gp-case-step-safety-suicide>
+      </template>
+      <template if:true={isStep5}>
+        <c-gp-case-step-safety-violence
+          case-id={caseId}
+          case-type={caseType}
+          data={currentStepData}
+          onnext={handleNext}
+          ondataupdated={handleDataUpdated}
+          onprevious={handlePrevious}
+          errors={currentStepErrors}
+          ></c-gp-case-step-safety-violence>
+      </template>
+      <template if:true={isStep6}>
+        <c-gp-case-step-psychosis-mania
+          case-id={caseId}
+          case-type={caseType}
+          data={currentStepData}
+          onnext={handleNext}
+          ondataupdated={handleDataUpdated}
+          onprevious={handlePrevious}
+          errors={currentStepErrors}
+          ></c-gp-case-step-psychosis-mania>
+      </template>
+      <template if:true={isStep7}>
+        <c-gp-case-step-family-trauma
+          case-id={caseId}
+          case-type={caseType}
+          data={currentStepData}
+          onnext={handleNext}
+          ondataupdated={handleDataUpdated}
+          onprevious={handlePrevious}
+          errors={currentStepErrors}
+          ></c-gp-case-step-family-trauma>
+      </template>
+      <template if:true={isStep8}>
+        <c-gp-case-step-home-safety
+          case-id={caseId}
+          data={currentStepData}
+          onnext={handleNext}
+          ondataupdated={handleDataUpdated}
+          onprevious={handlePrevious}
+          errors={currentStepErrors}
+          ></c-gp-case-step-home-safety>
+      </template>
+      <template if:true={isStep9}>
+        <c-gp-case-step-cognition
+          case-id={caseId}
+          data={currentStepData}
+          onnext={handleNext}
+          ondataupdated={handleDataUpdated}
+          onprevious={handlePrevious}
+          errors={currentStepErrors}
+          ></c-gp-case-step-cognition>
+      </template>
+      <template if:true={isStep10}>
+        <c-gp-case-step-medications
+          case-id={caseId}
+          data={currentStepData}
+          onnext={handleNext}
+          ondataupdated={handleDataUpdated}
+          onprevious={handlePrevious}
+          onviewmodechange={handleCollectionModeChange}
+          errors={currentStepErrors}
+          ></c-gp-case-step-medications>
+      </template>
+      <template if:true={isStep11}>
+        <c-gp-case-step-substances
+          case-id={caseId}
+          data={currentStepData}
+          onnext={handleNext}
+          ondataupdated={handleDataUpdated}
+          onprevious={handlePrevious}
+          onviewmodechange={handleCollectionModeChange}
+          errors={currentStepErrors}
+          ></c-gp-case-step-substances>
+      </template>
+      <template if:true={isStep12}>
+        <c-gp-case-step-screeners
+          case-id={caseId}
+          data={currentStepData}
+          onnext={handleNext}
+          ondataupdated={handleDataUpdated}
+          onprevious={handlePrevious}
+          onviewmodechange={handleCollectionModeChange}
+          errors={currentStepErrors}
+          ></c-gp-case-step-screeners>
+      </template>
+      <template if:true={isStep13}>
+        <c-gp-case-step-concerns
+          case-id={caseId}
+          data={currentStepData}
+          onnext={handleNext}
+          ondataupdated={handleDataUpdated}
+          onprevious={handlePrevious}
+          errors={currentStepErrors}
+          ></c-gp-case-step-concerns>
+      </template>
+      <template if:true={isStep14}>
+        <c-gp-case-step-safety-risks
+          case-id={caseId}
+          data={currentStepData}
+          onnext={handleNext}
+          ondataupdated={handleDataUpdated}
+          onprevious={handlePrevious}
+          errors={currentStepErrors}
+          ></c-gp-case-step-safety-risks>
+      </template>
+      <template if:true={isStep15}>
+        <c-gp-case-step-review-save
+          case-id={caseId}
+          form={form}
+          show-summary={reviewSummaryReady}
+          is-update-mode={isUpdateMode}
+          onfinish={handleFinish}
+          onfinalize={handleFinalize}
+          ondataupdated={handleDataUpdated}
+          onprevious={handlePrevious}
+          oneditstep={handleEditFromReview}
+          errors={currentStepErrors}
+          ></c-gp-case-step-review-save>
+      </template>
+    </div>
+  </div>
+  <p class="footer-note">
+    All steps implemented. From Results, use “Edit” links or the “Add Medications/Substances/Screeners/Safety Risks”
+    actions to relaunch wizards with current values.
+  </p>
+</template>
