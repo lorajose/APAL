@@ -1,0 +1,93 @@
+<template>
+    <div class="step-section">
+       <!-- <div class="section-header">
+            <h2>Step 7 — Family &amp; Trauma</h2>
+            <p>Document recent trauma, safety concerns, and relevant family history.</p>
+        </div> -->
+
+        <section class="card checkbox-grid">
+            <label class="checkbox-field">
+                <input type="checkbox" checked={recentTrauma} data-field="Recent_Trauma__c" onchange={handleCheckboxChange} />
+                <span>Recent trauma reported?</span>
+            </label>
+            <label class="checkbox-field">
+                <input type="checkbox" checked={dependentSafetyConcern} data-field="Dependent_Safety_Concern__c" onchange={handleCheckboxChange} />
+                <span>Child / elder safety concern?</span>
+            </label>
+            <label class="checkbox-field">
+                <input type="checkbox" checked={ipvConcern} data-field="IPV_Concern__c" onchange={handleCheckboxChange} />
+                <span>IPV concern noted?</span>
+            </label>
+        </section>
+
+        <section class="card">
+            <div class="field field-full">
+                <label class="input-label" for="family-notes">Family History Notes</label>
+                <textarea
+                    id="family-notes"
+                    class="textarea"
+                    placeholder="Add context, protective relatives, or patterns."
+                    value={familyHistoryNotes}
+                    oninput={handleNotesChange}
+                ></textarea>
+                <p class="helper-text">Add context, protective relatives, or patterns.</p>
+            </div>
+        </section>
+
+        <section class="card family-history-section">
+            <header class="card-header">
+                <div>
+                    <p class="card-title">Family History (1st-degree)</p>
+                    <p class="card-subtitle">Select concerns; add notes for the ones you choose.</p>
+                </div>
+                <div class="input-row condensed">
+                    <label class="input-label" for="family-search">Search</label>
+                    <input id="family-search" type="search" class="pill-search" placeholder="Filter concerns..." value={familySearch} oninput={handleFamilySearch} />
+                </div>
+            </header>
+            <div class="family-history-grid">
+                <div class="available-column">
+                    <p class="column-title">Available</p>
+                    <div class="checkbox-list">
+                        <template for:each={filteredFamilyOptions} for:item="option">
+                            <label key={option.value} class="checkbox-row">
+                                <input type="checkbox" data-value={option.value} checked={option.checked} onchange={handleFamilyToggle} />
+                                <span>{option.label}</span>
+                            </label>
+                        </template>
+                    </div>
+                </div>
+                <div class="selected-column">
+                    <p class="column-title">Selected (Notes only)</p>
+                    <template if:true={hasSelectedFamily}>
+                        <template for:each={selectedFamilyHistory} for:item="item">
+                            <div key={item.value} class="selected-card">
+                                <header>
+                                    <span>{item.label}</span>
+                                    <button class="link-button" type="button" data-value={item.value} onclick={handleFamilyRemove}>Remove</button>
+                                </header>
+                                <div class="field field-full">
+                                    <label class="input-label">Notes</label>
+                                    <textarea
+                                        class="textarea"
+                                        data-value={item.value}
+                                        value={item.note}
+                                        oninput={handleFamilyNoteChange}
+                                    ></textarea>
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+                    <template if:false={hasSelectedFamily}>
+                        <p class="empty-state">Nothing selected.</p>
+                    </template>
+                </div>
+            </div>
+        </section>
+
+        <div class="actions">
+            <button class="secondary" type="button" onclick={handleBack}>Back</button>
+            <button class="primary" type="button" onclick={handleNext}>Next</button>
+        </div>
+    </div>
+</template>
