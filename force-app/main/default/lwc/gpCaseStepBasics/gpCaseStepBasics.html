@@ -1,0 +1,56 @@
+<template>
+    <div class="slds-box slds-var-m-vertical_medium step-content-card">
+        <div class="slds-grid slds-wrap slds-gutters_small">
+            
+            <div class="slds-col slds-size_1-of-2 slds-var-m-bottom_small">
+                <lightning-input
+                    label="Subject"
+                    placeholder="Title the case"
+                    value={subject}
+                    onchange={handleInputChange}
+                    data-field="Subject"
+                    required
+                    message-when-value-missing="The Title (Subject) is required."
+                    class={subjectErrorClass}
+                ></lightning-input>
+            </div>
+
+            <div class="slds-col slds-size_1-of-2 slds-var-m-bottom_small">
+                <lightning-combobox
+                    label="Priority"
+                    placeholder="Select priority"
+                    value={priority}
+                    options={priorityOptions}
+                    onchange={handleInputChange}
+                    data-field="Priority"
+                    
+   
+                    class={priorityErrorClass}
+                ></lightning-combobox>
+            </div>
+            
+            <div class="slds-col slds-size_1-of-1 slds-var-m-bottom_small">
+                <lightning-textarea
+                    label="Description"
+                    placeholder="Give a brief description"
+                    value={description}
+                    onchange={handleInputChange}
+                    data-field="Description"
+                    required
+                    message-when-value-missing="A description is required."
+                    class={descriptionErrorClass}
+                ></lightning-textarea>
+            </div>
+
+        </div>
+    </div>
+    
+    <div class="slds-grid slds-grid_align-spread slds-var-m-top_large">
+        <button class="slds-button btn-back" onclick={handleBack}>
+            Back
+        </button>
+        <button class="slds-button btn-next" onclick={handleNext}>
+            Next
+        </button>
+    </div>
+</template>
