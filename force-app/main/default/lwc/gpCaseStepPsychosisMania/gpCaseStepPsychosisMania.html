@@ -1,0 +1,104 @@
+<template>
+    <div class="step-section">
+       <!-- <div class="section-header">
+            <h2>Step 6 — Psychosis, Mania &amp; Red Flags</h2>
+            <p>Capture symptom clusters and note any medical contributors.</p>
+        </div> -->
+
+        <section class="card multi-grid">
+            <div class="multi-column">
+                <header class="card-header">
+                    <div>
+                        <p class="card-title">Psychosis Symptoms</p>
+                        <p class="card-subtitle">Search or tap to toggle key psychosis indicators.</p>
+                    </div>
+                    <span class="selected-counter">{psychosisCountLabel}</span>
+                </header>
+                <div class="input-row">
+                    <label class="input-label" for="psychosis-search">Search</label>
+                    <input id="psychosis-search" type="search" class="pill-search" placeholder="Filter options..."
+                        value={psychosisSearch} oninput={handlePsychosisSearch}>
+                </div>
+                <div class="chip-grid">
+                    <template for:each={psychosisFilteredOptions} for:item="option">
+                        <button key={option.value} type="button" class={option.chipClass} data-value={option.value}
+                            onclick={handlePsychosisToggle}>
+                            {option.label}
+                        </button>
+                    </template>
+                </div>
+            </div>
+
+            <div class="multi-column">
+                <header class="card-header">
+                    <div>
+                        <p class="card-title">Mania / Hypomania Symptoms</p>
+                        <p class="card-subtitle">Capture mania/hypomania presentations observed.</p>
+                    </div>
+                    <span class="selected-counter">{maniaCountLabel}</span>
+                </header>
+                <div class="input-row">
+                    <label class="input-label" for="mania-search">Search</label>
+                    <input id="mania-search" type="search" class="pill-search" placeholder="Filter options..."
+                        value={maniaSearch} oninput={handleManiaSearch}>
+                </div>
+                <div class="chip-grid">
+                    <template for:each={maniaFilteredOptions} for:item="option">
+                        <button key={option.value} type="button" class={option.chipClass} data-value={option.value}
+                            onclick={handleManiaToggle}>
+                            {option.label}
+                        </button>
+                    </template>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="field field-full">
+                <label class="input-label" for="psychosis-notes">Other Psychosis &amp; Mania Notes</label>
+                <textarea id="psychosis-notes" class="textarea"
+                    placeholder="Document context, quotes, or caregiver observations."
+                    value={psychosisNotes} oninput={handlePsychosisNotesChange}></textarea>
+                <p class="helper-text">Document context, quotes, or caregiver observations.</p>
+            </div>
+        </section>
+
+        <section class="card">
+            <header class="card-header">
+                <div>
+                    <p class="card-title">Medical Red Flags</p>
+                    <p class="card-subtitle">Flag any contributing medical drivers that require parallel workup.</p>
+                </div>
+                <span class="selected-counter">{redFlagCountLabel}</span>
+            </header>
+            <div class="input-row">
+                <label class="input-label" for="red-flag-search">Search</label>
+                <input id="red-flag-search" type="search" class="pill-search" placeholder="Filter options..."
+                    value={redFlagSearch} oninput={handleRedFlagSearch}>
+            </div>
+            <div class="chip-grid">
+                <template for:each={redFlagFilteredOptions} for:item="option">
+                    <button key={option.value} type="button" class={option.chipClass} data-value={option.value}
+                        onclick={handleRedFlagToggle}>
+                        {option.label}
+                    </button>
+                </template>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="field field-full">
+                <label class="input-label" for="red-flag-notes">Red Flag Notes</label>
+                <textarea id="red-flag-notes" class="textarea"
+                    placeholder="Add lab requests, escalation plans, or coordination details."
+                    value={redFlagNotes} oninput={handleRedFlagNotesChange}></textarea>
+                <p class="helper-text">Add lab requests, escalation plans, or coordination details.</p>
+            </div>
+        </section>
+
+        <div class="actions">
+            <button class="secondary" type="button" onclick={handleBack}>Back</button>
+            <button class="primary" type="button" onclick={handleNext}>Next</button>
+        </div>
+    </div>
+</template>
