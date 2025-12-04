@@ -1,0 +1,160 @@
+<template>
+    <div class="step-section">
+      <!--  <div class="section-header">
+            <h2>Step 8 — Home Safety, Stressors &amp; Supports</h2>
+            <p>Confirm safety status, lethal-means access, and psychosocial stressors.</p>
+        </div> -->
+
+        <section class="card">
+            <label class="input-label" for="home-safety">Home Safety<span class="required">*</span></label>
+            <select
+                id="home-safety"
+                class="text-input"
+                value={homeSafetyStatus}
+                onchange={handleHomeSafetyChange}
+            >
+                <option value="">—</option>
+                <template for:each={homeSafetyOptions} for:item="option">
+                    <option key={option.value} value={option.value}>{option.label}</option>
+                </template>
+            </select>
+            <template if:true={homeSafetyError}>
+                <p class="error-text">{homeSafetyError}</p>
+            </template>
+        </section>
+
+        <template if:true={showLethalMeans}>
+            <section class="card lethal-section">
+                <header class="card-header">
+                    <div>
+                        <p class="card-title">Lethal Means Access</p>
+                        <p class="card-subtitle">Select everything currently available in the home.</p>
+                    </div>
+                    <span class="selected-counter">{lethalMeansCountLabel}</span>
+                </header>
+                <div class="chip-grid">
+                    <template for:each={lethalMeansOptions} for:item="option">
+                        <button
+                            key={option.value}
+                            type="button"
+                            class={option.chipClass}
+                            data-value={option.value}
+                            onclick={handleLethalToggle}
+                        >
+                            {option.label}
+                        </button>
+                    </template>
+                </div>
+                <template if:true={lethalMeansError}>
+                    <p class="error-text">{lethalMeansError}</p>
+                </template>
+
+                <label class="checkbox-field">
+                    <input type="checkbox" checked={meansSafetyPlan} onchange={handleMeansPlanChange} />
+                    <span>Means safety plan agreed?</span>
+                </label>
+
+                <div class="field field-full">
+                    <label class="input-label" for="safety-notes">Safety Notes</label>
+                    <textarea
+                        id="safety-notes"
+                        class="textarea"
+                        placeholder="Add storage instructions, supervision plans, or contacts."
+                        value={safetyNotes}
+                        oninput={handleSafetyNotesChange}
+                    ></textarea>
+                    <p class="helper-text">Add storage instructions, supervision plans, or contacts.</p>
+                </div>
+            </section>
+        </template>
+
+        <section class="card stressor-section">
+            <header class="card-header">
+                <div>
+                    <p class="card-title">Psychosocial Stressors</p>
+                    <p class="card-subtitle">Select stressors; capture notes and recent/historical flags.</p>
+                </div>
+                <div class="input-row condensed">
+                    <label class="input-label" for="stressor-search">Search</label>
+                    <input id="stressor-search" type="search" class="pill-search" placeholder="Filter stressors..." value={stressorSearch} oninput={handleStressorSearch} />
+                </div>
+            </header>
+            <div class="stressor-grid">
+                <div class="available-column">
+                    <p class="column-title">Available</p>
+                    <div class="checkbox-list">
+                        <template for:each={filteredStressors} for:item="option">
+                            <label key={option.value} class="checkbox-row">
+                                <input type="checkbox" data-value={option.value} checked={option.checked} onchange={handleStressorToggle} />
+                                <span>{option.label}</span>
+                            </label>
+                        </template>
+                    </div>
+                </div>
+                <div class="selected-column">
+                    <p class="column-title">Selected</p>
+                    <template if:true={hasStressors}>
+                        <template for:each={selectedStressors} for:item="item">
+                            <div key={item.value} class="selected-card">
+                                <header>
+                                    <span>{item.label}</span>
+                                    <button class="link-button" type="button" data-value={item.value} onclick={handleStressorRemove}>Remove</button>
+                                </header>
+                                <div class="field field-full">
+                                    <label class="input-label">Notes</label>
+                                    <textarea class="textarea" data-value={item.value} value={item.note} oninput={handleStressorNoteChange}></textarea>
+                                </div>
+                                <div class="flag-row">
+                                    <label class="checkbox-field">
+                                        <input type="checkbox" data-value={item.value} data-flag="recent" checked={item.recent} onchange={handleStressorFlagChange} />
+                                        <span>Recent?</span>
+                                    </label>
+                                    <label class="checkbox-field">
+                                        <input type="checkbox" data-value={item.value} data-flag="historical" checked={item.historical} onchange={handleStressorFlagChange} />
+                                        <span>Historical?</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+                    <template if:false={hasStressors}>
+                        <p class="empty-state">Nothing selected.</p>
+                    </template>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="supports-grid">
+                <label class="input-label" for="reliable-supports">Reliable Supports</label>
+                <select id="reliable-supports" class="text-input" value={reliableSupports} onchange={handleReliableSupportsChange}>
+                    <option value="">—</option>
+                    <template for:each={reliableSupportOptions} for:item="option">
+                        <option key={option.value} value={option.value}>{option.label}</option>
+                    </template>
+                </select>
+
+                <label class="checkbox-field">
+                    <input type="checkbox" checked={costCoverageIssues} onchange={handleCostCoverageChange} />
+                    <span>Cost/Coverage Issues?</span>
+                </label>
+            </div>
+            <div class="field field-full">
+                <label class="input-label" for="supports-notes">Supports Notes</label>
+                <textarea
+                    id="supports-notes"
+                    class="textarea"
+                    placeholder="Add outreach plans, key contacts, or gaps."
+                    value={supportsNotes}
+                    oninput={handleSupportsNotesChange}
+                ></textarea>
+                <p class="helper-text">Add outreach plans, key contacts, or gaps.</p>
+            </div>
+        </section>
+
+        <div class="actions">
+            <button class="secondary" type="button" onclick={handleBack}>Back</button>
+            <button class="primary" type="button" onclick={handleNext}>Next</button>
+        </div>
+    </div>
+</template>
