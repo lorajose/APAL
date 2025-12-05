@@ -256,11 +256,17 @@ export default class GpCaseStepPresenting extends LightningElement {
     }
 
     get impairmentLevelOptions() {
-        return IMPAIRMENT_LEVEL_OPTIONS;
+        return IMPAIRMENT_LEVEL_OPTIONS.map(option => ({
+            ...option,
+            selected: option.value === this.impairmentLevel
+        }));
     }
 
     get courseOptions() {
-        return COURSE_OPTIONS;
+        return COURSE_OPTIONS.map(option => ({
+            ...option,
+            selected: option.value === this.course
+        }));
     }
 
     get pcqtFilteredOptions() {

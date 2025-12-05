@@ -10,12 +10,11 @@
             <select
                 id="orientation"
                 class="text-input"
-                value={orientation}
                 onchange={handleOrientationChange}
             >
                 <option value="">—</option>
                 <template for:each={orientationOptions} for:item="option">
-                    <option key={option.value} value={option.value}>{option.label}</option>
+                    <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
                 </template>
             </select>
             <template if:true={orientationError}>
@@ -31,9 +30,8 @@
                         id="cognition-notes"
                         class="textarea"
                         placeholder="Describe memory, processing, reorientation cues..."
-                        value={cognitionNotes}
                         oninput={handleNotesChange}
-                    ></textarea>
+                    >{cognitionNotes}</textarea>
                     <p class="helper-text">Describe memory, processing, reorientation cues...</p>
                 </div>
                 <template if:true={cognitionNotesError}>

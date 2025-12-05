@@ -38,12 +38,11 @@
                 <select
                     id="self-harm-history"
                     class="text-input"
-                    value={selfHarmHistory}
                     data-field="Self_Harm_History__c"
                     onchange={handleInputChange}
                 >
                     <template for:each={selfHarmOptions} for:item="option">
-                        <option key={option.value} value={option.value}>{option.label}</option>
+                        <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
                     </template>
                 </select>
             </div>
@@ -53,10 +52,9 @@
                     id="other-dx"
                     class="textarea"
                     placeholder="Only fill this out if a diagnosis is missing below."
-                    value={otherPriorDiagnosis}
                     data-field="Other_Prior_Diagnosis__c"
                     oninput={handleInputChange}
-                ></textarea>
+                >{otherPriorDiagnosis}</textarea>
                 <p class="helper-text">Only fill this out if a diagnosis is missing below.</p>
             </div>
         </section>
@@ -110,9 +108,8 @@
                                     <textarea
                                         class="textarea"
                                         data-value={item.value}
-                                        value={item.note}
                                         oninput={handleDiagnosisNoteChange}
-                                    ></textarea>
+                                    >{item.note}</textarea>
                                 </div>
                             </div>
                         </template>

@@ -42,6 +42,7 @@ const createEmptyForm = () => ({
     cognition: {},
     supports: {},
     screeners: [],
+    substances: [],
     medications: [],
     concerns: [],
     safetyRisks: []

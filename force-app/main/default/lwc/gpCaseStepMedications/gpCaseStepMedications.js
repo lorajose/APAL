@@ -3,6 +3,17 @@ import { MEDICATION_ITEMS, MEDICATION_INDEX } from 'c/gpCaseCatalogs';
 
 const STEP_NUMBER = 10;
 
+const FILTER_OPTIONS = [
+    { label: 'Name', value: 'title' },
+    { label: 'Category', value: 'category' },
+    { label: 'Action', value: 'action' }
+];
+
+const WIZARD_FILTER_OPTIONS = [
+    { label: 'Name', value: 'title' },
+    { label: 'Category', value: 'category' }
+];
+
 const ACTION_OPTIONS = [
     'START New Medication',
     'STOP Existing Medication',
@@ -84,14 +95,6 @@ export default class GpCaseStepMedications extends LightningElement {
 
     get hasMedications() {
         return this.medications.length > 0;
-    }
-
-    get filterOptions() {
-        return [
-            { label: 'Name', value: 'title' },
-            { label: 'Category', value: 'category' },
-            { label: 'Action', value: 'action' }
-        ];
     }
 
     get filteredMedications() {
@@ -210,7 +213,7 @@ export default class GpCaseStepMedications extends LightningElement {
         this.wizardMode = 'edit';
         this.editingId = id;
         this.wizardSelection = [id];
-        this.wizardDraft = [{
+        this.wizardDraft = this.decorateWizardDraft([{
             id,
             meta: ITEM_INDEX[id],
             action: existing.action || '',
@@ -220,7 +223,7 @@ export default class GpCaseStepMedications extends LightningElement {
             current: !!existing.current,
             allergy: !!existing.allergy,
             notes: existing.notes || ''
-        }];
+        }]);
         this.wizardStep = 1;
         this.wizardSearch = '';
         this.wizardFilter = 'title';
@@ -256,7 +259,7 @@ export default class GpCaseStepMedications extends LightningElement {
 
     wizardNext() {
         if (this.wizardStep === 0) {
-            this.wizardDraft = this.wizardSelection.map(id => ({
+            const draft = this.wizardSelection.map(id => ({
                 id,
                 meta: ITEM_INDEX[id],
                 action: '',
@@ -267,19 +270,19 @@ export default class GpCaseStepMedications extends LightningElement {
                 allergy: false,
                 notes: ''
             }));
+            this.wizardDraft = this.decorateWizardDraft(draft);
             this.wizardStep = 1;
             return;
         }
         if (this.wizardStep === 1) {
             const errors = [];
-            this.wizardDraft = this.wizardDraft.map(item => {
+            this.wizardDraft.forEach(item => {
                 if (!item.action) {
                     errors.push('Action is required');
                 }
                 if (item.amount && !item.unit) {
                     errors.push('Unit is required when amount is provided');
                 }
-                return item;
             });
             if (errors.length) {
                 return;
@@ -346,15 +349,17 @@ export default class GpCaseStepMedications extends LightningElement {
         if (!id) return;
         const field = event.target.dataset.field;
         const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-        this.wizardDraft = this.wizardDraft.map(item =>
+        const updated = this.wizardDraft.map(item =>
             item.id === id ? { ...item, [field]: value } : item
         );
+        this.wizardDraft = this.decorateWizardDraft(updated);
     }
 
     handleWizardRemoveDraft(event) {
         const id = event.currentTarget.dataset.id;
         if (!id) return;
-        this.wizardDraft = this.wizardDraft.filter(item => item.id !== id);
+        const filtered = this.wizardDraft.filter(item => item.id !== id);
+        this.wizardDraft = this.decorateWizardDraft(filtered);
         this.wizardSelection = this.wizardSelection.filter(item => item !== id);
         if (this.wizardDraft.length === 0) {
             this.wizardStep = 0;
@@ -443,18 +448,6 @@ export default class GpCaseStepMedications extends LightningElement {
         this.wizardSearch = event.target.value;
     }
 
-    get actionOptions() {
-        return ACTION_OPTIONS;
-    }
-
-    get frequencyOptions() {
-        return FREQ;
-    }
-
-    get unitOptions() {
-        return UNITS;
-    }
-
     handleReviewEditDetails() {
         this.wizardStep = 1;
     }
@@ -462,5 +455,38 @@ export default class GpCaseStepMedications extends LightningElement {
     handleReviewChangeSelection() {
         this.wizardMode = 'add';
         this.wizardStep = 0;
+    }
+
+    get filterOptionsDecorated() {
+        return this.decorateOptionList(FILTER_OPTIONS, this.filterBy);
+    }
+
+    get wizardFilterOptions() {
+        return this.decorateOptionList(WIZARD_FILTER_OPTIONS, this.wizardFilter);
+    }
+
+    decorateWizardDraft(entries = []) {
+        return entries.map(entry => this.decorateWizardItem(entry));
+    }
+
+    decorateWizardItem(entry) {
+        const base = { ...entry };
+        base.meta = base.meta || ITEM_INDEX[base.id] || {};
+        base.actionOptionsDecorated = this.decorateOptionList(ACTION_OPTIONS, base.action || '');
+        base.frequencyOptionsDecorated = this.decorateOptionList(FREQ, base.frequency || '');
+        base.unitOptionsDecorated = this.decorateOptionList(UNITS, base.unit || '');
+        return base;
+    }
+
+    decorateOptionList(options, selectedValue) {
+        return (options || []).map(option => {
+            const normalized = typeof option === 'string'
+                ? { label: option, value: option }
+                : { label: option.label, value: option.value };
+            return {
+                ...normalized,
+                selected: normalized.value === selectedValue
+            };
+        });
     }
 }

@@ -65,7 +65,7 @@
                             <template if:true={showAllNotes}>
                                 <div class="field field-full">
                                     <label class="input-label">Notes</label>
-                                    <textarea class="textarea" data-id={concern.id} value={concern.notes} oninput={handleNoteChange}></textarea>
+                                    <textarea class="textarea" data-id={concern.id} oninput={handleNoteChange}>{concern.notes}</textarea>
                                 </div>
                             </template>
                             <template if:false={showAllNotes}>
@@ -110,12 +110,12 @@
 
         <template if:true={isWizardMode}>
             <section class="card wizard-shell">
-                <div class="wizard-progress">
+               <!-- <div class="wizard-progress">
                     <span class={wizardStep >= 0 ? 'dot active' : 'dot'}></span>
                     <span class={wizardStep >= 1 ? 'dot active' : 'dot'}></span>
                     <span class={wizardStep >= 2 ? 'dot active' : 'dot'}></span>
                     <span class="wizard-label">{wizardStepLabel}</span>
-                </div>
+                </div> -->
 
                 <template if:true={wizardStepIsPick}>
                     <div class="wizard-controls">

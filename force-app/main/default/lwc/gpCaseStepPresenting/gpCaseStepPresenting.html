@@ -67,19 +67,19 @@
             </div>
             <div class="field">
                 <label class="input-label" for="impairment-level">Impairment Level</label>
-                <select id="impairment-level" class="text-input" value={impairmentLevel}
+                <select id="impairment-level" class="text-input"
                     data-field="Impairment_Level__c" onchange={handleInputChange}>
                     <template for:each={impairmentLevelOptions} for:item="option">
-                        <option key={option.value} value={option.value}>{option.label}</option>
+                        <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
                     </template>
                 </select>
             </div>
             <div class="field">
                 <label class="input-label" for="course">Course</label>
-                <select id="course" class="text-input" value={course} data-field="Course__c"
+                <select id="course" class="text-input" data-field="Course__c"
                     onchange={handleInputChange}>
                     <template for:each={courseOptions} for:item="option">
-                        <option key={option.value} value={option.value}>{option.label}</option>
+                        <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
                     </template>
                 </select>
             </div>
@@ -96,10 +96,9 @@
                     id="other-symptoms"
                     class="textarea"
                     placeholder="Only fill this out if a symptom is missing."
-                    value={otherSymptoms}
                     data-field="Other_Symptoms__c"
                     oninput={handleInputChange}
-                ></textarea>
+                >{otherSymptoms}</textarea>
                 <p class="helper-text">Only fill this out if a symptom is missing.</p>
             </div>
         </section>
@@ -144,9 +143,8 @@
                                     <textarea
                                         class="textarea"
                                         data-value={item.value}
-                                        value={item.note}
                                         oninput={handleSymptomNoteChange}
-                                    ></textarea>
+                                    >{item.note}</textarea>
                                 </div>
                             </div>
                         </template>

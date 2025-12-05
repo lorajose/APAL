@@ -10,12 +10,11 @@
             <select
                 id="home-safety"
                 class="text-input"
-                value={homeSafetyStatus}
                 onchange={handleHomeSafetyChange}
             >
                 <option value="">—</option>
-                <template for:each={homeSafetyOptions} for:item="option">
-                    <option key={option.value} value={option.value}>{option.label}</option>
+                <template for:each={homeSafetyOptionsComputed} for:item="option">
+                    <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
                 </template>
             </select>
             <template if:true={homeSafetyError}>
@@ -60,9 +59,8 @@
                         id="safety-notes"
                         class="textarea"
                         placeholder="Add storage instructions, supervision plans, or contacts."
-                        value={safetyNotes}
                         oninput={handleSafetyNotesChange}
-                    ></textarea>
+                    >{safetyNotes}</textarea>
                     <p class="helper-text">Add storage instructions, supervision plans, or contacts.</p>
                 </div>
             </section>
@@ -102,7 +100,7 @@
                                 </header>
                                 <div class="field field-full">
                                     <label class="input-label">Notes</label>
-                                    <textarea class="textarea" data-value={item.value} value={item.note} oninput={handleStressorNoteChange}></textarea>
+                                    <textarea class="textarea" data-value={item.value} oninput={handleStressorNoteChange}>{item.note}</textarea>
                                 </div>
                                 <div class="flag-row">
                                     <label class="checkbox-field">
@@ -127,10 +125,10 @@
         <section class="card">
             <div class="supports-grid">
                 <label class="input-label" for="reliable-supports">Reliable Supports</label>
-                <select id="reliable-supports" class="text-input" value={reliableSupports} onchange={handleReliableSupportsChange}>
+                <select id="reliable-supports" class="text-input" onchange={handleReliableSupportsChange}>
                     <option value="">—</option>
-                    <template for:each={reliableSupportOptions} for:item="option">
-                        <option key={option.value} value={option.value}>{option.label}</option>
+                    <template for:each={reliableSupportOptionsComputed} for:item="option">
+                        <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
                     </template>
                 </select>
 
@@ -145,9 +143,8 @@
                     id="supports-notes"
                     class="textarea"
                     placeholder="Add outreach plans, key contacts, or gaps."
-                    value={supportsNotes}
                     oninput={handleSupportsNotesChange}
-                ></textarea>
+                >{supportsNotes}</textarea>
                 <p class="helper-text">Add outreach plans, key contacts, or gaps.</p>
             </div>
         </section>

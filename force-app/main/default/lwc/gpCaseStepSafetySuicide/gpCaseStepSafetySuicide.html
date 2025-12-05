@@ -10,12 +10,11 @@
             <select
                 id="ideation"
                 class="text-input"
-                value={ideation}
                 onchange={handleIdeationChange}
             >
                 <option value="">—</option>
                 <template for:each={ideationOptions} for:item="option">
-                    <option key={option.value} value={option.value}>{option.label}</option>
+                    <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
                 </template>
             </select>
             <template if:true={ideationError}>
@@ -42,10 +41,9 @@
                     id="protective-factors"
                     class="textarea"
                     placeholder="List buffers, supports, responsibilities, etc."
-                    value={protectiveFactors}
                     data-field="Protective_Factors__c"
                     oninput={handleInputChange}
-                ></textarea>
+                >{protectiveFactors}</textarea>
                 <template if:true={protectiveFactorsError}>
                     <p class="error-text">{protectiveFactorsError}</p>
                 </template>

@@ -14,7 +14,12 @@ export default class GpCaseStepCognition extends LightningElement {
     orientation = '';
     cognitionNotes = '';
 
-    orientationOptions = ORIENTATION_OPTIONS;
+    get orientationOptions() {
+        return ORIENTATION_OPTIONS.map(option => ({
+            ...option,
+            selected: option.value === this.orientation
+        }));
+    }
 
     get showCognitionNotes() {
         return this.orientation && this.orientation !== 'Alert & oriented (x3)';

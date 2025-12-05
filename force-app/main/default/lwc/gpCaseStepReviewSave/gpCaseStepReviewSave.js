@@ -141,8 +141,8 @@ export default class GpCaseStepReviewSave extends LightningElement {
         return this.form.presenting || {};
     }
 
-    get priorDxUtil() {
-        return this.form.priorDxUtil || {};
+    get priorDx() {
+        return this.form.priorDx || {};
     }
 
     get suicide() {
@@ -217,16 +217,16 @@ export default class GpCaseStepReviewSave extends LightningElement {
             { label: 'Impairment Level', value: this.formatValue(this.presenting.Impairment_Level__c) },
             { label: 'Course', value: this.formatValue(this.presenting.Course__c) },
             { label: 'Abrupt Change?', value: this.presenting.Abrupt_Change__c ? 'Yes' : 'No' },
-            { label: 'Other Symptoms', value: this.formatValue(this.presenting.Other_Symptoms__c) }
+            { label: 'Other Symptoms', value: this.formatValue(this.presenting.Other_Symptoms__c || this.presenting.otherSymptoms) }
         ];
     }
 
     get priorSummary() {
         return [
-            { label: 'Psych Hospitalizations', value: this.formatValue(this.priorDxUtil.Psych_Hospitalizations__c) },
-            { label: 'ED Visits (Psych)', value: this.formatValue(this.priorDxUtil.ED_Visits_Count__c) },
-            { label: 'Self-Harm History', value: this.formatValue(this.priorDxUtil.Self_Harm_History__c) },
-            { label: 'Other Prior Diagnosis', value: this.formatValue(this.priorDxUtil.Other_Prior_Diagnosis__c) }
+            { label: 'Psych Hospitalizations', value: this.formatValue(this.priorDx.Psych_Hospitalizations__c) },
+            { label: 'ED Visits (Psych)', value: this.formatValue(this.priorDx.ED_Visits_Count__c) },
+            { label: 'Self-Harm History', value: this.formatValue(this.priorDx.Self_Harm_History__c) },
+            { label: 'Other Prior Diagnosis', value: this.formatValue(this.priorDx.Other_Prior_Diagnosis__c) }
         ];
     }
 
@@ -272,7 +272,7 @@ export default class GpCaseStepReviewSave extends LightningElement {
             { label: 'Home Safety', value: this.formatValue(this.homeSafety.Home_Safety__c) },
             { label: 'Lethal Means Access', value: this.formatList(this.homeSafety.Lethal_Means_Access__c) },
             { label: 'Means Safety Plan', value: this.homeSafety.Means_Safety_Plan__c ? 'Yes' : 'No' },
-            { label: 'Psychosocial Stressors', value: this.formatList(this.homeSafety.Psychosocial_Stressors__c) },
+            { label: 'Psychosocial Stressors', value: this.formatStressorDraft(this.homeSafety.psychosocialStressorsDraft, this.homeSafety.Psychosocial_Stressors__c) },
             { label: 'Reliable Supports', value: this.formatValue(this.homeSafety.Reliable_Supports__c) },
             { label: 'Cost/Coverage Issues', value: this.homeSafety.Cost_Coverage_Issues__c ? 'Yes' : 'No' },
             { label: 'Safety Notes', value: this.formatValue(this.homeSafety.Safety_Notes__c) }
@@ -295,6 +295,16 @@ export default class GpCaseStepReviewSave extends LightningElement {
         if (!value) return FALLBACK;
         if (Array.isArray(value)) return value.length ? value.join(', ') : FALLBACK;
         return value.split(';').filter(Boolean).join(', ') || FALLBACK;
+    }
+
+    formatStressorDraft(draftList, fallbackSerialized) {
+        if (Array.isArray(draftList) && draftList.length) {
+            const labels = draftList
+                .map(item => item.label || item.value)
+                .filter(Boolean);
+            return labels.length ? labels.join(', ') : FALLBACK;
+        }
+        return this.formatList(fallbackSerialized);
     }
 
     handleBack() {

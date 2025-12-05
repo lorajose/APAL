@@ -27,9 +27,8 @@
                     id="family-notes"
                     class="textarea"
                     placeholder="Add context, protective relatives, or patterns."
-                    value={familyHistoryNotes}
                     oninput={handleNotesChange}
-                ></textarea>
+                >{familyHistoryNotes}</textarea>
                 <p class="helper-text">Add context, protective relatives, or patterns.</p>
             </div>
         </section>
@@ -71,9 +70,8 @@
                                     <textarea
                                         class="textarea"
                                         data-value={item.value}
-                                        value={item.note}
                                         oninput={handleFamilyNoteChange}
-                                    ></textarea>
+                                    >{item.note}</textarea>
                                 </div>
                             </div>
                         </template>

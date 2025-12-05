@@ -73,7 +73,7 @@
                             <template if:true={showAllNotes}>
                                 <div class="field field-full">
                                     <label class="input-label">Notes</label>
-                                    <textarea class="textarea" data-id={risk.id} value={risk.notes} oninput={handleNoteChange}></textarea>
+                                    <textarea class="textarea" data-id={risk.id} oninput={handleNoteChange}>{risk.notes}</textarea>
                                 </div>
                             </template>
                             <template if:false={showAllNotes}>
@@ -186,7 +186,7 @@
                             </div>
                             <div class="field field-full">
                                 <label class="input-label">Notes</label>
-                                <textarea class="textarea" data-id={item.id} data-field="notes" value={item.notes} oninput={handleWizardDetailChange}></textarea>
+                                <textarea class="textarea" data-id={item.id} data-field="notes" oninput={handleWizardDetailChange}>{item.notes}</textarea>
                             </div>
                         </section>
                     </template>
