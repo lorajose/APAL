@@ -7,6 +7,12 @@ const SOURCE_LABELS = {
     maniaSymptoms: 'Mania/Hypomania Symptoms',
     medicalRedFlags: 'Medical Red Flags',
     familyHistory: 'Family History',
+    withdrawalTreatment: 'Withdrawal and Treatment',
+    substanceUseMentalHealth: 'Substance Use and Mental Health',
+    preventionRiskManagement: 'Prevention and Risk Management',
+    socialEnvironmentalFactors: 'Social and Environmental Factors',
+    healthComplications: 'Health Complications',
+    supportRecovery: 'Support and Recovery',
     manual: 'Manual Add'
 };
 
@@ -19,7 +25,7 @@ const TOP_SYMPTOM_OPTIONS = [
 
 const PRIOR_DX_OPTIONS = [
     'MDD', 'Bipolar I', 'Bipolar II', 'GAD', 'Panic Disorder', 'PTSD',
-    'Psychotic Disorder', 'ADHD', 'OCD', 'SUD', 'Personality Disorder', 'Eating Disorder', 'Other', 'Unknown'
+    'Psychotic Disorder', 'ADHD', 'OCD', 'SUD', 'Personality Disorder', 'Eating Disorder'
 ];
 
 const PSYCHOSIS_SYMPTOMS_OPTIONS = [
@@ -36,12 +42,48 @@ const MANIA_SYMPTOMS_OPTIONS = [
 const MEDICAL_RED_FLAG_OPTIONS = [
     'Fever/infection', 'Head injury', 'Seizure', 'Thyroid/endocrine',
     'Pain/untreated', 'Steroid or stimulant use', 'Medication started/stopped',
-    'Delirium suspected', 'Sleep apnea', 'Other/Unknown'
+    'Delirium suspected', 'Sleep apnea'
 ];
 
 const FAMILY_HISTORY_OPTIONS = [
     'Bipolar', 'Psychosis/Schizophrenia', 'Suicide', 'SUD',
-    'Depression/Anxiety', 'None', 'Unknown'
+    'Depression/Anxiety', 'Unknown'
+];
+
+const WITHDRAWAL_TREATMENT_OPTIONS = [
+    'Acute Withdrawal Symptoms',
+    'Medication-Assisted Treatment (MAT) Needs',
+    'Cravings Management'
+];
+
+const SUBSTANCE_USE_MENTAL_HEALTH_OPTIONS = [
+    'Chronic Substance Use',
+    'Dual Diagnosis (Substance Use and Mental Health)',
+    'Co-occurring Disorders',
+    'Trauma and Substance Use'
+];
+
+const PREVENTION_RISK_MANAGEMENT_OPTIONS = [
+    'Relapse Prevention',
+    'Overdose Risks',
+    'Harm Reduction Strategies'
+];
+
+const SOCIAL_ENVIRONMENTAL_FACTORS_OPTIONS = [
+    'Social Isolation due to Substance Use',
+    'Legal Issues Related to Substance Use',
+    'Family Dynamics and Substance Use',
+    'Housing Stability and Substance Use',
+    'Financial Instability Related to Substance Use',
+    'Social Determinants of Health Impacting Recovery'
+];
+
+const HEALTH_COMPLICATIONS_OPTIONS = [
+    'Physical Health Complications from Substance Use'
+];
+
+const SUPPORT_RECOVERY_OPTIONS = [
+    'Peer Support Group Needs'
 ];
 
 const CATALOG = buildCatalog();
@@ -67,6 +109,12 @@ function buildCatalog() {
     addEntries('Mania/Hypomania Symptoms', MANIA_SYMPTOMS_OPTIONS);
     addEntries('Medical Red Flags', MEDICAL_RED_FLAG_OPTIONS);
     addEntries('Family History (1st-degree)', FAMILY_HISTORY_OPTIONS);
+    addEntries('Withdrawal and Treatment', WITHDRAWAL_TREATMENT_OPTIONS);
+    addEntries('Substance Use and Mental Health', SUBSTANCE_USE_MENTAL_HEALTH_OPTIONS);
+    addEntries('Prevention and Risk Management', PREVENTION_RISK_MANAGEMENT_OPTIONS);
+    addEntries('Social and Environmental Factors', SOCIAL_ENVIRONMENTAL_FACTORS_OPTIONS);
+    addEntries('Health Complications', HEALTH_COMPLICATIONS_OPTIONS);
+    addEntries('Support and Recovery', SUPPORT_RECOVERY_OPTIONS);
     return entries;
 }
 
