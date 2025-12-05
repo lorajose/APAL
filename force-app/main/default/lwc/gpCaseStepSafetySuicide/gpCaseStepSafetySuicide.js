@@ -26,7 +26,12 @@ export default class GpCaseStepSafetySuicide extends LightningElement {
     pastAttempts = '';
     @track accessToMeans = [];
 
-    ideationOptions = IDEATION_OPTIONS;
+    get ideationOptions() {
+        return IDEATION_OPTIONS.map(option => ({
+            ...option,
+            selected: option.value === this.ideation
+        }));
+    }
 
     get showRiskDetail() {
         return this.ideation && !['None', 'Unknown'].includes(this.ideation);

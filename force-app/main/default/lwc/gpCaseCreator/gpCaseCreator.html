@@ -43,7 +43,7 @@
       <template if:true={isStep1}>
         <c-gp-case-step-basics
           case-id={caseId}
-          data={currentStepData}
+          data={form.basics}
           onnext={handleNext}
           onsaveprescreen={handleSavePreScreen}
           ondataupdated={handleDataUpdated}
@@ -55,7 +55,7 @@
         <c-gp-case-step-presenting
           case-id={caseId}
           case-type={caseType}
-          data={currentStepData}
+          data={form.presenting}
           onnext={handleNext}
           ondataupdated={handleDataUpdated}
           onprevious={handlePrevious}
@@ -66,7 +66,7 @@
         <c-gp-case-step-prior-dx
           case-id={caseId}
           case-type={caseType}
-          data={currentStepData}
+          data={form.priorDx}
           onnext={handleNext}
           ondataupdated={handleDataUpdated}
           onprevious={handlePrevious}
@@ -76,7 +76,7 @@
       <template if:true={isStep4}>
         <c-gp-case-step-safety-suicide
           case-id={caseId}
-          data={currentStepData}
+          data={form.suicide}
           onnext={handleNext}
           ondataupdated={handleDataUpdated}
           onprevious={handlePrevious}
@@ -87,7 +87,7 @@
         <c-gp-case-step-safety-violence
           case-id={caseId}
           case-type={caseType}
-          data={currentStepData}
+          data={form.violence}
           onnext={handleNext}
           ondataupdated={handleDataUpdated}
           onprevious={handlePrevious}
@@ -98,7 +98,7 @@
         <c-gp-case-step-psychosis-mania
           case-id={caseId}
           case-type={caseType}
-          data={currentStepData}
+          data={form.psychosisMania}
           onnext={handleNext}
           ondataupdated={handleDataUpdated}
           onprevious={handlePrevious}
@@ -109,7 +109,7 @@
         <c-gp-case-step-family-trauma
           case-id={caseId}
           case-type={caseType}
-          data={currentStepData}
+          data={form.familyTrauma}
           onnext={handleNext}
           ondataupdated={handleDataUpdated}
           onprevious={handlePrevious}
@@ -119,7 +119,7 @@
       <template if:true={isStep8}>
         <c-gp-case-step-home-safety
           case-id={caseId}
-          data={currentStepData}
+          data={form.homeSafety}
           onnext={handleNext}
           ondataupdated={handleDataUpdated}
           onprevious={handlePrevious}
@@ -129,7 +129,7 @@
       <template if:true={isStep9}>
         <c-gp-case-step-cognition
           case-id={caseId}
-          data={currentStepData}
+          data={form.cognition}
           onnext={handleNext}
           ondataupdated={handleDataUpdated}
           onprevious={handlePrevious}
@@ -139,7 +139,7 @@
       <template if:true={isStep10}>
         <c-gp-case-step-medications
           case-id={caseId}
-          data={currentStepData}
+          data={form.medications}
           onnext={handleNext}
           ondataupdated={handleDataUpdated}
           onprevious={handlePrevious}
@@ -150,7 +150,7 @@
       <template if:true={isStep11}>
         <c-gp-case-step-substances
           case-id={caseId}
-          data={currentStepData}
+          data={form.substances}
           onnext={handleNext}
           ondataupdated={handleDataUpdated}
           onprevious={handlePrevious}
@@ -161,7 +161,7 @@
       <template if:true={isStep12}>
         <c-gp-case-step-screeners
           case-id={caseId}
-          data={currentStepData}
+          data={form.screeners}
           onnext={handleNext}
           ondataupdated={handleDataUpdated}
           onprevious={handlePrevious}
@@ -172,7 +172,7 @@
       <template if:true={isStep13}>
         <c-gp-case-step-concerns
           case-id={caseId}
-          data={currentStepData}
+          data={form.concerns}
           onnext={handleNext}
           ondataupdated={handleDataUpdated}
           onprevious={handlePrevious}
@@ -182,7 +182,7 @@
       <template if:true={isStep14}>
         <c-gp-case-step-safety-risks
           case-id={caseId}
-          data={currentStepData}
+          data={form.safetyRisks}
           onnext={handleNext}
           ondataupdated={handleDataUpdated}
           onprevious={handlePrevious}

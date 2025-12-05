@@ -46,7 +46,10 @@ export default class GpCaseStepPriorDx extends LightningElement {
     @track diagnosisSearch = '';
 
     get selfHarmOptions() {
-        return SELF_HARM_OPTIONS;
+        return SELF_HARM_OPTIONS.map(option => ({
+            ...option,
+            selected: option.value === this.selfHarmHistory
+        }));
     }
 
     get filteredDiagnosisOptions() {

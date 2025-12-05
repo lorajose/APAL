@@ -2198,46 +2198,6 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
-                    <name>additionalMargin</name>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>configId</name>
-                    <value>Case</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>headerIcon</name>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>headerTitle</name>
-                    <value>Case Timeline</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>noDataFoundWarnCss</name>
-                    <value>none</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>showButtons</name>
-                    <value>true</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>showExpandCollapse</name>
-                    <value>true</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>showHeader</name>
-                    <value>true</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>showSearch</name>
-                    <value>true</value>
-                </componentInstanceProperties>
-                <componentName>timeline:activityTimeline</componentName>
-                <identifier>timeline_activityTimeline</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
                     <name>parentFieldApiName</name>
                     <value>Case.Id</value>
                 </componentInstanceProperties>
@@ -2332,6 +2292,46 @@
                         <rightValue>General Psychiatry</rightValue>
                     </criteria>
                 </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>additionalMargin</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>configId</name>
+                    <value>Case</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>headerIcon</name>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>headerTitle</name>
+                    <value>Case Timeline</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>noDataFoundWarnCss</name>
+                    <value>none</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showButtons</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showExpandCollapse</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showHeader</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showSearch</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentName>timeline:activityTimeline</componentName>
+                <identifier>timeline_activityTimeline</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>

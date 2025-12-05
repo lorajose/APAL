@@ -29,9 +29,9 @@
                 <div class="grid-header-row">
                     <div class="control-group">
                         <label class="input-label" for="grid-filter">Filter by</label>
-                        <select id="grid-filter" class="text-input" value={filterBy} onchange={handleFilterChange}>
-                            <template for:each={filterOptions} for:item="option">
-                                <option key={option.value} value={option.value}>{option.label}</option>
+                        <select id="grid-filter" class="text-input" onchange={handleFilterChange}>
+                            <template for:each={filterOptionsDecorated} for:item="option">
+                                <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
                             </template>
                         </select>
                     </div>
@@ -77,7 +77,7 @@
                             <template if:true={showAllNotes}>
                                 <div class="field field-full">
                                     <label class="input-label">Notes</label>
-                                    <textarea class="textarea" data-id={med.id} data-field="notes" value={med.notes} oninput={handleCardNoteChange}></textarea>
+                                    <textarea class="textarea" data-id={med.id} data-field="notes" oninput={handleCardNoteChange}>{med.notes}</textarea>
                                 </div>
                             </template>
                             <template if:false={showAllNotes}>
@@ -132,9 +132,10 @@
                     <div class="wizard-controls">
                         <div class="control-group">
                             <label class="input-label" for="wizard-filter">Filter by</label>
-                            <select id="wizard-filter" class="text-input" value={wizardFilter} onchange={handleWizardFilterChange}>
-                                <option value="title">Name</option>
-                                <option value="category">Category</option>
+                            <select id="wizard-filter" class="text-input" onchange={handleWizardFilterChange}>
+                                <template for:each={wizardFilterOptions} for:item="option">
+                                    <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
+                                </template>
                             </select>
                         </div>
                         <div class="control-group">
@@ -183,18 +184,18 @@
                             </header>
                             <div class="detail-grid">
                                 <label class="input-label">Action<span class="required">*</span>
-                                    <select class="text-input" data-id={item.id} data-field="action" value={item.action} onchange={handleWizardDetailChange}>
+                                    <select class="text-input" data-id={item.id} data-field="action" onchange={handleWizardDetailChange}>
                                         <option value="">Select action</option>
-                                        <template for:each={actionOptions} for:item="option">
-                                            <option key={option} value={option}>{option}</option>
+                                        <template for:each={item.actionOptionsDecorated} for:item="option">
+                                            <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
                                         </template>
                                     </select>
                                 </label>
                                 <label class="input-label">Frequency
-                                    <select class="text-input" data-id={item.id} data-field="frequency" value={item.frequency} onchange={handleWizardDetailChange}>
+                                    <select class="text-input" data-id={item.id} data-field="frequency" onchange={handleWizardDetailChange}>
                                         <option value="">--</option>
-                                        <template for:each={frequencyOptions} for:item="option">
-                                            <option key={option} value={option}>{option}</option>
+                                        <template for:each={item.frequencyOptionsDecorated} for:item="option">
+                                            <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
                                         </template>
                                     </select>
                                 </label>
@@ -202,10 +203,10 @@
                                     <input type="number" class="text-input" data-id={item.id} data-field="amount" value={item.amount} oninput={handleWizardDetailChange} />
                                 </label>
                                 <label class="input-label">Dosing Unit
-                                    <select class="text-input" data-id={item.id} data-field="unit" value={item.unit} onchange={handleWizardDetailChange}>
+                                    <select class="text-input" data-id={item.id} data-field="unit" onchange={handleWizardDetailChange}>
                                         <option value="">--</option>
-                                        <template for:each={unitOptions} for:item="option">
-                                            <option key={option} value={option}>{option}</option>
+                                        <template for:each={item.unitOptionsDecorated} for:item="option">
+                                            <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
                                         </template>
                                     </select>
                                 </label>

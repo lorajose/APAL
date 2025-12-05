@@ -53,8 +53,19 @@ export default class GpCaseStepHomeSafety extends LightningElement {
     costCoverageIssues = false;
     supportsNotes = '';
 
-    homeSafetyOptions = HOME_SAFETY_OPTIONS;
-    reliableSupportOptions = RELIABLE_SUPPORT_OPTIONS;
+    get homeSafetyOptionsComputed() {
+        return HOME_SAFETY_OPTIONS.map(option => ({
+            ...option,
+            selected: option.value === this.homeSafetyStatus
+        }));
+    }
+
+    get reliableSupportOptionsComputed() {
+        return RELIABLE_SUPPORT_OPTIONS.map(option => ({
+            ...option,
+            selected: option.value === this.reliableSupports
+        }));
+    }
 
     get showLethalMeans() {
         return this.homeSafetyStatus && this.homeSafetyStatus !== 'Safe';

@@ -20,7 +20,12 @@ export default class GpCaseStepSafetyViolence extends LightningElement {
     weaponsAccess = '';
     violenceDetails = '';
 
-    ideationOptions = IDEATION_OPTIONS;
+    get ideationOptions() {
+        return IDEATION_OPTIONS.map(option => ({
+            ...option,
+            selected: option.value === this.ideation
+        }));
+    }
 
     get showDetail() {
         return this.ideation && this.ideation !== 'None';

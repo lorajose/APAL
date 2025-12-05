@@ -73,7 +73,7 @@
                             <template if:true={showAllNotes}>
                                 <div class="field field-full">
                                     <label class="input-label">Notes</label>
-                                    <textarea class="textarea" data-id={scr.id} data-field="notes" value={scr.notes} oninput={handleCardNoteChange}></textarea>
+                                    <textarea class="textarea" data-id={scr.id} data-field="notes" oninput={handleCardNoteChange}>{scr.notes}</textarea>
                                 </div>
                             </template>
                             <template if:false={showAllNotes}>

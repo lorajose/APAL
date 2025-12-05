@@ -1,6 +1,18 @@
 import { LightningElement, api, track } from 'lwc';
 import { SUBSTANCE_ITEMS as SUBSTANCE_CATALOG, SUBSTANCE_INDEX as SUBSTANCE_LOOKUP } from 'c/gpCaseCatalogs';
 
+const FILTER_OPTIONS = [
+    { label: 'Name', value: 'name' },
+    { label: 'Category', value: 'category' },
+    { label: 'Frequency', value: 'frequency' }
+];
+
+const WIZARD_FILTER_OPTIONS = [
+    { label: 'Name', value: 'name' },
+    { label: 'Category', value: 'category' },
+    { label: 'Description', value: 'description' }
+];
+
 const FREQUENCY_OPTIONS = [
     'Multiple times a day',
     'Daily',
@@ -54,14 +66,6 @@ export default class GpCaseStepSubstances extends LightningElement {
 
     get hasSubstances() {
         return this.substances.length > 0;
-    }
-
-    get filterOptions() {
-        return [
-            { label: 'Name', value: 'name' },
-            { label: 'Category', value: 'category' },
-            { label: 'Frequency', value: 'frequency' }
-        ];
     }
 
     get filteredSubstances() {
@@ -125,13 +129,13 @@ export default class GpCaseStepSubstances extends LightningElement {
         this.setSubMode('wizard');
         this.wizardMode = 'edit';
         this.wizardSelection = [id];
-        this.wizardDraft = [{
+        this.wizardDraft = this.decorateWizardDraft([{
             id,
             meta: SUBSTANCE_INDEX[id],
             frequency: existing.frequency || '',
             current: !!existing.current,
             notes: existing.notes || ''
-        }];
+        }]);
         this.wizardStep = 1;
         this.wizardSearch = '';
         this.wizardFilter = 'name';
@@ -265,16 +269,16 @@ export default class GpCaseStepSubstances extends LightningElement {
 
     wizardNext() {
         if (this.wizardStep === 0) {
-            this.wizardDraft = this.wizardSelection.map(id => ({
+            this.wizardDraft = this.decorateWizardDraft(this.wizardSelection.map(id => ({
                 id,
                 meta: SUBSTANCE_INDEX[id],
                 frequency: '',
                 current: false,
                 notes: ''
-            }));
+            })));
             this.wizardStep = 1;
             return;
-    }
+        }
         if (this.wizardStep === 1) {
             if (this.wizardDraft.length === 0) {
                 return;
@@ -335,15 +339,15 @@ export default class GpCaseStepSubstances extends LightningElement {
         if (!id) return;
         const field = event.target.dataset.field;
         const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-        this.wizardDraft = this.wizardDraft.map(item =>
+        this.wizardDraft = this.decorateWizardDraft(this.wizardDraft.map(item =>
             item.id === id ? { ...item, [field]: value } : item
-        );
+        ));
     }
 
     handleWizardRemoveDraft(event) {
         const id = event.currentTarget.dataset.id;
         if (!id) return;
-        this.wizardDraft = this.wizardDraft.filter(item => item.id !== id);
+        this.wizardDraft = this.decorateWizardDraft(this.wizardDraft.filter(item => item.id !== id));
         this.wizardSelection = this.wizardSelection.filter(item => item !== id);
         if (this.wizardDraft.length === 0) {
             this.wizardStep = 0;
@@ -386,7 +390,35 @@ export default class GpCaseStepSubstances extends LightningElement {
         }));
     }
 
-    get frequencyOptions() {
-        return FREQUENCY_OPTIONS;
+    get filterOptionsDecorated() {
+        return this.decorateOptionList(FILTER_OPTIONS, this.filterBy);
+    }
+
+    get wizardFilterOptionsDecorated() {
+        return this.decorateOptionList(WIZARD_FILTER_OPTIONS, this.wizardFilter);
+    }
+
+    decorateWizardDraft(entries = []) {
+        return (entries || []).map(entry => this.decorateWizardItem(entry));
+    }
+
+    decorateWizardItem(entry = {}) {
+        const base = { ...entry };
+        base.meta = base.meta || SUBSTANCE_INDEX[base.id] || {};
+        base.frequencyBlankSelected = !base.frequency;
+        base.frequencyOptionsDecorated = this.decorateOptionList(FREQUENCY_OPTIONS, base.frequency || '');
+        return base;
+    }
+
+    decorateOptionList(options = [], selectedValue) {
+        return (options || []).map(option => {
+            const normalized = typeof option === 'string'
+                ? { label: option, value: option }
+                : { label: option.label, value: option.value };
+            return {
+                ...normalized,
+                selected: normalized.value === selectedValue
+            };
+        });
     }
 }
