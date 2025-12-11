@@ -3,8 +3,7 @@
         <div class="section-header">
             <div class="section-heading">
                 <template if:true={isGridView}>
-                    <h2>Safety Risks (General Psych)</h2>
-                    <p>Track recent/historical flags and notes. Add more opens wizard.</p>
+                    <h2>Safety Risks ({risksCount})</h2>
                 </template>
                 <template if:true={isWizardView}>
                     <div class="wizard-heading">
@@ -40,11 +39,14 @@
                         <input id="grid-search" class="text-input" type="search" placeholder="Filter by name..." value={searchValue} oninput={handleSearchChange} />
                     </div>
                     <div class="grid-actions">
-                        <button class="ghost-button" onclick={toggleShowNotes}>
+                        <button class="ghost-button" type="button" onclick={toggleShowNotes}>
                             <template if:true={showAllNotes}>Hide notes</template>
                             <template if:false={showAllNotes}>Show all notes</template>
                         </button>
-                        <button class="primary-button" onclick={handleAddRisks}>Add Safety Risks</button>
+                        <template if:true={hasRisks}>
+                            <button class="ghost-button" type="button" onclick={handleEditRisksWizard}>Edit via Wizard</button>
+                        </template>
+                        <button class="primary-button" type="button" onclick={handleAddRisks}>Add Safety Risks</button>
                     </div>
                 </div>
             </section>
@@ -248,8 +250,16 @@
         </template>
 
         <div class="actions">
-            <button class="secondary" type="button" onclick={handleBack}>Back</button>
-            <button class="primary" type="button" onclick={handleNext}>Next</button>
+            <template if:true={showNavigation}>
+                <button class="secondary" type="button" onclick={handleBack}>Back</button>
+                <button class="primary" type="button" onclick={handleNext}>Next</button>
+            </template>
+            <template if:false={showNavigation}>
+                <button class="primary" type="button" onclick={handleStandaloneSave} disabled={isSaving}>
+                    <template if:true={isSaving}>Saving…</template>
+                    <template if:false={isSaving}>Save Safety Risks</template>
+                </button>
+            </template>
         </div>
     </div>
 </template>

@@ -1,4 +1,7 @@
-import { LightningElement, api, track } from 'lwc';
+import { LightningElement, api, track, wire } from 'lwc';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import getCaseFullData from '@salesforce/apex/GPCaseService.getCaseFullData';
+import saveScreeners from '@salesforce/apex/GPCaseService.saveScreeners';
 import { SCREENER_ITEMS as SCREENER_CATALOG, SCREENER_INDEX as SCREENER_LOOKUP } from 'c/gpCaseCatalogs';
 
 const SCREENERS = SCREENER_CATALOG;
@@ -9,6 +12,8 @@ const STEP_NUMBER = 12;
 
 export default class GpCaseStepScreeners extends LightningElement {
     @api caseId;
+    @api recordId;
+    @api layoutMode = false;
     @api caseType;
 
     @track screenerMode = 'grid';
@@ -17,6 +22,8 @@ export default class GpCaseStepScreeners extends LightningElement {
     @track searchValue = '';
     showAllNotes = true;
     confirmRemoveId = null;
+    @track isSaving = false;
+    hasLoadedInitialData = false;
 
     wizardStep = 0;
     wizardMode = 'add';
@@ -24,14 +31,58 @@ export default class GpCaseStepScreeners extends LightningElement {
     @track wizardDraft = [];
     wizardFilter = 'name';
     wizardSearch = '';
+    hydratedFromServer = false;
 
     @api
     set data(value) {
         this.screeners = Array.isArray(value) ? cloneList(value) : [];
+        if (this.screeners.length) {
+            this.hydratedFromServer = true;
+            this.hasLoadedInitialData = true;
+        }
+        // Debug: track incoming data length
+        // eslint-disable-next-line no-console
+        console.error(`[gpCaseStepScreeners] set data len=${this.screeners.length} caseId=${this.caseId} recordId=${this.recordId}`);
     }
 
     get data() {
         return cloneList(this.screeners);
+    }
+
+    get screenersCount() {
+        return this.screeners.length;
+    }
+
+    get effectiveCaseId() {
+        return this.caseId || this.recordId || null;
+    }
+
+    get isStandaloneLayout() {
+        return this.layoutMode || (!!this.recordId && !this.caseId);
+    }
+
+    get showNavigation() {
+        return !this.isStandaloneLayout;
+    }
+
+    get wireCaseId() {
+        return this.caseId || this.recordId || null;
+    }
+
+    @wire(getCaseFullData, { caseId: '$wireCaseId' })
+    wiredCaseData({ data, error }) {
+        if (data && !this.hydratedFromServer && !this.screeners.length) {
+            const scr = Array.isArray(data.screeners) ? data.screeners : [];
+            this.screeners = cloneList(scr);
+            this.hydratedFromServer = true;
+            this.hasLoadedInitialData = true;
+            // eslint-disable-next-line no-console
+            console.error(`[gpCaseStepScreeners] hydrated via wire len=${this.screeners.length}`);
+        }
+        if (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error loading screeners', error);
+        }
     }
 
     get isGridView() {
@@ -103,6 +154,45 @@ export default class GpCaseStepScreeners extends LightningElement {
         this.wizardStep = 0;
         this.wizardSelection = [];
         this.wizardDraft = [];
+        this.wizardSearch = '';
+        this.wizardFilter = 'name';
+    }
+
+    handleEditScreenersWizard(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        const current = (this.screeners || [])
+            .map(scr => {
+                const id = scr?.id || scr?.catalogName || scr?.meta?.name;
+                return id ? { ...scr, id } : null;
+            })
+            .filter(Boolean);
+        if (!current.length) {
+            this.handleAddScreeners();
+            return;
+        }
+        this.setScreenerMode('wizard');
+        this.wizardMode = 'edit';
+        this.wizardSelection = current.map(scr => scr.id);
+        this.wizardDraft = current.map(scr => {
+            const meta = SCREENER_INDEX[scr.id] || {
+                name: scr.catalogName || scr.id,
+                type: scr.catalogType || ''
+            };
+            return {
+                id: scr.id,
+                meta,
+                catalogName: scr.catalogName || meta.name || scr.id,
+                catalogType: scr.catalogType || meta.type || '',
+                date: scr.date || '',
+                score: scr.score || '',
+                positive: scr.positive === undefined ? false : scr.positive,
+                notes: scr.notes || ''
+            };
+        });
+        this.wizardStep = 1;
         this.wizardSearch = '';
         this.wizardFilter = 'name';
     }
@@ -298,8 +388,8 @@ export default class GpCaseStepScreeners extends LightningElement {
             const meta = SCREENER_INDEX[item.id] || {};
             return {
                 id: item.id,
-                catalogName: meta.name || '',
-                catalogType: meta.type || '',
+                catalogName: item.catalogName || meta.name || item.meta?.name || item.id,
+                catalogType: item.catalogType || meta.type || item.meta?.type || '',
                 date: item.date,
                 score: item.score,
                 positive: item.positive,
@@ -362,6 +452,27 @@ export default class GpCaseStepScreeners extends LightningElement {
         }));
     }
 
+    async handleStandaloneSave() {
+        if (!this.effectiveCaseId) {
+            this.showToast('Error', 'Case Id is required to save screeners.', 'error');
+            return;
+        }
+        const payload = this.buildScreenerPayload();
+        this.isSaving = true;
+        try {
+            await saveScreeners({
+                caseId: this.effectiveCaseId,
+                items: payload
+            });
+            this.showToast('Success', 'Screeners saved.', 'success');
+        } catch (err) {
+            const message = err?.body?.message || err?.message || 'Unexpected error saving screeners';
+            this.showToast('Error', message, 'error');
+        } finally {
+            this.isSaving = false;
+        }
+    }
+
     emitDraftChange() {
         const payload = cloneList(this.screeners);
         this.dispatchEvent(new CustomEvent('dataupdated', {
@@ -373,6 +484,34 @@ export default class GpCaseStepScreeners extends LightningElement {
         this.screenerMode = mode;
         this.dispatchEvent(new CustomEvent('viewmodechange', {
             detail: { step: STEP_NUMBER, mode }
+        }));
+    }
+
+    buildScreenerPayload() {
+        return cloneList(this.screeners)
+            .map(scr => {
+                const meta = SCREENER_INDEX[scr.id] || {};
+                const catalogName = scr.catalogName || meta.name || '';
+                if (!catalogName) {
+                    return null;
+                }
+                return {
+                    catalogName,
+                    catalogType: scr.catalogType || meta.type || '',
+                    screenedDate: scr.date || null,
+                    score: scr.score || null,
+                    positive: scr.positive === undefined ? null : scr.positive,
+                    notes: scr.notes || null
+                };
+            })
+            .filter(Boolean);
+    }
+
+    showToast(title, message, variant) {
+        this.dispatchEvent(new ShowToastEvent({
+            title,
+            message,
+            variant: variant || 'info'
         }));
     }
 }

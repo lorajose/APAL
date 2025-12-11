@@ -1,4 +1,7 @@
-import { LightningElement, api, track } from 'lwc';
+import { LightningElement, api, track, wire } from 'lwc';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import getCaseFullData from '@salesforce/apex/GPCaseService.getCaseFullData';
+import saveSafetyRisks from '@salesforce/apex/GPCaseService.saveSafetyRisks';
 import { SAFETY_RISK_ITEMS as SAFETY_RISK_CATALOG, SAFETY_RISK_INDEX as SAFETY_RISK_LOOKUP } from 'c/gpCaseCatalogs';
 
 const SAFETY_RISKS = SAFETY_RISK_CATALOG;
@@ -8,6 +11,8 @@ const cloneList = (list = []) => JSON.parse(JSON.stringify(list || []));
 
 export default class GpCaseStepSafetyRisks extends LightningElement {
     @api caseId;
+    @api recordId;
+    @api layoutMode = false;
     @api caseType;
 
     @track safetyMode = 'grid';
@@ -16,20 +21,66 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
     @track searchValue = '';
     showAllNotes = false;
     confirmRemoveId = null;
+    @track isSaving = false;
+    hasLoadedInitialData = false;
 
     wizardStep = 0;
     @track wizardSelection = [];
     @track wizardDraft = [];
     wizardCategoryFilter = 'all';
     wizardSearch = '';
+    hydratedFromServer = false;
 
     @api
     set data(value) {
         this.risks = Array.isArray(value) ? cloneList(value) : [];
+        if (this.risks.length) {
+            this.hydratedFromServer = true;
+            this.hasLoadedInitialData = true;
+        }
+        // Debug: track incoming data length
+        // eslint-disable-next-line no-console
+        console.error(`[gpCaseStepSafetyRisks] set data len=${this.risks.length} caseId=${this.caseId} recordId=${this.recordId}`);
     }
 
     get data() {
         return cloneList(this.risks);
+    }
+
+    get risksCount() {
+        return this.risks.length;
+    }
+
+    get effectiveCaseId() {
+        return this.caseId || this.recordId || null;
+    }
+
+    get isStandaloneLayout() {
+        return this.layoutMode || (!!this.recordId && !this.caseId);
+    }
+
+    get showNavigation() {
+        return !this.isStandaloneLayout;
+    }
+
+    get wireCaseId() {
+        return this.caseId || this.recordId || null;
+    }
+
+    @wire(getCaseFullData, { caseId: '$wireCaseId' })
+    wiredCaseData({ data, error }) {
+        if (data && !this.hydratedFromServer && !this.risks.length) {
+            const risks = Array.isArray(data.safetyRisks) ? data.safetyRisks : [];
+            this.risks = cloneList(risks);
+            this.hydratedFromServer = true;
+            this.hasLoadedInitialData = true;
+            // eslint-disable-next-line no-console
+            console.error(`[gpCaseStepSafetyRisks] hydrated via wire len=${this.risks.length}`);
+        }
+        if (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error loading safety risks', error);
+        }
     }
 
     get isGridView() {
@@ -89,6 +140,43 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
         this.wizardStep = 0;
         this.wizardSelection = [];
         this.wizardDraft = [];
+        this.wizardSearch = '';
+        this.wizardCategoryFilter = 'all';
+    }
+
+    handleEditRisksWizard(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        const current = (this.risks || [])
+            .map(risk => {
+                const id = risk?.id || risk?.catalogName || risk?.meta?.name;
+                return id ? { ...risk, id } : null;
+            })
+            .filter(Boolean);
+        if (!current.length) {
+            this.handleAddRisks();
+            return;
+        }
+        this.safetyMode = 'wizard';
+        this.wizardSelection = current.map(risk => risk.id);
+        this.wizardDraft = current.map(risk => {
+            const meta = RISK_INDEX[risk.id] || {
+                name: risk.catalogName || risk.id,
+                category: risk.catalogCategory || ''
+            };
+            return {
+                id: risk.id,
+                meta,
+                catalogName: risk.catalogName || meta.name || risk.id,
+                catalogCategory: risk.catalogCategory || meta.category || '',
+                recent: risk.recent === undefined ? false : risk.recent,
+                historical: risk.historical === undefined ? false : risk.historical,
+                notes: risk.notes || ''
+            };
+        });
+        this.wizardStep = 1;
         this.wizardSearch = '';
         this.wizardCategoryFilter = 'all';
     }
@@ -331,10 +419,58 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
         }));
     }
 
+    async handleStandaloneSave() {
+        if (!this.effectiveCaseId) {
+            this.showToast('Error', 'Case Id is required to save safety risks.', 'error');
+            return;
+        }
+        const payload = this.buildSafetyRiskPayload();
+        this.isSaving = true;
+        try {
+            await saveSafetyRisks({
+                caseId: this.effectiveCaseId,
+                items: payload
+            });
+            this.showToast('Success', 'Safety risks saved.', 'success');
+        } catch (err) {
+            const message = err?.body?.message || err?.message || 'Unexpected error saving safety risks';
+            this.showToast('Error', message, 'error');
+        } finally {
+            this.isSaving = false;
+        }
+    }
+
     emitDraftChange() {
         const payload = cloneList(this.risks);
         this.dispatchEvent(new CustomEvent('dataupdated', {
             detail: payload
+        }));
+    }
+
+    buildSafetyRiskPayload() {
+        return cloneList(this.risks)
+            .map(risk => {
+                const meta = RISK_INDEX[risk.id] || {};
+                const catalogName = risk.catalogName || meta.name || '';
+                if (!catalogName) {
+                    return null;
+                }
+                return {
+                    catalogName,
+                    catalogCategory: risk.catalogCategory || meta.category || '',
+                    recent: risk.recent === undefined ? null : risk.recent,
+                    historical: risk.historical === undefined ? null : risk.historical,
+                    notes: risk.notes || null
+                };
+            })
+            .filter(Boolean);
+    }
+
+    showToast(title, message, variant) {
+        this.dispatchEvent(new ShowToastEvent({
+            title,
+            message,
+            variant: variant || 'info'
         }));
     }
 }

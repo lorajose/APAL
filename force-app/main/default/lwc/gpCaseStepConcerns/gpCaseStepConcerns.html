@@ -3,8 +3,7 @@
         <div class="section-header">
             <div class="section-heading">
                 <template if:true={isListMode}>
-                    <h2>Concern Review & Add</h2>
-                    <p>Review everything captured so far and add any missing concerns.</p>
+                    <h2>Patient Concerns ({concernsCount})</h2>
                 </template>
                 <template if:true={isWizardMode}>
                     <div class="wizard-heading">
@@ -20,7 +19,7 @@
                 </template>
             </div>
             <template if:true={isWizardMode}>
-                <button class="text-button" onclick={cancelWizard}>Back to Summary</button>
+                <button class="text-button" type="button" onclick={cancelWizard}>Back to Summary</button>
             </template>
         </div>
 
@@ -40,11 +39,14 @@
                         <input id="concern-search" class="text-input" type="search" placeholder="Filter by label..." value={searchValue} oninput={handleSearchChange} />
                     </div>
                     <div class="grid-actions">
-                        <button class="ghost-button" onclick={toggleShowNotes}>
+                        <button class="ghost-button" type="button" onclick={toggleShowNotes}>
                             <template if:true={showAllNotes}>Hide notes</template>
                             <template if:false={showAllNotes}>Show all notes</template>
                         </button>
-                        <button class="primary-button" onclick={openWizard}>Add Concerns</button>
+                        <template if:true={hasConcerns}>
+                            <button class="ghost-button" type="button" onclick={openWizardForEdit}>Edit via Wizard</button>
+                        </template>
+                        <button class="primary-button" type="button" onclick={openWizard}>Add Concerns</button>
                     </div>
                 </div>
             </section>
@@ -82,14 +84,14 @@
                                 </p>
                             </template>
                             <div class="card-actions">
-                                <button class="pill-button danger" data-id={concern.id} onclick={handleRemoveConcern}>Remove</button>
+                                <button class="pill-button danger" type="button" data-id={concern.id} onclick={handleRemoveConcern}>Remove</button>
                             </div>
                             <template if:true={concern.showConfirm}>
                                 <div class="remove-confirm">
                                     <p>Remove this concern?</p>
                                     <div class="remove-actions">
-                                        <button class="pill-button danger" data-id={concern.id} onclick={confirmRemove}>Confirm Remove</button>
-                                        <button class="pill-button secondary" onclick={cancelRemove}>Cancel</button>
+                                        <button class="pill-button danger" type="button" data-id={concern.id} onclick={confirmRemove}>Confirm Remove</button>
+                                        <button class="pill-button secondary" type="button" onclick={cancelRemove}>Cancel</button>
                                     </div>
                                 </div>
                             </template>
@@ -135,8 +137,8 @@
                     <div class="wizard-result-row">
                         <span class="result-pill">{wizardResultCount} result(s)</span>
                         <div class="result-actions">
-                            <button class="ghost-button" onclick={handleSelectAllFiltered}>Select all (filtered)</button>
-                            <button class="ghost-button" onclick={handleClearSelection}>Clear</button>
+                            <button class="ghost-button" type="button" onclick={handleSelectAllFiltered}>Select all (filtered)</button>
+                            <button class="ghost-button" type="button" onclick={handleClearSelection}>Clear</button>
                         </div>
                     </div>
                     <div class="wizard-catalog">
@@ -163,7 +165,7 @@
                                     <h3>{item.meta.label}</h3>
                                     <p class="detail-brand">{item.meta.category}</p>
                                 </div>
-                                <button class="text-button" data-id={item.id} onclick={handleWizardRemoveDraft}>Remove</button>
+                                <button class="text-button" type="button" data-id={item.id} onclick={handleWizardRemoveDraft}>Remove</button>
                             </header>
                             <div class="field field-full">
                                 <label class="input-label">Notes</label>
@@ -201,16 +203,16 @@
                 </template>
 
                 <div class="wizard-footer">
-                    <button class="ghost-button" onclick={wizardBack} disabled={wizardBackDisabled}>Back</button>
+                    <button class="ghost-button" type="button" onclick={wizardBack} disabled={wizardBackDisabled}>Back</button>
                     <div class="wizard-actions">
                         <template if:true={wizardStepIsReview}>
-                            <button class="ghost-button" onclick={handleReviewEditDetails}>Edit Details</button>
-                            <button class="ghost-button" onclick={handleReviewChangeSelection}>Change Selection</button>
+                            <button class="ghost-button" type="button" onclick={handleReviewEditDetails}>Edit Details</button>
+                            <button class="ghost-button" type="button" onclick={handleReviewChangeSelection}>Change Selection</button>
                         </template>
                         <template if:false={wizardStepIsReview}>
-                            <button class="ghost-button" onclick={cancelWizard}>Cancel</button>
+                            <button class="ghost-button" type="button" onclick={cancelWizard}>Cancel</button>
                         </template>
-                        <button class="primary-button" onclick={wizardNext} disabled={wizardNextDisabled}>
+                        <button class="primary-button" type="button" onclick={wizardNext} disabled={wizardNextDisabled}>
                             <template if:true={wizardStepIsReview}>Save</template>
                             <template if:false={wizardStepIsReview}>Next</template>
                         </button>
@@ -220,8 +222,16 @@
         </template>
 
         <div class="actions">
-            <button class="secondary" type="button" onclick={handleBack}>Back</button>
-            <button class="primary" type="button" onclick={handleNext}>Next</button>
+            <template if:true={showNavigation}>
+                <button class="secondary" type="button" onclick={handleBack}>Back</button>
+                <button class="primary" type="button" onclick={handleNext}>Next</button>
+            </template>
+            <template if:false={showNavigation}>
+                <button class="primary" type="button" onclick={handleStandaloneSave} disabled={isSaving}>
+                    <template if:true={isSaving}>Saving…</template>
+                    <template if:false={isSaving}>Save Concerns</template>
+                </button>
+            </template>
         </div>
     </div>
 </template>

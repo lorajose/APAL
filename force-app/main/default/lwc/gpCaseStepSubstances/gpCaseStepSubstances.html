@@ -3,8 +3,7 @@
         <div class="section-header">
             <div class="section-heading">
                 <template if:true={isGridView}>
-                    <h2>Substances</h2>
-                    <p>Manage captured substances below.</p>
+                    <h2>Substances ({substancesCount})</h2>
                 </template>
                 <template if:true={isWizardView}>
                     <div class="wizard-heading">
@@ -40,11 +39,14 @@
                         <input id="grid-search" class="text-input" type="search" placeholder="Filter by name..." value={searchValue} oninput={handleSearchChange} />
                     </div>
                     <div class="grid-actions">
-                        <button class="ghost-button" onclick={toggleShowNotes}>
+                        <button class="ghost-button" type="button" onclick={toggleShowNotes}>
                             <template if:true={showAllNotes}>Hide notes</template>
                             <template if:false={showAllNotes}>Show all notes</template>
                         </button>
-                        <button class="primary-button" onclick={handleAddSubstances}>Add Substances</button>
+                        <template if:true={hasSubstances}>
+                            <button class="ghost-button" type="button" onclick={handleEditSubstancesWizard}>Edit via Wizard</button>
+                        </template>
+                        <button class="primary-button" type="button" onclick={handleAddSubstances}>Add Substances</button>
                     </div>
                 </div>
             </section>
@@ -262,8 +264,16 @@
         </template>
 
         <div class="actions">
-            <button class="secondary" type="button" onclick={handleBack}>Back</button>
-            <button class="primary" type="button" onclick={handleNext}>Next</button>
+            <template if:true={showNavigation}>
+                <button class="secondary" type="button" onclick={handleBack}>Back</button>
+                <button class="primary" type="button" onclick={handleNext}>Next</button>
+            </template>
+            <template if:false={showNavigation}>
+                <button class="primary" type="button" onclick={handleStandaloneSave} disabled={isSaving}>
+                    <template if:true={isSaving}>Saving…</template>
+                    <template if:false={isSaving}>Save Substances</template>
+                </button>
+            </template>
         </div>
     </div>
 </template>
