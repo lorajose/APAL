@@ -1,4 +1,7 @@
-import { LightningElement, api, track } from 'lwc';
+import { LightningElement, api, track, wire } from 'lwc';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import getCaseFullData from '@salesforce/apex/GPCaseService.getCaseFullData';
+import saveConcerns from '@salesforce/apex/GPCaseService.saveConcerns';
 
 const SOURCE_LABELS = {
     topSymptoms: 'Top Symptoms',
@@ -127,13 +130,17 @@ const cloneList = (list = []) => JSON.parse(JSON.stringify(list || []));
 
 export default class GpCaseStepConcerns extends LightningElement {
     @api caseId;
+    @api recordId;
+    @api layoutMode = false;
 
     @track concernMode = 'list';
     @track concerns = [];
     @track searchValue = '';
     @track categoryFilter = 'all';
     @track showAllNotes = false;
+    @track isSaving = false;
     confirmRemoveId = null;
+    hasLoadedInitialData = false;
 
     wizardStep = 0;
     wizardMode = 'add';
@@ -141,6 +148,7 @@ export default class GpCaseStepConcerns extends LightningElement {
     @track wizardDraft = [];
     wizardCategoryFilter = 'all';
     wizardSearch = '';
+    hydratedFromServer = false;
 
     @api
     set data(value) {
@@ -149,10 +157,29 @@ export default class GpCaseStepConcerns extends LightningElement {
         } else {
             this.concerns = [];
         }
+        if (this.concerns.length) {
+            this.hydratedFromServer = true;
+            this.hasLoadedInitialData = true;
+        }
+        // Debug: track incoming data length
+        // eslint-disable-next-line no-console
+        console.error(`[gpCaseStepConcerns] set data len=${this.concerns.length} caseId=${this.caseId} recordId=${this.recordId}`);
     }
 
     get data() {
         return cloneList(this.concerns);
+    }
+
+    get effectiveCaseId() {
+        return this.caseId || this.recordId || null;
+    }
+
+    get isStandaloneLayout() {
+        return this.layoutMode || (!!this.recordId && !this.caseId);
+    }
+
+    get showNavigation() {
+        return !this.isStandaloneLayout;
     }
 
     get isListMode() {
@@ -161,6 +188,10 @@ export default class GpCaseStepConcerns extends LightningElement {
 
     get isWizardMode() {
         return this.concernMode === 'wizard';
+    }
+
+    get concernsCount() {
+        return this.concerns.length;
     }
 
     get categoryOptions() {
@@ -242,6 +273,37 @@ export default class GpCaseStepConcerns extends LightningElement {
         this.wizardStep = 0;
     }
 
+    openWizardForEdit(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        const currentConcerns = cloneList(this.concerns || [])
+            .map(item => {
+                const fallbackId = item?.id || item?.label || null;
+                return fallbackId ? { ...item, id: fallbackId } : null;
+            })
+            .filter(Boolean);
+        if (!currentConcerns.length) {
+            this.openWizard();
+            return;
+        }
+        this.concernMode = 'wizard';
+        this.wizardMode = 'edit';
+        this.wizardSelection = currentConcerns.map(item => item.id);
+        this.wizardDraft = currentConcerns.map(item => ({
+            id: item.id,
+            meta: CATALOG_INDEX[item.id] || {
+                label: item.label || item.id,
+                category: item.category || ''
+            },
+            notes: item.notes || ''
+        }));
+        this.wizardStep = 1;
+        this.wizardSearch = '';
+        this.wizardCategoryFilter = 'all';
+    }
+
     /* Wizard */
     get wizardStepLabel() {
         if (this.wizardStep === 0) return 'Pick concerns';
@@ -259,6 +321,27 @@ export default class GpCaseStepConcerns extends LightningElement {
 
     get wizardStepIsReview() {
         return this.wizardStep === 2;
+    }
+
+    get wireCaseId() {
+        return this.caseId || this.recordId || null;
+    }
+
+    @wire(getCaseFullData, { caseId: '$wireCaseId' })
+    wiredCaseData({ data, error }) {
+        if (data && !this.hydratedFromServer && !this.concerns.length) {
+            const cons = Array.isArray(data.concerns) ? data.concerns : [];
+            this.concerns = cloneList(cons);
+            this.hydratedFromServer = true;
+            this.hasLoadedInitialData = true;
+            // eslint-disable-next-line no-console
+            console.error(`[gpCaseStepConcerns] hydrated via wire len=${this.concerns.length}`);
+        }
+        if (error) {
+            // Surface wire issues to console; UI is read-only until data loads.
+            // eslint-disable-next-line no-console
+            console.error('Error loading concerns', error);
+        }
     }
 
     get wizardBackDisabled() {
@@ -350,7 +433,10 @@ export default class GpCaseStepConcerns extends LightningElement {
         if (this.wizardStep === 0) {
             this.wizardDraft = this.wizardSelection.map(id => ({
                 id,
-                meta: CATALOG_INDEX[id],
+                meta: CATALOG_INDEX[id] || {
+                    label: (CATALOG_INDEX[id] && CATALOG_INDEX[id].label) || id,
+                    category: (CATALOG_INDEX[id] && CATALOG_INDEX[id].category) || ''
+                },
                 notes: ''
             }));
             this.wizardStep = 1;
@@ -408,14 +494,11 @@ export default class GpCaseStepConcerns extends LightningElement {
             notes: item.notes,
             source: 'manual'
         }));
-        const existingIds = new Set(this.concerns.map(c => c.id));
-        const merged = [...this.concerns];
+        const byId = new Map(this.concerns.map(c => [c.id, c]));
         additions.forEach(entry => {
-            if (!existingIds.has(entry.id)) {
-                merged.push(entry);
-            }
+            byId.set(entry.id, { ...(byId.get(entry.id) || {}), ...entry });
         });
-        this.concerns = merged;
+        this.concerns = Array.from(byId.values());
         this.emitDraftChange();
         this.cancelWizard();
     }
@@ -432,10 +515,49 @@ export default class GpCaseStepConcerns extends LightningElement {
         }));
     }
 
+    async handleStandaloneSave() {
+        if (!this.effectiveCaseId) {
+            this.showToast('Error', 'Case Id is required to save concerns.', 'error');
+            return;
+        }
+        const payload = this.buildConcernPayload();
+        this.isSaving = true;
+        try {
+            await saveConcerns({
+                caseId: this.effectiveCaseId,
+                items: payload
+            });
+            this.showToast('Success', 'Concerns saved.', 'success');
+        } catch (err) {
+            const message = err?.body?.message || err?.message || 'Unexpected error saving concerns';
+            this.showToast('Error', message, 'error');
+        } finally {
+            this.isSaving = false;
+        }
+    }
+
     emitDraftChange() {
         const payload = cloneList(this.concerns);
         this.dispatchEvent(new CustomEvent('dataupdated', {
             detail: payload
+        }));
+    }
+
+    buildConcernPayload() {
+        return cloneList(this.concerns)
+            .map(item => ({
+                label: item.label || '',
+                category: item.category || '',
+                notes: item.notes || null
+            }))
+            .filter(entry => entry.label);
+    }
+
+    showToast(title, message, variant) {
+        this.dispatchEvent(new ShowToastEvent({
+            title,
+            message,
+            variant: variant || 'info'
         }));
     }
 }

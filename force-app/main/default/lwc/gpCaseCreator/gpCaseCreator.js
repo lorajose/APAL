@@ -237,6 +237,21 @@ export default class gpCaseCreator extends NavigationMixin(LightningElement) {
                 this.currentStep);
         // Devuelve el objeto de datos del paso actual, o un objeto vacío si no existe.
         // Esto pre-llena los campos del componente hijo.
+        if ([10, 11, 12, 13, 14].includes(this.currentStep)) {
+            try {
+                const counts = {
+                    meds: Array.isArray(this.form.medications) ? this.form.medications.length : 0,
+                    subs: Array.isArray(this.form.substances) ? this.form.substances.length : 0,
+                    scr: Array.isArray(this.form.screeners) ? this.form.screeners.length : 0,
+                    con: Array.isArray(this.form.concerns) ? this.form.concerns.length : 0,
+                    risk: Array.isArray(this.form.safetyRisks) ? this.form.safetyRisks.length : 0
+                };
+                console.warn(`[GPCaseCreator:currentStepData] step=${this.currentStep} key=${key}`, counts);
+            } catch (logErr) {
+                // eslint-disable-next-line no-console
+                console.error('currentStepData log error', logErr);
+            }
+        }
         return this.form[key] || {};
     }
     get isUpdateMode() {
@@ -466,21 +481,25 @@ get stepsFormatted() {
     ------------------------------------------------------------ */
     async connectedCallback() {
         this.hasConnected = true;
-        console.warn("🔥 FORM BASICS LOADED:", JSON.stringify(this.form.basics));
+        // eslint-disable-next-line no-console
+        console.error("🔥 FORM BASICS LOADED:", JSON.stringify(this.form.basics));
+        this.logCollectionState('connected:start');
+        // Si estamos en modo edición de un Case existente, limpiar cualquier caché previo para evitar sobrescribir con otro caso
+        if (this.recordId || this.caseId) {
+            try {
+                localStorage.removeItem('gpCaseForm');
+            } catch (storageErr) {
+                // eslint-disable-next-line no-console
+                console.error('Error clearing cached form', storageErr);
+            }
+        }
 
 
     /* ------------------------------------------------------------
-       1) Cargar Tailwind desde static resource
-    ------------------------------------------------------------ */
-    loadScript(this, TAILWIND + '/tailwindLoader.js')
-        .then(() => console.log("TAILWIND FULL LOADED"))
-        .catch(err => console.error(err));
-
-    /* ------------------------------------------------------------
-       2) Restaurar datos guardados del formulario (persistencia)
+       1) Restaurar datos guardados del formulario (persistencia)
     ------------------------------------------------------------ */
     const saved = localStorage.getItem('gpCaseForm');
-    if (saved) {
+    if (saved && !(this.recordId || this.caseId)) { // solo restaura cache si no es edición de Case existente
         const parsed = JSON.parse(saved);
         if (parsed.homesafety && !parsed.homeSafety) {
             parsed.homeSafety = parsed.homesafety;
@@ -526,6 +545,9 @@ get stepsFormatted() {
     }
 
     await this.initializeCaseContext();
+        this.logCollectionState('connected:end');
+        // eslint-disable-next-line no-console
+        console.error('[GPCaseCreator] connectedCallback complete', { recordId: this.recordId, caseId: this.caseId, formLoadedFromServer: this.formLoadedFromServer });
 }
 
     async initializeCaseContext() {
@@ -564,6 +586,26 @@ get stepsFormatted() {
         }
     }
 
+    logCollectionState(contextLabel = 'state') {
+        try {
+            const meds = Array.isArray(this.form.medications) ? this.form.medications.length : 0;
+            const subs = Array.isArray(this.form.substances) ? this.form.substances.length : 0;
+            const scr = Array.isArray(this.form.screeners) ? this.form.screeners.length : 0;
+            const con = Array.isArray(this.form.concerns) ? this.form.concerns.length : 0;
+            const risk = Array.isArray(this.form.safetyRisks) ? this.form.safetyRisks.length : 0;
+            console.warn(`[GPCaseCreator:${contextLabel}] recordId=${this.recordId} caseId=${this.caseId} loadedFromServer=${this.formLoadedFromServer}`, {
+                meds,
+                subs,
+                screeners: scr,
+                concerns: con,
+                safetyRisks: risk
+            });
+        } catch (logError) {
+            // eslint-disable-next-line no-console
+            console.error('LogCollectionState error', logError);
+        }
+    }
+
     async loadFullCaseData() {
         if (!this.caseId) {
             this.formLoadedFromServer = false;
@@ -574,6 +616,18 @@ get stepsFormatted() {
                 caseId: this.caseId
             });
             if (serverData) {
+                try {
+                    const meds = Array.isArray(serverData.medications) ? serverData.medications.length : 0;
+                    const subs = Array.isArray(serverData.substances) ? serverData.substances.length : 0;
+                    const scr = Array.isArray(serverData.screeners) ? serverData.screeners.length : 0;
+                    const con = Array.isArray(serverData.concerns) ? serverData.concerns.length : 0;
+                    const risk = Array.isArray(serverData.safetyRisks) ? serverData.safetyRisks.length : 0;
+                    // eslint-disable-next-line no-console
+                    console.error(`[GPCaseCreator:loadFullCaseData] recordId=${this.recordId} caseId=${this.caseId} meds=${meds} subs=${subs} scr=${scr} con=${con} risk=${risk}`);
+                } catch (logErr) {
+                    // eslint-disable-next-line no-console
+                    console.error('loadFullCaseData log error', logErr);
+                }
                 this.form = this.normalizeServerForm(serverData);
                 localStorage.setItem('gpCaseForm', JSON.stringify(this.form));
                 this.formLoadedFromServer = true;
@@ -591,16 +645,30 @@ get stepsFormatted() {
         MANEJO DE EVENTOS DE COMPONENTES HIJOS
     ------------------------------------------------------------ */
     // Este manejador permite revalidar el paso actual cuando los datos cambian en el hijo
- async handleDataUpdated(event) {
+async handleDataUpdated(event) {
     if (this.reviewSummaryReady && this.currentStep !== 15) {
         this.reviewSummaryReady = false;
     }
-   console.warn("🔥 PARENT RECEIVED:", JSON.stringify(event.detail));
-    console.warn("🔥 FORM BEFORE:", JSON.stringify(this.form.basics));
-
     const data = event.detail || {};
+    try {
+        const debugPayload = {
+            step: this.currentStep,
+            meds: Array.isArray(data) && this.currentStep === 10 ? data.length : (Array.isArray(this.form.medications) ? this.form.medications.length : 0),
+            subs: Array.isArray(data) && this.currentStep === 11 ? data.length : (Array.isArray(this.form.substances) ? this.form.substances.length : 0),
+            scr: Array.isArray(data) && this.currentStep === 12 ? data.length : (Array.isArray(this.form.screeners) ? this.form.screeners.length : 0),
+            con: Array.isArray(data) && this.currentStep === 13 ? data.length : (Array.isArray(this.form.concerns) ? this.form.concerns.length : 0),
+            risk: Array.isArray(data) && this.currentStep === 14 ? data.length : (Array.isArray(this.form.safetyRisks) ? this.form.safetyRisks.length : 0)
+        };
+        // eslint-disable-next-line no-console
+        console.error('🔥 PARENT RECEIVED', debugPayload);
+    } catch (debugErr) {
+        // eslint-disable-next-line no-console
+        console.error('Debug payload error', debugErr);
+    }
+
     this.mergeFormData(data);
-    console.warn("🔥 FORM AFTER:", JSON.stringify(this.form.basics));
+    // eslint-disable-next-line no-console
+    console.error("🔥 FORM AFTER BASICS:", JSON.stringify(this.form.basics));
 
 
     // Guardar todo en localStorage (persistencia verdadera)

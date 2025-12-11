@@ -1,5 +1,8 @@
-import { LightningElement, api, track } from 'lwc';
+import { LightningElement, api, track, wire } from 'lwc';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { SUBSTANCE_ITEMS as SUBSTANCE_CATALOG, SUBSTANCE_INDEX as SUBSTANCE_LOOKUP } from 'c/gpCaseCatalogs';
+import getCaseFullData from '@salesforce/apex/GPCaseService.getCaseFullData';
+import saveSubstances from '@salesforce/apex/GPCaseService.saveSubstances';
 
 const FILTER_OPTIONS = [
     { label: 'Name', value: 'name' },
@@ -30,6 +33,8 @@ const STEP_NUMBER = 11;
 
 export default class GpCaseStepSubstances extends LightningElement {
     @api caseId;
+    @api recordId;
+    @api layoutMode = false;
     @api caseType;
 
     @track subMode = 'grid';
@@ -38,6 +43,8 @@ export default class GpCaseStepSubstances extends LightningElement {
     @track searchValue = '';
     showAllNotes = true;
     confirmRemoveId = null;
+    @track isSaving = false;
+    hasLoadedInitialData = false;
 
     wizardStep = 0;
     wizardMode = 'add';
@@ -45,14 +52,38 @@ export default class GpCaseStepSubstances extends LightningElement {
     @track wizardDraft = [];
     wizardFilter = 'name';
     wizardSearch = '';
+    hydratedFromServer = false;
 
     @api
     set data(value) {
         this.substances = Array.isArray(value) ? cloneList(value) : [];
+        if (this.substances.length) {
+            this.hydratedFromServer = true;
+            this.hasLoadedInitialData = true;
+        }
+        // Debug: track incoming data length
+        // eslint-disable-next-line no-console
+        console.error(`[gpCaseStepSubstances] set data len=${this.substances.length} caseId=${this.caseId} recordId=${this.recordId}`);
     }
 
     get data() {
         return cloneList(this.substances);
+    }
+
+    get substancesCount() {
+        return this.substances.length;
+    }
+
+    get effectiveCaseId() {
+        return this.caseId || this.recordId || null;
+    }
+
+    get isStandaloneLayout() {
+        return this.layoutMode || (!!this.recordId && !this.caseId);
+    }
+
+    get showNavigation() {
+        return !this.isStandaloneLayout;
     }
 
     /* VIEW STATES */
@@ -122,6 +153,44 @@ export default class GpCaseStepSubstances extends LightningElement {
         this.wizardFilter = 'name';
     }
 
+    handleEditSubstancesWizard(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        const current = (this.substances || [])
+            .map(sub => {
+                const id = sub?.id || sub?.catalogName || sub?.meta?.name;
+                return id ? { ...sub, id } : null;
+            })
+            .filter(Boolean);
+        if (!current.length) {
+            this.handleAddSubstances();
+            return;
+        }
+        this.setSubMode('wizard');
+        this.wizardMode = 'edit';
+        this.wizardSelection = current.map(sub => sub.id);
+        this.wizardDraft = this.decorateWizardDraft(current.map(sub => {
+            const meta = SUBSTANCE_INDEX[sub.id] || {
+                name: sub.catalogName || sub.id,
+                category: sub.catalogCategory || ''
+            };
+            return {
+                id: sub.id,
+                meta,
+                catalogName: sub.catalogName || meta.name || sub.id,
+                catalogCategory: sub.catalogCategory || meta.category || '',
+                frequency: sub.frequency || '',
+                current: sub.current === undefined ? false : sub.current,
+                notes: sub.notes || ''
+            };
+        }));
+        this.wizardStep = 1;
+        this.wizardSearch = '';
+        this.wizardFilter = 'name';
+    }
+
     handleEditSubstance(event) {
         const id = event.currentTarget.dataset.id;
         const existing = this.substances.find(sub => sub.id === id);
@@ -173,6 +242,26 @@ export default class GpCaseStepSubstances extends LightningElement {
 
     get wizardStepIsReview() {
         return this.wizardStep === 2;
+    }
+
+    get wireCaseId() {
+        return this.caseId || this.recordId || null;
+    }
+
+    @wire(getCaseFullData, { caseId: '$wireCaseId' })
+    wiredCaseData({ data, error }) {
+        if (data && !this.hydratedFromServer && !this.substances.length) {
+            const subs = Array.isArray(data.substances) ? data.substances : [];
+            this.substances = cloneList(subs);
+            this.hydratedFromServer = true;
+            this.hasLoadedInitialData = true;
+            // eslint-disable-next-line no-console
+            console.error(`[gpCaseStepSubstances] hydrated via wire len=${this.substances.length}`);
+        }
+        if (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error loading substances', error);
+        }
     }
 
     get wizardBackDisabled() {
@@ -312,8 +401,8 @@ export default class GpCaseStepSubstances extends LightningElement {
             const meta = SUBSTANCE_INDEX[item.id] || {};
             return {
                 id: item.id,
-                catalogName: meta.name || '',
-                catalogCategory: meta.category || '',
+                catalogName: item.catalogName || meta.name || item.meta?.name || item.id,
+                catalogCategory: item.catalogCategory || meta.category || item.meta?.category || '',
                 frequency: item.frequency,
                 current: item.current,
                 notes: item.notes
@@ -376,6 +465,27 @@ export default class GpCaseStepSubstances extends LightningElement {
         }));
     }
 
+    async handleStandaloneSave() {
+        if (!this.effectiveCaseId) {
+            this.showToast('Error', 'Case Id is required to save substances.', 'error');
+            return;
+        }
+        const payload = this.buildSubstancePayload();
+        this.isSaving = true;
+        try {
+            await saveSubstances({
+                caseId: this.effectiveCaseId,
+                items: payload
+            });
+            this.showToast('Success', 'Substances saved.', 'success');
+        } catch (err) {
+            const message = err?.body?.message || err?.message || 'Unexpected error saving substances';
+            this.showToast('Error', message, 'error');
+        } finally {
+            this.isSaving = false;
+        }
+    }
+
     emitDraftChange() {
         const payload = cloneList(this.substances);
         this.dispatchEvent(new CustomEvent('dataupdated', {
@@ -420,5 +530,25 @@ export default class GpCaseStepSubstances extends LightningElement {
                 selected: normalized.value === selectedValue
             };
         });
+    }
+
+    buildSubstancePayload() {
+        return cloneList(this.substances)
+            .map(sub => ({
+                catalogName: sub.catalogName || (SUBSTANCE_INDEX[sub.id]?.name || ''),
+                catalogCategory: sub.catalogCategory || (SUBSTANCE_INDEX[sub.id]?.category || ''),
+                frequency: sub.frequency || '',
+                current: sub.current === undefined ? null : sub.current,
+                notes: sub.notes || null
+            }))
+            .filter(item => item.catalogName);
+    }
+
+    showToast(title, message, variant) {
+        this.dispatchEvent(new ShowToastEvent({
+            title,
+            message,
+            variant: variant || 'info'
+        }));
     }
 }
