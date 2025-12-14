@@ -1158,6 +1158,10 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>layoutContext</name>
+                    <value>case</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
                     <name>layoutMode</name>
                     <value>false</value>
                 </componentInstanceProperties>
@@ -1920,6 +1924,10 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>layoutContext</name>
+                    <value>case</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
                     <name>layoutMode</name>
                     <value>false</value>
                 </componentInstanceProperties>
@@ -1937,6 +1945,10 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>layoutContext</name>
+                    <value>case</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
                     <name>layoutMode</name>
                     <value>false</value>
                 </componentInstanceProperties>
@@ -1946,6 +1958,10 @@
         </itemInstances>
         <itemInstances>
             <componentInstance>
+                <componentInstanceProperties>
+                    <name>layoutContext</name>
+                    <value>case</value>
+                </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>layoutMode</name>
                     <value>false</value>
@@ -1957,6 +1973,10 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>layoutContext</name>
+                    <value>case</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
                     <name>layoutMode</name>
                     <value>false</value>
                 </componentInstanceProperties>
@@ -1966,6 +1986,10 @@
         </itemInstances>
         <itemInstances>
             <componentInstance>
+                <componentInstanceProperties>
+                    <name>layoutContext</name>
+                    <value>case</value>
+                </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>layoutMode</name>
                     <value>false</value>

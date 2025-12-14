@@ -44,28 +44,52 @@ const MEDICATION_INDEX = MEDICATION_ITEMS.reduce((acc, item) => {
 }, {});
 
 const SUBSTANCE_ITEMS = [
+    // Alcohol
     { id: 'sub-alcohol', name: 'Alcohol', category: 'Alcohol', description: 'A widely consumed depressant found in beverages like beer, wine, and spirits, known for its effects on mood and behavior.' },
+    { id: 'sub-addiction-generic', name: 'Substance – Addiction', category: 'Alcohol', description: 'General addiction-related alcohol use.' },
+
+    // Hallucinogens
+    { id: 'sub-mdma', name: 'MDMA (Ecstasy)', category: 'Hallucinogens', description: 'A synthetic drug with stimulant and hallucinogenic properties, commonly known as ecstasy or molly.' },
+    { id: 'sub-pcp', name: 'PCP', category: 'Hallucinogens', description: 'A dissociative hallucinogenic drug, also known as phencyclidine or angel dust.' },
+    { id: 'sub-psilocybin', name: 'Psilocybin', category: 'Hallucinogens', description: 'A naturally occurring hallucinogen found in certain mushrooms, known as magic mushrooms.' },
+    { id: 'sub-mescaline', name: 'Mescaline', category: 'Hallucinogens', description: 'A hallucinogenic compound derived from the peyote cactus.' },
+
+    // Herbal Psychoactive
+    { id: 'sub-kratom', name: 'Kratom', category: 'Herbal Psychoactive', description: 'Mitragyna speciosa; opioid-like plant.' },
+
+    // Marijuana (THC)
     { id: 'sub-flower', name: 'Flower', category: 'Marijuana (THC)', description: 'The dried buds of the cannabis plant, typically smoked.' },
     { id: 'sub-concentrates', name: 'Concentrates (Dabs)', category: 'Marijuana (THC)', description: 'Highly concentrated THC extracted from cannabis, typically vaporized or dabbed.' },
     { id: 'sub-edibles', name: 'Edibles', category: 'Marijuana (THC)', description: 'Food products infused with cannabis extracts, ingested orally.' },
     { id: 'sub-tinctures', name: 'Tinctures', category: 'Marijuana (THC)', description: 'Liquid cannabis extracts taken sublingually.' },
-    { id: 'sub-vapes-thc', name: 'Vapes (THC)', category: 'Marijuana (THC)', description: 'Cannabis oil or distillate used in vaporizing devices.' },
+    { id: 'sub-vapes-thc', name: 'Vapes', category: 'Marijuana (THC)', description: 'Cannabis oil or distillate used in vaporizing devices.' },
+
+    // Nicotine
     { id: 'sub-cigarettes', name: 'Cigarettes', category: 'Nicotine', description: 'Found in tobacco products like cigarettes; an addictive stimulant.' },
-    { id: 'sub-vapes-nic', name: 'Vapes (Nicotine)', category: 'Nicotine', description: 'Found in electronic vaping devices; an addictive stimulant.' },
-    { id: 'sub-heroin', name: 'Heroin', category: 'Opioids', description: 'An opioid derived from morphine with high addiction potential.' },
-    { id: 'sub-fentanyl', name: 'Fentanyl', category: 'Opioids', description: 'A synthetic opioid far more potent than heroin or morphine.' },
-    { id: 'sub-rx-pain', name: 'Prescription Pain Killers', category: 'Opioids', description: 'Includes oxycodone, hydrocodone, morphine, and related opioids.' },
-    { id: 'sub-cocaine', name: 'Cocaine', category: 'Stimulants', description: 'Powerful stimulant derived from coca leaves, commonly snorted or injected.' },
-    { id: 'sub-meth', name: 'Methamphetamine', category: 'Stimulants', description: 'Highly addictive stimulant affecting the central nervous system.' },
-    { id: 'sub-benzos', name: 'Benzodiazepine', category: 'Sedatives', description: 'Sedatives prescribed for anxiety, insomnia, and other conditions (e.g., Valium, Xanax).' },
-    { id: 'sub-ghb', name: 'GHB', category: 'Sedatives', description: 'Central nervous system depressant used recreationally for sedative effects.' },
-    { id: 'sub-mdma', name: 'MDMA (Ecstasy)', category: 'Hallucinogens', description: 'Synthetic drug with stimulant and hallucinogenic properties (ecstasy/molly).' },
-    { id: 'sub-pcp', name: 'PCP', category: 'Hallucinogens', description: 'Dissociative hallucinogenic drug also known as phencyclidine or angel dust.' },
-    { id: 'sub-psilocybin', name: 'Psilocybin', category: 'Hallucinogens', description: 'Naturally occurring hallucinogen found in certain mushrooms.' },
-    { id: 'sub-mescaline', name: 'Mescaline', category: 'Hallucinogens', description: 'Hallucinogenic compound derived from the peyote cactus.' },
-    { id: 'sub-synth-cannabinoids', name: 'Synthetic Cannabinoids', category: 'Synthetics', description: 'Man-made chemicals mimicking THC (e.g., K2, Spice).' },
-    { id: 'sub-synth-cathinones', name: 'Synthetic Cathinones', category: 'Synthetics', description: 'Stimulant drugs often found in bath salts, similar to amphetamines.' },
-    { id: 'sub-ketamine', name: 'Ketamine', category: 'Synthetics', description: 'Dissociative anesthetic used medically and recreationally with hallucinogenic effects.' }
+    { id: 'sub-vapes-nic', name: 'Vapes', category: 'Nicotine', description: 'Found in electronic vaping devices; an addictive stimulant.' },
+    { id: 'sub-nicotine-tobacco', name: 'Nicotine/Tobacco', category: 'Nicotine', description: 'Tobacco or nicotine product use.' },
+
+    // Opioids
+    { id: 'sub-heroin', name: 'Heroin', category: 'Opioids', description: 'An opioid derived from morphine, known for its strong pain-relieving properties and high addiction potential.' },
+    { id: 'sub-fentanyl', name: 'Fentanyl', category: 'Opioids', description: 'A synthetic opioid, much more potent than heroin or morphine, used medically for severe pain.' },
+    { id: 'sub-rx-pain', name: 'Prescription Pain Killers', category: 'Opioids', description: 'Opioids prescribed for pain relief, including oxycodone, hydrocodone, and morphine.' },
+
+    // Prescription Stimulant
+    { id: 'sub-rx-stimulant', name: 'Prescription Stimulants (e.g., Adderall)', category: 'Prescription Stimulant', description: 'Prescription stimulant use (e.g., Adderall, Ritalin).' },
+
+    // Sedatives
+    { id: 'sub-psych-sedative', name: 'Substance – Psychiatry', category: 'Sedatives', description: 'Psychiatric sedative use.' },
+    { id: 'sub-benzos', name: 'Benzodiazepine', category: 'Sedatives', description: 'Sedatives prescribed for anxiety, insomnia, and other conditions, including drugs like Valium and Xanax.' },
+    { id: 'sub-ghb', name: 'GHB', category: 'Sedatives', description: 'A central nervous system depressant, often used recreationally or for its sedative effects.' },
+
+    // Stimulants
+    { id: 'sub-cocaine', name: 'Cocaine', category: 'Stimulants', description: 'A powerful stimulant derived from coca leaves, commonly snorted or injected.' },
+    { id: 'sub-meth', name: 'Methamphetamine', category: 'Stimulants', description: 'A highly addictive stimulant affecting the central nervous system, often called meth or crystal meth.' },
+
+    // Synthetics
+    { id: 'sub-synth-cannabinoids', name: 'Synthetic Cannabinoids', category: 'Synthetics', description: 'Man-made chemicals that mimic the effects of THC, found in products like K2 and Spice.' },
+    { id: 'sub-synth-cathinones', name: 'Synthetic Cathinones', category: 'Synthetics', description: 'Stimulant drugs often found in bath salts, chemically similar to amphetamines.' },
+    { id: 'sub-ketamine', name: 'Ketamine', category: 'Synthetics', description: 'A dissociative anesthetic used medically and recreationally, known for its hallucinogenic effects.' }
 ];
 
 const SUBSTANCE_INDEX = SUBSTANCE_ITEMS.reduce((acc, item) => {
@@ -74,23 +98,52 @@ const SUBSTANCE_INDEX = SUBSTANCE_ITEMS.reduce((acc, item) => {
 }, {});
 
 const SCREENER_ITEMS = [
-    { id: 'scoff', name: 'SCOFF questionnaire', type: 'Eating Disorder', positiveOutcome: 'Screens for symptoms of eating disorders', notes: 'A positive score may indicate the presence of an eating disorder' },
-    { id: 'phq9', name: 'PHQ-9', type: 'Depression', positiveOutcome: 'Indicates severity of depressive symptoms', notes: 'Score interpretation: 0-4: Minimal depression; 5-9: Mild depression; 10-14: Moderate depression; 15-19: Moderately severe depression; 20-27: Severe depression' },
-    { id: 'gad7', name: 'GAD-7', type: 'Anxiety', positiveOutcome: 'Assesses severity of generalized anxiety symptoms', notes: 'Score interpretation: 0-4: Minimal anxiety; 5-9: Mild anxiety; 10-14: Moderate anxiety; 15-21: Severe anxiety' },
-    { id: 'pss', name: 'Perceived Stress Scale (PSS)', type: 'Stress', positiveOutcome: 'Measures perceived stress levels', notes: 'Higher scores indicate higher perceived stress levels' },
-    { id: 'pcl5', name: 'PTSD Checklist (PCL-5)', type: 'Trauma', positiveOutcome: 'Screens for symptoms of post-traumatic stress', notes: 'Used to assess PTSD symptoms; scoring system varies based on administration' },
-    { id: 'audit', name: 'AUDIT', type: 'Substance Use', positiveOutcome: 'Identifies alcohol use patterns and related problems', notes: 'Higher scores indicate higher levels of alcohol use and related problems' },
-    { id: 'dast10', name: 'DAST-10', type: 'Substance Use', positiveOutcome: 'Screens for drug abuse or dependence', notes: 'Higher scores indicate higher likelihood of drug abuse or dependence' },
-    { id: 'cssrs', name: 'Columbia-Suicide Severity Rating Scale (C-SSRS)', type: 'Suicide Risk', positiveOutcome: 'Assesses suicide risk and severity of suicidal ideation', notes: 'Comprehensive tool for suicide risk assessment' },
-    { id: 'prime', name: 'PRIME Screen', type: 'Psychosis', positiveOutcome: 'Screens for early signs of psychosis', notes: 'Used for early detection of psychosis; assesses symptoms such as hallucinations and delusions' },
-    { id: 'k10', name: 'Kessler Psychological Distress Scale (K10)', type: 'Psychological Distress', positiveOutcome: 'High total score indicates high distress and need for evaluation', notes: '10 items scored 1–5; total score 10-50; measures non-specific psychological distress' },
-    { id: 'pcptsd5', name: 'Primary Care PTSD Screen for DSM-5 (PC-PTSD-5)', type: 'PTSD', positiveOutcome: 'Four or more yes responses suggest probable PTSD', notes: '5-item screen with trauma exposure question; assesses symptoms over past month' },
-    { id: 'mdq', name: 'Mood Disorder Questionnaire (MDQ)', type: 'Bipolar Disorder', positiveOutcome: 'Seven+ “yes” responses plus criteria indicate possible bipolar disorder', notes: '13 yes/no items plus co-occurrence + impairment questions; ~5 minutes' },
-    { id: 'asrs', name: 'Adult ADHD Self-Report Scale (ASRS v1.1)', type: 'ADHD', positiveOutcome: 'Four+ marks in shaded boxes suggest ADHD symptoms', notes: '18 items; Part A (6 items) most predictive; Part B provides additional info' },
+    // Anxiety
+    { id: 'screener-psychiatry', name: 'screener – psychiatry', type: 'Anxiety', positiveOutcome: '', notes: '' },
+    { id: 'gad7', name: 'GAD-7', type: 'Anxiety', positiveOutcome: 'Score ≥10', notes: '0–4: Minimal anxiety; 5–9: Mild anxiety; 10–14: Moderate anxiety; 15–21: Severe anxiety' },
+    { id: 'bai', name: 'Beck Anxiety Inventory (BAI)', type: 'Anxiety', positiveOutcome: 'Higher scores indicate more severe anxiety', notes: '21-item inventory; scores ≥16 suggest moderate to severe anxiety' },
+
+    // Cognitive Assessment
+    { id: 'moca', name: 'Montreal Cognitive Assessment (MoCA)', type: 'Cognitive Assessment', positiveOutcome: 'Score <26', notes: 'Screens for mild cognitive impairment; max score 30' },
+    { id: 'mmse', name: 'Mini-Mental State Examination (MMSE)', type: 'Cognitive Assessment', positiveOutcome: 'Score ≤23', notes: '24–30: Normal; 18–23: Mild impairment; 0–17: Severe impairment' },
+
+    // Depression
+    { id: 'phq9', name: 'PHQ-9', type: 'Depression', positiveOutcome: 'Score ≥10', notes: '0–4: Minimal; 5–9: Mild; 10–14: Moderate; 15–19: Moderately severe; 20–27: Severe' },
+    { id: 'hamd', name: 'Hamilton Depression Rating Scale (HAM-D)', type: 'Depression', positiveOutcome: 'Score ≥17', notes: '0–7: Normal; 8–16: Mild; 17–23: Moderate; ≥24: Severe' },
     { id: 'bdi', name: 'Beck Depression Inventory (BDI-II)', type: 'Depression', positiveOutcome: 'Scores ≥20 indicate moderate to severe depressive symptoms', notes: '21-question self-report; each item scored 0–3 across depressive symptoms' },
-    { id: 'dass21', name: 'Depression Anxiety Stress Scale-21 (DASS-21)', type: 'Depression/Anxiety/Stress', positiveOutcome: 'Elevated subscale scores indicate moderate to severe symptoms', notes: '21-item measure generating three subscale scores (0–3 per item)' },
-    { id: 'hads', name: 'Hospital Anxiety and Depression Scale (HADS)', type: 'Depression/Anxiety', positiveOutcome: 'Scores >8 on HADS-A or HADS-D indicate possible anxiety/depression', notes: '14-item questionnaire with two 7-item subscales; items rated 0–3' },
-    { id: 'bai', name: 'Beck Anxiety Inventory (BAI)', type: 'Anxiety', positiveOutcome: 'Scores ≥16 indicate moderate to severe anxiety', notes: '21-question inventory measuring physical/cognitive anxiety symptoms' }
+
+    // Eating Disorder
+    { id: 'scoff', name: 'SCOFF questionnaire', type: 'Eating Disorder', positiveOutcome: '≥2 positive answers', notes: 'May indicate presence of an eating disorder' },
+
+    // Mania Severity Scale
+    { id: 'ymrs', name: 'Young Mania Rating Scale (YMRS)', type: 'Mania Severity Scale', positiveOutcome: 'Score ≥20', notes: 'Assesses severity of manic symptoms' },
+
+    // Mood Disorders
+    { id: 'mdq', name: 'Mood Disorder Questionnaire (MDQ)', type: 'Mood Disorders', positiveOutcome: '≥7 “Yes” + Q1–2 yes + Q3 yes', notes: 'Screens for bipolar disorder; requires symptom clustering and impairment' },
+
+    // Psychiatric
+    { id: 'bprs', name: 'Brief Psychiatric Rating Scale (BPRS)', type: 'Psychiatric', positiveOutcome: 'Higher scores', notes: 'Measures psychotic and affective symptoms; monitors treatment response' },
+
+    // Psychosis
+    { id: 'prime', name: 'PRIME Screen', type: 'Psychosis', positiveOutcome: 'Any endorsed psychotic-like experiences', notes: 'Early detection of psychosis' },
+
+    // PTSD
+    { id: 'pcl5', name: 'PTSD Checklist (PCL-5)', type: 'PTSD', positiveOutcome: 'Score ≥33', notes: 'Suggests probable PTSD' },
+    { id: 'pcptsd5', name: 'Primary Care PTSD Screen for DSM-5 (PC-PTSD-5)', type: 'PTSD', positiveOutcome: 'Four or more yes responses suggest probable PTSD', notes: '5-item screen with trauma exposure question; assesses symptoms over past month' },
+
+    // Stress
+    { id: 'pss', name: 'Perceived Stress Scale (PSS)', type: 'Stress', positiveOutcome: 'Higher scores', notes: 'Indicates higher perceived stress' },
+
+    // Substance Use
+    { id: 'screener-addiction', name: 'screener – addiction', type: 'Substance Use', positiveOutcome: '', notes: '' },
+    { id: 'audit', name: 'AUDIT', type: 'Substance Use', positiveOutcome: 'Score ≥8', notes: 'Indicates hazardous or harmful alcohol use' },
+    { id: 'dast10', name: 'DAST-10', type: 'Substance Use', positiveOutcome: 'Score ≥3', notes: 'Suggests moderate to severe drug problems' },
+
+    // Suicide Risk
+    { id: 'cssrs', name: 'Columbia-Suicide Severity Rating Scale (C-SSRS)', type: 'Suicide Risk', positiveOutcome: 'Any suicidal ideation or behavior', notes: 'Comprehensive suicide risk assessment' },
+
+    // Withdrawal
+    { id: 'ciwa-ar', name: 'Clinical Institute Withdrawal Assessment for Alcohol (CIWA-Ar)', type: 'Withdrawal', positiveOutcome: 'Score ≥10', notes: 'Assesses alcohol withdrawal severity; guides medication dosing' }
 ];
 
 const SCREENER_INDEX = SCREENER_ITEMS.reduce((acc, item) => {
@@ -99,31 +152,27 @@ const SCREENER_INDEX = SCREENER_ITEMS.reduce((acc, item) => {
 }, {});
 
 const SAFETY_RISK_ITEMS = [
-    { id: 'risk-access-drugs', name: 'Access to Drugs', category: 'Substance Use Risks', description: 'Client retains ready access to illicit or non-prescribed substances.', generalPsych: false },
-    { id: 'risk-overdose', name: 'Overdose', category: 'Substance Use Risks', description: 'History or risk of non-fatal overdose requiring monitoring.', generalPsych: false },
-    { id: 'risk-relapse', name: 'Substance Use Relapse', category: 'Substance Use Risks', description: 'Heightened probability of returning to substance use.', generalPsych: false },
-    { id: 'risk-withdrawal', name: 'Withdrawal Complications', category: 'Medical/Health Complications', description: 'Medical instability due to acute withdrawal.', generalPsych: false },
-    { id: 'risk-med-management', name: 'Medication Management', category: 'Medical/Health Complications', description: 'Complex regimen or adherence barriers requiring oversight.', generalPsych: true },
-    { id: 'risk-suicidal-ideation', name: 'Suicidal Ideation', category: 'Mental Health Concerns', description: 'Active or recent thoughts of suicide.', generalPsych: true },
-    { id: 'risk-suicide-attempt', name: 'Suicide Attempt', category: 'Mental Health Concerns', description: 'History of suicide attempt(s) impacting current safety planning.', generalPsych: true },
-    { id: 'risk-self-harm', name: 'Self-Harm', category: 'Mental Health Concerns', description: 'Non-suicidal self-injury or related behaviors.', generalPsych: true },
-    { id: 'risk-mh-comorbidities', name: 'Mental Health Comorbidities', category: 'Mental Health Concerns', description: 'Multiple co-occurring psychiatric diagnoses complicating care.', generalPsych: true },
-    { id: 'risk-aggressive', name: 'Aggressive Behaviors', category: 'Behavioral Concerns', description: 'Physical aggression or violent outbursts requiring monitoring.', generalPsych: true },
-    { id: 'risk-environmental', name: 'Environmental Risks', category: 'Environmental/Social Risks', description: 'Unsafe living environment or unstable social situation.', generalPsych: true },
-    { id: 'risk-financial-employment', name: 'Financial Stability and Employment', category: 'Socioeconomic Concerns', description: 'Loss of income or employment jeopardizing stability.', generalPsych: true },
-    { id: 'risk-housing', name: 'Housing insecurity', category: 'Psychosocial Stressors', description: 'Unstable or temporary housing arrangement.', generalPsych: true },
-    { id: 'risk-food', name: 'Food insecurity', category: 'Psychosocial Stressors', description: 'Limited access to adequate nutrition.', generalPsych: true },
-    { id: 'risk-caregiver', name: 'Caregiver burden', category: 'Psychosocial Stressors', description: 'Care responsibilities exceed available supports.', generalPsych: true },
-    { id: 'risk-legal', name: 'Legal issues', category: 'Psychosocial Stressors', description: 'Active legal matters impacting treatment engagement.', generalPsych: true },
-    { id: 'risk-job', name: 'Job/school risk', category: 'Psychosocial Stressors', description: 'Threatened employment or academic standing.', generalPsych: true },
-    { id: 'risk-relationship', name: 'Relationship conflict', category: 'Psychosocial Stressors', description: 'High-conflict relationships increasing risk.', generalPsych: true },
-    { id: 'risk-limited-supports', name: 'Limited supports', category: 'Psychosocial Stressors', description: 'Few reliable caregivers or social supports.', generalPsych: true },
-    { id: 'risk-financial-stress', name: 'Financial stress', category: 'Psychosocial Stressors', description: 'Significant financial strain affecting stability.', generalPsych: true },
-    { id: 'risk-firearms-unlocked', name: 'Firearms - Unlocked', category: 'Access to Means', description: 'Unlocked firearms accessible in the home.', generalPsych: true },
-    { id: 'risk-firearms-locked', name: 'Firearms - Locked', category: 'Access to Means', description: 'Locked firearms requiring continued monitoring.', generalPsych: true },
-    { id: 'risk-med-supply', name: 'Large medication supply', category: 'Access to Means', description: 'Excess medication quantities posing overdose risk.', generalPsych: true },
-    { id: 'risk-ligature', name: 'Ligature risk', category: 'Access to Means', description: 'Presence of ligatures or choke points in the environment.', generalPsych: true },
-    { id: 'risk-homicidal-ideation', name: 'Homicidal Ideation', category: 'Homicidal Ideation', description: 'Thoughts of harming others requiring monitoring.', generalPsych: true }
+    { id: 'risk-elder-abuse', name: 'Elder Abuse', category: 'Abuse Risk', description: 'Risk of mistreatment or neglect of an elderly individual.', generalPsych: true },
+    { id: 'risk-access-drugs', name: 'Access to Drugs', category: 'Access Risk', description: 'Client retains ready access to illicit or non-prescribed substances.', generalPsych: false },
+    { id: 'risk-wandering', name: 'Wandering/Disorientation', category: 'Cognitive Risk', description: 'Disorientation or wandering behavior that endangers safety.', generalPsych: true },
+    { id: 'risk-falls-cognitive', name: 'Falls Risk due to Cognitive Impairment', category: 'Cognitive Risk', description: 'Elevated fall risk related to cognitive impairment.', generalPsych: true },
+    { id: 'risk-medication-management', name: 'Medication Management', category: 'Compliance Risk', description: 'Complex regimen or adherence barriers requiring oversight.', generalPsych: true },
+    { id: 'risk-nonadherence', name: 'Nonadherence to Medication', category: 'Compliance Risk', description: 'Pattern of missing or refusing prescribed medications.', generalPsych: true },
+    { id: 'risk-environmental', name: 'Environmental Risks', category: 'Environmental Risk', description: 'Unsafe living environment or unstable social situation.', generalPsych: true },
+    { id: 'risk-overdose', name: 'Overdose', category: 'Health Risk', description: 'History or risk of non-fatal overdose requiring monitoring.', generalPsych: false },
+    { id: 'risk-relapse', name: 'Substance Use Relapse', category: 'Health Risk', description: 'Heightened probability of returning to substance use.', generalPsych: false },
+    { id: 'risk-withdrawal', name: 'Withdrawal Complications', category: 'Health Risk', description: 'Medical instability due to acute withdrawal.', generalPsych: false },
+    { id: 'risk-psychiatry', name: 'Safety risk – Psychiatry', category: 'Mental Health Concerns', description: 'Psychiatric safety risk requiring monitoring.', generalPsych: true },
+    { id: 'risk-mh-comorbidities', name: 'Mental Health Comorbidities', category: 'Mental Health Risk', description: 'Multiple co-occurring psychiatric diagnoses complicating care.', generalPsych: true },
+    { id: 'risk-housing', name: 'Housing insecurity', category: 'Psychological Stressors', description: 'Unstable or temporary housing arrangement.', generalPsych: true },
+    { id: 'risk-suicidal-ideation', name: 'Suicidal Ideation', category: 'Self-Harm Risk', description: 'Active or recent thoughts of suicide.', generalPsych: true },
+    { id: 'risk-suicide-attempt', name: 'Suicide Attempt', category: 'Self-Harm Risk', description: 'History of suicide attempt(s) impacting current safety planning.', generalPsych: true },
+    { id: 'risk-self-harm', name: 'Self-Harm', category: 'Self-Harm Risk', description: 'Non-suicidal self-injury or related behaviors.', generalPsych: true },
+    { id: 'risk-self-neglect', name: 'Self-Neglect', category: 'Self-Harm Risk', description: 'Failure to meet basic needs, creating safety concerns.', generalPsych: true },
+    { id: 'risk-financial-employment', name: 'Financial Stability and Employment', category: 'Socioeconomic Risk', description: 'Loss of income or employment jeopardizing stability.', generalPsych: true },
+    { id: 'risk-addiction', name: 'Safety risk – Addiction', category: 'Substance Use Risks', description: 'Addiction-related safety risk requiring monitoring.', generalPsych: false },
+    { id: 'risk-aggressive', name: 'Aggressive Behaviors', category: 'Violence Risk', description: 'Physical aggression or violent outbursts requiring monitoring.', generalPsych: true },
+    { id: 'risk-psychosis-aggression', name: 'Psychosis-Induced Aggression', category: 'Violence Risk', description: 'Aggression arising from psychosis requiring close supervision.', generalPsych: true }
 ];
 
 const SAFETY_RISK_INDEX = SAFETY_RISK_ITEMS.reduce((acc, item) => {

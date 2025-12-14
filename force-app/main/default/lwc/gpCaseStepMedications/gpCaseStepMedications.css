@@ -21,6 +21,9 @@
 	margin: 0;
 	font-size: 1.2rem;
 	font-weight: 700;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
 }
 
 .section-header p {
@@ -80,6 +83,29 @@
 
 .grid-controls .text-input {
 	min-width: 180px;
+	font-size: 0.9rem;
+	padding: 0.45rem 0.6rem;
+}
+
+.grid-controls .control-group {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+	width: 100%;
+}
+
+.grid-controls input[type="search"],
+.grid-controls select {
+	font-size: 0.9rem;
+	padding: 0.45rem 0.6rem;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.grid-controls .input-label {
+	font-size: 0.9rem;
+	font-weight: 400;
+	color: #111827;
 }
 
 .grid-header-row {
@@ -163,6 +189,26 @@
 	color: #b91c1c;
 }
 
+.heading-icon {
+	--sds-c-icon-color-foreground-default: #6f2dbd;
+}
+
+.link-pill a {
+	color: #0f2d52;
+	font-weight: 600;
+}
+
+.med-category-pill {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: 12px;
+	font-size: 0.8rem;
+	font-weight: 600;
+	border: 1px solid #5c7a99;
+	color: #0f2d52;
+	background-color: #e8f2ff;
+}
+
 .med-notes {
 	font-size: 0.85rem;
 	color: #374151;
@@ -191,6 +237,7 @@
 
 .pill-button.secondary {
 	background: #4b5563;
+	color: #fff;
 }
 
 .pill-button:hover {
@@ -255,6 +302,10 @@
 	width: 100%;
 }
 
+.input-error {
+	border-color: #ef4444;
+}
+
 .textarea {
 	min-height: 4.5rem;
 	resize: vertical;
@@ -264,6 +315,19 @@
 	font-size: 0.8rem;
 	color: #9ca3af;
 	margin-top: 0.25rem;
+}
+
+.error-text {
+	color: #b91c1c;
+	margin-top: 0.2rem;
+}
+
+.error-inline {
+	color: #b91c1c;
+	font-size: 0.85rem;
+	margin-top: 0.25rem;
+	display: block;
+	line-height: 1.2;
 }
 
 .wizard-shell {

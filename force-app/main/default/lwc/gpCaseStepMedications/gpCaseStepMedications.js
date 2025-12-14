@@ -103,6 +103,42 @@ export default class GpCaseStepMedications extends LightningElement {
         return this.medications.length;
     }
 
+    get medicationsCountDisplay() {
+        return this.medicationsCount > 10 ? '10+' : this.medicationsCount;
+    }
+
+    @api
+    get layoutContext() {
+        return this._layoutContext;
+    }
+
+    set layoutContext(value) {
+        this._layoutContext = (value || 'auto').toLowerCase();
+    }
+
+    get effectiveLayoutContext() {
+        if (this._layoutContext && this._layoutContext !== 'auto') {
+            return this._layoutContext;
+        }
+        if (this.isStandaloneLayout && !this.caseId && this.recordId) {
+            return 'relatedcase';
+        }
+        return 'case';
+    }
+
+    get headerTitle() {
+        switch (this.effectiveLayoutContext) {
+        case 'relatedcase':
+            return `Medications for Parent Case (${this.medicationsCount})`;
+        default:
+            return `Medications (${this.medicationsCountDisplay})`;
+        }
+    }
+
+    get headerIconName() {
+        return 'utility:priority';
+    }
+
     get effectiveCaseId() {
         return this.caseId || this.recordId || null;
     }
@@ -112,7 +148,34 @@ export default class GpCaseStepMedications extends LightningElement {
     }
 
     get showNavigation() {
-        return !this.isStandaloneLayout;
+        return !this.isStandaloneLayout && !this.isWizardView;
+    }
+
+    get showAddButton() {
+        return this.isGridView && this.effectiveLayoutContext !== 'relatedcase';
+    }
+
+    get readOnlyNotes() {
+        return this.isStandaloneLayout;
+    }
+
+    notePreview(value) {
+        if (!value) {
+            return '';
+        }
+        const str = value.toString();
+        return str.length > 255 ? `${str.slice(0, 255)}…` : str;
+    }
+
+    buildPatientMedicationLink(recordId) {
+        if (!recordId || typeof recordId !== 'string') {
+            return null;
+        }
+        const trimmed = recordId.trim();
+        if (trimmed.length === 15 || trimmed.length === 18) {
+            return `/lightning/r/Patient_Medication__c/${trimmed}/view`;
+        }
+        return null;
     }
 
     get wireCaseId() {
@@ -144,6 +207,10 @@ export default class GpCaseStepMedications extends LightningElement {
         return this.medMode === 'wizard';
     }
 
+    get isRelatedCase() {
+        return this.effectiveLayoutContext === 'relatedcase';
+    }
+
     get hasMedications() {
         return this.medications.length > 0;
     }
@@ -153,9 +220,15 @@ export default class GpCaseStepMedications extends LightningElement {
         return this.medications
             .map(item => ({
                 ...item,
-                meta: ITEM_INDEX[item.id] || {},
+                meta: ITEM_INDEX[item.id] || {
+                    title: item.catalogName || item.meta?.title || item.id,
+                    category: item.catalogCategory || item.meta?.category || ''
+                },
+                recordName: item.recordName || item.name || null,
+                recordLink: this.buildPatientMedicationLink(item.recordId),
                 cardClass: item.allergy ? 'med-card allergy' : 'med-card',
-                showConfirm: this.confirmRemoveId === item.id
+                showConfirm: this.confirmRemoveId === item.id,
+                previewNotes: this.notePreview(item.notes)
             }))
             .filter(item => {
                 if (!term) return true;
@@ -198,10 +271,7 @@ export default class GpCaseStepMedications extends LightningElement {
             return this.wizardSelection.length === 0 && this.wizardMode === 'add';
         }
         if (this.wizardStep === 1) {
-            if (this.wizardDraft.length === 0) {
-                return true;
-            }
-            return !this.wizardDraft.every(item => item.action && (!item.amount || item.unit));
+            return this.wizardDraft.length === 0;
         }
         return false;
     }
@@ -369,16 +439,37 @@ export default class GpCaseStepMedications extends LightningElement {
             return;
         }
         if (this.wizardStep === 1) {
-            const errors = [];
-            this.wizardDraft.forEach(item => {
-                if (!item.action) {
-                    errors.push('Action is required');
+            let hasError = false;
+            let firstMissingActionId = null;
+            const updated = this.wizardDraft.map(item => {
+                let actionError = false;
+                let unitError = false;
+                const normalizedAction = (item.action || '').trim();
+                if (!normalizedAction || normalizedAction === 'Select action') {
+                    actionError = true;
+                    hasError = true;
+                    if (!firstMissingActionId) {
+                        firstMissingActionId = item.id;
+                    }
+                    this.setActionValidity(item.id, 'Select the Action');
+                } else {
+                    this.setActionValidity(item.id, '');
                 }
                 if (item.amount && !item.unit) {
-                    errors.push('Unit is required when amount is provided');
+                    unitError = true;
+                    hasError = true;
                 }
+                return { ...item, actionError, unitError, actionClass: actionError ? 'text-input input-error' : 'text-input' };
             });
-            if (errors.length) {
+            this.wizardDraft = this.decorateWizardDraft(updated);
+            this.wizardDraft = [...this.wizardDraft]; // force rerender for error state
+            if (hasError) {
+                if (firstMissingActionId) {
+                    setTimeout(() => {
+                        this.setActionValidity(firstMissingActionId, 'Select the Action');
+                        this.focusActionDropdown(firstMissingActionId, true);
+                    }, 0);
+                }
                 return;
             }
             this.wizardStep = 2;
@@ -442,11 +533,53 @@ export default class GpCaseStepMedications extends LightningElement {
         const id = event.target.dataset.id;
         if (!id) return;
         const field = event.target.dataset.field;
-        const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-        const updated = this.wizardDraft.map(item =>
-            item.id === id ? { ...item, [field]: value } : item
-        );
+        const value = event.detail && event.detail.value !== undefined
+            ? event.detail.value
+            : (event.target.type === 'checkbox' ? event.target.checked : event.target.value);
+        const updated = this.wizardDraft.map(item => {
+            if (item.id !== id) return item;
+            const next = { ...item, [field]: value };
+            if (field === 'action') {
+                const normalized = (value || '').trim();
+                if (normalized && normalized !== 'Select action') {
+                    next.actionError = false;
+                    next.actionClass = 'text-input';
+                    this.setActionValidity(id, '');
+                    next.action = normalized;
+                } else {
+                    next.action = '';
+                }
+            }
+            if (field === 'unit' && value) {
+                next.unitError = false;
+            }
+            if (field === 'amount' && !value) {
+                next.unitError = false;
+            }
+            return next;
+        });
         this.wizardDraft = this.decorateWizardDraft(updated);
+    }
+
+    focusActionDropdown(id, showValidity = false) {
+        if (!id) return;
+        const el = this.template.querySelector(`lightning-combobox[data-field="action"][data-id="${id}"]`) ||
+                   this.template.querySelector(`select[data-field="action"][data-id="${id}"]`);
+        if (el) {
+            el.focus();
+            if (showValidity && el.reportValidity) {
+                el.reportValidity();
+            }
+        }
+    }
+
+    setActionValidity(id, message) {
+        const el = this.template.querySelector(`lightning-combobox[data-field="action"][data-id="${id}"]`) ||
+                   this.template.querySelector(`select[data-field="action"][data-id="${id}"]`);
+        if (el && typeof el.setCustomValidity === 'function') {
+            el.setCustomValidity(message || '');
+            el.reportValidity?.();
+        }
     }
 
     handleWizardRemoveDraft(event) {
@@ -500,6 +633,10 @@ export default class GpCaseStepMedications extends LightningElement {
         this.dispatchEvent(new CustomEvent('dataupdated', {
             detail: payload
         }));
+        if (!this.showNavigation && !this.isSaving) {
+            // Auto-save in standalone layout
+            this.handleStandaloneSave();
+        }
     }
 
     setMedMode(mode) {
@@ -590,6 +727,9 @@ export default class GpCaseStepMedications extends LightningElement {
         base.actionOptionsDecorated = this.decorateOptionList(ACTION_OPTIONS, base.action || '');
         base.frequencyOptionsDecorated = this.decorateOptionList(FREQ, base.frequency || '');
         base.unitOptionsDecorated = this.decorateOptionList(UNITS, base.unit || '');
+        base.actionError = !!base.actionError;
+        base.unitError = !!base.unitError;
+        base.actionClass = base.actionError ? 'text-input input-error' : 'text-input';
         return base;
     }
 

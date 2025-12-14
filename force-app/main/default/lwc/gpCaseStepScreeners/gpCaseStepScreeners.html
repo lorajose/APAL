@@ -3,53 +3,59 @@
         <div class="section-header">
             <div class="section-heading">
                 <template if:true={isGridView}>
-                    <h2>Screeners ({screenersCount})</h2>
+                    <h2>
+                        <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
+                        {headerTitle}
+                    </h2>
                 </template>
                 <template if:true={isWizardView}>
                     <div class="wizard-heading">
                         <h3>Screeners — Guided Wizard</h3>
-                        <p class="wizard-subcopy">Compact. Step 1: choose. Step 2: enter details. Step 3: review.</p>
+                       <!-- <p class="wizard-subcopy">Compact. Step 1: choose. Step 2: enter details. Step 3: review.</p>
                         <div class="wizard-inline-progress">
                             <span class={wizardInlineDotPick}></span>
                             <span class={wizardInlineDotDetails}></span>
                             <span class={wizardInlineDotReview}></span>
                             <span class="wizard-inline-label">Pick → Details → Review</span>
-                        </div>
+                        </div> -->
                     </div>
                 </template>
             </div>
             <template if:true={isWizardView}>
-                <button class="text-button" onclick={cancelWizard}>Back to Grid</button>
+                <button class="ghost-button" onclick={cancelWizard}>Cancel</button>
             </template>
         </div>
 
         <template if:true={isGridView}>
-            <section class="card grid-controls">
-                <div class="grid-header-row">
-                    <div class="control-group">
-                        <label class="input-label" for="grid-filter">Filter by</label>
-                        <select id="grid-filter" class="text-input" value={filterBy} onchange={handleFilterChange}>
-                            <template for:each={filterOptions} for:item="option">
-                                <option key={option.value} value={option.value}>{option.label}</option>
-                            </template>
-                        </select>
-                    </div>
-                    <div class="control-group">
-                        <label class="input-label" for="grid-search">Search</label>
-                        <input id="grid-search" class="text-input" type="search" placeholder="Filter by name..." value={searchValue} oninput={handleSearchChange} />
-                    </div>
-                    <div class="grid-actions">
+            <template if:true={hasScreeners}>
+                <section class="card grid-controls">
+                    <div class="grid-header-row">
+                        <div class="control-group">
+                            <label class="input-label" for="grid-filter">Filter by</label>
+                            <select id="grid-filter" class="text-input" value={filterBy} onchange={handleFilterChange}>
+                                <template for:each={filterOptions} for:item="option">
+                                    <option key={option.value} value={option.value}>{option.label}</option>
+                                </template>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label class="input-label" for="grid-search">Search</label>
+                            <input id="grid-search" class="text-input" type="search" placeholder="Filter by name..." value={searchValue} oninput={handleSearchChange} />
+                        </div>
+                        <div class="grid-actions">
                         <button class="ghost-button" type="button" onclick={toggleShowNotes}>
                             <template if:true={showAllNotes}>Hide notes</template>
-                            <template if:false={showAllNotes}>Show all notes</template>
+                            <template if:false={showAllNotes}>Show notes</template>
                         </button>
-                        <template if:true={hasScreeners}>
-                            <button class="ghost-button" type="button" onclick={handleEditScreenersWizard}>Edit via Wizard</button>
-                        </template>
-                        <button class="primary-button" type="button" onclick={handleAddScreeners}>Add Screeners</button>
+                            <template if:true={isGridView}>
+                                <template if:false={isRelatedCase}>
+                                    <button class="primary-button" type="button" onclick={handleAddScreeners}>Add Screeners</button>
+                                </template>
+                            </template>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </template>
             <template if:true={hasScreeners}>
                 <div class="scr-grid">
                     <template for:each={filteredScreeners} for:item="scr">
@@ -57,7 +63,7 @@
                             <header class="scr-card-header">
                                 <div>
                                     <h3>{scr.meta.name}</h3>
-                                    <p>{scr.meta.type}</p>
+                                    <span class="scr-category-pill">{scr.meta.type}</span>
                                 </div>
                             </header>
                             <div class="pill-row">
@@ -71,18 +77,30 @@
                                 <template if:true={scr.positive}>
                                     <span class="summary-pill positive">Positive</span>
                                 </template>
+                                <template if:true={isRelatedCase}>
+                                    <template if:true={scr.recordName}>
+                                        <span class="summary-pill link-pill">
+                                            Screener Reference Number:
+                                            <template if:true={scr.recordLink}>
+                                                <a href={scr.recordLink} target="_blank">{scr.recordName}</a>
+                                            </template>
+                                            <template if:false={scr.recordLink}>
+                                                {scr.recordName}
+                                            </template>
+                                        </span>
+                                    </template>
+                                </template>
                             </div>
                             <template if:true={showAllNotes}>
                                 <div class="field field-full">
                                     <label class="input-label">Notes</label>
-                                    <textarea class="textarea" data-id={scr.id} data-field="notes" oninput={handleCardNoteChange}>{scr.notes}</textarea>
+                                    <textarea class="textarea" data-id={scr.id} data-field="notes" oninput={handleCardNoteChange} disabled={readOnlyNotes}>{scr.notes}</textarea>
                                 </div>
                             </template>
                             <template if:false={showAllNotes}>
                                 <p class="scr-notes">
-                                    Notes:
                                     <template if:true={scr.notes}>
-                                        {scr.notes}
+                                        {scr.previewNotes}
                                     </template>
                                     <template if:false={scr.notes}>
                                         —
@@ -90,7 +108,9 @@
                                 </p>
                             </template>
                             <div class="card-actions">
-                                <button class="pill-button" data-id={scr.id} onclick={handleEditScreener}>Edit</button>
+                                <template if:true={showNavigation}>
+                                    <button class="pill-button" data-id={scr.id} onclick={handleEditScreener}>Edit</button>
+                                </template>
                                 <button class="pill-button danger" data-id={scr.id} onclick={handleRemoveScreener}>Remove</button>
                             </div>
                             <template if:true={scr.showConfirm}>
@@ -112,7 +132,7 @@
                         <p class="empty-title">Add screeners</p>
                         <p class="empty-subtitle">Opens the guided wizard</p>
                     </div>
-                    <button class="primary-button" onclick={handleAddScreeners}>Start</button>
+                    <button class="primary-button" onclick={handleAddScreeners}>Add Screeners</button>
                 </section>
             </template>
         </template>
@@ -268,12 +288,6 @@
             <template if:true={showNavigation}>
                 <button class="secondary" type="button" onclick={handleBack}>Back</button>
                 <button class="primary" type="button" onclick={handleNext}>Next</button>
-            </template>
-            <template if:false={showNavigation}>
-                <button class="primary" type="button" onclick={handleStandaloneSave} disabled={isSaving}>
-                    <template if:true={isSaving}>Saving…</template>
-                    <template if:false={isSaving}>Save Screeners</template>
-                </button>
             </template>
         </div>
     </div>

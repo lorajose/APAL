@@ -62,7 +62,7 @@
         <section class="card">
             <div class="top-section-header">
                 <div>
-                    <p class="card-title">Prior Diagnoses (with notes)</p>
+                    <p class="card-title">Prior Diagnoses</p>
                     <p class="card-subtitle">Select concerns; add notes for the ones you choose.</p>
                 </div>
                 <div class="input-row condensed">
@@ -95,7 +95,7 @@
                     </div>
                 </div>
                 <div class="selected-column">
-                    <p class="column-title">Selected (Notes only)</p>
+                    <p class="column-title">Selected</p>
                     <template if:true={hasSelectedDiagnoses}>
                         <template for:each={selectedDiagnoses} for:item="item">
                             <div key={item.value} class="selected-card">

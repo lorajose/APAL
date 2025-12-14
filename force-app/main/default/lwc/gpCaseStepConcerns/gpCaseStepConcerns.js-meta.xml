@@ -15,8 +15,10 @@
         <targetConfig targets="lightning__RecordPage">
             <objects>
                 <object>Case</object>
+                <object>Contact</object>
             </objects>
             <property name="layoutMode" type="Boolean" label="Layout mode (hide navigation, load/save concerns for record)" default="false"/>
+            <property name="layoutContext" type="String" label="Layout context" datasource="auto,case,relatedCase,patient" default="auto"/>
         </targetConfig>
         <targetConfig targets="lightning__RecordAction">
             <objects>
@@ -25,6 +27,7 @@
         </targetConfig>
         <targetConfig targets="lightning__AppPage, lightning__HomePage">
             <property name="layoutMode" type="Boolean" label="Layout mode (hide navigation, load/save concerns for record)" default="false"/>
+            <property name="layoutContext" type="String" label="Layout context" datasource="auto,case,relatedCase,patient" default="auto"/>
         </targetConfig>
       
     </targetConfigs>

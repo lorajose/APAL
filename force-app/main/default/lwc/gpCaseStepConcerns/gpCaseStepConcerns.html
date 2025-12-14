@@ -3,53 +3,57 @@
         <div class="section-header">
             <div class="section-heading">
                 <template if:true={isListMode}>
-                    <h2>Patient Concerns ({concernsCount})</h2>
+                    <h2>
+                        <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
+                        {headerTitle}
+                    </h2>
                 </template>
                 <template if:true={isWizardMode}>
                     <div class="wizard-heading">
                         <h3>Add Concerns — Guided Wizard</h3>
-                        <p class="wizard-subcopy">Pick concerns, add context notes, review, and save.</p>
+                      <!--  <p class="wizard-subcopy">Pick concerns, add context notes, review, and save.</p>
                         <div class="wizard-inline-progress">
                             <span class={wizardInlineDotPick}></span>
                             <span class={wizardInlineDotDetails}></span>
                             <span class={wizardInlineDotReview}></span>
                             <span class="wizard-inline-label">Pick → Notes → Review</span>
-                        </div>
+                        </div> -->
                     </div>
                 </template>
             </div>
             <template if:true={isWizardMode}>
-                <button class="text-button" type="button" onclick={cancelWizard}>Back to Summary</button>
+                <button class="ghost-button" type="button" onclick={cancelWizard}>Cancel</button>
             </template>
         </div>
 
         <template if:true={isListMode}>
-            <section class="card grid-controls">
-                <div class="grid-header-row">
-                    <div class="control-group">
-                        <label class="input-label" for="category-filter">Filter by category</label>
-                        <select id="category-filter" class="text-input" value={categoryFilter} onchange={handleCategoryFilter}>
-                            <template for:each={categoryOptions} for:item="opt">
-                                <option key={opt.value} value={opt.value}>{opt.label}</option>
-                            </template>
-                        </select>
-                    </div>
-                    <div class="control-group">
-                        <label class="input-label" for="concern-search">Search</label>
-                        <input id="concern-search" class="text-input" type="search" placeholder="Filter by label..." value={searchValue} oninput={handleSearchChange} />
-                    </div>
-                    <div class="grid-actions">
+            <template if:true={hasConcerns}>
+                <section class="card grid-controls">
+                    <div class="grid-header-row">
+                        <div class="control-group">
+                            <label class="input-label" for="category-filter">Filter by category</label>
+                            <select id="category-filter" class="text-input" value={categoryFilter} onchange={handleCategoryFilter}>
+                                <template for:each={categoryOptions} for:item="opt">
+                                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                </template>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label class="input-label" for="concern-search">Search</label>
+                            <input id="concern-search" class="text-input" type="search" placeholder="Filter by label..." value={searchValue} oninput={handleSearchChange} />
+                        </div>
+                        <div class="grid-actions">
                         <button class="ghost-button" type="button" onclick={toggleShowNotes}>
                             <template if:true={showAllNotes}>Hide notes</template>
-                            <template if:false={showAllNotes}>Show all notes</template>
+                            <template if:false={showAllNotes}>Show notes</template>
                         </button>
-                        <template if:true={hasConcerns}>
-                            <button class="ghost-button" type="button" onclick={openWizardForEdit}>Edit via Wizard</button>
-                        </template>
-                        <button class="primary-button" type="button" onclick={openWizard}>Add Concerns</button>
+                            <template if:true={showAddButton}>
+                                <button class="primary-button" type="button" onclick={openWizard}>Add Concerns</button>
+                            </template>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </template>
 
             <template if:true={hasConcerns}>
                 <div class="concern-grid">
@@ -58,24 +62,20 @@
                             <header class="concern-card-header">
                                 <div>
                                     <h3>{concern.label}</h3>
-                                    <p>{concern.category}</p>
+                                    <span class="concern-category-pill">{concern.category}</span>
                                 </div>
-                                <template if:true={concern.source}>
-                                    <span class="source-pill">{concern.sourceLabel}</span>
-                                </template>
                             </header>
                             <template if:true={showAllNotes}>
                                 <div class="field field-full">
                                     <label class="input-label">Notes</label>
-                                    <textarea class="textarea" data-id={concern.id} oninput={handleNoteChange}>{concern.notes}</textarea>
+                                    <textarea class="textarea" data-id={concern.id} oninput={handleNoteChange} disabled={readOnlyNotes}>{concern.notes}</textarea>
                                 </div>
                             </template>
                             <template if:false={showAllNotes}>
                                 <p class="concern-notes">
-                                    Notes:
                                     <span>
                                         <template if:true={concern.notes}>
-                                            {concern.notes}
+                                            {concern.previewNotes}
                                         </template>
                                         <template if:false={concern.notes}>
                                             —
@@ -225,12 +225,6 @@
             <template if:true={showNavigation}>
                 <button class="secondary" type="button" onclick={handleBack}>Back</button>
                 <button class="primary" type="button" onclick={handleNext}>Next</button>
-            </template>
-            <template if:false={showNavigation}>
-                <button class="primary" type="button" onclick={handleStandaloneSave} disabled={isSaving}>
-                    <template if:true={isSaving}>Saving…</template>
-                    <template if:false={isSaving}>Save Concerns</template>
-                </button>
             </template>
         </div>
     </div>
