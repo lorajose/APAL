@@ -3,53 +3,57 @@
         <div class="section-header">
             <div class="section-heading">
                 <template if:true={isGridView}>
-                    <h2>Safety Risks ({risksCount})</h2>
+                    <h2>
+                        <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
+                        {headerTitle}
+                    </h2>
                 </template>
                 <template if:true={isWizardView}>
                     <div class="wizard-heading">
                         <h3>Safety Risks — Guided Wizard</h3>
-                        <p class="wizard-subcopy">Pick risks, capture flags and notes, review, and save.</p>
+                       <!-- <p class="wizard-subcopy">Pick risks, capture flags and notes, review, and save.</p>
                         <div class="wizard-inline-progress">
                             <span class={wizardInlineDotPick}></span>
                             <span class={wizardInlineDotDetails}></span>
                             <span class={wizardInlineDotReview}></span>
                             <span class="wizard-inline-label">Pick → Details → Review</span>
-                        </div>
+                        </div> -->
                     </div>
                 </template>
             </div>
             <template if:true={isWizardView}>
-                <button class="text-button" onclick={cancelWizard}>Back to Grid</button>
+                <button class="ghost-button" onclick={cancelWizard}>Cancel</button>
             </template>
         </div>
 
         <template if:true={isGridView}>
-            <section class="card grid-controls">
-                <div class="grid-header-row">
-                    <div class="control-group">
-                        <label class="input-label" for="grid-filter">Filter by</label>
-                        <select id="grid-filter" class="text-input" value={filterBy} onchange={handleFilterChange}>
-                            <template for:each={filterOptions} for:item="option">
-                                <option key={option.value} value={option.value}>{option.label}</option>
-                            </template>
-                        </select>
-                    </div>
-                    <div class="control-group">
-                        <label class="input-label" for="grid-search">Search</label>
-                        <input id="grid-search" class="text-input" type="search" placeholder="Filter by name..." value={searchValue} oninput={handleSearchChange} />
-                    </div>
-                    <div class="grid-actions">
+            <template if:true={hasRisks}>
+                <section class="card grid-controls">
+                    <div class="grid-header-row">
+                        <div class="control-group">
+                            <label class="input-label" for="grid-filter">Filter by</label>
+                            <select id="grid-filter" class="text-input" value={filterBy} onchange={handleFilterChange}>
+                                <template for:each={filterOptions} for:item="option">
+                                    <option key={option.value} value={option.value}>{option.label}</option>
+                                </template>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label class="input-label" for="grid-search">Search</label>
+                            <input id="grid-search" class="text-input" type="search" placeholder="Filter by name..." value={searchValue} oninput={handleSearchChange} />
+                        </div>
+                        <div class="grid-actions">
                         <button class="ghost-button" type="button" onclick={toggleShowNotes}>
                             <template if:true={showAllNotes}>Hide notes</template>
-                            <template if:false={showAllNotes}>Show all notes</template>
+                            <template if:false={showAllNotes}>Show notes</template>
                         </button>
-                        <template if:true={hasRisks}>
-                            <button class="ghost-button" type="button" onclick={handleEditRisksWizard}>Edit via Wizard</button>
-                        </template>
-                        <button class="primary-button" type="button" onclick={handleAddRisks}>Add Safety Risks</button>
+                            <template if:true={showAddButton}>
+                                <button class="primary-button" type="button" onclick={handleAddRisks}>Add Safety Risks</button>
+                            </template>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </template>
 
             <template if:true={hasRisks}>
                 <div class="risk-grid">
@@ -58,10 +62,21 @@
                             <header class="risk-card-header">
                                 <div>
                                     <h3>{risk.meta.name}</h3>
-                                    <p>{risk.meta.category}</p>
+                                    <span class="risk-category-pill">{risk.meta.category}</span>
                                 </div>
                             </header>
                             <p class="risk-description">{risk.meta.description}</p>
+                            <template if:true={isRelatedCase}>
+                                <p class="risk-id">
+                                    Risk Id:
+                                    <template if:true={risk.recordLink}>
+                                        <a href={risk.recordLink} target="_blank">{risk.recordName}</a>
+                                    </template>
+                                    <template if:false={risk.recordLink}>
+                                        {risk.recordName}
+                                    </template>
+                                </p>
+                            </template>
                             <div class="flag-row">
                                 <label class="checkbox-field">
                                     <input type="checkbox" data-id={risk.id} data-field="recent" checked={risk.recent} onchange={handleFlagToggle} />
@@ -71,19 +86,21 @@
                                     <input type="checkbox" data-id={risk.id} data-field="historical" checked={risk.historical} onchange={handleFlagToggle} />
                                     <span>Historical</span>
                                 </label>
+                                <template if:true={risk.flagError}>
+                                    <p class="error-inline">Select Recent and/or Historical</p>
+                                </template>
                             </div>
                             <template if:true={showAllNotes}>
                                 <div class="field field-full">
                                     <label class="input-label">Notes</label>
-                                    <textarea class="textarea" data-id={risk.id} oninput={handleNoteChange}>{risk.notes}</textarea>
+                                    <textarea class="textarea" data-id={risk.id} oninput={handleNoteChange} disabled={readOnlyNotes}>{risk.notes}</textarea>
                                 </div>
                             </template>
                             <template if:false={showAllNotes}>
                                 <p class="risk-notes">
-                                    Notes:
                                     <span>
                                         <template if:true={risk.notes}>
-                                            {risk.notes}
+                                            {risk.previewNotes}
                                         </template>
                                         <template if:false={risk.notes}>
                                             —
@@ -92,7 +109,10 @@
                                 </p>
                             </template>
                             <div class="card-actions">
-                                <button class="pill-button danger" data-id={risk.id} onclick={handleRemoveRisk}>Clear</button>
+                                <template if:true={showNavigation}>
+                                    <button class="pill-button" data-id={risk.id} onclick={handleEditRisk}>Edit</button>
+                                </template>
+                                <button class="pill-button danger" data-id={risk.id} onclick={handleRemoveRisk}>Remove</button>
                             </div>
                             <template if:true={risk.showConfirm}>
                                 <div class="remove-confirm">
@@ -253,12 +273,6 @@
             <template if:true={showNavigation}>
                 <button class="secondary" type="button" onclick={handleBack}>Back</button>
                 <button class="primary" type="button" onclick={handleNext}>Next</button>
-            </template>
-            <template if:false={showNavigation}>
-                <button class="primary" type="button" onclick={handleStandaloneSave} disabled={isSaving}>
-                    <template if:true={isSaving}>Saving…</template>
-                    <template if:false={isSaving}>Save Safety Risks</template>
-                </button>
             </template>
         </div>
     </div>

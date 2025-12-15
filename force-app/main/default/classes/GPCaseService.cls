@@ -341,11 +341,14 @@ public with sharing class GPCaseService {
     @AuraEnabled
     public static void saveMedications(Id caseId, List<MedicationInput> items) {
         Id parentCaseId = resolveCaseId(caseId);
+        Id patientId = fetchCasePatient(parentCaseId);
         Map<String, Schema.SObjectField> caseFields = Case.SObjectType.getDescribe().fields.getMap();
         Boolean hasPatientField = caseFields.containsKey('Patient__c');
         String query = 'SELECT Id' + (hasPatientField ? ', Patient__c' : '') + ' FROM Case WHERE Id = :parentCaseId LIMIT 1';
         Case parentCase = (Case)Database.query(query);
-        Id patientId = hasPatientField ? (Id)parentCase.get('Patient__c') : null;
+        if (patientId == null && hasPatientField) {
+            patientId = (Id)parentCase.get('Patient__c');
+        }
         deleteExistingMedications(parentCaseId);
         System.debug(LoggingLevel.INFO, 'saveMedications => items: ' + JSON.serialize(items));
         if (items == null || items.isEmpty()) {
@@ -395,6 +398,7 @@ public with sharing class GPCaseService {
     @AuraEnabled
     public static void saveSubstances(Id caseId, List<SubstanceInput> items) {
         Id parentCaseId = resolveCaseId(caseId);
+        Id patientId = fetchCasePatient(parentCaseId);
         deleteExistingSubstances(parentCaseId);
         System.debug(LoggingLevel.INFO, 'saveSubstances => items: ' + JSON.serialize(items));
         if (items == null || items.isEmpty()) {
@@ -414,6 +418,7 @@ public with sharing class GPCaseService {
             }
             Patient_Substance__c record = new Patient_Substance__c();
             record.Case__c = parentCaseId;
+            setPatientIfPossible(record, patientId);
             record.Substance_Listing__c = catalogId;
             record.Frequency_of_Substance_Use__c = item.frequency;
             record.Current_Substance__c = item.current;
@@ -428,6 +433,7 @@ public with sharing class GPCaseService {
     @AuraEnabled
     public static void saveScreeners(Id caseId, List<ScreenerInput> items) {
         Id parentCaseId = resolveCaseId(caseId);
+        Id patientId = fetchCasePatient(parentCaseId);
         deleteExistingScreeners(parentCaseId);
         System.debug(LoggingLevel.INFO, 'saveScreeners => items: ' + JSON.serialize(items));
         if (items == null || items.isEmpty()) {
@@ -447,6 +453,7 @@ public with sharing class GPCaseService {
             }
             Patient_Screener__c record = new Patient_Screener__c();
             record.Case__c = parentCaseId;
+            setPatientIfPossible(record, patientId);
             record.Screener__c = catalogId;
             if (!String.isBlank(item.screenedDate)) {
                 try {
@@ -468,64 +475,188 @@ public with sharing class GPCaseService {
     @AuraEnabled
     public static void saveConcerns(Id caseId, List<ConcernInput> items) {
         Id parentCaseId = resolveCaseId(caseId);
-        deleteExistingConcerns(parentCaseId);
-        System.debug(LoggingLevel.INFO, 'saveConcerns => items: ' + JSON.serialize(items));
-        if (items == null || items.isEmpty()) {
-            return;
+        Id patientId = fetchCasePatient(parentCaseId);
+        if (items == null) {
+            items = new List<ConcernInput>();
         }
+
+        // Catalog lookup for incoming payload
         Map<String, Id> concerns = fetchCatalogIds('Concern_List__c', collectNamesFromConcerns(items));
-        List<Patient_Concern__c> toInsert = new List<Patient_Concern__c>();
+
+        // Existing records (to preserve manual)
+        Map<String, Patient_Concern__c> existingByLabel = new Map<String, Patient_Concern__c>();
+        for (Patient_Concern__c pc : [
+            SELECT Id, Concern__r.Name, Concern__c, Seed_Source__c, Notes_new__c
+            FROM Patient_Concern__c
+            WHERE Case__c = :parentCaseId
+        ]) {
+            if (pc.Concern__r == null) continue;
+            String key = pc.Concern__r.Name != null ? pc.Concern__r.Name.toLowerCase() : null;
+            if (String.isBlank(key)) continue;
+            existingByLabel.put(key, pc);
+        }
+
+        // Deduplicate payload by label (case-insensitive)
+        Map<String, ConcernInput> payloadByLabel = new Map<String, ConcernInput>();
         for (ConcernInput item : items) {
-            if (String.isBlank(item.label)) {
-                continue;
+            if (item == null || String.isBlank(item.label)) continue;
+            String key = item.label.toLowerCase();
+            if (!payloadByLabel.containsKey(key)) {
+                payloadByLabel.put(key, item);
+            } else {
+                ConcernInput existing = payloadByLabel.get(key);
+                // Prefer non-blank notes/category/source
+                if (String.isBlank(existing.notes) && !String.isBlank(item.notes)) {
+                    existing.notes = item.notes;
+                }
+                if (String.isBlank(existing.category) && !String.isBlank(item.category)) {
+                    existing.category = item.category;
+                }
+                if (String.isBlank(existing.source) && !String.isBlank(item.source)) {
+                    existing.source = item.source;
+                }
+                payloadByLabel.put(key, existing);
             }
-            Id concernId = concerns.get(item.label.toLowerCase());
+        }
+
+        Set<String> payloadKeys = new Set<String>(payloadByLabel.keySet());
+        List<Patient_Concern__c> toUpsert = new List<Patient_Concern__c>();
+        for (String key : payloadByLabel.keySet()) {
+            ConcernInput item = payloadByLabel.get(key);
+            Id concernId = concerns.get(key);
             if (concernId == null) {
                 concernId = ensureCatalogRecord('Concern_List__c', item.label, new Map<String, Object>{
                     'Category__c' => item.category
                 });
+                concerns.put(key, concernId);
             }
+
+            Patient_Concern__c existing = existingByLabel.get(key);
             Patient_Concern__c record = new Patient_Concern__c();
-            record.Case__c = parentCaseId;
-            record.Concern__c = concernId;
+            record.Id = existing != null ? existing.Id : null;
+            if (record.Id == null) {
+                record.Case__c = parentCaseId;
+                record.Concern__c = concernId;
+            }
+            setPatientIfPossible(record, patientId);
             record.Notes_new__c = item.notes;
-            toInsert.add(record);
+            String seed = resolveConcernSeed(item.source, item.category);
+            if (seed != null) {
+                record.Seed_Source__c = seed;
+            }
+            toUpsert.add(record);
         }
-        if (!toInsert.isEmpty()) {
-            insert toInsert;
+
+        // Delete only seeded records that are no longer present
+        Set<String> seededValues = new Set<String>{
+            'Step2_TopSymptoms', 'Step3_PriorDiagnosis', 'Step6_PsychosisMania',
+            'Step6_MedicalRedFlags', 'Step7_FamilyHistory'
+        };
+        List<Patient_Concern__c> toDelete = new List<Patient_Concern__c>();
+        for (String key : existingByLabel.keySet()) {
+            Patient_Concern__c existing = existingByLabel.get(key);
+            if (seededValues.contains(existing.Seed_Source__c) && !payloadKeys.contains(key)) {
+                toDelete.add(new Patient_Concern__c(Id = existing.Id));
+            }
+        }
+
+        if (!toUpsert.isEmpty()) {
+            upsert toUpsert;
+        }
+        if (!toDelete.isEmpty()) {
+            delete toDelete;
         }
     }
 
     @AuraEnabled
     public static void saveSafetyRisks(Id caseId, List<SafetyRiskInput> items) {
         Id parentCaseId = resolveCaseId(caseId);
-        deleteExistingSafetyRisks(parentCaseId);
+        Id patientId = fetchCasePatient(parentCaseId);
         System.debug(LoggingLevel.INFO, 'saveSafetyRisks => items: ' + JSON.serialize(items));
-        if (items == null || items.isEmpty()) {
-            return;
+        if (items == null) {
+            items = new List<SafetyRiskInput>();
         }
+
         Map<String, Id> risks = fetchCatalogIds('Safety_Risk__c', collectNamesFromSafetyRisks(items));
-        List<Patient_Safety_Risk__c> toInsert = new List<Patient_Safety_Risk__c>();
+
+        Map<String, Patient_Safety_Risk__c> existingByName = new Map<String, Patient_Safety_Risk__c>();
+        for (Patient_Safety_Risk__c risk : [
+            SELECT Id, Safety_Risk__r.Name, Safety_Risk__c, Seed_Source__c, Notes_new__c, Recent__c, Historical__c
+            FROM Patient_Safety_Risk__c
+            WHERE Case__c = :parentCaseId
+        ]) {
+            if (risk.Safety_Risk__r == null || String.isBlank(risk.Safety_Risk__r.Name)) continue;
+            String key = risk.Safety_Risk__r.Name.toLowerCase();
+            existingByName.put(key, risk);
+        }
+
+        // Deduplicate payload by name
+        Map<String, SafetyRiskInput> payloadByName = new Map<String, SafetyRiskInput>();
         for (SafetyRiskInput item : items) {
-            if (String.isBlank(item.catalogName)) {
-                continue;
+            if (item == null || String.isBlank(item.catalogName)) continue;
+            String key = item.catalogName.toLowerCase();
+            if (!payloadByName.containsKey(key)) {
+                payloadByName.put(key, item);
+            } else {
+                SafetyRiskInput existing = payloadByName.get(key);
+                existing.recent = existing.recent == true || item.recent == true;
+                existing.historical = existing.historical == true || item.historical == true;
+                if (String.isBlank(existing.notes) && !String.isBlank(item.notes)) {
+                    existing.notes = item.notes;
+                }
+                if (String.isBlank(existing.catalogCategory) && !String.isBlank(item.catalogCategory)) {
+                    existing.catalogCategory = item.catalogCategory;
+                }
+                if (String.isBlank(existing.source) && !String.isBlank(item.source)) {
+                    existing.source = item.source;
+                }
+                payloadByName.put(key, existing);
             }
-            Id riskId = risks.get(item.catalogName.toLowerCase());
+        }
+
+        Set<String> payloadKeys = new Set<String>(payloadByName.keySet());
+        List<Patient_Safety_Risk__c> toUpsert = new List<Patient_Safety_Risk__c>();
+        for (String key : payloadByName.keySet()) {
+            SafetyRiskInput item = payloadByName.get(key);
+            Id riskId = risks.get(key);
             if (riskId == null) {
                 riskId = ensureCatalogRecord('Safety_Risk__c', item.catalogName, new Map<String, Object>{
                     'Category__c' => item.catalogCategory
                 });
+                risks.put(key, riskId);
             }
+
+            Patient_Safety_Risk__c existing = existingByName.get(key);
             Patient_Safety_Risk__c record = new Patient_Safety_Risk__c();
-            record.Case__c = parentCaseId;
-            record.Safety_Risk__c = riskId;
+            record.Id = existing != null ? existing.Id : null;
+            if (record.Id == null) {
+                record.Case__c = parentCaseId;
+                record.Safety_Risk__c = riskId;
+            }
+            setPatientIfPossible(record, patientId);
             record.Recent__c = item.recent;
             record.Historical__c = item.historical;
             record.Notes_new__c = item.notes;
-            toInsert.add(record);
+            String seed = resolveSafetySeed(item.source, item.catalogCategory);
+            if (seed != null) {
+                record.Seed_Source__c = seed;
+            }
+            toUpsert.add(record);
         }
-        if (!toInsert.isEmpty()) {
-            insert toInsert;
+
+        List<Patient_Safety_Risk__c> toDelete = new List<Patient_Safety_Risk__c>();
+        for (String key : existingByName.keySet()) {
+            Patient_Safety_Risk__c existing = existingByName.get(key);
+            if (!payloadKeys.contains(key)) {
+                toDelete.add(new Patient_Safety_Risk__c(Id = existing.Id));
+            }
+        }
+
+        if (!toUpsert.isEmpty()) {
+            upsert toUpsert;
+        }
+        if (!toDelete.isEmpty()) {
+            delete toDelete;
         }
     }
 
@@ -608,7 +739,7 @@ public with sharing class GPCaseService {
             return results;
         }
         List<Patient_Medication__c> meds = [
-            SELECT Id, Medication_List__c, Medication_List__r.Name, Medication_List__r.Category__c,
+            SELECT Id, Name, Medication_List__c, Medication_List__r.Name, Medication_List__r.Category__c,
                    Medication_Changes__c, Frequency__c, Amount__c, Dosing_Unit__c,
                    Current_Medication__c, Allergy__c, Notes__c
             FROM Patient_Medication__c
@@ -628,6 +759,8 @@ public with sharing class GPCaseService {
             entry.put('current', med.Current_Medication__c);
             entry.put('allergy', med.Allergy__c);
             entry.put('notes', med.Notes__c);
+            entry.put('recordName', med.Name);
+            entry.put('recordId', med.Id);
             results.add(entry);
         }
         return results;
@@ -639,7 +772,7 @@ public with sharing class GPCaseService {
             return results;
         }
         List<Patient_Substance__c> subs = [
-            SELECT Id, Substance_Listing__c, Substance_Listing__r.Name, Substance_Listing__r.Substance_Category__c,
+            SELECT Id, Name, Substance_Listing__c, Substance_Listing__r.Name, Substance_Listing__r.Substance_Category__c,
                    Frequency_of_Substance_Use__c, Current_Substance__c, Notes_new__c
             FROM Patient_Substance__c
             WHERE Case__c = :caseId
@@ -654,6 +787,8 @@ public with sharing class GPCaseService {
             entry.put('frequency', sub.Frequency_of_Substance_Use__c);
             entry.put('current', sub.Current_Substance__c);
             entry.put('notes', sub.Notes_new__c);
+            entry.put('recordName', sub.Name);
+            entry.put('recordId', sub.Id);
             results.add(entry);
         }
         return results;
@@ -665,7 +800,7 @@ public with sharing class GPCaseService {
             return results;
         }
         List<Patient_Screener__c> screeners = [
-            SELECT Id, Screener__c, Screener__r.Name, Screener__r.Screener_Type__c,
+            SELECT Id, Name, Screener__c, Screener__r.Name, Screener__r.Screener_Type__c,
                    Aproximate_Date_Screened__c, Score__c, Positive_Outcome__c, Notes_new__c
             FROM Patient_Screener__c
             WHERE Case__c = :caseId
@@ -681,6 +816,8 @@ public with sharing class GPCaseService {
             entry.put('score', scr.Score__c != null ? String.valueOf(scr.Score__c) : null);
             entry.put('positive', scr.Positive_Outcome__c);
             entry.put('notes', scr.Notes_new__c);
+            entry.put('recordName', scr.Name);
+            entry.put('recordId', scr.Id);
             results.add(entry);
         }
         return results;
@@ -692,7 +829,7 @@ public with sharing class GPCaseService {
             return results;
         }
         List<Patient_Concern__c> concerns = [
-            SELECT Id, Concern__c, Concern__r.Name, Concern__r.Category__c, Notes_new__c
+            SELECT Id, Concern__c, Concern__r.Name, Concern__r.Category__c, Notes_new__c, Seed_Source__c
             FROM Patient_Concern__c
             WHERE Case__c = :caseId
             ORDER BY CreatedDate ASC
@@ -703,7 +840,7 @@ public with sharing class GPCaseService {
             entry.put('label', concern.Concern__r != null ? concern.Concern__r.Name : null);
             entry.put('category', concern.Concern__r != null ? (String)concern.Concern__r.get('Category__c') : null);
             entry.put('notes', concern.Notes_new__c);
-            entry.put('source', 'manual');
+            entry.put('source', concern.Seed_Source__c != null ? concern.Seed_Source__c : 'Manual');
             results.add(entry);
         }
         return results;
@@ -715,21 +852,24 @@ public with sharing class GPCaseService {
             return results;
         }
         List<Patient_Safety_Risk__c> risks = [
-            SELECT Id, Safety_Risk__c, Safety_Risk__r.Name, Safety_Risk__r.Category__c,
-                   Recent__c, Historical__c, Notes_new__c
+            SELECT Id, Name, Safety_Risk__c, Safety_Risk__r.Name, Safety_Risk__r.Category__c,
+                   Recent__c, Historical__c, Notes_new__c, Seed_Source__c
             FROM Patient_Safety_Risk__c
             WHERE Case__c = :caseId
             ORDER BY CreatedDate ASC
         ];
         for (Patient_Safety_Risk__c risk : risks) {
             Map<String, Object> entry = new Map<String, Object>();
-            entry.put('id', risk.Safety_Risk__r != null ? risk.Safety_Risk__r.Name : risk.Safety_Risk__c);
+            entry.put('id', risk.Safety_Risk__c);
             entry.put('catalogId', risk.Safety_Risk__c);
             entry.put('catalogName', risk.Safety_Risk__r != null ? risk.Safety_Risk__r.Name : null);
             entry.put('catalogCategory', risk.Safety_Risk__r != null ? (String)risk.Safety_Risk__r.get('Category__c') : null);
             entry.put('recent', risk.Recent__c);
             entry.put('historical', risk.Historical__c);
             entry.put('notes', risk.Notes_new__c);
+            entry.put('source', risk.Seed_Source__c != null ? risk.Seed_Source__c : 'Manual');
+            entry.put('recordName', risk.Name);
+            entry.put('recordId', risk.Id);
             results.add(entry);
         }
         return results;
@@ -866,6 +1006,63 @@ public with sharing class GPCaseService {
         return names;
     }
 
+    // Build concerns from Case fields (psychosis/mania shared note + red flags shared note).
+    private static List<ConcernInput> buildCaseDrivenConcerns(Id caseId) {
+        List<ConcernInput> results = new List<ConcernInput>();
+        if (caseId == null) return results;
+
+        Case c = [
+            SELECT Psychosis_Symptoms__c, Mania_Symptoms__c, Medical_Red_Flags__c,
+                   Psychosis_Notes__c, Medical_Notes__c
+            FROM Case
+            WHERE Id = :caseId
+            LIMIT 1
+        ];
+
+        String sharedPsychosisNote = c.Psychosis_Notes__c;
+        String sharedRedFlagNote = c.Medical_Notes__c;
+
+        // Psychosis symptoms
+        for (String val : parseMultiValue(c.Psychosis_Symptoms__c)) {
+            ConcernInput ci = new ConcernInput();
+            ci.label = val;
+            ci.category = 'Psychosis symptoms';
+            ci.notes = sharedPsychosisNote;
+            ci.source = 'Step6_PsychosisMania';
+            results.add(ci);
+        }
+        // Mania / Hypomania symptoms
+        for (String val : parseMultiValue(c.Mania_Symptoms__c)) {
+            ConcernInput ci = new ConcernInput();
+            ci.label = val;
+            ci.category = 'Mania/Hypomania symptoms';
+            ci.notes = sharedPsychosisNote;
+            ci.source = 'Step6_PsychosisMania';
+            results.add(ci);
+        }
+        // Medical red flags
+        for (String val : parseMultiValue(c.Medical_Red_Flags__c)) {
+            ConcernInput ci = new ConcernInput();
+            ci.label = val;
+            ci.category = 'Medical red flags';
+            ci.notes = sharedRedFlagNote;
+            ci.source = 'Step6_MedicalRedFlags';
+            results.add(ci);
+        }
+        return results;
+    }
+
+    private static List<String> parseMultiValue(String raw) {
+        List<String> values = new List<String>();
+        if (String.isBlank(raw)) return values;
+        for (String v : raw.split(';')) {
+            if (!String.isBlank(v)) {
+                values.add(v.trim());
+            }
+        }
+        return values;
+    }
+
     private static Set<String> collectNamesFromSafetyRisks(List<SafetyRiskInput> items) {
         Set<String> names = new Set<String>();
         if (items == null) return names;
@@ -875,6 +1072,86 @@ public with sharing class GPCaseService {
             }
         }
         return names;
+    }
+
+    private static Id fetchCasePatient(Id caseId) {
+        if (caseId == null) return null;
+        Map<String, Schema.SObjectField> fields = Case.SObjectType.getDescribe().fields.getMap();
+        Boolean hasPatient = fields.containsKey('Patient__c');
+        String query = 'SELECT Id, ContactId' + (hasPatient ? ', Patient__c' : '') + ' FROM Case WHERE Id = :caseId LIMIT 1';
+        Case c = (Case)Database.query(query);
+        if (hasPatient) {
+            Id p = (Id)c.get('Patient__c');
+            if (p != null) return p;
+        }
+        return c.ContactId;
+    }
+
+    private static void setPatientIfPossible(SObject record, Id patientId) {
+        if (patientId == null) return;
+        Map<String, Schema.SObjectField> fields = record.getSObjectType().getDescribe().fields.getMap();
+        if (fields.containsKey('Patient__c')) {
+            record.put('Patient__c', patientId);
+        } else if (fields.containsKey('Contact__c')) {
+            record.put('Contact__c', patientId);
+        }
+    }
+
+    private static String resolveConcernSeed(String source, String category) {
+        if (String.isBlank(source)) return null;
+        String normalized = source.trim();
+        String lower = normalized.toLowerCase();
+        if (lower.startsWith('step')) {
+            return normalized;
+        }
+        if (lower == 'presenting' || lower == 'top symptoms') {
+            return 'Step2_TopSymptoms';
+        }
+        if (lower == 'priordx' || lower == 'prior diagnosis') {
+            return 'Step3_PriorDiagnosis';
+        }
+        if (lower == 'psychosismania' || lower == 'psychosis_mania' || lower == 'psychosis mania' || lower == 'psychosis' || lower == 'mania') {
+            return 'Step6_PsychosisMania';
+        }
+        if (lower == 'redflags' || lower == 'medicalredflags' || lower == 'medical red flags' || lower == 'red flags') {
+            return 'Step6_MedicalRedFlags';
+        }
+        if (lower == 'familyhistory' || lower == 'family') {
+            return 'Step7_FamilyHistory';
+        }
+        if (lower == 'manual') {
+            return 'Manual';
+        }
+        // Fallback based on category for step 6
+        if (!String.isBlank(category)) {
+            String catLower = category.toLowerCase();
+            if (catLower.contains('psychosis') || catLower.contains('mania')) {
+                return 'Step6_PsychosisMania';
+            }
+            if (catLower.contains('medical red flag')) {
+                return 'Step6_MedicalRedFlags';
+            }
+        }
+        return null;
+    }
+
+    private static String resolveSafetySeed(String source, String category) {
+        if (String.isBlank(source)) return null;
+        String normalized = source.trim();
+        String lower = normalized.toLowerCase();
+        if (lower.startsWith('step')) {
+            return normalized;
+        }
+        if (lower == 'stressors' || lower == 'psychological stressors') {
+            return 'Step8_PsychologicalStressors';
+        }
+        if (lower == 'manual') {
+            return 'Manual';
+        }
+        if (!String.isBlank(category) && category.toLowerCase().contains('psychological')) {
+            return 'Step8_PsychologicalStressors';
+        }
+        return null;
     }
 
     /* ------------------------------------------------------------
@@ -914,6 +1191,7 @@ public with sharing class GPCaseService {
         @AuraEnabled public String label { get; set; }
         @AuraEnabled public String category { get; set; }
         @AuraEnabled public String notes { get; set; }
+        @AuraEnabled public String source { get; set; }
     }
 
     public class SafetyRiskInput {
@@ -922,6 +1200,7 @@ public with sharing class GPCaseService {
         @AuraEnabled public Boolean recent { get; set; }
         @AuraEnabled public Boolean historical { get; set; }
         @AuraEnabled public String notes { get; set; }
+        @AuraEnabled public String source { get; set; }
     }
 
     private static void setLookupFieldSafely(SObject record, String fieldApiName, Object value) {

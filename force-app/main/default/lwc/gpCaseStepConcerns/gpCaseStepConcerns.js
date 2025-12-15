@@ -179,7 +179,19 @@ export default class GpCaseStepConcerns extends LightningElement {
     }
 
     get showNavigation() {
-        return !this.isStandaloneLayout;
+        return !this.isStandaloneLayout && !this.isWizardMode;
+    }
+
+    get readOnlyNotes() {
+        return this.isStandaloneLayout;
+    }
+
+    notePreview(value) {
+        if (!value) {
+            return '';
+        }
+        const str = value.toString();
+        return str.length > 255 ? `${str.slice(0, 255)}…` : str;
     }
 
     get isListMode() {
@@ -190,8 +202,57 @@ export default class GpCaseStepConcerns extends LightningElement {
         return this.concernMode === 'wizard';
     }
 
+    get showAddButton() {
+        // Oculta Add en layout relatedCase y patient
+        return this.isListMode &&
+            this.effectiveLayoutContext !== 'relatedcase' &&
+            this.effectiveLayoutContext !== 'patient';
+    }
+
     get concernsCount() {
         return this.concerns.length;
+    }
+
+    get concernsCountDisplay() {
+        // Siempre mostrar el conteo real en relatedCase y patient; en case puedes ajustar si quieres 10+
+        if (this.effectiveLayoutContext === 'case') {
+            return this.concernsCount > 10 ? '10+' : this.concernsCount;
+        }
+        return this.concernsCount;
+    }
+
+    @api
+    get layoutContext() {
+        return this._layoutContext;
+    }
+
+    set layoutContext(value) {
+        this._layoutContext = (value || 'auto').toLowerCase();
+    }
+
+    get effectiveLayoutContext() {
+        if (this._layoutContext && this._layoutContext !== 'auto') {
+            return this._layoutContext;
+        }
+        if (this.isStandaloneLayout && !this.caseId && this.recordId) {
+            return 'relatedcase';
+        }
+        return 'case';
+    }
+
+    get headerTitle() {
+        switch (this.effectiveLayoutContext) {
+        case 'relatedcase':
+            return `Patient Concerns for Parent Case (${this.concernsCountDisplay})`;
+        case 'patient':
+            return `Patient Concerns (${this.concernsCountDisplay})`;
+        default:
+            return `Concerns (${this.concernsCount})`;
+        }
+    }
+
+    get headerIconName() {
+        return 'utility:priority';
     }
 
     get categoryOptions() {
@@ -218,7 +279,8 @@ export default class GpCaseStepConcerns extends LightningElement {
             .map(item => ({
                 ...item,
                 showConfirm: this.confirmRemoveId === item.id,
-                sourceLabel: SOURCE_LABELS[item.source] || item.source || 'Manual'
+                sourceLabel: SOURCE_LABELS[item.source] || item.source || 'Manual',
+                previewNotes: this.notePreview(item.notes)
             }));
     }
 
@@ -541,6 +603,10 @@ export default class GpCaseStepConcerns extends LightningElement {
         this.dispatchEvent(new CustomEvent('dataupdated', {
             detail: payload
         }));
+        if (!this.showNavigation && !this.isSaving) {
+            // Auto-save when used standalone in a page layout
+            this.handleStandaloneSave();
+        }
     }
 
     buildConcernPayload() {

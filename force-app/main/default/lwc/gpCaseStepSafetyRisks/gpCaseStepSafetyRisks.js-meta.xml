@@ -10,16 +10,17 @@
     <target>lightning__RecordAction</target>
 </targets>
 <targetConfigs>
-    <targetConfig targets="lightning__RecordPage">
-        <objects>
-            <object>Case</object>
-        </objects>
-        <property name="layoutMode" type="Boolean" label="Layout mode (hide navigation, load/save safety risks for record)" default="false"/>
-    </targetConfig>
-    <targetConfig targets="lightning__RecordAction">
-        <objects>
-            <object>Case</object>
-        </objects>
+        <targetConfig targets="lightning__RecordPage">
+            <objects>
+                <object>Case</object>
+            </objects>
+            <property name="layoutMode" type="Boolean" label="Layout mode (hide navigation, load/save safety risks for record)" default="false"/>
+            <property name="layoutContext" type="String" label="Layout context" datasource="auto,case,relatedCase" default="auto"/>
+        </targetConfig>
+        <targetConfig targets="lightning__RecordAction">
+            <objects>
+                <object>Case</object>
+            </objects>
     </targetConfig>
     <targetConfig targets="lightning__AppPage, lightning__HomePage">
         <property name="layoutMode" type="Boolean" label="Layout mode (hide navigation, load/save safety risks for record)" default="false"/>

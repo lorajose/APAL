@@ -15,6 +15,7 @@ export default class GpCaseStepScreeners extends LightningElement {
     @api recordId;
     @api layoutMode = false;
     @api caseType;
+    _layoutContext = 'auto'; // auto | case | relatedcase
 
     @track screenerMode = 'grid';
     @track screeners = [];
@@ -53,6 +54,42 @@ export default class GpCaseStepScreeners extends LightningElement {
         return this.screeners.length;
     }
 
+    get screenersCountDisplay() {
+        return this.screenersCount > 10 ? '10+' : this.screenersCount;
+    }
+
+    @api
+    get layoutContext() {
+        return this._layoutContext;
+    }
+
+    set layoutContext(value) {
+        this._layoutContext = (value || 'auto').toLowerCase();
+    }
+
+    get effectiveLayoutContext() {
+        if (this._layoutContext && this._layoutContext !== 'auto') {
+            return this._layoutContext;
+        }
+        if (this.isStandaloneLayout && !this.caseId && this.recordId) {
+            return 'relatedcase';
+        }
+        return 'case';
+    }
+
+    get headerTitle() {
+        switch (this.effectiveLayoutContext) {
+        case 'relatedcase':
+            return `Screeners for Parent Case (${this.screenersCount})`;
+        default:
+            return `Screeners (${this.screenersCountDisplay})`;
+        }
+    }
+
+    get headerIconName() {
+        return 'utility:priority';
+    }
+
     get effectiveCaseId() {
         return this.caseId || this.recordId || null;
     }
@@ -62,7 +99,30 @@ export default class GpCaseStepScreeners extends LightningElement {
     }
 
     get showNavigation() {
-        return !this.isStandaloneLayout;
+        return !this.isStandaloneLayout && !this.isWizardView;
+    }
+
+    get readOnlyNotes() {
+        return this.isStandaloneLayout;
+    }
+
+    notePreview(value) {
+        if (!value) {
+            return '';
+        }
+        const str = value.toString();
+        return str.length > 255 ? `${str.slice(0, 255)}…` : str;
+    }
+
+    buildPatientScreenerLink(recordId) {
+        if (!recordId || typeof recordId !== 'string') {
+            return null;
+        }
+        const trimmed = recordId.trim();
+        if (trimmed.length === 15 || trimmed.length === 18) {
+            return `/lightning/r/Patient_Screener__c/${trimmed}/view`;
+        }
+        return null;
     }
 
     get wireCaseId() {
@@ -93,6 +153,10 @@ export default class GpCaseStepScreeners extends LightningElement {
         return this.screenerMode === 'wizard';
     }
 
+    get isRelatedCase() {
+        return this.effectiveLayoutContext === 'relatedcase';
+    }
+
     get hasScreeners() {
         return this.screeners.length > 0;
     }
@@ -110,9 +174,15 @@ export default class GpCaseStepScreeners extends LightningElement {
         return this.screeners
             .map(item => ({
                 ...item,
-                meta: SCREENER_INDEX[item.id] || {},
+                meta: SCREENER_INDEX[item.id] || {
+                    name: item.catalogName || item.meta?.name || item.id,
+                    type: item.catalogType || item.meta?.type || ''
+                },
+                recordName: item.recordName || item.name || null,
+                recordLink: this.buildPatientScreenerLink(item.recordId),
                 cardClass: item.positive ? 'scr-card positive-flag' : 'scr-card',
-                showConfirm: this.confirmRemoveId === item.id
+                showConfirm: this.confirmRemoveId === item.id,
+                previewNotes: this.notePreview(item.notes)
             }))
             .filter(item => {
                 if (!term) return true;
@@ -478,6 +548,10 @@ export default class GpCaseStepScreeners extends LightningElement {
         this.dispatchEvent(new CustomEvent('dataupdated', {
             detail: payload
         }));
+        if (!this.showNavigation && !this.isSaving) {
+            // Auto-save when embedded standalone in a page layout
+            this.handleStandaloneSave();
+        }
     }
 
     setScreenerMode(mode) {

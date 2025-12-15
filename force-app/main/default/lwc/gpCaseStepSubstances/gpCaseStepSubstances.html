@@ -3,53 +3,57 @@
         <div class="section-header">
             <div class="section-heading">
                 <template if:true={isGridView}>
-                    <h2>Substances ({substancesCount})</h2>
+                    <h2>
+                        <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
+                        {headerTitle}
+                    </h2>
                 </template>
                 <template if:true={isWizardView}>
                     <div class="wizard-heading">
                         <h3>Substances — Guided Wizard</h3>
-                        <p class="wizard-subcopy">Pick substances, capture context, review, save.</p>
+                      <!--  <p class="wizard-subcopy">Pick substances, capture context, review, save.</p>
                         <div class="wizard-inline-progress">
                             <span class={wizardInlineDotPick}></span>
                             <span class={wizardInlineDotDetails}></span>
                             <span class={wizardInlineDotReview}></span>
                             <span class="wizard-inline-label">Pick → Details → Review</span>
-                        </div>
+                        </div> -->
                     </div>
                 </template>
             </div>
             <template if:true={isWizardView}>
-                <button class="text-button" onclick={cancelWizard}>Back to Grid</button>
+                <button class="ghost-button" onclick={cancelWizard}>Cancel</button>
             </template>
         </div>
 
         <template if:true={isGridView}>
-            <section class="card grid-controls">
-                <div class="grid-header-row">
-                    <div class="control-group">
-                        <label class="input-label" for="grid-filter">Filter by</label>
-                        <select id="grid-filter" class="text-input" onchange={handleFilterChange}>
-                            <template for:each={filterOptionsDecorated} for:item="option">
-                                <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
-                            </template>
-                        </select>
-                    </div>
-                    <div class="control-group">
-                        <label class="input-label" for="grid-search">Search</label>
-                        <input id="grid-search" class="text-input" type="search" placeholder="Filter by name..." value={searchValue} oninput={handleSearchChange} />
-                    </div>
-                    <div class="grid-actions">
+            <template if:true={hasSubstances}>
+                <section class="card grid-controls">
+                    <div class="grid-header-row">
+                        <div class="control-group">
+                            <label class="input-label" for="grid-filter">Filter by</label>
+                            <select id="grid-filter" class="text-input" onchange={handleFilterChange}>
+                                <template for:each={filterOptionsDecorated} for:item="option">
+                                    <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
+                                </template>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label class="input-label" for="grid-search">Search</label>
+                            <input id="grid-search" class="text-input" type="search" placeholder="Filter by name..." value={searchValue} oninput={handleSearchChange} />
+                        </div>
+                        <div class="grid-actions">
                         <button class="ghost-button" type="button" onclick={toggleShowNotes}>
                             <template if:true={showAllNotes}>Hide notes</template>
-                            <template if:false={showAllNotes}>Show all notes</template>
+                            <template if:false={showAllNotes}>Show notes</template>
                         </button>
-                        <template if:true={hasSubstances}>
-                            <button class="ghost-button" type="button" onclick={handleEditSubstancesWizard}>Edit via Wizard</button>
-                        </template>
-                        <button class="primary-button" type="button" onclick={handleAddSubstances}>Add Substances</button>
+                            <template if:true={showAddButton}>
+                                <button class="primary-button" type="button" onclick={handleAddSubstances}>Add Substances</button>
+                            </template>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </template>
             <template if:true={hasSubstances}>
                 <div class="sub-grid">
                     <template for:each={filteredSubstances} for:item="sub">
@@ -57,7 +61,17 @@
                             <header class="sub-card-header">
                                 <div>
                                     <h3>{sub.meta.name}</h3>
-                                    <p>{sub.meta.category}</p>
+                                    <span class="sub-category-pill">{sub.meta.category}</span>
+                                    <template if:true={showSubstanceName}>
+                                        <p class="sub-name">Substance Id:
+                                            <template if:true={sub.recordLink}>
+                                                <a href={sub.recordLink} target="_blank">{sub.recordName}</a>
+                                            </template>
+                                            <template if:false={sub.recordLink}>
+                                                {sub.recordName}
+                                            </template>
+                                        </p>
+                                    </template>
                                 </div>
                             </header>
                             <div class="pill-row">
@@ -75,14 +89,13 @@
                             <template if:true={showAllNotes}>
                                 <div class="field field-full">
                                     <label class="input-label">Notes</label>
-                                    <textarea class="textarea" data-id={sub.id} data-field="notes" oninput={handleCardNoteChange}>{sub.notes}</textarea>
+                                    <textarea class="textarea" data-id={sub.id} data-field="notes" oninput={handleCardNoteChange} disabled={readOnlyNotes}>{sub.notes}</textarea>
                                 </div>
                             </template>
                             <template if:false={showAllNotes}>
                                 <p class="sub-notes">
-                                    Notes:
                                     <template if:true={sub.notes}>
-                                        {sub.notes}
+                                        {sub.previewNotes}
                                     </template>
                                     <template if:false={sub.notes}>
                                         —
@@ -90,7 +103,9 @@
                                 </p>
                             </template>
                             <div class="card-actions">
-                                <button class="pill-button" data-id={sub.id} onclick={handleEditSubstance}>Edit</button>
+                                <template if:true={showNavigation}>
+                                    <button class="pill-button" data-id={sub.id} onclick={handleEditSubstance}>Edit</button>
+                                </template>
                                 <button class="pill-button danger" data-id={sub.id} onclick={handleRemoveSubstance}>Remove</button>
                             </div>
                             <template if:true={sub.showConfirm}>
@@ -112,7 +127,7 @@
                         <p class="empty-title">Add substances</p>
                         <p class="empty-subtitle">Opens the guided wizard</p>
                     </div>
-                    <button class="primary-button" onclick={handleAddSubstances}>Start</button>
+                    <button class="primary-button" onclick={handleAddSubstances}>Add Substances</button>
                 </section>
             </template>
         </template>
@@ -267,12 +282,6 @@
             <template if:true={showNavigation}>
                 <button class="secondary" type="button" onclick={handleBack}>Back</button>
                 <button class="primary" type="button" onclick={handleNext}>Next</button>
-            </template>
-            <template if:false={showNavigation}>
-                <button class="primary" type="button" onclick={handleStandaloneSave} disabled={isSaving}>
-                    <template if:true={isSaving}>Saving…</template>
-                    <template if:false={isSaving}>Save Substances</template>
-                </button>
             </template>
         </div>
     </div>

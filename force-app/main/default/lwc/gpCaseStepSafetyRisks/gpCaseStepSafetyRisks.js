@@ -14,6 +14,7 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
     @api recordId;
     @api layoutMode = false;
     @api caseType;
+    _layoutContext = 'auto'; // auto | case | relatedcase
 
     @track safetyMode = 'grid';
     @track risks = [];
@@ -51,6 +52,42 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
         return this.risks.length;
     }
 
+    get risksCountDisplay() {
+        return this.risksCount > 10 ? '10+' : this.risksCount;
+    }
+
+    @api
+    get layoutContext() {
+        return this._layoutContext;
+    }
+
+    set layoutContext(value) {
+        this._layoutContext = (value || 'auto').toLowerCase();
+    }
+
+    get effectiveLayoutContext() {
+        if (this._layoutContext && this._layoutContext !== 'auto') {
+            return this._layoutContext;
+        }
+        if (this.isStandaloneLayout && !this.caseId && this.recordId) {
+            return 'relatedcase';
+        }
+        return 'case';
+    }
+
+    get headerTitle() {
+        switch (this.effectiveLayoutContext) {
+        case 'relatedcase':
+            return `Patient Safety Risks for Parent Case (${this.risksCount})`;
+        default:
+            return `Safety Risks (${this.risksCountDisplay})`;
+        }
+    }
+
+    get headerIconName() {
+        return 'utility:priority';
+    }
+
     get effectiveCaseId() {
         return this.caseId || this.recordId || null;
     }
@@ -60,7 +97,34 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
     }
 
     get showNavigation() {
-        return !this.isStandaloneLayout;
+        return !this.isStandaloneLayout && !this.isWizardView;
+    }
+
+    get showAddButton() {
+        return this.isGridView && !this.isRelatedCase;
+    }
+
+    get readOnlyNotes() {
+        return this.isStandaloneLayout;
+    }
+
+    notePreview(value) {
+        if (!value) {
+            return '';
+        }
+        const str = value.toString();
+        return str.length > 255 ? `${str.slice(0, 255)}…` : str;
+    }
+
+    buildPatientSafetyRiskLink(recordId) {
+        if (!recordId || typeof recordId !== 'string') {
+            return null;
+        }
+        const trimmed = recordId.trim();
+        if (trimmed.length === 15 || trimmed.length === 18) {
+            return `/lightning/r/Patient_Safety_Risk__c/${trimmed}/view`;
+        }
+        return null;
     }
 
     get wireCaseId() {
@@ -91,6 +155,10 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
         return this.safetyMode === 'wizard';
     }
 
+    get isRelatedCase() {
+        return this.effectiveLayoutContext === 'relatedcase';
+    }
+
     get hasRisks() {
         return this.risks.length > 0;
     }
@@ -108,8 +176,11 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
         return this.risks
             .map(item => ({
                 ...item,
-                meta: RISK_INDEX[item.id] || {},
-                showConfirm: this.confirmRemoveId === item.id
+                meta: RISK_INDEX[item.id] || { name: item.catalogName || item.id, category: item.catalogCategory || '' },
+                recordName: item.recordName || item.name || null,
+                recordLink: this.buildPatientSafetyRiskLink(item.recordId),
+                showConfirm: this.confirmRemoveId === item.id,
+                previewNotes: this.notePreview(item.notes)
             }))
             .filter(item => {
                 if (!term) return true;
@@ -235,12 +306,6 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
     }
 
     get wizardNextDisabled() {
-        if (this.wizardStep === 0) {
-            return this.wizardSelection.length === 0;
-        }
-        if (this.wizardStep === 1) {
-            return this.wizardDraft.length === 0;
-        }
         return false;
     }
 
@@ -327,13 +392,15 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
                 meta: RISK_INDEX[id],
                 recent: false,
                 historical: false,
-                notes: ''
+                notes: '',
+                flagError: false
             }));
             this.wizardStep = 1;
             return;
         }
         if (this.wizardStep === 1) {
-            if (this.wizardDraft.length === 0) return;
+            // No required validation; allow moving on even with empty selection/flags.
+            this.wizardDraft = [...this.wizardDraft];
             this.wizardStep = 2;
             return;
         }
@@ -445,6 +512,10 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
         this.dispatchEvent(new CustomEvent('dataupdated', {
             detail: payload
         }));
+        if (!this.showNavigation && !this.isSaving) {
+            // Auto-save when used standalone in a page layout
+            this.handleStandaloneSave();
+        }
     }
 
     buildSafetyRiskPayload() {

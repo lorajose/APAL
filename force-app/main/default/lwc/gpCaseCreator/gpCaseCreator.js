@@ -116,6 +116,7 @@ export default class gpCaseCreator extends NavigationMixin(LightningElement) {
     isSaving = false;
     // Almacena los resultados de la validación de todos los pasos: { 1: { isValid, hardErrors, softWarnings }, ... }
     @track validationResults = {};
+    @track showStepErrors = {};
     /* ------------------------------------------------------------
         CENTRAL FORM STORE (15 STEPS)
     ------------------------------------------------------------ */
@@ -189,10 +190,10 @@ export default class gpCaseCreator extends NavigationMixin(LightningElement) {
         label: 'Screeners',
         value: 12
     }, {
-        label: 'Concern Review & Add',
+        label: 'Concerns',
         value: 13
     }, {
-        label: 'Safety Risks (General Psych)',
+        label: 'Safety Risks',
         value: 14
     }, {
         label: 'Review',
@@ -214,21 +215,17 @@ export default class gpCaseCreator extends NavigationMixin(LightningElement) {
     }
     // Mapea errores de validationResults a un formato amigable para el componente hijo: { fieldPath: 'Mensaje' }
     get currentStepErrors() {
-        const result = this
-            .validationResults[this
-                .currentStep];
-        if (!result || !result
-            .hardErrors)
+        if (!this.showStepErrors[this.currentStep]) {
             return {};
-        return result.hardErrors
-            .reduce((
-                acc, error) => {
-                acc[error
-                        .path] =
-                    error
-                    .message;
-                return acc;
-            }, {});
+        }
+        const result = this.validationResults[this.currentStep];
+        if (!result || !result.hardErrors) {
+            return {};
+        }
+        return result.hardErrors.reduce((acc, error) => {
+            acc[error.path] = error.message;
+            return acc;
+        }, {});
     }
     // 🔥 NUEVO GETTER PARA PERSISTENCIA DE DATOS
     get currentStepData() {
@@ -348,15 +345,15 @@ export default class gpCaseCreator extends NavigationMixin(LightningElement) {
             case 11:
                 return this.collectionModes[11] === 'wizard'
                     ? guidedCopy
-                    : 'Manage current substance list; Add more opens wizard';
+                    : 'Click Add Medications -> Add record -> Add details -> Review -> Save';
             case 12:
                 return this.collectionModes[12] === 'wizard'
                     ? guidedCopy
-                    : 'Manage existing screeners; Add more opens wizard';                                
+                    : 'Click Add Medications -> Add record -> Add details -> Review -> Save';                                
             case 13:
-                return 'Review everything captured so far and add any missing concerns.';
+                return 'Click Add Medications -> Add record -> Add details -> Review -> Save';
             case 14:
-                return 'Track high-level risks across service lines.';
+                return 'Click Add Medications -> Add record -> Add details -> Review -> Save';
             case 15:
                 return 'Final check before saving. Use the links to jump back if needed.';
             default:
@@ -484,34 +481,6 @@ get stepsFormatted() {
         // eslint-disable-next-line no-console
         console.error("🔥 FORM BASICS LOADED:", JSON.stringify(this.form.basics));
         this.logCollectionState('connected:start');
-        // Si estamos en modo edición de un Case existente, limpiar cualquier caché previo para evitar sobrescribir con otro caso
-        if (this.recordId || this.caseId) {
-            try {
-                localStorage.removeItem('gpCaseForm');
-            } catch (storageErr) {
-                // eslint-disable-next-line no-console
-                console.error('Error clearing cached form', storageErr);
-            }
-        }
-
-
-    /* ------------------------------------------------------------
-       1) Restaurar datos guardados del formulario (persistencia)
-    ------------------------------------------------------------ */
-    const saved = localStorage.getItem('gpCaseForm');
-    if (saved && !(this.recordId || this.caseId)) { // solo restaura cache si no es edición de Case existente
-        const parsed = JSON.parse(saved);
-        if (parsed.homesafety && !parsed.homeSafety) {
-            parsed.homeSafety = parsed.homesafety;
-        }
-        if (parsed.orientation && !parsed.cognition) {
-            parsed.cognition = parsed.orientation;
-        }
-        delete parsed.homesafety;
-        delete parsed.orientation;
-        this.form = parsed;
-    }
-
     /* ------------------------------------------------------------
        3) Evaluar Step 1 al recargar página (auto-activar steps)
     ------------------------------------------------------------ */
@@ -629,7 +598,26 @@ get stepsFormatted() {
                     console.error('loadFullCaseData log error', logErr);
                 }
                 this.form = this.normalizeServerForm(serverData);
-                localStorage.setItem('gpCaseForm', JSON.stringify(this.form));
+                // Seed Top Symptoms into concerns on initial load if present
+                if (Array.isArray(this.form?.presenting?.topSymptomsDraft)) {
+                    this.syncTopSymptomsToConcerns(this.form.presenting.topSymptomsDraft);
+                }
+                // Seed Prior Diagnoses into concerns on initial load if present
+                if (Array.isArray(this.form?.priorDx?.priorDiagnosesDraft)) {
+                    this.syncPriorDxToConcerns(this.form.priorDx.priorDiagnosesDraft);
+                }
+                // Seed Psychosis/Mania/Red Flags into concerns on initial load if present
+                if (this.form?.psychosisMania) {
+                    this.syncPsychosisManiaToConcerns(this.form.psychosisMania);
+                }
+                // Seed Family History into concerns on initial load if present
+                if (Array.isArray(this.form?.familyTrauma?.familyHistoryDraft)) {
+                    this.syncFamilyHistoryToConcerns(this.form.familyTrauma.familyHistoryDraft);
+                }
+                // Seed Psychological Stressors into safety risks on initial load if present
+                if (Array.isArray(this.form?.homeSafety?.psychosocialStressorsDraft)) {
+                    this.syncStressorsToSafetyRisks(this.form.homeSafety.psychosocialStressorsDraft);
+                }
                 this.formLoadedFromServer = true;
                 this.runFullValidation(true);
                 return true;
@@ -670,9 +658,67 @@ async handleDataUpdated(event) {
     // eslint-disable-next-line no-console
     console.error("🔥 FORM AFTER BASICS:", JSON.stringify(this.form.basics));
 
+    // Seed Top Symptoms → Concerns (Step 2)
+    if (this.currentStep === 2 && Array.isArray(data.topSymptomsDraft)) {
+        const seeded = this.syncTopSymptomsToConcerns(data.topSymptomsDraft);
+        if (seeded && this.caseId) {
+            try {
+                await this.persistRelatedCollections(13);
+            } catch (seedErr) {
+                // eslint-disable-next-line no-console
+                console.error('Error persisting seeded concerns', seedErr);
+            }
+        }
+    }
+    // Seed Prior Diagnoses → Concerns (Step 3)
+    if (this.currentStep === 3 && Array.isArray(data.priorDiagnosesDraft)) {
+        const seededPrior = this.syncPriorDxToConcerns(data.priorDiagnosesDraft);
+        if (seededPrior && this.caseId) {
+            try {
+                await this.persistRelatedCollections(13);
+            } catch (seedErr) {
+                // eslint-disable-next-line no-console
+                console.error('Error persisting seeded prior dx concerns', seedErr);
+            }
+        }
+    }
+    // Seed Psychosis/Mania/Red Flags → Concerns (Step 6)
+    if (this.currentStep === 6 && data) {
+        const seededPsychosis = this.syncPsychosisManiaToConcerns(data);
+        if (seededPsychosis && this.caseId) {
+            try {
+                await this.persistRelatedCollections(13);
+            } catch (seedErr) {
+                // eslint-disable-next-line no-console
+                console.error('Error persisting seeded psychosis/mania concerns', seedErr);
+            }
+        }
+    }
+    // Seed Family History → Concerns (Step 7)
+    if (this.currentStep === 7 && Array.isArray(data.familyHistoryDraft)) {
+        const seededFamily = this.syncFamilyHistoryToConcerns(data.familyHistoryDraft);
+        if (seededFamily && this.caseId) {
+            try {
+                await this.persistRelatedCollections(13);
+            } catch (seedErr) {
+                // eslint-disable-next-line no-console
+                console.error('Error persisting seeded family history concerns', seedErr);
+            }
+        }
+    }
+    // Seed Psychological Stressors → Safety Risks (Step 8)
+    if (this.currentStep === 8 && Array.isArray(data.psychosocialStressorsDraft)) {
+        const seededStressors = this.syncStressorsToSafetyRisks(data.psychosocialStressorsDraft);
+        if (seededStressors && this.caseId) {
+            try {
+                await this.persistRelatedCollections(14);
+            } catch (seedErr) {
+                // eslint-disable-next-line no-console
+                console.error('Error persisting seeded safety risks', seedErr);
+            }
+        }
+    }
 
-    // Guardar todo en localStorage (persistencia verdadera)
-    localStorage.setItem('gpCaseForm', JSON.stringify(this.form));
 
     // Validar el step actual
     const result = validateStep(this.currentStep, this.form);
@@ -868,6 +914,7 @@ async handleDataUpdated(event) {
                         currentStep
                     ] =
                     'in-progress';
+                this.showStepErrors = { ...this.showStepErrors, [currentStep]: true };
                 // Hard validation fails: Block navigation and focus error
                 this.toast('Error',
                     'Review the errors in the form to proceed.',
@@ -1110,6 +1157,229 @@ async handleDataUpdated(event) {
             this.form[key] = next;
         }
     }
+
+    // Sync Top Symptoms from Step 2 into Concerns (category: Top symptoms)
+    syncTopSymptomsToConcerns(topSymptomsDraft = []) {
+        const existing = Array.isArray(this.form.concerns) ? this.form.concerns : [];
+        const nonSeeded = existing.filter(item => item.category !== 'Top symptoms' || item.source !== 'presenting');
+
+        const newTop = (topSymptomsDraft || [])
+            .filter(item => item && item.value)
+            .map(item => {
+                const label = item.label || item.value;
+                return {
+                    id: item.value || this.slugify(label),
+                    label,
+                    category: 'Top symptoms',
+                    notes: item.note || '',
+                    source: 'presenting'
+                };
+            });
+
+        // Deduplicate by label (case-insensitive)
+        const byLabel = new Map();
+        newTop.forEach(entry => {
+            const key = (entry.label || '').toLowerCase();
+            if (!key) return;
+            if (!byLabel.has(key)) {
+                byLabel.set(key, entry);
+            } else {
+                const existingEntry = byLabel.get(key);
+                if (!existingEntry.notes && entry.notes) {
+                    existingEntry.notes = entry.notes;
+                }
+                byLabel.set(key, existingEntry);
+            }
+        });
+
+        const merged = [...nonSeeded, ...byLabel.values()];
+        const changed = JSON.stringify(merged) !== JSON.stringify(existing);
+        if (changed) {
+            this.form.concerns = merged;
+        }
+        return changed;
+    }
+    // Sync Psychological Stressors (Step 8) into Safety Risks (category: Psychological stressors)
+    syncStressorsToSafetyRisks(stressorsDraft = []) {
+        const existing = Array.isArray(this.form.safetyRisks) ? this.form.safetyRisks : [];
+        const nonSeeded = existing.filter(item => item.catalogCategory !== 'Psychological stressors' || item.source !== 'stressors');
+
+        const mapped = (stressorsDraft || [])
+            .filter(item => item && item.value)
+            .map(item => {
+                const label = item.label || item.value;
+                const catalogId = this.lookupSafetyRiskId(label);
+                return {
+                    id: catalogId || item.value || this.slugify(label),
+                    catalogName: label,
+                    catalogCategory: 'Psychological stressors',
+                    recent: item.recent === undefined ? null : !!item.recent,
+                    historical: item.historical === undefined ? null : !!item.historical,
+                    notes: item.note || '',
+                    source: 'stressors'
+                };
+            });
+
+        // Deduplicate by label (case-insensitive)
+        const byLabel = new Map();
+        mapped.forEach(entry => {
+            const key = (entry.catalogName || '').toLowerCase();
+            if (!key) return;
+            const existingEntry = byLabel.get(key);
+            if (!existingEntry) {
+                byLabel.set(key, entry);
+            } else {
+                // merge flags/notes if needed
+                byLabel.set(key, {
+                    ...existingEntry,
+                    recent: entry.recent ?? existingEntry.recent,
+                    historical: entry.historical ?? existingEntry.historical,
+                    notes: entry.notes || existingEntry.notes
+                });
+            }
+        });
+
+        const merged = [...nonSeeded, ...byLabel.values()];
+        const changed = JSON.stringify(merged) !== JSON.stringify(existing);
+        if (changed) {
+            this.form.safetyRisks = merged;
+        }
+        return changed;
+    }
+    // Sync Prior Diagnoses from Step 3 into Concerns (category: Prior diagnosis)
+    syncPriorDxToConcerns(priorDiagnosesDraft = []) {
+        const existing = Array.isArray(this.form.concerns) ? this.form.concerns : [];
+        const nonSeeded = existing.filter(item => item.category !== 'Prior diagnosis' || item.source !== 'priorDx');
+
+        const mapped = (priorDiagnosesDraft || [])
+            .filter(item => item && item.value)
+            .map(item => {
+                const label = item.label || item.value;
+                return {
+                    id: item.value || this.slugify(label),
+                    label,
+                    category: 'Prior diagnosis',
+                    notes: item.note || '',
+                    source: 'priorDx'
+                };
+            });
+
+        const byLabel = new Map();
+        mapped.forEach(entry => {
+            const key = (entry.label || '').toLowerCase();
+            if (!key) return;
+            if (!byLabel.has(key)) {
+                byLabel.set(key, entry);
+            } else {
+                const existingEntry = byLabel.get(key);
+                if (!existingEntry.notes && entry.notes) {
+                    existingEntry.notes = entry.notes;
+                }
+                byLabel.set(key, existingEntry);
+            }
+        });
+
+        const merged = [...nonSeeded, ...byLabel.values()];
+        const changed = JSON.stringify(merged) !== JSON.stringify(existing);
+        if (changed) {
+            this.form.concerns = merged;
+        }
+        return changed;
+    }
+    // Sync Psychosis/Mania/Medical Red Flags (Step 6) into Concerns with shared notes
+    syncPsychosisManiaToConcerns(data = {}) {
+        const existing = Array.isArray(this.form.concerns) ? this.form.concerns : [];
+        const isSeededItem = (item) => {
+            const seededCategories = ['Psychosis symptoms', 'Mania / Hypomania symptoms', 'Medical red flags'];
+            return seededCategories.includes(item.category) && item.source === 'psychosisMania';
+        };
+        const nonSeeded = existing.filter(item => !isSeededItem(item));
+
+        const psychosisList = Array.isArray(data.psychosisSymptomsDraft) ? data.psychosisSymptomsDraft : [];
+        const maniaList = Array.isArray(data.maniaSymptomsDraft) ? data.maniaSymptomsDraft : [];
+        const redFlagList = Array.isArray(data.medicalRedFlagsDraft) ? data.medicalRedFlagsDraft : [];
+
+        const sharedPsychosisNote = data.Psychosis_Notes__c || '';
+        const sharedRedFlagNote = data.Red_Flag_Notes__c || data.Medical_Notes__c || '';
+
+        const buildEntries = (list, category, note) => {
+            return (list || [])
+                .filter(val => !!val)
+                .map(val => {
+                    const label = val;
+                    return {
+                        id: val || this.slugify(label),
+                        label,
+                        category,
+                        notes: note || '',
+                        source: 'psychosisMania'
+                    };
+                });
+        };
+
+        const psychosisEntries = buildEntries(psychosisList, 'Psychosis symptoms', sharedPsychosisNote);
+        const maniaEntries = buildEntries(maniaList, 'Mania / Hypomania symptoms', sharedPsychosisNote);
+        const redFlagEntries = buildEntries(redFlagList, 'Medical red flags', sharedRedFlagNote);
+
+        // Deduplicate by category + label (case-insensitive)
+        const byKey = new Map();
+        [...psychosisEntries, ...maniaEntries, ...redFlagEntries].forEach(entry => {
+            const key = `${entry.category.toLowerCase()}::${(entry.label || '').toLowerCase()}`;
+            if (!key) return;
+            const existingEntry = byKey.get(key);
+            if (!existingEntry) {
+                byKey.set(key, entry);
+            } else if (!existingEntry.notes && entry.notes) {
+                byKey.set(key, { ...existingEntry, notes: entry.notes });
+            }
+        });
+
+        const merged = [...nonSeeded, ...byKey.values()];
+        const changed = JSON.stringify(merged) !== JSON.stringify(existing);
+        if (changed) {
+            this.form.concerns = merged;
+        }
+        return changed;
+    }
+    // Sync Family History (Step 7) into Concerns (category: Family history)
+    syncFamilyHistoryToConcerns(familyHistoryDraft = []) {
+        const existing = Array.isArray(this.form.concerns) ? this.form.concerns : [];
+        const nonSeeded = existing.filter(item => item.category !== 'Family history' || item.source !== 'familyHistory');
+
+        const mapped = (familyHistoryDraft || [])
+            .filter(item => item && item.value)
+            .map(item => {
+                const label = item.label || item.value;
+                return {
+                    id: item.value || this.slugify(label),
+                    label,
+                    category: 'Family history',
+                    notes: item.note || '',
+                    source: 'familyHistory'
+                };
+            });
+
+        const byLabel = new Map();
+        mapped.forEach(entry => {
+            const key = (entry.label || '').toLowerCase();
+            if (!key) return;
+            if (!byLabel.has(key)) {
+                byLabel.set(key, entry);
+            } else {
+                const existingEntry = byLabel.get(key);
+                if (!existingEntry.notes && entry.notes) {
+                    byLabel.set(key, { ...existingEntry, notes: entry.notes });
+                }
+            }
+        });
+
+        const merged = [...nonSeeded, ...byLabel.values()];
+        const changed = JSON.stringify(merged) !== JSON.stringify(existing);
+        if (changed) {
+            this.form.concerns = merged;
+        }
+        return changed;
+    }
     // NOTA: Se ha corregido el mapeo para que concuerde con la definición de steps.
     getStepFormKey(step) {
         return {
@@ -1214,7 +1484,8 @@ async handleDataUpdated(event) {
                 return {
                     label,
                     category: item.category || '',
-                    notes: item.notes || null
+                    notes: item.notes || null,
+                    source: this.mapConcernSeedSource(item)
                 };
             })
             .filter(Boolean);
@@ -1235,7 +1506,8 @@ async handleDataUpdated(event) {
                     catalogCategory: risk.catalogCategory || '',
                     recent: risk.recent === undefined ? null : risk.recent,
                     historical: risk.historical === undefined ? null : risk.historical,
-                    notes: risk.notes || null
+                    notes: risk.notes || null,
+                    source: this.mapRiskSeedSource(risk)
                 };
             })
             .filter(Boolean);
@@ -1404,7 +1676,8 @@ async handleDataUpdated(event) {
             id: derivedId || entry.id || label || null,
             label,
             category: entry.category || '',
-            notes: entry.notes || ''
+            notes: entry.notes || '',
+            source: entry.source || entry.Seed_Source__c || 'Manual'
         };
     }
 
@@ -1418,7 +1691,8 @@ async handleDataUpdated(event) {
             catalogCategory: entry.catalogCategory || meta.category || '',
             recent: entry.recent === undefined ? null : entry.recent,
             historical: entry.historical === undefined ? null : entry.historical,
-            notes: entry.notes || ''
+            notes: entry.notes || '',
+            source: entry.source || entry.Seed_Source__c || 'Manual'
         };
     }
 
@@ -1446,6 +1720,64 @@ async handleDataUpdated(event) {
         return index[key] || null;
     }
 
+    mapConcernSeedSource(item = {}) {
+        const src = (item.source || '').trim();
+        if (src) {
+            switch (src) {
+                case 'presenting':
+                case 'Step2_TopSymptoms':
+                    return 'Step2_TopSymptoms';
+                case 'priorDx':
+                case 'Step3_PriorDiagnosis':
+                    return 'Step3_PriorDiagnosis';
+                case 'psychosisMania':
+                case 'Step6_PsychosisMania':
+                    return 'Step6_PsychosisMania';
+                case 'familyHistory':
+                case 'Step7_FamilyHistory':
+                    return 'Step7_FamilyHistory';
+                case 'stressors':
+                case 'Step8_PsychologicalStressors':
+                    return 'Step8_PsychologicalStressors';
+                default:
+                    if (src.startsWith('Step')) return src;
+                    break;
+            }
+        }
+        const category = (item.category || '').toLowerCase();
+        if (category.includes('psychosis') || category.includes('mania')) {
+            return 'Step6_PsychosisMania';
+        }
+        if (category.includes('medical red flag')) {
+            return 'Step6_MedicalRedFlags';
+        }
+        if (category.includes('family history')) {
+            return 'Step7_FamilyHistory';
+        }
+        if (category.includes('top symptoms')) {
+            return 'Step2_TopSymptoms';
+        }
+        if (category.includes('prior diagnosis')) {
+            return 'Step3_PriorDiagnosis';
+        }
+        return 'Manual';
+    }
+
+    mapRiskSeedSource(item = {}) {
+        const src = (item.source || '').trim();
+        if (src) {
+            if (src === 'stressors' || src === 'Step8_PsychologicalStressors') {
+                return 'Step8_PsychologicalStressors';
+            }
+            if (src.startsWith('Step')) return src;
+        }
+        const category = (item.catalogCategory || '').toLowerCase();
+        if (category.includes('psychological')) {
+            return 'Step8_PsychologicalStressors';
+        }
+        return 'Manual';
+    }
+
     slugify(value = '') {
         return value
             .toString()
@@ -1469,7 +1801,6 @@ async handleDataUpdated(event) {
         this.inlineMessage = null;
         this.reviewSummaryReady = false;
         this.isSaving = false;
-        localStorage.removeItem('gpCaseForm');
         this.stepsReady = true;
         this.formLoadedFromServer = false;
         this.initializingCaseContext = false;

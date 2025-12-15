@@ -36,6 +36,7 @@ export default class GpCaseStepSubstances extends LightningElement {
     @api recordId;
     @api layoutMode = false;
     @api caseType;
+    _layoutContext = 'auto'; // auto | case | relatedcase
 
     @track subMode = 'grid';
     @track substances = [];
@@ -74,6 +75,68 @@ export default class GpCaseStepSubstances extends LightningElement {
         return this.substances.length;
     }
 
+    get substancesCountDisplay() {
+        return this.substancesCount > 10 ? '10+' : this.substancesCount;
+    }
+
+    @api
+    get layoutContext() {
+        return this._layoutContext;
+    }
+
+    set layoutContext(value) {
+        this._layoutContext = (value || 'auto').toLowerCase();
+    }
+
+    get effectiveLayoutContext() {
+        if (this._layoutContext && this._layoutContext !== 'auto') {
+            return this._layoutContext;
+        }
+        if (this.isStandaloneLayout && !this.caseId && this.recordId) {
+            return 'relatedcase';
+        }
+        return 'case';
+    }
+
+    get headerTitle() {
+        switch (this.effectiveLayoutContext) {
+        case 'relatedcase':
+            return `Substances for Parent Case (${this.substancesCount})`;
+        default:
+            return `Substances (${this.substancesCountDisplay})`;
+        }
+    }
+
+    get headerIconName() {
+        return 'utility:priority';
+    }
+
+    get showSubstanceName() {
+        return this.effectiveLayoutContext === 'relatedcase';
+    }
+
+    buildCatalogLink(catalogId) {
+        if (!catalogId || typeof catalogId !== 'string') {
+            return null;
+        }
+        const trimmed = catalogId.trim();
+        if (trimmed.length === 15 || trimmed.length === 18) {
+            return `/lightning/r/Substance_List__c/${trimmed}/view`;
+        }
+        return null;
+    }
+
+    buildPatientSubstanceLink(recordId) {
+        if (!recordId || typeof recordId !== 'string') {
+            return null;
+        }
+        const trimmed = recordId.trim();
+        if (trimmed.length === 15 || trimmed.length === 18) {
+            return `/lightning/r/Patient_Substance__c/${trimmed}/view`;
+        }
+        return null;
+    }
+
     get effectiveCaseId() {
         return this.caseId || this.recordId || null;
     }
@@ -83,7 +146,23 @@ export default class GpCaseStepSubstances extends LightningElement {
     }
 
     get showNavigation() {
-        return !this.isStandaloneLayout;
+        return !this.isStandaloneLayout && !this.isWizardView;
+    }
+
+    get showAddButton() {
+        return this.isGridView && this.effectiveLayoutContext !== 'relatedcase';
+    }
+
+    get readOnlyNotes() {
+        return this.isStandaloneLayout;
+    }
+
+    notePreview(value) {
+        if (!value) {
+            return '';
+        }
+        const str = value.toString();
+        return str.length > 255 ? `${str.slice(0, 255)}…` : str;
     }
 
     /* VIEW STATES */
@@ -104,9 +183,15 @@ export default class GpCaseStepSubstances extends LightningElement {
         return this.substances
             .map(item => ({
                 ...item,
-                meta: SUBSTANCE_INDEX[item.id] || {},
+                meta: SUBSTANCE_INDEX[item.id] || {
+                    name: item.catalogName || item.meta?.name || item.id,
+                    category: item.catalogCategory || item.meta?.category || ''
+                },
+                recordName: item.recordName || item.name || null,
+                recordLink: this.buildPatientSubstanceLink(item.recordId),
                 cardClass: item.current ? 'sub-card current' : 'sub-card',
-                showConfirm: this.confirmRemoveId === item.id
+                showConfirm: this.confirmRemoveId === item.id,
+                previewNotes: this.notePreview(item.notes)
             }))
             .filter(item => {
                 if (!term) return true;
@@ -491,6 +576,10 @@ export default class GpCaseStepSubstances extends LightningElement {
         this.dispatchEvent(new CustomEvent('dataupdated', {
             detail: payload
         }));
+        if (!this.showNavigation && !this.isSaving) {
+            // Auto-save when used standalone in a page layout
+            this.handleStandaloneSave();
+        }
     }
 
     setSubMode(mode) {
