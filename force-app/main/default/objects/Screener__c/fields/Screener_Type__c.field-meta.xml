@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Screener_Type__c</fullName>
+    <label>Screener Type</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Anxiety</fullName>
+                <default>false</default>
+                <label>Anxiety</label>
+            </value>
+            <value>
+                <fullName>Depression</fullName>
+                <default>false</default>
+                <label>Depression</label>
+            </value>
+            <value>
+                <fullName>Eating Disorder</fullName>
+                <default>false</default>
+                <label>Eating Disorder</label>
+            </value>
+            <value>
+                <fullName>Mood Disorders</fullName>
+                <default>false</default>
+                <label>Mood Disorders</label>
+            </value>
+            <value>
+                <fullName>Psychosis</fullName>
+                <default>false</default>
+                <label>Psychosis</label>
+            </value>
+            <value>
+                <fullName>Stress</fullName>
+                <default>false</default>
+                <label>Stress</label>
+            </value>
+            <value>
+                <fullName>Substance Use</fullName>
+                <default>false</default>
+                <label>Substance Use</label>
+            </value>
+            <value>
+                <fullName>Suicide Risk</fullName>
+                <default>false</default>
+                <label>Suicide Risk</label>
+            </value>
+            <value>
+                <fullName>Trauma</fullName>
+                <default>false</default>
+                <label>Trauma</label>
+            </value>
+            <value>
+                <fullName>PTSD</fullName>
+                <default>false</default>
+                <label>PTSD</label>
+            </value>
+            <value>
+                <fullName>Psychiatric</fullName>
+                <default>false</default>
+                <label>Psychiatric</label>
+            </value>
+            <value>
+                <fullName>Cognitive Assessment</fullName>
+                <default>false</default>
+                <label>Cognitive Assessment</label>
+            </value>
+            <value>
+                <fullName>Withdrawal</fullName>
+                <default>false</default>
+                <label>Withdrawal</label>
+            </value>
+            <value>
+                <fullName>Mania Severity Scale</fullName>
+                <default>false</default>
+                <label>Mania Severity Scale</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
