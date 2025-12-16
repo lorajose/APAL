@@ -119,4 +119,17 @@
 	display: flex;
 	align-items: center;
 	gap: 0.35rem;
+	margin-bottom: 0.75rem;
+}
+
+.top-section-header .card-subtitle {
+	margin: 0.2rem 0 0.5rem;
+}
+
+.field-stack .field + .field {
+	margin-top: 0.75rem;
+}
+
+.top-section-header + .checkbox-list {
+	margin-top: 0.6rem;
 }

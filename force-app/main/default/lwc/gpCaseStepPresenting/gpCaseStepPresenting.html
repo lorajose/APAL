@@ -8,10 +8,7 @@
         <section class="card">
             <header class="card-header">
                 <div>
-                    <p class="card-title">
-                        Primary Clinical Questions
-                        <span class="required">*</span>
-                    </p>
+                    <p class="card-title">Primary Clinical Questions<span class="required">*</span></p>
                     <p class="card-subtitle">
                         Select every reason this case is landing on your desk.
                     </p>
@@ -129,7 +126,7 @@
                     </div>
                 </div>
                 <div class="selected-column">
-                    <p class="column-title">Selected (Notes only)</p>
+                    <p class="column-title">Selected</p>
                     <template if:true={hasSelectedTopSymptoms}>
                         <template for:each={selectedTopSymptoms} for:item="item">
                             <div key={item.value} class="selected-card">

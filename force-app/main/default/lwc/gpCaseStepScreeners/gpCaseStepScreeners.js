@@ -25,6 +25,7 @@ export default class GpCaseStepScreeners extends LightningElement {
     confirmRemoveId = null;
     @track isSaving = false;
     hasLoadedInitialData = false;
+    pendingSuccessMessage = null;
 
     wizardStep = 0;
     wizardMode = 'add';
@@ -295,6 +296,7 @@ export default class GpCaseStepScreeners extends LightningElement {
         const id = event.currentTarget.dataset.id;
         this.screeners = this.screeners.filter(scr => scr.id !== id);
         this.confirmRemoveId = null;
+        this.pendingSuccessMessage = 'Screener was removed.';
         this.emitDraftChange();
     }
 
@@ -534,7 +536,9 @@ export default class GpCaseStepScreeners extends LightningElement {
                 caseId: this.effectiveCaseId,
                 items: payload
             });
-            this.showToast('Success', 'Screeners saved.', 'success');
+            const message = this.pendingSuccessMessage || 'Screeners saved.';
+            this.pendingSuccessMessage = null;
+            this.showToast('Success', message, 'success');
         } catch (err) {
             const message = err?.body?.message || err?.message || 'Unexpected error saving screeners';
             this.showToast('Error', message, 'error');

@@ -22,7 +22,7 @@
                 </template>
             </div>
             <template if:true={isWizardView}>
-                <button class="ghost-button" onclick={cancelWizard}>Cancel</button>
+                <button class="ghost-button wizard-cancel" onclick={cancelWizard}>Cancel</button>
             </template>
         </div>
 
@@ -48,6 +48,9 @@
                             <template if:false={showAllNotes}>Show notes</template>
                         </button>
                             <template if:true={showAddButton}>
+                                <template if:true={hasRisks}>
+                                    <button class="ghost-button" type="button" onclick={handleEditRisksWizard}>Edit</button>
+                                </template>
                                 <button class="primary-button" type="button" onclick={handleAddRisks}>Add Safety Risks</button>
                             </template>
                         </div>
@@ -251,14 +254,14 @@
                 </template>
 
                 <div class="wizard-footer">
-                    <button class="ghost-button" onclick={wizardBack} disabled={wizardBackDisabled}>Back</button>
+                    <!-- <button class="ghost-button" onclick={wizardBack} disabled={wizardBackDisabled}>Back</button> -->
                     <div class="wizard-actions">
                         <template if:true={wizardStepIsReview}>
                             <button class="ghost-button" onclick={handleReviewEditDetails}>Edit Details</button>
                             <button class="ghost-button" onclick={handleReviewChangeSelection}>Change Selection</button>
                         </template>
                         <template if:false={wizardStepIsReview}>
-                            <button class="ghost-button" onclick={cancelWizard}>Cancel</button>
+                            <button class="ghost-button wizard-cancel" onclick={cancelWizard}>Cancel</button>
                         </template>
                         <button class="primary-button" onclick={wizardNext} disabled={wizardNextDisabled}>
                             <template if:true={wizardStepIsReview}>Save</template>

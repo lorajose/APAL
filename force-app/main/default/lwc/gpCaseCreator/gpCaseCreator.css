@@ -84,6 +84,10 @@
 	color: #ffffff !important;
 	font-weight: 700;
 }
+.step-active:hover {
+	background: #111827;
+	color: #ffffff;
+}
 
 /* ------------------------------------------------------------ */
 /* COMPLETED STEP (Hard Validated OK, No Soft Warnings - Gray)  */
