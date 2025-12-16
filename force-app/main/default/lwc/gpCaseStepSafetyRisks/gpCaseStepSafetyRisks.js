@@ -24,6 +24,7 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
     confirmRemoveId = null;
     @track isSaving = false;
     hasLoadedInitialData = false;
+    pendingSuccessMessage = null;
 
     wizardStep = 0;
     @track wizardSelection = [];
@@ -275,6 +276,7 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
         const id = event.currentTarget.dataset.id;
         this.risks = this.risks.filter(item => item.id !== id);
         this.confirmRemoveId = null;
+        this.pendingSuccessMessage = 'Safety risk was removed.';
         this.emitDraftChange();
     }
 
@@ -498,7 +500,9 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
                 caseId: this.effectiveCaseId,
                 items: payload
             });
-            this.showToast('Success', 'Safety risks saved.', 'success');
+            const message = this.pendingSuccessMessage || 'Safety risks saved.';
+            this.pendingSuccessMessage = null;
+            this.showToast('Success', message, 'success');
         } catch (err) {
             const message = err?.body?.message || err?.message || 'Unexpected error saving safety risks';
             this.showToast('Error', message, 'error');

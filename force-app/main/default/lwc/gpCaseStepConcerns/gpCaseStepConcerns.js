@@ -141,6 +141,7 @@ export default class GpCaseStepConcerns extends LightningElement {
     @track isSaving = false;
     confirmRemoveId = null;
     hasLoadedInitialData = false;
+    pendingSuccessMessage = null;
 
     wizardStep = 0;
     wizardMode = 'add';
@@ -311,6 +312,7 @@ export default class GpCaseStepConcerns extends LightningElement {
         const id = event.currentTarget.dataset.id;
         this.concerns = this.concerns.filter(item => item.id !== id);
         this.confirmRemoveId = null;
+        this.pendingSuccessMessage = 'Concern was removed.';
         this.emitDraftChange();
     }
 
@@ -589,7 +591,9 @@ export default class GpCaseStepConcerns extends LightningElement {
                 caseId: this.effectiveCaseId,
                 items: payload
             });
-            this.showToast('Success', 'Concerns saved.', 'success');
+            const message = this.pendingSuccessMessage || 'Concerns saved.';
+            this.pendingSuccessMessage = null;
+            this.showToast('Success', message, 'success');
         } catch (err) {
             const message = err?.body?.message || err?.message || 'Unexpected error saving concerns';
             this.showToast('Error', message, 'error');

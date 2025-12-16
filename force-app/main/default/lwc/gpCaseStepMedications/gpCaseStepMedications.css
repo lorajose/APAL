@@ -122,6 +122,12 @@
 	flex-wrap: wrap;
 }
 
+.grid-actions .ghost-button,
+.grid-actions .primary-button {
+	min-width: 150px;
+	justify-content: center;
+}
+
 .med-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -198,6 +204,17 @@
 	font-weight: 600;
 }
 
+.wizard-cancel {
+	background: #ffffff !important;
+	color: #111827 !important;
+	border: 1px solid #d1d5db !important;
+	box-shadow: none !important;
+}
+
+.wizard-cancel:hover {
+	background: #f9fafb !important;
+}
+
 .med-category-pill {
 	display: inline-block;
 	padding: 2px 8px;
@@ -213,6 +230,17 @@
 	font-size: 0.85rem;
 	color: #374151;
 	margin: 0;
+}
+
+.med-record {
+	margin: 0.15rem 0;
+	font-size: 0.85rem;
+	color: #374151;
+}
+
+.med-record a {
+	color: #0f2d52;
+	font-weight: 600;
 }
 
 .card-actions {
@@ -565,6 +593,8 @@
 .wizard-actions {
 	display: flex;
 	gap: 0.5rem;
+	margin-left: auto;
+	justify-content: flex-end;
 }
 
 .actions {

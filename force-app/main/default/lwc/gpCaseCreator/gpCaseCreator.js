@@ -439,8 +439,13 @@ get stepsFormatted() {
         console.warn(` -> Estado encontrado: ${status}`);
 
         // 2. Asignación de la clase CSS de estado
-        if (status === 'active') {
+        const isCurrent = s.value === this.currentStep;
+
+        if (isCurrent) {
             css += "step-active";
+        } else if (status === 'active') {
+            // Si no es el paso actual, no mantenerlo en activo; mostrar como completado
+            css += "step-completed";
         } else if (status === 'final-completed') {
             css += "step-final-completed"; // Clase Verde con Check
         } else if (status === 'completed') {

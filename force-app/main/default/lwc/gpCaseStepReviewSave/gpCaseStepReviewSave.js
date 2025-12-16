@@ -236,7 +236,7 @@ export default class GpCaseStepReviewSave extends LightningElement {
             { label: 'Protective Factors', value: this.formatValue(this.suicide.Protective_Factors__c) },
             { label: 'Access to Means', value: this.formatList(this.suicide.Access_to_Means__c) },
             { label: 'Past Attempts (#)', value: this.formatValue(this.suicide.Past_Suicide_Attempts__c) },
-            { label: 'Last Attempt Date', value: this.formatValue(this.suicide.Last_Attempt_Date__c) }
+            { label: 'Last Attempt Date', value: this.formatDate(this.suicide.Last_Attempt_Date__c) }
         ];
     }
 
@@ -289,6 +289,15 @@ export default class GpCaseStepReviewSave extends LightningElement {
     formatValue(value) {
         if (value === null || typeof value === 'undefined' || value === '') return FALLBACK;
         return value;
+    }
+
+    formatDate(value) {
+        if (!value) return FALLBACK;
+        const dt = new Date(value);
+        if (Number.isNaN(dt.getTime())) {
+            return this.formatValue(value);
+        }
+        return dt.toLocaleDateString();
     }
 
     formatList(value) {

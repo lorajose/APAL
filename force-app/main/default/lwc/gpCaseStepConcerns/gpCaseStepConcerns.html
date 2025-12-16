@@ -22,7 +22,7 @@
                 </template>
             </div>
             <template if:true={isWizardMode}>
-                <button class="ghost-button" type="button" onclick={cancelWizard}>Cancel</button>
+                <button class="ghost-button wizard-cancel" type="button" onclick={cancelWizard}>Cancel</button>
             </template>
         </div>
 
@@ -48,6 +48,9 @@
                             <template if:false={showAllNotes}>Show notes</template>
                         </button>
                             <template if:true={showAddButton}>
+                                <template if:true={hasConcerns}>
+                                    <button class="ghost-button" type="button" onclick={openWizardForEdit}>Edit</button>
+                                </template>
                                 <button class="primary-button" type="button" onclick={openWizard}>Add Concerns</button>
                             </template>
                         </div>
@@ -203,7 +206,7 @@
                 </template>
 
                 <div class="wizard-footer">
-                    <button class="ghost-button" type="button" onclick={wizardBack} disabled={wizardBackDisabled}>Back</button>
+                   <!-- <button class="ghost-button" type="button" onclick={wizardBack} disabled={wizardBackDisabled}>Back</button> -->
                     <div class="wizard-actions">
                         <template if:true={wizardStepIsReview}>
                             <button class="ghost-button" type="button" onclick={handleReviewEditDetails}>Edit Details</button>

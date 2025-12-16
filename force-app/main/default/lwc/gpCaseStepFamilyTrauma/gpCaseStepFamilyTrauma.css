@@ -65,6 +65,10 @@
 	gap: 0.35rem;
 }
 
+.family-note-label {
+	font-weight: 400;
+}
+
 .field-full {
 	width: 100%;
 }

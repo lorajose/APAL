@@ -46,6 +46,7 @@ export default class GpCaseStepSubstances extends LightningElement {
     confirmRemoveId = null;
     @track isSaving = false;
     hasLoadedInitialData = false;
+    pendingSuccessMessage = null;
 
     wizardStep = 0;
     wizardMode = 'add';
@@ -303,6 +304,7 @@ export default class GpCaseStepSubstances extends LightningElement {
         const id = event.currentTarget.dataset.id;
         this.substances = this.substances.filter(sub => sub.id !== id);
         this.confirmRemoveId = null;
+        this.pendingSuccessMessage = 'Substance was removed.';
         this.emitDraftChange();
     }
 
@@ -562,7 +564,9 @@ export default class GpCaseStepSubstances extends LightningElement {
                 caseId: this.effectiveCaseId,
                 items: payload
             });
-            this.showToast('Success', 'Substances saved.', 'success');
+            const message = this.pendingSuccessMessage || 'Substances saved.';
+            this.pendingSuccessMessage = null;
+            this.showToast('Success', message, 'success');
         } catch (err) {
             const message = err?.body?.message || err?.message || 'Unexpected error saving substances';
             this.showToast('Error', message, 'error');

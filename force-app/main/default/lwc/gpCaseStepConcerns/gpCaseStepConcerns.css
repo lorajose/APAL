@@ -126,6 +126,12 @@
 	flex-wrap: wrap;
 }
 
+.grid-actions .ghost-button,
+.grid-actions .primary-button {
+	min-width: 150px;
+	justify-content: center;
+}
+
 .concern-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -451,6 +457,8 @@
 .wizard-actions {
 	display: flex;
 	gap: 0.5rem;
+	margin-left: auto;
+	justify-content: flex-end;
 }
 
 .actions {
@@ -507,6 +515,15 @@
 .ghost-button.danger {
 	color: #b91c1c;
 	border-color: #fca5a5;
+}
+
+.wizard-cancel {
+	background: #ffffff;
+	color: #111827;
+}
+
+.wizard-cancel:hover {
+	background: #f9fafb;
 }
 
 .text-button {

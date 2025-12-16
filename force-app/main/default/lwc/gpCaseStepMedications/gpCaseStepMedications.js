@@ -60,6 +60,7 @@ export default class GpCaseStepMedications extends LightningElement {
     @api recordId;
     @api layoutMode = false;
     @api caseType;
+    _layoutContext = 'auto'; // auto | case | relatedcase
 
     @track medMode = 'grid';
     @track medications = [];
@@ -69,6 +70,7 @@ export default class GpCaseStepMedications extends LightningElement {
     confirmRemoveId = null;
     @track isSaving = false;
     hasLoadedInitialData = false;
+    pendingSuccessMessage = null;
 
     wizardStep = 0;
     @track wizardSelection = [];
@@ -402,6 +404,7 @@ export default class GpCaseStepMedications extends LightningElement {
         const id = event.currentTarget.dataset.id;
         this.medications = this.medications.filter(med => med.id !== id);
         this.confirmRemoveId = null;
+        this.pendingSuccessMessage = 'Medication was removed.';
         this.emitDraftChange();
     }
 
@@ -619,7 +622,9 @@ export default class GpCaseStepMedications extends LightningElement {
                 caseId: this.effectiveCaseId,
                 items: payload
             });
-            this.showToast('Success', 'Medications saved.', 'success');
+            const message = this.pendingSuccessMessage || 'Medications saved.';
+            this.pendingSuccessMessage = null;
+            this.showToast('Success', message, 'success');
         } catch (err) {
             const message = err?.body?.message || err?.message || 'Unexpected error saving medications';
             this.showToast('Error', message, 'error');

@@ -122,6 +122,12 @@
 	flex-wrap: wrap;
 }
 
+.grid-actions .ghost-button,
+.grid-actions .primary-button {
+	min-width: 150px;
+	justify-content: center;
+}
+
 .scr-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -185,6 +191,17 @@
 .link-pill a {
 	color: #0f2d52;
 	font-weight: 600;
+}
+
+.wizard-cancel {
+	background: #ffffff !important;
+	color: #111827 !important;
+	border: 1px solid #d1d5db !important;
+	box-shadow: none !important;
+}
+
+.wizard-cancel:hover {
+	background: #f9fafb !important;
 }
 
 .scr-notes {
@@ -481,6 +498,8 @@
 .wizard-actions {
 	display: flex;
 	gap: 0.5rem;
+	margin-left: auto;
+	justify-content: flex-end;
 }
 
 .actions {
