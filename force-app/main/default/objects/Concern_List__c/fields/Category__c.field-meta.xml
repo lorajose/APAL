@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Category__c</fullName>
+    <label>Category</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Withdrawal and Treatment</fullName>
+                <default>false</default>
+                <label>Withdrawal and Treatment</label>
+            </value>
+            <value>
+                <fullName>Substance Use and Mental Health</fullName>
+                <default>false</default>
+                <label>Substance Use and Mental Health</label>
+            </value>
+            <value>
+                <fullName>Prevention and Risk Management</fullName>
+                <default>false</default>
+                <label>Prevention and Risk Management</label>
+            </value>
+            <value>
+                <fullName>Social and Environmental Factors</fullName>
+                <default>false</default>
+                <label>Social and Environmental Factors</label>
+            </value>
+            <value>
+                <fullName>Health Complications</fullName>
+                <default>false</default>
+                <label>Health Complications</label>
+            </value>
+            <value>
+                <fullName>Support and Recovery</fullName>
+                <default>false</default>
+                <label>Support and Recovery</label>
+            </value>
+            <value>
+                <fullName>Top Symptoms</fullName>
+                <default>false</default>
+                <label>Top Symptoms</label>
+            </value>
+            <value>
+                <fullName>Prior Diagnoses</fullName>
+                <default>false</default>
+                <label>Prior Diagnoses</label>
+            </value>
+            <value>
+                <fullName>Psychosis Symptoms</fullName>
+                <default>false</default>
+                <label>Psychosis Symptoms</label>
+            </value>
+            <value>
+                <fullName>Mania/Hypomania Symptoms</fullName>
+                <default>false</default>
+                <label>Mania/Hypomania Symptoms</label>
+            </value>
+            <value>
+                <fullName>Medical Red Flags</fullName>
+                <default>false</default>
+                <label>Medical Red Flags</label>
+            </value>
+            <value>
+                <fullName>Family History</fullName>
+                <default>false</default>
+                <label>Family History</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
