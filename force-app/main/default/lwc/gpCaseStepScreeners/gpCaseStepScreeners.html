@@ -47,13 +47,11 @@
                             <template if:true={showAllNotes}>Hide notes</template>
                             <template if:false={showAllNotes}>Show notes</template>
                         </button>
-                            <template if:true={isGridView}>
-                                <template if:false={isRelatedCase}>
-                                    <template if:true={hasScreeners}>
-                                        <button class="ghost-button" type="button" onclick={handleEditScreenersWizard}>Edit</button>
-                                    </template>
-                                    <button class="primary-button" type="button" onclick={handleAddScreeners}>Add Screeners</button>
+                            <template if:true={showAddButton}>
+                                <template if:true={hasScreeners}>
+                                    <button class="ghost-button" type="button" onclick={handleEditScreenersWizard}>Edit</button>
                                 </template>
+                                <button class="primary-button" type="button" onclick={handleAddScreeners}>Add Screeners</button>
                             </template>
                         </div>
                     </div>

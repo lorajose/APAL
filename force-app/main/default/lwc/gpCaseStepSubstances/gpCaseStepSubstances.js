@@ -151,7 +151,7 @@ export default class GpCaseStepSubstances extends LightningElement {
     }
 
     get showAddButton() {
-        return this.isGridView && this.effectiveLayoutContext !== 'relatedcase';
+        return this.isGridView;
     }
 
     get readOnlyNotes() {

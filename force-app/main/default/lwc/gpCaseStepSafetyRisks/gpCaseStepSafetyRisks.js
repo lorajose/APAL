@@ -102,7 +102,7 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
     }
 
     get showAddButton() {
-        return this.isGridView && !this.isRelatedCase;
+        return this.isGridView;
     }
 
     get readOnlyNotes() {
