@@ -204,10 +204,8 @@ export default class GpCaseStepConcerns extends LightningElement {
     }
 
     get showAddButton() {
-        // Oculta Add en layout relatedCase y patient
-        return this.isListMode &&
-            this.effectiveLayoutContext !== 'relatedcase' &&
-            this.effectiveLayoutContext !== 'patient';
+        // Permite Add en relatedCase; oculto solo en patient
+        return this.isListMode && this.effectiveLayoutContext !== 'patient';
     }
 
     get concernsCount() {

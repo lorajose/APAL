@@ -7,6 +7,9 @@
                     <name>actionNames</name>
                     <valueList>
                         <valueListItems>
+                            <value>Case.Edit_via_Wizard</value>
+                        </valueListItems>
+                        <valueListItems>
                             <value>Case.CareNoteCR</value>
                             <visibilityRule>
                                 <criteria>
@@ -1163,6 +1166,20 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>layoutContext</name>
+                    <value>relatedCase</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>layoutMode</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentName>gpCaseStepSafetyRisks</componentName>
+                <identifier>c_gpCaseStepSafetyRisks</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
                     <name>columns</name>
                     <value>Facet-742278bb-21e8-4602-9915-81525dd49306</value>
                 </componentInstanceProperties>
@@ -1866,20 +1883,6 @@
                 </componentInstanceProperties>
                 <componentName>gpCaseStepScreeners</componentName>
                 <identifier>c_gpCaseStepScreeners</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>layoutContext</name>
-                    <value>relatedCase</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>layoutMode</name>
-                    <value>false</value>
-                </componentInstanceProperties>
-                <componentName>gpCaseStepSafetyRisks</componentName>
-                <identifier>c_gpCaseStepSafetyRisks</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
