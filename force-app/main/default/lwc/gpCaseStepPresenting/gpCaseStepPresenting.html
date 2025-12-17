@@ -8,7 +8,7 @@
         <section class="card">
             <header class="card-header">
                 <div>
-                    <p class="card-title">Primary Clinical Questions<span class="required">*</span></p>
+                    <p class="card-title"><span class="required">*</span>Primary Clinical Questions</p>
                     <p class="card-subtitle">
                         Select every reason this case is landing on your desk.
                     </p>
@@ -153,9 +153,9 @@
             </div>
         </section>
 
-        <div class="actions">
-            <button class="secondary" type="button" onclick={handleBack}>Back</button>
-            <button class="primary" type="button" onclick={handleNext}>Next</button>
+        <div class="slds-grid slds-grid_align-spread slds-var-m-top_large">
+            <button class="slds-button btn-back" type="button" onclick={handleBack}>Back</button>
+            <button class="slds-button btn-next" type="button" onclick={handleNext}>Next</button>
         </div>
     </div>
 </template>

@@ -10,7 +10,7 @@
                 </template>
                 <template if:true={isWizardView}>
                     <div class="wizard-heading">
-                        <h3>Screeners — Guided Wizard</h3>
+                        <h3>Screeners</h3>
                        <!-- <p class="wizard-subcopy">Compact. Step 1: choose. Step 2: enter details. Step 3: review.</p>
                         <div class="wizard-inline-progress">
                             <span class={wizardInlineDotPick}></span>
@@ -285,11 +285,11 @@
             </section>
         </template>
 
-        <div class="actions">
-            <template if:true={showNavigation}>
-                <button class="secondary" type="button" onclick={handleBack}>Back</button>
-                <button class="primary" type="button" onclick={handleNext}>Next</button>
-            </template>
-        </div>
+        <template if:true={showNavigation}>
+            <div class="slds-grid slds-grid_align-spread slds-var-m-top_large">
+                <button class="slds-button btn-back" type="button" onclick={handleBack}>Back</button>
+                <button class="slds-button btn-next" type="button" onclick={handleNext}>Next</button>
+            </div>
+        </template>
     </div>
 </template>

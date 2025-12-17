@@ -36,6 +36,25 @@
 }
 
 .slds-form-element__label {
-    color: #111827;
+    font-size: 0.85rem;
+    color: #4b5563;
     font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.input-label {
+	font-size: 0.85rem;
+	color: #4b5563;
+	font-weight: 600;
+	display: flex;
+	align-items: center;
+	gap: 0.35rem;
+	margin-bottom: 0.25rem;
+}
+
+.required {
+	color: #dc2626;
+	font-size: 0.85rem;
 }

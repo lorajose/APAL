@@ -1931,27 +1931,6 @@
                     <name>layoutMode</name>
                     <value>false</value>
                 </componentInstanceProperties>
-                <componentName>gpCaseStepConcerns</componentName>
-                <identifier>c_gpCaseStepConcerns2</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.Case_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>General Psychiatry</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>layoutContext</name>
-                    <value>case</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>layoutMode</name>
-                    <value>false</value>
-                </componentInstanceProperties>
                 <componentName>gpCaseStepSubstances</componentName>
                 <identifier>c_gpCaseStepSubstances</identifier>
             </componentInstance>

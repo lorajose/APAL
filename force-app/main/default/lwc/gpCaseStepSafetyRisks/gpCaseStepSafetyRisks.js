@@ -181,7 +181,20 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
         return this.risks
             .map(item => ({
                 ...item,
-                meta: RISK_INDEX[item.id] || { name: item.catalogName || item.id, category: item.catalogCategory || '' },
+                meta: (() => {
+                    const base = RISK_INDEX[item.id] || {};
+                    const displayName = item.catalogName
+                        || item.meta?.name
+                        || base.name
+                        || item.recordName
+                        || item.name
+                        || item.id;
+                    const category = item.meta?.category
+                        || item.catalogCategory
+                        || base.category
+                        || '';
+                    return { ...base, name: displayName, category };
+                })(),
                 recordName: item.recordName || item.name || null,
                 recordLink: this.buildPatientSafetyRiskLink(item.recordId),
                 showConfirm: this.confirmRemoveId === item.id,

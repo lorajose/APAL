@@ -195,10 +195,23 @@ export default class GpCaseStepReviewSave extends LightningElement {
     }
 
     get safetyRisks() {
-        return (Array.isArray(this.form.safetyRisks) ? this.form.safetyRisks : []).map(item => ({
-            ...item,
-            meta: SAFETY_INDEX[item.id] || { name: item.id }
-        }));
+        return (Array.isArray(this.form.safetyRisks) ? this.form.safetyRisks : []).map(item => {
+            const catalog = SAFETY_INDEX[item.id] || {};
+            const displayName = item.catalogName
+                || item.meta?.name
+                || catalog.name
+                || item.recordName
+                || item.name
+                || item.id;
+            const category = item.meta?.category
+                || item.catalogCategory
+                || catalog.category
+                || '';
+            return {
+                ...item,
+                meta: { ...catalog, name: displayName, category }
+            };
+        });
     }
 
     get basicsSummary() {
