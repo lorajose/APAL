@@ -8,15 +8,15 @@
         <section class="card checkbox-grid">
             <label class="checkbox-field">
                 <input type="checkbox" checked={recentTrauma} data-field="Recent_Trauma__c" onchange={handleCheckboxChange} />
-                <span>Recent trauma reported?</span>
+                <span class="input-label" >Recent trauma reported?</span>
             </label>
             <label class="checkbox-field">
                 <input type="checkbox" checked={dependentSafetyConcern} data-field="Dependent_Safety_Concern__c" onchange={handleCheckboxChange} />
-                <span>Child / elder safety concern?</span>
+                <span class="input-label" >Child / elder safety concern?</span>
             </label>
             <label class="checkbox-field">
                 <input type="checkbox" checked={ipvConcern} data-field="IPV_Concern__c" onchange={handleCheckboxChange} />
-                <span>IPV concern noted?</span>
+                <span class="input-label" >IPV concern noted?</span>
             </label>
         </section>
 
@@ -83,9 +83,9 @@
             </div>
         </section>
 
-        <div class="actions">
-            <button class="secondary" type="button" onclick={handleBack}>Back</button>
-            <button class="primary" type="button" onclick={handleNext}>Next</button>
+        <div class="slds-grid slds-grid_align-spread slds-var-m-top_large">
+            <button class="slds-button btn-back" type="button" onclick={handleBack}>Back</button>
+            <button class="slds-button btn-next" type="button" onclick={handleNext}>Next</button>
         </div>
     </div>
 </template>

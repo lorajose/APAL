@@ -6,7 +6,7 @@
         </div> -->
 
         <section class="card">
-            <label class="input-label" for="ideation">Suicidal Ideation<span class="required">*</span></label>
+            <label class="input-label" for="ideation"><span class="required">*</span>Suicidal Ideation</label>
             <select
                 id="ideation"
                 class="text-input"
@@ -36,7 +36,7 @@
 
         <template if:true={showRiskDetail}>
             <section class="card">
-                <label class="input-label" for="protective-factors">Protective Factors<span class="required">*</span></label>
+                <label class="input-label" for="protective-factors"><span class="required">*</span>Protective Factors</label>
                 <textarea
                     id="protective-factors"
                     class="textarea"
@@ -64,7 +64,7 @@
                 </div>
 
                 <div class="field">
-                    <label class="input-label" for="past-attempts">Past Suicide Attempts (#)<span class="required">*</span></label>
+                    <label class="input-label" for="past-attempts"><span class="required">*</span>Past Suicide Attempts (#)</label>
                     <input
                         id="past-attempts"
                         type="number"
@@ -83,10 +83,9 @@
             <section class="card">
                 <div class="top-section-header">
                     <div>
-                        <p class="card-title">Access to Means</p>
+                        <p class="card-title"><span class="required">*</span>Access to Means</p>
                         <p class="card-subtitle">Select all means currently available.</p>
                     </div>
-                    <span class="required">*</span>
                 </div>
                 <div class="checkbox-list">
                     <template for:each={meansOptions} for:item="option">
@@ -107,9 +106,9 @@
             </section>
         </template>
 
-        <div class="actions">
-            <button class="secondary" type="button" onclick={handleBack}>Back</button>
-            <button class="primary" type="button" onclick={handleNext}>Next</button>
+        <div class="slds-grid slds-grid_align-spread slds-var-m-top_large">
+            <button class="slds-button btn-back" type="button" onclick={handleBack}>Back</button>
+            <button class="slds-button btn-next" type="button" onclick={handleNext}>Next</button>
         </div>
     </div>
 </template>

@@ -6,7 +6,7 @@
         </div> -->
 
         <section class="card">
-            <label class="input-label" for="ideation">Homicidal Ideation<span class="required">*</span></label>
+            <label class="input-label" for="ideation"><span class="required">*</span>Homicidal Ideation</label>
             <select
                 id="ideation"
                 class="text-input"
@@ -29,7 +29,7 @@
                     checked={recentViolence}
                     onchange={handleCheckboxChange}
                 />
-                <span>Recent violence or agitation observed?</span>
+                <span  class="input-label">Recent violence or agitation observed?</span>
             </label>
         </section>
 
@@ -48,7 +48,7 @@
             </section>
 
             <section class="card">
-                <label class="input-label" for="violence-details">Violence / Threat Details<span class="required">*</span></label>
+                <label class="input-label" for="violence-details"><span class="required">*</span>Violence / Threat Details</label>
                 <textarea
                     id="violence-details"
                     class="textarea"
@@ -62,9 +62,9 @@
             </section>
         </template>
 
-        <div class="actions">
-            <button class="secondary" type="button" onclick={handleBack}>Back</button>
-            <button class="primary" type="button" onclick={handleNext}>Next</button>
+        <div class="slds-grid slds-grid_align-spread slds-var-m-top_large">
+            <button class="slds-button btn-back" type="button" onclick={handleBack}>Back</button>
+            <button class="slds-button btn-next" type="button" onclick={handleNext}>Next</button>
         </div>
     </div>
 </template>

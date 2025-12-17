@@ -392,10 +392,10 @@ export default class gpCaseCreator extends NavigationMixin(LightningElement) {
             this.stepStatus[step] =
                 'warning';
         }
-        // Si falló la validación HARD (ROJO/IN-PROGRESS)
+        // Si falló la validación HARD (marcar en amarillo/cautela)
         else if (!result.isValid) {
             this.stepStatus[step] =
-                'in-progress';
+                'warning';
         }
         // Caso por defecto (Si no ha sido validado, se queda en su estado anterior, p.ej. 'locked' o 'warning')
         console.warn(

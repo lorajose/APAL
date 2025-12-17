@@ -6,7 +6,7 @@
         </div> -->
 
         <section class="card">
-            <label class="input-label" for="home-safety">Home Safety<span class="required">*</span></label>
+            <label class="input-label" for="home-safety"><span class="required">*</span>Home Safety</label>
             <select
                 id="home-safety"
                 class="text-input"
@@ -50,7 +50,7 @@
 
                 <label class="checkbox-field">
                     <input type="checkbox" checked={meansSafetyPlan} onchange={handleMeansPlanChange} />
-                    <span>Means safety plan agreed?</span>
+                    <span class="input-label">Means safety plan agreed?</span>
                 </label>
 
                 <div class="field field-full">
@@ -134,7 +134,7 @@
 
                 <label class="checkbox-field">
                     <input type="checkbox" checked={costCoverageIssues} onchange={handleCostCoverageChange} />
-                    <span>Cost/Coverage Issues?</span>
+                    <span class="input-label">Cost/Coverage Issues?</span>
                 </label>
             </div>
             <div class="field field-full">
@@ -149,9 +149,9 @@
             </div>
         </section>
 
-        <div class="actions">
-            <button class="secondary" type="button" onclick={handleBack}>Back</button>
-            <button class="primary" type="button" onclick={handleNext}>Next</button>
+        <div class="slds-grid slds-grid_align-spread slds-var-m-top_large">
+            <button class="slds-button btn-back" type="button" onclick={handleBack}>Back</button>
+            <button class="slds-button btn-next" type="button" onclick={handleNext}>Next</button>
         </div>
     </div>
 </template>
