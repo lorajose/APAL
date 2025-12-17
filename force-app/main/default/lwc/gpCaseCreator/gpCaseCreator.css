@@ -79,13 +79,13 @@
 /* ACTIVE STEP (Current Step - Green)                            */
 /* ------------------------------------------------------------ */
 .step-active {
-	border: 2px solid #111827 !important;
-	background: #111827;
+	border: 2px solid #0a2f5a !important;
+	background: #0a2f5a;
 	color: #ffffff !important;
 	font-weight: 700;
 }
 .step-active:hover {
-	background: #111827;
+	background: #0a2f5a;
 	color: #ffffff;
 }
 

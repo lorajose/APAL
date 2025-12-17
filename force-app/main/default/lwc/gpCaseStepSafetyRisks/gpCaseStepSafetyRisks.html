@@ -82,11 +82,11 @@
                             </template>
                             <div class="flag-row">
                                 <label class="checkbox-field">
-                                    <input type="checkbox" data-id={risk.id} data-field="recent" checked={risk.recent} onchange={handleFlagToggle} />
+                                    <input type="checkbox" data-id={risk.id} data-field="recent" checked={risk.recent} onchange={handleFlagToggle} disabled={readOnlyFields} />
                                     <span>Recent</span>
                                 </label>
                                 <label class="checkbox-field">
-                                    <input type="checkbox" data-id={risk.id} data-field="historical" checked={risk.historical} onchange={handleFlagToggle} />
+                                    <input type="checkbox" data-id={risk.id} data-field="historical" checked={risk.historical} onchange={handleFlagToggle} disabled={readOnlyFields} />
                                     <span>Historical</span>
                                 </label>
                                 <template if:true={risk.flagError}>

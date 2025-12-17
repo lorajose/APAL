@@ -341,19 +341,19 @@ export default class gpCaseCreator extends NavigationMixin(LightningElement) {
             case 10:
                 return this.collectionModes[10] === 'wizard'
                     ? guidedCopy
-                    : 'Manage current list; Add more opens wizard';
+                    : 'Click Add Medications -> Add record -> Add details -> Review -> Save';
             case 11:
                 return this.collectionModes[11] === 'wizard'
                     ? guidedCopy
-                    : 'Click Add Medications -> Add record -> Add details -> Review -> Save';
+                    : 'Click Add Substances -> Add record -> Add details -> Review -> Save';
             case 12:
                 return this.collectionModes[12] === 'wizard'
                     ? guidedCopy
-                    : 'Click Add Medications -> Add record -> Add details -> Review -> Save';                                
+                    : 'Click Add Screeners -> Add record -> Add details -> Review -> Save';                                
             case 13:
-                return 'Click Add Medications -> Add record -> Add details -> Review -> Save';
+                return 'Click Add Concerns -> Add record -> Add details -> Review -> Save';
             case 14:
-                return 'Click Add Medications -> Add record -> Add details -> Review -> Save';
+                return 'Click Add Safety Risks -> Add record -> Add details -> Review -> Save';
             case 15:
                 return 'Final check before saving. Use the links to jump back if needed.';
             default:
