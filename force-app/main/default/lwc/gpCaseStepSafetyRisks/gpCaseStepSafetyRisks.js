@@ -109,6 +109,10 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
         return this.isStandaloneLayout;
     }
 
+    get readOnlyFields() {
+        return this.isStandaloneLayout;
+    }
+
     notePreview(value) {
         if (!value) {
             return '';
