@@ -5,7 +5,7 @@
             <p>Capture primary questions, domains, and presenting context together.</p>
         </div> -->
 
-        <section class="card">
+       <!-- <section class="card">
             <header class="card-header">
                 <div>
                     <p class="card-title"><span class="required">*</span>Primary Clinical Questions</p>
@@ -13,7 +13,7 @@
                         Select every reason this case is landing on your desk.
                     </p>
                 </div>
-                <span class="selected-counter">{pcqtCountLabel}</span>
+                <span class="selected-counter">{chipCountLabel}</span>
             </header>
             <div class="input-row">
                 <label class="input-label" for="pcqt-search">Search</label>
@@ -22,7 +22,7 @@
             </div>
             <div class="chip-grid">
                 <template for:each={pcqtFilteredOptions} for:item="option">
-                    <button key={option.value} type="button" class={option.chipClass} data-value={option.value}
+                    <button key={option.value} type="button" class={option.chipClass} data-id={option.value}
                         onclick={handlePcqtToggle}>
                         {option.label}
                     </button>
@@ -31,6 +31,17 @@
             <template if:true={errors.Primary_Clinical_Question_Types__c}>
                 <p class="error-text">{errors.Primary_Clinical_Question_Types__c}</p>
             </template>
+        </section> -->
+
+        <!-- PCQT Selector (wizard-controlled) en card independiente -->
+        <section class="card">
+            <c-pcqt-selector
+                case-type={caseType}
+                value={pcqtSelectorValue}
+                required={pcqtRequired}
+                show-save-buttons="false"
+                onchange={handlePcqtChange}>
+            </c-pcqt-selector>
         </section>
 
         <section class="card">

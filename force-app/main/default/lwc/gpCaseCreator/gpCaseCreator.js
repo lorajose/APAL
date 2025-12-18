@@ -17,6 +17,8 @@ import saveScreeners from '@salesforce/apex/GPCaseService.saveScreeners';
 import saveConcerns from '@salesforce/apex/GPCaseService.saveConcerns';
 import saveSafetyRisks from '@salesforce/apex/GPCaseService.saveSafetyRisks';
 import getCaseFullData from '@salesforce/apex/GPCaseService.getCaseFullData';
+import getPcqtSelections from '@salesforce/apex/PCQTSelectorController.getPcqtSelections';
+import savePcqtSelections from '@salesforce/apex/PCQTSelectorController.savePcqtSelections';
 import { MEDICATION_INDEX, SUBSTANCE_INDEX, SCREENER_INDEX, SAFETY_RISK_INDEX } from 'c/gpCaseCatalogs';
 import {
     CurrentPageReference,
@@ -603,6 +605,18 @@ get stepsFormatted() {
                     console.error('loadFullCaseData log error', logErr);
                 }
                 this.form = this.normalizeServerForm(serverData);
+                // Cargar selecciones PCQT (ids) para que el selector y las chips las muestren al editar
+                try {
+                    const pcqtIds = await getPcqtSelections({ recordId: this.caseId });
+                    if (Array.isArray(pcqtIds) && pcqtIds.length) {
+                        const presenting = { ...(this.form.presenting || {}) };
+                        presenting.primaryClinicalQuestionTypesDraft = [...pcqtIds];
+                        this.form.presenting = presenting;
+                    }
+                } catch (pcqtErr) {
+                    // eslint-disable-next-line no-console
+                    console.warn('Failed to load PCQT selections', pcqtErr);
+                }
                 // Seed Top Symptoms into concerns on initial load if present
                 if (Array.isArray(this.form?.presenting?.topSymptomsDraft)) {
                     this.syncTopSymptomsToConcerns(this.form.presenting.topSymptomsDraft);
@@ -1003,6 +1017,9 @@ async handleDataUpdated(event) {
         STEP 15 → FINISH (Final Validation)
     ------------------------------------------------------------ */
     async handleFinish() {
+        if (this.isSaving) {
+            return;
+        }
         // Ejecutar validación final para todos los pasos
         this.runFullValidation(true);
         const allStepsValid = Object
@@ -1025,6 +1042,9 @@ async handleDataUpdated(event) {
     }
 
     async handleFinalize() {
+        if (this.isSaving) {
+            return;
+        }
         this.runFullValidation(true);
         const allStepsValid = Object.values(this.validationResults).every(res => res.isValid);
         if (!allStepsValid) {
@@ -1042,6 +1062,28 @@ async handleDataUpdated(event) {
         this.isSaving = true;
         try {
             const caseId = this.caseId;
+
+            // Persist core steps (1-9) in update mode to capture edits before final save
+            const coreSteps = [
+                this.form.basics || {},
+                this.form.presenting || {},
+                this.form.priorDx || {},
+                this.form.suicide || {},
+                this.form.violence || {},
+                this.form.psychosisMania || {},
+                this.form.familyTrauma || {},
+                this.form.homeSafety || {},
+                this.form.cognition || {}
+            ];
+            for (const stepData of coreSteps) {
+                await saveStepData({ caseId, stepData });
+            }
+
+            const pcqtIds = this.getPcqtSelectionIds();
+            await savePcqtSelections({
+                recordId: caseId,
+                selectionIds: pcqtIds
+            });
             await saveMedications({
                 caseId,
                 items: this.buildMedicationPayload()
@@ -1070,6 +1112,8 @@ async handleDataUpdated(event) {
                 } catch (closeError) {
                     console.warn('CloseActionScreenEvent is not supported in this context.', closeError);
                 }
+                // For update flows, force a full page refresh to sync all open tabs
+                this.reloadPage();
             } else {
                 this.toast('Success', 'Case successfully saved!', 'success');
                 await this.openCaseRecord(caseId);
@@ -1081,6 +1125,15 @@ async handleDataUpdated(event) {
             this.toast('Error', message, 'error');
         } finally {
             this.isSaving = false;
+        }
+    }
+
+    reloadPage() {
+        try {
+            // eslint-disable-next-line no-restricted-globals
+            window.location.reload();
+        } catch (e) {
+            // swallow reload issues
         }
     }
 
@@ -1516,6 +1569,27 @@ async handleDataUpdated(event) {
                 };
             })
             .filter(Boolean);
+    }
+
+    getPcqtSelectionIds() {
+        const looksLikePcqtId = (val) => {
+            if (typeof val !== 'string') return false;
+            const trimmed = val.trim();
+            if (trimmed.length !== 18 && trimmed.length !== 15) return false;
+            return /^[a-zA-Z0-9]+$/.test(trimmed) && trimmed.toLowerCase().startsWith('a0');
+        };
+        const presenting = this.form?.presenting || {};
+        if (Array.isArray(presenting.primaryClinicalQuestionTypesDraft)) {
+            return presenting.primaryClinicalQuestionTypesDraft.filter(looksLikePcqtId);
+        }
+        const raw = presenting.Primary_Clinical_Question_Types__c;
+        if (raw && typeof raw === 'string') {
+            return raw
+                .split(';')
+                .map(v => v.trim())
+                .filter(looksLikePcqtId);
+        }
+        return [];
     }
 
     async persistRelatedCollections(step) {

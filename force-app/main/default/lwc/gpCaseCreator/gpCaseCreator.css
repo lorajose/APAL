@@ -194,6 +194,20 @@
 	font-weight: 500;
 }
 
+/* Saving indicator */
+.saving-indicator {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin: 0.5rem 0 1rem;
+	color: #2563eb;
+}
+
+.saving-text {
+	font-weight: 600;
+	font-size: 0.95rem;
+}
+
 /* ------------------------------------------------------------ */
 /* FOOTER NOTE                                                  */
 /* ------------------------------------------------------------ */
