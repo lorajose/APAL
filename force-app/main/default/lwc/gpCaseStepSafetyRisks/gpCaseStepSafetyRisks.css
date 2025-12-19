@@ -87,6 +87,20 @@
 	padding: 0.45rem 0.6rem;
 }
 
+.text-input,
+.textarea {
+	font-family: inherit;
+}
+
+.text-input,
+.textarea {
+	border: 1px solid #d1d5db;
+	border-radius: 0.5rem;
+	padding: 0.45rem 0.6rem;
+	font-size: 0.9rem;
+	width: 100%;
+}
+
 .grid-controls .control-group {
 	display: flex;
 	flex-direction: column;
@@ -358,6 +372,30 @@
 	align-items: end;
 }
 
+.wizard-controls .control-group {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.wizard-result-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	flex-wrap: wrap;
+}
+
+.wizard-result-row .result-pill {
+	margin-right: 0.5rem;
+}
+
+.wizard-result-row .result-actions {
+	display: flex;
+	gap: 0.5rem;
+	flex-wrap: wrap;
+}
+
 .wizard-catalog {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -525,7 +563,7 @@
 }
 
 .btn-next {
-	background-color: #10b981;
+	background-color: #059669;
 	color: white;
 	border: none;
 	padding: 0.5rem 1.5rem;

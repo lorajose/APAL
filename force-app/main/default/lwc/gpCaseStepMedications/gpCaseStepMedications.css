@@ -224,7 +224,7 @@
 }
 
 .btn-next {
-	background-color: #10b981;
+	background-color: #059669;
 	color: white;
 	border: none;
 	padding: 0.5rem 1.5rem;
@@ -409,6 +409,30 @@
 	gap: 0.75rem;
 	flex-wrap: wrap;
 	align-items: end;
+}
+
+.wizard-controls .control-group {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.wizard-result-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	flex-wrap: wrap;
+}
+
+.wizard-result-row .result-pill {
+	margin-right: 0.5rem;
+}
+
+.wizard-result-row .result-actions {
+	display: flex;
+	gap: 0.5rem;
+	flex-wrap: wrap;
 }
 
 .wizard-catalog {

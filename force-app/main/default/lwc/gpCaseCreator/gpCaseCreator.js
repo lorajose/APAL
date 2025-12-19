@@ -116,6 +116,7 @@ export default class gpCaseCreator extends NavigationMixin(LightningElement) {
     @track inlineMessage = null;
     @track reviewSummaryReady = false;
     isSaving = false;
+    forceErrorHighlight = false;
     // Almacena los resultados de la validación de todos los pasos: { 1: { isValid, hardErrors, softWarnings }, ... }
     @track validationResults = {};
     @track showStepErrors = {};
@@ -320,7 +321,9 @@ export default class gpCaseCreator extends NavigationMixin(LightningElement) {
     @track collectionModes = createInitialCollectionModes();
 
     get currentDescription() {
-        const guidedCopy = 'Guided selection → details → review';
+        const guidedCopy = 'Click Add Screeners -> Add record -> Add details -> Review -> Save';  
+        const guidedCopyM = 'Click Add Medications -> Add record -> Add details -> Review -> Save';
+        const guidedCopyS = 'Click Add Substances -> Add record -> Add details -> Review -> Save';
         switch (this.currentStep) {
             case 1:
                 return 'Subject, Priority & Description.';
@@ -342,11 +345,11 @@ export default class gpCaseCreator extends NavigationMixin(LightningElement) {
                 return 'Capture orientation status and cognition notes when needed.';
             case 10:
                 return this.collectionModes[10] === 'wizard'
-                    ? guidedCopy
+                    ? guidedCopyM
                     : 'Click Add Medications -> Add record -> Add details -> Review -> Save';
             case 11:
                 return this.collectionModes[11] === 'wizard'
-                    ? guidedCopy
+                    ? guidedCopyS
                     : 'Click Add Substances -> Add record -> Add details -> Review -> Save';
             case 12:
                 return this.collectionModes[12] === 'wizard'
@@ -394,10 +397,9 @@ export default class gpCaseCreator extends NavigationMixin(LightningElement) {
             this.stepStatus[step] =
                 'warning';
         }
-        // Si falló la validación HARD (marcar en amarillo/cautela)
+        // Si falló la validación HARD (amarillo por defecto, rojo si viene de Finish/Update)
         else if (!result.isValid) {
-            this.stepStatus[step] =
-                'warning';
+            this.stepStatus[step] = this.forceErrorHighlight ? 'in-progress' : 'warning';
         }
         // Caso por defecto (Si no ha sido validado, se queda en su estado anterior, p.ej. 'locked' o 'warning')
         console.warn(
@@ -855,8 +857,7 @@ async handleDataUpdated(event) {
             "locked")
             return; // prevent clicking locked
         // 1. Marcar el paso actual con su estado de validación final antes de saltar
-        const currentStep = this
-            .currentStep;
+        const currentStep = this.currentStep;
         // Solo validamos si el paso actual ya ha sido visitado o no está 'locked'
         if (this.stepStatus[
                 currentStep] !==
@@ -869,14 +870,14 @@ async handleDataUpdated(event) {
             this.validationResults[
                     currentStep] =
                 result;
-            this.updateStepStatus(
-                currentStep
-            ); // Lo actualiza a final-completed/warning/in-progress
         }
         // 2. Saltar al nuevo paso y marcarlo como 'active'
         this.currentStep = step;
-        this.stepStatus[step] =
-            'active';
+        this.stepStatus[step] = 'active';
+        // 3. Actualiza el estado del paso que se deja (ya no es currentStep)
+        if (this.validationResults[currentStep]) {
+            this.updateStepStatus(currentStep);
+        }
         if (step === 15) {
             this.evaluateReviewReady();
         } else {
@@ -1020,6 +1021,7 @@ async handleDataUpdated(event) {
         if (this.isSaving) {
             return;
         }
+        this.forceErrorHighlight = true;
         // Ejecutar validación final para todos los pasos
         this.runFullValidation(true);
         const allStepsValid = Object
@@ -1028,6 +1030,7 @@ async handleDataUpdated(event) {
             .every(res => res
                 .isValid);
         if (allStepsValid) {
+            this.forceErrorHighlight = false;
             this.reviewSummaryReady = true;
             this.toast('Success',
                 'All steps are valid. Review the summary before final submission.',
@@ -1045,6 +1048,7 @@ async handleDataUpdated(event) {
         if (this.isSaving) {
             return;
         }
+        this.forceErrorHighlight = true;
         this.runFullValidation(true);
         const allStepsValid = Object.values(this.validationResults).every(res => res.isValid);
         if (!allStepsValid) {
