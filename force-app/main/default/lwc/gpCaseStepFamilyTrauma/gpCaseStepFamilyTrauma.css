@@ -198,10 +198,38 @@
 }
 
 .btn-next {
-	background-color: #10b981;
+	background-color: #059669;
 	color: white;
 	border: none;
 	padding: 0.5rem 1.5rem;
 	border-radius: 0.375rem;
 	font-weight: 600;
+}
+
+@media (max-width: 768px) {
+	.slds-grid_align-spread {
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+	.btn-back,
+	.btn-next {
+		width: 100%;
+	}
+
+	.card {
+		padding: 0.85rem;
+	}
+
+	.input-row {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.family-history-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.checkbox-list {
+		max-height: none;
+	}
 }

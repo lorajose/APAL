@@ -281,7 +281,7 @@
 }
 
 .btn-next {
-	background-color: #10b981;
+	background-color: #059669;
 	color: white;
 	border: none;
 	padding: 0.5rem 1.5rem;
@@ -293,4 +293,56 @@
 	font-size: 0.8rem;
 	color: #dc2626;
 	margin-top: 0.4rem;
+}
+
+@media (max-width: 768px) {
+	.slds-grid_align-spread {
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+	.btn-back,
+	.btn-next {
+		width: 100%;
+	}
+
+	.card {
+		padding: 0.85rem;
+	}
+
+	.input-row {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.stressor-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.checkbox-list {
+		max-height: none;
+	}
+
+	.flag-row {
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.supports-grid {
+		flex-direction: column;
+		align-items: stretch;
+	}
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+	.card {
+		padding: 1rem;
+	}
+
+	.stressor-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.supports-grid {
+		gap: 0.75rem;
+	}
 }

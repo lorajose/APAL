@@ -1741,6 +1741,14 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
+        <description>varRecordTypeDevName</description>
+        <name>varRecordTypeDevName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
         <name>WeaponsAccessBoolean</name>
         <dataType>Boolean</dataType>
         <isCollection>false</isCollection>
