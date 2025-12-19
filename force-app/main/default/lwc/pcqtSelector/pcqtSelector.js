@@ -94,9 +94,11 @@ export default class PcqtSelector extends LightningElement {
 
             if (this.isWizardMode) {
                 this.selectedIds = [...(this._value || [])];
-                const stored = this.loadDraft();
-                if (stored && stored.length) {
-                    this.selectedIds = stored;
+                if (!this.selectedIds.length) {
+                    const stored = this.loadDraft();
+                    if (stored && stored.length) {
+                        this.selectedIds = stored;
+                    }
                 }
                 this.reconcileSelectionWithOptions();
             } else {

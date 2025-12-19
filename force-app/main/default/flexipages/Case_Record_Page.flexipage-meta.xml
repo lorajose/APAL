@@ -1179,6 +1179,20 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>layoutContext</name>
+                    <value>case</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>layoutMode</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentName>gpCaseStepSafetyRisks</componentName>
+                <identifier>c_gpCaseStepSafetyRisks</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
                     <name>columns</name>
                     <value>Facet-c7ed00e6-c85a-463d-b8ef-3b825e179a1d</value>
                 </componentInstanceProperties>
@@ -1961,20 +1975,6 @@
                 </componentInstanceProperties>
                 <componentName>gpCaseStepScreeners</componentName>
                 <identifier>c_gpCaseStepScreeners</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>layoutContext</name>
-                    <value>case</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>layoutMode</name>
-                    <value>false</value>
-                </componentInstanceProperties>
-                <componentName>gpCaseStepSafetyRisks</componentName>
-                <identifier>c_gpCaseStepSafetyRisks</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
