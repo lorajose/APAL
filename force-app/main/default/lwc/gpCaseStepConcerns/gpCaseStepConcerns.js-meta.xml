@@ -17,6 +17,10 @@
                 <object>Case</object>
                 <object>Contact</object>
             </objects>
+            <supportedFormFactors>
+                <supportedFormFactor type="Large"/>
+                <supportedFormFactor type="Small"/>
+            </supportedFormFactors>
             <property name="layoutMode" type="Boolean" label="Layout mode (hide navigation, load/save concerns for record)" default="false"/>
             <property name="layoutContext" type="String" label="Layout context" datasource="auto,case,relatedCase,patient" default="auto"/>
         </targetConfig>

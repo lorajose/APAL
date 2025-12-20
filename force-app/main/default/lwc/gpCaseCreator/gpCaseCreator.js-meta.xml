@@ -14,7 +14,17 @@
     </targets>
 
     <targetConfigs>
-        <targetConfig targets="lightning__RecordPage, lightning__RecordAction">
+        <targetConfig targets="lightning__RecordPage">
+            <objects>
+                <object>Case</object>
+            </objects>
+            <supportedFormFactors>
+                <supportedFormFactor type="Large" />
+                <supportedFormFactor type="Small" />
+            </supportedFormFactors>
+        </targetConfig>
+        <targetConfig targets="lightning__RecordAction">
+            <actionType>ScreenAction</actionType>
             <objects>
                 <object>Case</object>
             </objects>
