@@ -2,18 +2,13 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>61.0</apiVersion>
     <isExposed>true</isExposed>
-
     <targets>
         <target>lightning__AppPage</target>
         <target>lightning__RecordPage</target>
-        <target>lightning__FlowScreen</target>
         <target>lightning__HomePage</target>
- 
-
-        <!-- Acción rápida moderna (válida para LWC) -->
+        <target>lightning__FlowScreen</target>
         <target>lightning__RecordAction</target>
     </targets>
-
     <targetConfigs>
         <targetConfig targets="lightning__RecordPage">
             <objects>
@@ -23,23 +18,16 @@
                 <supportedFormFactor type="Large" />
                 <supportedFormFactor type="Small" />
             </supportedFormFactors>
+            <property name="layoutMode" type="Boolean" label="Layout mode (hide navigation, load/save patient support for record)" default="false"/>
+            <property name="layoutContext" type="String" label="Layout context" datasource="auto,case,relatedCase" default="auto"/>
         </targetConfig>
         <targetConfig targets="lightning__RecordAction">
-            <actionType>ScreenAction</actionType>
             <objects>
                 <object>Case</object>
             </objects>
         </targetConfig>
-        <targetConfig targets="lightning__FlowScreen">
-            <property name="providerId"
-                label="Provider Account Id"
-                type="String" />
-            <property name="practiceAccountId"
-                label="Practice Account Id"
-                type="String" />
-            <property name="patientContactId"
-                label="Patient Contact Id"
-                type="String" />
+        <targetConfig targets="lightning__AppPage, lightning__HomePage">
+            <property name="layoutMode" type="Boolean" label="Layout mode (hide navigation, load/save patient support for record)" default="false"/>
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>
