@@ -30,6 +30,7 @@ import {
 import { CloseActionScreenEvent } from 'lightning/actions';
 import { getRecordNotifyChange } from 'lightning/uiRecordApi';
 import { FlowNavigationFinishEvent } from 'lightning/flowSupport';
+import FORM_FACTOR from '@salesforce/client/formFactor';
 
 const createEmptyForm = () => ({
     basics: {},
@@ -256,6 +257,24 @@ export default class gpCaseCreator extends NavigationMixin(LightningElement) {
     }
     get isUpdateMode() {
         return this.formLoadedFromServer;
+    }
+
+    get isPhone() {
+        return FORM_FACTOR === 'Small';
+    }
+
+    get isTablet() {
+        return FORM_FACTOR === 'Medium';
+    }
+
+    get isDesktop() {
+        return FORM_FACTOR === 'Large';
+    }
+
+    get wizardLayoutClass() {
+        if (this.isPhone) return 'wizard-layout form-factor-small';
+        if (this.isTablet) return 'wizard-layout form-factor-medium';
+        return 'wizard-layout form-factor-large';
     }
     // Getters de visibilidad (se mantienen igual)
     get isStep1() {

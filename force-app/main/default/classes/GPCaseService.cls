@@ -3,6 +3,10 @@ public with sharing class GPCaseService {
         @AuraEnabled public String label;
         @AuraEnabled public String value;
     }
+    public class SupportCatalogItem {
+        @AuraEnabled public Id id;
+        @AuraEnabled public String name;
+    }
     private static final List<String> DEFAULT_PCQT_OPTIONS = new List<String>{
         'Diagnosis clarification',
         'Medication strategy',
@@ -104,6 +108,34 @@ public with sharing class GPCaseService {
             options.add(dto);
         }
         return options;
+    }
+
+    //
+    // ======================================================
+    // 1c) PATIENT SUPPORT CATALOG LOADER
+    // ======================================================
+    //
+    @AuraEnabled(cacheable=true)
+    public static List<SupportCatalogItem> getSupportCatalog() {
+        Schema.SObjectType supportType = Schema.getGlobalDescribe().get('Support__c');
+        if (supportType == null) {
+            return new List<SupportCatalogItem>();
+        }
+        Map<String, Schema.SObjectField> fields = supportType.getDescribe().fields.getMap();
+        String query = 'SELECT Id, Name' + (fields.containsKey('Active__c') ? ', Active__c' : '') + ' FROM Support__c';
+        if (fields.containsKey('Active__c')) {
+            query += ' WHERE Active__c = true';
+        }
+        query += ' ORDER BY Name ASC';
+
+        List<SupportCatalogItem> out = new List<SupportCatalogItem>();
+        for (SObject row : Database.query(query)) {
+            SupportCatalogItem item = new SupportCatalogItem();
+            item.id = (Id)row.get('Id');
+            item.name = (String)row.get('Name');
+            out.add(item);
+        }
+        return out;
     }
 
 
@@ -331,6 +363,12 @@ public with sharing class GPCaseService {
         return payload;
     }
 
+    @AuraEnabled(cacheable=true)
+    public static List<Map<String, Object>> getPatientSupports(Id caseId) {
+        Id parentCaseId = resolveCaseId(caseId);
+        return loadPatientSupportsForCase(parentCaseId);
+    }
+
 
 
     //
@@ -470,6 +508,97 @@ public with sharing class GPCaseService {
         if (!toInsert.isEmpty()) {
             insert toInsert;
         }
+    }
+
+    @AuraEnabled
+    public static void savePatientSupports(Id caseId, List<SupportInput> items) {
+        Id parentCaseId = resolveCaseId(caseId);
+        Id patientId = fetchCasePatient(parentCaseId);
+        if (items == null) {
+            items = new List<SupportInput>();
+        }
+
+        Set<String> supportNames = new Set<String>();
+        for (SupportInput item : items) {
+            if (item == null) continue;
+            if (item.supportId == null && !String.isBlank(item.supportName)) {
+                supportNames.add(item.supportName);
+            }
+        }
+        Map<String, Id> supportIdsByName = fetchCatalogIds('Support__c', supportNames);
+
+        Map<String, SupportInput> payloadBySupportId = new Map<String, SupportInput>();
+        for (SupportInput item : items) {
+            if (item == null) continue;
+            Id supportId = item.supportId;
+            if (supportId == null && !String.isBlank(item.supportName)) {
+                supportId = supportIdsByName.get(item.supportName.toLowerCase());
+            }
+            if (supportId == null) continue;
+            String key = String.valueOf(supportId);
+            if (!payloadBySupportId.containsKey(key)) {
+                item.supportId = supportId;
+                payloadBySupportId.put(key, item);
+            }
+        }
+
+        Map<Id, Patient_Support__c> existingBySupport = new Map<Id, Patient_Support__c>();
+        for (Patient_Support__c ps : [
+            SELECT Id, Support__c
+            FROM Patient_Support__c
+            WHERE Case__c = :parentCaseId
+        ]) {
+            if (ps.Support__c != null) {
+                existingBySupport.put(ps.Support__c, ps);
+            }
+        }
+
+        Map<String, Schema.SObjectField> fields = Patient_Support__c.SObjectType.getDescribe().fields.getMap();
+        List<Patient_Support__c> toInsert = new List<Patient_Support__c>();
+        List<Patient_Support__c> toUpdate = new List<Patient_Support__c>();
+        Set<Id> desiredSupportIds = new Set<Id>();
+
+        for (SupportInput item : payloadBySupportId.values()) {
+            Id supportId = item.supportId;
+            if (supportId == null) continue;
+            desiredSupportIds.add(supportId);
+            Patient_Support__c record = existingBySupport.get(supportId);
+            Boolean isNew = false;
+            if (record == null) {
+                record = new Patient_Support__c();
+                record.Case__c = parentCaseId;
+                record.Support__c = supportId;
+                setPatientIfPossible(record, patientId);
+                isNew = true;
+            }
+
+            if (fields.containsKey('Notes_new__c')) {
+                record.put('Notes_new__c', item.notes);
+            }
+            setBooleanFieldIfExists(record, fields, 'Scheduled__c', item.scheduled);
+            setBooleanFieldIfExists(record, fields, 'Going__c', item.going);
+            setBooleanFieldIfExists(record, fields, 'Appointment_Completed__c', item.appointmentCompleted);
+            setBooleanFieldIfExists(record, fields, 'Appointment_Completed_Ineffective__c', item.appointmentCompletedIneffective);
+            setBooleanFieldIfExists(record, fields, 'Suspended__c', item.suspended);
+            setBooleanFieldIfExists(record, fields, 'Care_Not_Applicable__c', item.careNotApplicable);
+
+            if (isNew) {
+                toInsert.add(record);
+            } else {
+                toUpdate.add(record);
+            }
+        }
+
+        List<Patient_Support__c> toDelete = new List<Patient_Support__c>();
+        for (Id supportId : existingBySupport.keySet()) {
+            if (!desiredSupportIds.contains(supportId)) {
+                toDelete.add(existingBySupport.get(supportId));
+            }
+        }
+
+        if (!toInsert.isEmpty()) insert toInsert;
+        if (!toUpdate.isEmpty()) update toUpdate;
+        if (!toDelete.isEmpty()) delete toDelete;
     }
 
     @AuraEnabled
@@ -846,6 +975,56 @@ public with sharing class GPCaseService {
         return results;
     }
 
+    private static List<Map<String, Object>> loadPatientSupportsForCase(Id caseId) {
+        List<Map<String, Object>> results = new List<Map<String, Object>>();
+        if (caseId == null) {
+            return results;
+        }
+        Map<String, Schema.SObjectField> fields = Patient_Support__c.SObjectType.getDescribe().fields.getMap();
+        String query = 'SELECT Id, Name, Support__c, Support__r.Name';
+        if (fields.containsKey('Notes_new__c')) {
+            query += ', Notes_new__c';
+        }
+        if (fields.containsKey('Scheduled__c')) {
+            query += ', Scheduled__c';
+        }
+        if (fields.containsKey('Going__c')) {
+            query += ', Going__c';
+        }
+        if (fields.containsKey('Appointment_Completed__c')) {
+            query += ', Appointment_Completed__c';
+        }
+        if (fields.containsKey('Appointment_Completed_Ineffective__c')) {
+            query += ', Appointment_Completed_Ineffective__c';
+        }
+        if (fields.containsKey('Suspended__c')) {
+            query += ', Suspended__c';
+        }
+        if (fields.containsKey('Care_Not_Applicable__c')) {
+            query += ', Care_Not_Applicable__c';
+        }
+        query += ' FROM Patient_Support__c WHERE Case__c = :caseId ORDER BY CreatedDate ASC';
+
+        for (SObject row : Database.query(query)) {
+            SObject supportRef = row.getSObject('Support__r');
+            Map<String, Object> entry = new Map<String, Object>();
+            entry.put('id', row.get('Support__c'));
+            entry.put('catalogId', row.get('Support__c'));
+            entry.put('catalogName', supportRef != null ? (String)supportRef.get('Name') : null);
+            entry.put('notes', fields.containsKey('Notes_new__c') ? row.get('Notes_new__c') : null);
+            entry.put('scheduled', fields.containsKey('Scheduled__c') ? row.get('Scheduled__c') : null);
+            entry.put('going', fields.containsKey('Going__c') ? row.get('Going__c') : null);
+            entry.put('appointmentCompleted', fields.containsKey('Appointment_Completed__c') ? row.get('Appointment_Completed__c') : null);
+            entry.put('appointmentCompletedIneffective', fields.containsKey('Appointment_Completed_Ineffective__c') ? row.get('Appointment_Completed_Ineffective__c') : null);
+            entry.put('suspended', fields.containsKey('Suspended__c') ? row.get('Suspended__c') : null);
+            entry.put('careNotApplicable', fields.containsKey('Care_Not_Applicable__c') ? row.get('Care_Not_Applicable__c') : null);
+            entry.put('recordName', row.get('Name'));
+            entry.put('recordId', row.get('Id'));
+            results.add(entry);
+        }
+        return results;
+    }
+
     private static List<Map<String, Object>> loadSafetyRisksForCase(Id caseId) {
         List<Map<String, Object>> results = new List<Map<String, Object>>();
         if (caseId == null) {
@@ -1074,6 +1253,22 @@ public with sharing class GPCaseService {
         return names;
     }
 
+    private static Set<String> collectNamesFromSupports(List<SupportInput> items) {
+        Set<String> names = new Set<String>();
+        if (items == null) return names;
+        for (SupportInput item : items) {
+            if (!String.isBlank(item.supportName)) {
+                names.add(item.supportName);
+            }
+        }
+        return names;
+    }
+
+    private static void setBooleanFieldIfExists(SObject record, Map<String, Schema.SObjectField> fields, String fieldName, Boolean value) {
+        if (fields == null || !fields.containsKey(fieldName)) return;
+        record.put(fieldName, value);
+    }
+
     private static Id fetchCasePatient(Id caseId) {
         if (caseId == null) return null;
         Map<String, Schema.SObjectField> fields = Case.SObjectType.getDescribe().fields.getMap();
@@ -1201,6 +1396,18 @@ public with sharing class GPCaseService {
         @AuraEnabled public Boolean historical { get; set; }
         @AuraEnabled public String notes { get; set; }
         @AuraEnabled public String source { get; set; }
+    }
+
+    public class SupportInput {
+        @AuraEnabled public Id supportId { get; set; }
+        @AuraEnabled public String supportName { get; set; }
+        @AuraEnabled public String notes { get; set; }
+        @AuraEnabled public Boolean scheduled { get; set; }
+        @AuraEnabled public Boolean going { get; set; }
+        @AuraEnabled public Boolean appointmentCompleted { get; set; }
+        @AuraEnabled public Boolean appointmentCompletedIneffective { get; set; }
+        @AuraEnabled public Boolean suspended { get; set; }
+        @AuraEnabled public Boolean careNotApplicable { get; set; }
     }
 
     private static void setLookupFieldSafely(SObject record, String fieldApiName, Object value) {

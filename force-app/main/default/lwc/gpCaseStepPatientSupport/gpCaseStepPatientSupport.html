@@ -1,0 +1,350 @@
+<template>
+    <template if:true={shouldRender}>
+        <div class="step-section">
+            <div class="section-header">
+                <div class="section-heading">
+                    <h2>
+                        <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
+                        {headerTitle}
+                    </h2>
+                </div>
+                <template if:true={isReadOnlySurface}>
+                    <template if:true={showShowMoreToggle}>
+                        <button class="ghost-button" type="button" onclick={toggleShowMore}>
+                            <template if:true={showAllCards}>Show less</template>
+                            <template if:false={showAllCards}>Show more</template>
+                        </button>
+                    </template>
+                </template>
+                <template if:true={isWizardView}>
+                    <button class="ghost-button wizard-cancel" onclick={cancelWizard}>Cancel</button>
+                </template>
+            </div>
+
+            <template if:true={isReadOnlySurface}>
+                <template if:true={hasSupports}>
+                    <div class="scr-grid">
+                        <template for:each={visibleSupports} for:item="sup">
+                            <article key={sup.id} class="scr-card">
+                                <header class="scr-card-header">
+                                    <div>
+                                        <h3>{sup.supportName}</h3>
+                                    </div>
+                                </header>
+                                <div class="pill-row">
+                                    <template if:true={sup.scheduled}>
+                                        <span class="summary-pill">Scheduled</span>
+                                    </template>
+                                    <template if:true={sup.going}>
+                                        <span class="summary-pill">Going</span>
+                                    </template>
+                                    <template if:true={sup.appointmentCompleted}>
+                                        <span class="summary-pill">Appt Completed</span>
+                                    </template>
+                                    <template if:true={sup.appointmentCompletedIneffective}>
+                                        <span class="summary-pill">Completed (Ineffective)</span>
+                                    </template>
+                                    <template if:true={sup.suspended}>
+                                        <span class="summary-pill">Suspended</span>
+                                    </template>
+                                    <template if:true={sup.careNotApplicable}>
+                                        <span class="summary-pill">Care Not Applicable</span>
+                                    </template>
+                                </div>
+                                <p class="scr-notes">
+                                    <template if:true={sup.notes}>
+                                        {sup.previewNotes}
+                                    </template>
+                                    <template if:false={sup.notes}>
+                                        —
+                                    </template>
+                                </p>
+                            </article>
+                        </template>
+                    </div>
+                </template>
+            </template>
+
+            <template if:false={isReadOnlySurface}>
+                <template if:true={isGridView}>
+                    <template if:true={hasSupports}>
+                        <section class="card grid-controls">
+                            <div class="grid-header-row">
+                                <div class="control-group">
+                                    <label class="input-label" for="grid-filter">Filter by</label>
+                                    <select id="grid-filter" class="text-input" value={filterBy} onchange={handleFilterChange}>
+                                        <template for:each={filterOptions} for:item="option">
+                                            <option key={option.value} value={option.value}>{option.label}</option>
+                                        </template>
+                                    </select>
+                                </div>
+                                <div class="control-group">
+                                    <label class="input-label" for="grid-search">Search</label>
+                                    <input id="grid-search" class="text-input" type="search" placeholder="Filter by name..." value={searchValue} oninput={handleSearchChange} />
+                                </div>
+                                <div class="grid-actions">
+                                    <button class="ghost-button" type="button" onclick={toggleShowNotes}>
+                                        <template if:true={showAllNotes}>Hide notes</template>
+                                        <template if:false={showAllNotes}>Show notes</template>
+                                    </button>
+                                    <template if:true={showAddButton}>
+                                        <template if:true={hasSupports}>
+                                            <button class="ghost-button" type="button" onclick={handleEditSupportWizard}>Edit</button>
+                                        </template>
+                                        <button class="primary-button" type="button" onclick={handleAddSupport}>Add Patient Support</button>
+                                    </template>
+                                </div>
+                            </div>
+                        </section>
+                    </template>
+                    <template if:true={hasSupports}>
+                        <div class="scr-grid">
+                            <template for:each={filteredSupports} for:item="sup">
+                                <article key={sup.id} class="scr-card">
+                                    <header class="scr-card-header">
+                                        <div>
+                                            <h3>{sup.supportName}</h3>
+                                        </div>
+                                    </header>
+                                    <div class="pill-row">
+                                        <template if:true={sup.scheduled}>
+                                            <span class="summary-pill">Scheduled</span>
+                                        </template>
+                                        <template if:true={sup.going}>
+                                            <span class="summary-pill">Going</span>
+                                        </template>
+                                        <template if:true={sup.appointmentCompleted}>
+                                            <span class="summary-pill">Appt Completed</span>
+                                        </template>
+                                        <template if:true={sup.appointmentCompletedIneffective}>
+                                            <span class="summary-pill">Completed (Ineffective)</span>
+                                        </template>
+                                        <template if:true={sup.suspended}>
+                                            <span class="summary-pill">Suspended</span>
+                                        </template>
+                                        <template if:true={sup.careNotApplicable}>
+                                            <span class="summary-pill">Care Not Applicable</span>
+                                        </template>
+                                    </div>
+                                    <template if:true={showAllNotes}>
+                                        <div class="field field-full">
+                                            <label class="input-label">Notes</label>
+                                            <textarea class="textarea" data-id={sup.id} data-field="notes" oninput={handleCardNoteChange}>{sup.notes}</textarea>
+                                        </div>
+                                    </template>
+                                    <template if:false={showAllNotes}>
+                                        <p class="scr-notes">
+                                            <template if:true={sup.notes}>
+                                                {sup.previewNotes}
+                                            </template>
+                                            <template if:false={sup.notes}>
+                                                —
+                                            </template>
+                                        </p>
+                                    </template>
+                                    <div class="support-flags">
+                                        <label class="flag-item">
+                                            <input type="checkbox" data-id={sup.id} data-field="scheduled" checked={sup.scheduled} onchange={handleCardFlagChange} />
+                                            <span>Scheduled</span>
+                                        </label>
+                                        <label class="flag-item">
+                                            <input type="checkbox" data-id={sup.id} data-field="going" checked={sup.going} onchange={handleCardFlagChange} />
+                                            <span>Going</span>
+                                        </label>
+                                        <label class="flag-item">
+                                            <input type="checkbox" data-id={sup.id} data-field="appointmentCompleted" checked={sup.appointmentCompleted} onchange={handleCardFlagChange} />
+                                            <span>Appointment Completed</span>
+                                        </label>
+                                        <label class="flag-item">
+                                            <input type="checkbox" data-id={sup.id} data-field="appointmentCompletedIneffective" checked={sup.appointmentCompletedIneffective} onchange={handleCardFlagChange} />
+                                            <span>Completed (Ineffective)</span>
+                                        </label>
+                                        <label class="flag-item">
+                                            <input type="checkbox" data-id={sup.id} data-field="suspended" checked={sup.suspended} onchange={handleCardFlagChange} />
+                                            <span>Suspended</span>
+                                        </label>
+                                        <label class="flag-item">
+                                            <input type="checkbox" data-id={sup.id} data-field="careNotApplicable" checked={sup.careNotApplicable} onchange={handleCardFlagChange} />
+                                            <span>Care Not Applicable</span>
+                                        </label>
+                                    </div>
+                                    <div class="card-actions">
+                                        <template if:true={showNavigation}>
+                                            <button class="pill-button" data-id={sup.id} onclick={handleEditSupport}>Edit</button>
+                                        </template>
+                                        <button class="pill-button danger" data-id={sup.id} onclick={handleRemoveSupport}>Remove</button>
+                                    </div>
+                                    <template if:true={sup.showConfirm}>
+                                        <div class="remove-confirm">
+                                            <p>Remove this support?</p>
+                                            <div class="remove-actions">
+                                                <button class="pill-button danger" data-id={sup.id} onclick={confirmRemove}>Confirm Remove</button>
+                                                <button class="pill-button secondary" onclick={cancelRemove}>Cancel</button>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </article>
+                            </template>
+                        </div>
+                    </template>
+                    <template if:false={hasSupports}>
+                        <section class="card empty-state-card">
+                            <div>
+                                <p class="empty-title">No patient support captured yet</p>
+                                <p class="empty-subtitle">Use the button to add items manually.</p>
+                            </div>
+                            <button class="primary-button" onclick={handleAddSupport}>Add Patient Support</button>
+                        </section>
+                    </template>
+                </template>
+
+                <template if:true={isWizardView}>
+                    <section class="card wizard-shell">
+                        <template if:true={wizardStepIsPick}>
+                            <div class="wizard-controls">
+                                <div class="control-group">
+                                    <label class="input-label" for="wizard-filter">Filter by</label>
+                                    <select id="wizard-filter" class="text-input" value={wizardFilter} onchange={handleWizardFilterChange}>
+                                        <option value="name">Name</option>
+                                    </select>
+                                </div>
+                                <div class="control-group">
+                                    <label class="input-label" for="wizard-search">Search</label>
+                                    <input id="wizard-search" class="text-input" type="search" placeholder="Filter by name..." value={wizardSearch} oninput={handleWizardSearchChange} />
+                                </div>
+                            </div>
+                            <div class="wizard-result-row">
+                                <span class="result-pill">{wizardResultCount} result(s)</span>
+                                <div class="result-actions">
+                                    <button class="ghost-button" onclick={handleSelectAllFiltered}>Select all (filtered)</button>
+                                    <button class="ghost-button" onclick={handleClearSelection}>Clear</button>
+                                </div>
+                            </div>
+                            <div class="wizard-catalog">
+                                <template for:each={wizardCatalogItems} for:item="item">
+                                    <label key={item.id} class={item.className}>
+                                        <input
+                                            type="checkbox"
+                                            data-id={item.id}
+                                            checked={item.checked}
+                                            disabled={item.disabled}
+                                            onchange={handleWizardSelectionToggle}
+                                        />
+                                        <div class="catalog-details">
+                                            <p class="catalog-title">{item.name}</p>
+                                            <template if:true={item.disabled}>
+                                                <span class="catalog-added">Added</span>
+                                            </template>
+                                        </div>
+                                    </label>
+                                </template>
+                            </div>
+                        </template>
+
+                        <template if:true={wizardStepIsDetails}>
+                            <template for:each={wizardDraft} for:item="item">
+                                <section key={item.id} class="detail-card">
+                                    <header class="detail-header">
+                                        <div>
+                                            <h3>{item.meta.name}</h3>
+                                        </div>
+                                        <button class="ghost-button" data-id={item.id} onclick={handleWizardRemoveDraft}>Remove</button>
+                                    </header>
+                                    <div class="detail-fields">
+                                        <div class="detail-checkboxes">
+                                            <label class="flag-item">
+                                                <input type="checkbox" data-id={item.id} data-field="scheduled" checked={item.scheduled} onchange={handleWizardDetailChange} />
+                                                <span>Scheduled</span>
+                                            </label>
+                                            <label class="flag-item">
+                                                <input type="checkbox" data-id={item.id} data-field="going" checked={item.going} onchange={handleWizardDetailChange} />
+                                                <span>Going</span>
+                                            </label>
+                                            <label class="flag-item">
+                                                <input type="checkbox" data-id={item.id} data-field="appointmentCompleted" checked={item.appointmentCompleted} onchange={handleWizardDetailChange} />
+                                                <span>Appointment Completed</span>
+                                            </label>
+                                            <label class="flag-item">
+                                                <input type="checkbox" data-id={item.id} data-field="appointmentCompletedIneffective" checked={item.appointmentCompletedIneffective} onchange={handleWizardDetailChange} />
+                                                <span>Completed (Ineffective)</span>
+                                            </label>
+                                            <label class="flag-item">
+                                                <input type="checkbox" data-id={item.id} data-field="suspended" checked={item.suspended} onchange={handleWizardDetailChange} />
+                                                <span>Suspended</span>
+                                            </label>
+                                            <label class="flag-item">
+                                                <input type="checkbox" data-id={item.id} data-field="careNotApplicable" checked={item.careNotApplicable} onchange={handleWizardDetailChange} />
+                                                <span>Care Not Applicable</span>
+                                            </label>
+                                        </div>
+                                        <div class="field field-full">
+                                            <label class="input-label">Notes</label>
+                                            <textarea class="textarea" data-id={item.id} data-field="notes" oninput={handleWizardDetailChange}>{item.notes}</textarea>
+                                        </div>
+                                    </div>
+                                </section>
+                            </template>
+                        </template>
+
+                        <template if:true={wizardStepIsReview}>
+                            <div class="review-grid">
+                                <template for:each={wizardDraft} for:item="item">
+                                    <article key={item.id} class="review-card">
+                                        <header>
+                                            <h3>{item.meta.name}</h3>
+                                        </header>
+                                        <div class="pill-row">
+                                            <template if:true={item.scheduled}>
+                                                <span class="summary-pill">Scheduled</span>
+                                            </template>
+                                            <template if:true={item.going}>
+                                                <span class="summary-pill">Going</span>
+                                            </template>
+                                            <template if:true={item.appointmentCompleted}>
+                                                <span class="summary-pill">Appt Completed</span>
+                                            </template>
+                                            <template if:true={item.appointmentCompletedIneffective}>
+                                                <span class="summary-pill">Completed (Ineffective)</span>
+                                            </template>
+                                            <template if:true={item.suspended}>
+                                                <span class="summary-pill">Suspended</span>
+                                            </template>
+                                            <template if:true={item.careNotApplicable}>
+                                                <span class="summary-pill">Care Not Applicable</span>
+                                            </template>
+                                        </div>
+                                        <p class="scr-notes">
+                                            <template if:true={item.notes}>
+                                                {item.notes}
+                                            </template>
+                                            <template if:false={item.notes}>
+                                                —
+                                            </template>
+                                        </p>
+                                    </article>
+                                </template>
+                            </div>
+                        </template>
+
+                        <div class="wizard-footer">
+                            <button class="ghost-button" type="button" onclick={wizardBack}>Back</button>
+                            <div class="wizard-actions">
+                                <template if:true={wizardStepIsReview}>
+                                    <button class="ghost-button" type="button" onclick={handleReviewEditDetails}>Edit Details</button>
+                                    <button class="ghost-button" type="button" onclick={handleReviewChangeSelection}>Change Selection</button>
+                                </template>
+                                <template if:false={wizardStepIsReview}>
+                                    <button class="ghost-button" type="button" onclick={cancelWizard}>Cancel</button>
+                                </template>
+                                <button class="primary-button" type="button" onclick={wizardNext} disabled={wizardNextDisabled}>
+                                    <template if:true={wizardStepIsReview}>Save</template>
+                                    <template if:false={wizardStepIsReview}>Next</template>
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                </template>
+            </template>
+        </div>
+    </template>
+</template>
