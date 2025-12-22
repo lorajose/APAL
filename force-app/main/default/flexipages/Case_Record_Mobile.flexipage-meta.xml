@@ -1768,7 +1768,7 @@
                     <name>actionNames</name>
                     <valueList>
                         <valueListItems>
-                            <value>Case.Edit_via_Wizard</value>
+                            <value>Case.Edit_via_Wizard_mobile</value>
                         </valueListItems>
                         <valueListItems>
                             <value>Case.New_CareRequest</value>
@@ -2093,15 +2093,10 @@
         <name>flexipage:recordHomeSingleColNoHeaderTemplateDesktop</name>
         <properties>
             <name>actionNames</name>
-            <valueList>
-                <valueListItems>
-                    <value>Case.Edit_via_Wizard</value>
-                </valueListItems>
-            </valueList>
         </properties>
         <properties>
             <name>enablePageActionConfig</name>
-            <value>true</value>
+            <value>false</value>
         </properties>
     </template>
     <type>RecordPage</type>
