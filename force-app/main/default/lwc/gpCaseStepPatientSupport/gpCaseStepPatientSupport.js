@@ -3,8 +3,10 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getSupportCatalog from '@salesforce/apex/GPCaseService.getSupportCatalog';
 import getPatientSupports from '@salesforce/apex/GPCaseService.getPatientSupports';
 import savePatientSupports from '@salesforce/apex/GPCaseService.savePatientSupports';
-import { getRecord } from 'lightning/uiRecordApi';
+import { getRecord, getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { refreshApex } from '@salesforce/apex';
 import CASE_RECORDTYPE_DEVNAME from '@salesforce/schema/Case.RecordType.DeveloperName';
+import CASE_TYPE_FIELD from '@salesforce/schema/Case.Case_Type__c';
 
 const cloneList = (list = []) => JSON.parse(JSON.stringify(list || []));
 const STEP_NUMBER = 16;
@@ -14,6 +16,7 @@ export default class GpCaseStepPatientSupport extends LightningElement {
     @api caseId;
     @api recordId;
     @api layoutMode = false;
+    @api caseType;
     _layoutContext = 'auto';
 
     @track supportMode = 'grid';
@@ -39,6 +42,8 @@ export default class GpCaseStepPatientSupport extends LightningElement {
     wizardSearch = '';
 
     recordTypeDeveloperName;
+    caseTypeFromRecord;
+    wiredSupportsResult;
 
     @api
     get layoutContext() {
@@ -92,7 +97,7 @@ export default class GpCaseStepPatientSupport extends LightningElement {
 
     get headerTitle() {
         if (this.effectiveLayoutContext === 'relatedcase') {
-            return `Patient Support for Parent Case (${this.supportsCountDisplay})`;
+            return `Support for Parent Case (${this.supportsCountDisplay})`;
         }
         return `Patient Support (${this.supportsCountDisplay})`;
     }
@@ -224,8 +229,27 @@ export default class GpCaseStepPatientSupport extends LightningElement {
         }
     }
 
+    get catalogCaseType() {
+        if (this.caseType) {
+            return this.caseType;
+        }
+        return this.caseTypeFromRecord || null;
+    }
+
+    @wire(getRecord, { recordId: '$surfaceRecordId', fields: [CASE_TYPE_FIELD] })
+    wiredCaseType({ data, error }) {
+        if (data) {
+            this.caseTypeFromRecord = data.fields.Case_Type__c?.value || null;
+        }
+        if (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error loading case type', error);
+        }
+    }
+
     @wire(getPatientSupports, { caseId: '$effectiveCaseId' })
     wiredSupports({ data, error }) {
+        this.wiredSupportsResult = { data, error };
         if (data) {
             this.supports = Array.isArray(data) ? cloneList(data) : [];
             if (this.supports.length) {
@@ -245,10 +269,11 @@ export default class GpCaseStepPatientSupport extends LightningElement {
     async loadCatalog() {
         this.isCatalogLoading = true;
         try {
-            const data = await getSupportCatalog();
+            const data = await getSupportCatalog({ caseType: this.catalogCaseType });
             this.catalog = (data || []).map(item => ({
                 id: item.id,
-                name: item.name
+                name: item.name,
+                category: item.category || ''
             }));
             const index = {};
             this.catalog.forEach(item => {
@@ -408,6 +433,12 @@ export default class GpCaseStepPatientSupport extends LightningElement {
     handleWizardSelectionToggle(event) {
         const id = event.target.dataset.id;
         if (!id) return;
+        if (this.wizardMode === 'add') {
+            const existingIds = new Set(this.supports.map(item => item.id));
+            if (existingIds.has(id)) {
+                return;
+            }
+        }
         if (this.wizardSelection.includes(id)) {
             this.wizardSelection = this.wizardSelection.filter(sel => sel !== id);
         } else {
@@ -545,11 +576,25 @@ export default class GpCaseStepPatientSupport extends LightningElement {
             const message = this.pendingSuccessMessage || 'Patient Support saved.';
             this.pendingSuccessMessage = null;
             this.showToast('Success', message, 'success');
+            if (!this.showNavigation) {
+                this.refreshPageLayout();
+            }
         } catch (err) {
             const message = err?.body?.message || err?.message || 'Unexpected error saving patient support';
             this.showToast('Error', message, 'error');
         } finally {
             this.isSaving = false;
+        }
+    }
+
+    refreshPageLayout() {
+        try {
+            getRecordNotifyChange([{ recordId: this.effectiveCaseId }]);
+        } catch (e) {
+            // ignore notify issues
+        }
+        if (this.wiredSupportsResult) {
+            refreshApex(this.wiredSupportsResult);
         }
     }
 

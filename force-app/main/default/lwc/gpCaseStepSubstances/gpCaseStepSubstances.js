@@ -4,6 +4,7 @@ import getCaseFullData from '@salesforce/apex/GPCaseService.getCaseFullData';
 import getSubstanceCatalog from '@salesforce/apex/GPCaseService.getSubstanceCatalog';
 import saveSubstances from '@salesforce/apex/GPCaseService.saveSubstances';
 import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { refreshApex } from '@salesforce/apex';
 import { getRecord } from 'lightning/uiRecordApi';
 import CASE_TYPE_FIELD from '@salesforce/schema/Case.Case_Type__c';
 
@@ -60,6 +61,7 @@ export default class GpCaseStepSubstances extends LightningElement {
     wizardFilter = 'name';
     wizardSearch = '';
     hydratedFromServer = false;
+    wiredCaseDataResult;
 
     @api
     set data(value) {
@@ -114,7 +116,7 @@ export default class GpCaseStepSubstances extends LightningElement {
     }
 
     get headerIconName() {
-        return 'utility:priority';
+        return 'utility:people';
     }
 
     get showSubstanceName() {
@@ -360,7 +362,15 @@ export default class GpCaseStepSubstances extends LightningElement {
 
     @wire(getCaseFullData, { caseId: '$wireCaseId' })
     wiredCaseData({ data, error }) {
-        if (data && !this.hydratedFromServer && !this.substances.length) {
+        this.wiredCaseDataResult = { data, error };
+        if (data && this.isStandaloneLayout) {
+            const subs = Array.isArray(data.substances) ? data.substances : [];
+            this.substances = cloneList(subs);
+            this.hydratedFromServer = true;
+            this.hasLoadedInitialData = true;
+            // eslint-disable-next-line no-console
+            console.error(`[gpCaseStepSubstances] refreshed via wire len=${this.substances.length}`);
+        } else if (data && !this.hydratedFromServer && !this.substances.length) {
             const subs = Array.isArray(data.substances) ? data.substances : [];
             this.substances = cloneList(subs);
             this.hydratedFromServer = true;
@@ -426,7 +436,7 @@ export default class GpCaseStepSubstances extends LightningElement {
     }
 
     get wizardCatalogItems() {
-        const existingIds = new Set(this.substances.map(sub => sub.id));
+        const existingIds = new Set(this.substances.map(sub => sub.catalogId || sub.id));
         const term = (this.wizardSearch || '').toLowerCase();
         return this.catalog
             .filter(item => {
@@ -480,6 +490,12 @@ export default class GpCaseStepSubstances extends LightningElement {
     handleWizardSelectionToggle(event) {
         const id = event.currentTarget.dataset.id;
         if (!id) return;
+        if (this.wizardMode === 'add') {
+            const existingIds = new Set(this.substances.map(sub => sub.catalogId || sub.id));
+            if (existingIds.has(id)) {
+                return;
+            }
+        }
         if (this.wizardSelection.includes(id)) {
             this.wizardSelection = this.wizardSelection.filter(sel => sel !== id);
         } else {
@@ -628,11 +644,8 @@ export default class GpCaseStepSubstances extends LightningElement {
         } catch (e) {
             // ignore notify issues
         }
-        try {
-            // eslint-disable-next-line no-restricted-globals
-            window.location.reload();
-        } catch (e) {
-            // ignore reload issues
+        if (this.wiredCaseDataResult) {
+            refreshApex(this.wiredCaseDataResult);
         }
     }
 

@@ -4,6 +4,7 @@ import getCaseFullData from '@salesforce/apex/GPCaseService.getCaseFullData';
 import getMedicationCatalog from '@salesforce/apex/GPCaseService.getMedicationCatalog';
 import saveMedications from '@salesforce/apex/GPCaseService.saveMedications';
 import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { refreshApex } from '@salesforce/apex';
 import { getRecord } from 'lightning/uiRecordApi';
 import CASE_TYPE_FIELD from '@salesforce/schema/Case.Case_Type__c';
 
@@ -85,6 +86,7 @@ export default class GpCaseStepMedications extends LightningElement {
     wizardFilter = 'title';
     wizardSearch = '';
     hydratedFromServer = false;
+    wiredCaseDataResult;
 
     @api
     set data(value) {
@@ -143,7 +145,7 @@ export default class GpCaseStepMedications extends LightningElement {
     }
 
     get headerIconName() {
-        return 'utility:priority';
+        return 'utility:people';
     }
 
     get effectiveCaseId() {
@@ -209,7 +211,15 @@ export default class GpCaseStepMedications extends LightningElement {
 
     @wire(getCaseFullData, { caseId: '$wireCaseId' })
     wiredCaseData({ data, error }) {
-        if (data && !this.hydratedFromServer && !this.medications.length) {
+        this.wiredCaseDataResult = { data, error };
+        if (data && this.isStandaloneLayout) {
+            const meds = Array.isArray(data.medications) ? data.medications : [];
+            this.medications = cloneMedList(meds);
+            this.hydratedFromServer = true;
+            this.hasLoadedInitialData = true;
+            // eslint-disable-next-line no-console
+            console.error(`[gpCaseStepMedications] refreshed via wire len=${this.medications.length}`);
+        } else if (data && !this.hydratedFromServer && !this.medications.length) {
             const meds = Array.isArray(data.medications) ? data.medications : [];
             this.medications = cloneMedList(meds);
             this.hydratedFromServer = true;
@@ -461,6 +471,12 @@ export default class GpCaseStepMedications extends LightningElement {
     handleWizardSelectionToggle(event) {
         const id = event.currentTarget.dataset.id;
         if (!id) return;
+        if (this.wizardMode === 'add') {
+            const existingIds = new Set(this.medications.map(med => med.catalogId || med.id));
+            if (existingIds.has(id)) {
+                return;
+            }
+        }
         const exists = this.wizardSelection.includes(id);
         if (exists) {
             this.wizardSelection = this.wizardSelection.filter(item => item !== id);
@@ -687,11 +703,8 @@ export default class GpCaseStepMedications extends LightningElement {
         } catch (e) {
             // ignore notify issues
         }
-        try {
-            // eslint-disable-next-line no-restricted-globals
-            window.location.reload();
-        } catch (e) {
-            // ignore reload issues
+        if (this.wiredCaseDataResult) {
+            refreshApex(this.wiredCaseDataResult);
         }
     }
 
@@ -719,7 +732,7 @@ export default class GpCaseStepMedications extends LightningElement {
     }
 
     get wizardCatalogItems() {
-        const existingIds = new Set(this.medications.map(med => med.id));
+        const existingIds = new Set(this.medications.map(med => med.catalogId || med.id));
         const term = (this.wizardSearch || '').toLowerCase();
         return this.catalog
             .filter(item => {

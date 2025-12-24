@@ -475,6 +475,12 @@
 	margin-bottom: 0.9rem;
 }
 
+.checkbox-field {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
 .detail-card .textarea {
 	min-height: 120px;
 	margin-top: 0.35rem;
