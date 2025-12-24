@@ -1,8 +1,11 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getCaseFullData from '@salesforce/apex/GPCaseService.getCaseFullData';
+import getMedicationCatalog from '@salesforce/apex/GPCaseService.getMedicationCatalog';
 import saveMedications from '@salesforce/apex/GPCaseService.saveMedications';
-import { MEDICATION_ITEMS, MEDICATION_INDEX } from 'c/gpCaseCatalogs';
+import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { getRecord } from 'lightning/uiRecordApi';
+import CASE_TYPE_FIELD from '@salesforce/schema/Case.Case_Type__c';
 
 const STEP_NUMBER = 10;
 
@@ -48,8 +51,6 @@ const UNITS = [
     'Custom'
 ];
 
-const ITEMS = MEDICATION_ITEMS;
-const ITEM_INDEX = MEDICATION_INDEX;
 
 function cloneMedList(list) {
     return JSON.parse(JSON.stringify(list || []));
@@ -61,6 +62,10 @@ export default class GpCaseStepMedications extends LightningElement {
     @api layoutMode = false;
     @api caseType;
     _layoutContext = 'auto'; // auto | case | relatedcase
+    caseTypeFromRecord;
+
+    @track catalog = [];
+    @track catalogIndex = {};
 
     @track medMode = 'grid';
     @track medications = [];
@@ -184,6 +189,24 @@ export default class GpCaseStepMedications extends LightningElement {
         return this.caseId || this.recordId || null;
     }
 
+    get catalogCaseType() {
+        if (this.caseType) {
+            return this.caseType;
+        }
+        return this.caseTypeFromRecord || null;
+    }
+
+    @wire(getRecord, { recordId: '$wireCaseId', fields: [CASE_TYPE_FIELD] })
+    wiredCaseRecord({ data, error }) {
+        if (data) {
+            this.caseTypeFromRecord = data.fields.Case_Type__c?.value || null;
+        }
+        if (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error loading case type', error);
+        }
+    }
+
     @wire(getCaseFullData, { caseId: '$wireCaseId' })
     wiredCaseData({ data, error }) {
         if (data && !this.hydratedFromServer && !this.medications.length) {
@@ -197,6 +220,28 @@ export default class GpCaseStepMedications extends LightningElement {
         if (error) {
             // eslint-disable-next-line no-console
             console.error('Error loading medications', error);
+        }
+    }
+
+    @wire(getMedicationCatalog, { caseType: '$catalogCaseType' })
+    wiredMedicationCatalog({ data, error }) {
+        if (data && Array.isArray(data) && data.length) {
+            this.catalog = data.map(item => ({
+                id: item.id,
+                title: item.name,
+                category: item.category || '',
+                description: item.description || '',
+                brand: item.brand || ''
+            }));
+            const index = {};
+            this.catalog.forEach(item => {
+                index[item.id] = item;
+            });
+            this.catalogIndex = index;
+        }
+        if (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error loading medication catalog', error);
         }
     }
 
@@ -222,7 +267,7 @@ export default class GpCaseStepMedications extends LightningElement {
         return this.medications
             .map(item => ({
                 ...item,
-                meta: ITEM_INDEX[item.id] || {
+                meta: this.catalogIndex[item.id] || {
                     title: item.catalogName || item.meta?.title || item.id,
                     category: item.catalogCategory || item.meta?.category || ''
                 },
@@ -347,7 +392,7 @@ export default class GpCaseStepMedications extends LightningElement {
         this.wizardMode = 'edit';
         this.wizardSelection = current.map(med => med.id);
         this.wizardDraft = this.decorateWizardDraft(current.map(med => {
-            const meta = ITEM_INDEX[med.id] || {
+            const meta = this.catalogIndex[med.id] || {
                 title: med.catalogName || med.id,
                 category: med.catalogCategory || ''
             };
@@ -381,7 +426,7 @@ export default class GpCaseStepMedications extends LightningElement {
         this.wizardSelection = [id];
         this.wizardDraft = this.decorateWizardDraft([{
             id,
-            meta: ITEM_INDEX[id],
+            meta: this.catalogIndex[id],
             action: existing.action || '',
             frequency: existing.frequency || '',
             amount: existing.amount || '',
@@ -428,7 +473,7 @@ export default class GpCaseStepMedications extends LightningElement {
         if (this.wizardStep === 0) {
             const draft = this.wizardSelection.map(id => ({
                 id,
-                meta: ITEM_INDEX[id],
+                meta: this.catalogIndex[id],
                 action: '',
                 frequency: '',
                 amount: '',
@@ -503,7 +548,7 @@ export default class GpCaseStepMedications extends LightningElement {
 
     saveWizardDraft() {
         const draft = this.wizardDraft.map(item => {
-            const meta = ITEM_INDEX[item.id] || {};
+            const meta = this.catalogIndex[item.id] || {};
             return {
                 id: item.id,
                 catalogName: item.catalogName || meta.title || item.meta?.title || item.id,
@@ -625,11 +670,28 @@ export default class GpCaseStepMedications extends LightningElement {
             const message = this.pendingSuccessMessage || 'Medications saved.';
             this.pendingSuccessMessage = null;
             this.showToast('Success', message, 'success');
+            if (!this.showNavigation) {
+                this.refreshPageLayout();
+            }
         } catch (err) {
             const message = err?.body?.message || err?.message || 'Unexpected error saving medications';
             this.showToast('Error', message, 'error');
         } finally {
             this.isSaving = false;
+        }
+    }
+
+    refreshPageLayout() {
+        try {
+            getRecordNotifyChange([{ recordId: this.effectiveCaseId }]);
+        } catch (e) {
+            // ignore notify issues
+        }
+        try {
+            // eslint-disable-next-line no-restricted-globals
+            window.location.reload();
+        } catch (e) {
+            // ignore reload issues
         }
     }
 
@@ -653,13 +715,13 @@ export default class GpCaseStepMedications extends LightningElement {
 
     /* TEMPLATE HELPERS */
     get catalogItems() {
-        return ITEMS;
+        return this.catalog;
     }
 
     get wizardCatalogItems() {
         const existingIds = new Set(this.medications.map(med => med.id));
         const term = (this.wizardSearch || '').toLowerCase();
-        return ITEMS
+        return this.catalog
             .filter(item => {
                 if (!term) return true;
                 if (this.wizardFilter === 'category') {
@@ -728,7 +790,7 @@ export default class GpCaseStepMedications extends LightningElement {
 
     decorateWizardItem(entry) {
         const base = { ...entry };
-        base.meta = base.meta || ITEM_INDEX[base.id] || {};
+        base.meta = base.meta || this.catalogIndex[base.id] || {};
         base.actionOptionsDecorated = this.decorateOptionList(ACTION_OPTIONS, base.action || '');
         base.frequencyOptionsDecorated = this.decorateOptionList(FREQ, base.frequency || '');
         base.unitOptionsDecorated = this.decorateOptionList(UNITS, base.unit || '');
@@ -753,7 +815,7 @@ export default class GpCaseStepMedications extends LightningElement {
     buildMedicationPayload() {
         return cloneMedList(this.medications)
             .map(med => {
-                const meta = ITEM_INDEX[med.id] || {};
+                const meta = this.catalogIndex[med.id] || {};
                 const catalogName = med.catalogName || meta.title || '';
                 if (!catalogName) {
                     return null;

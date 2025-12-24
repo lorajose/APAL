@@ -1,8 +1,19 @@
 <template>
-  <div class="wizard-title">Case Creation Wizard</div>
+  <div class="wizard-title">
+    <template if:true={isUpdateMode}>Case Editing Wizard</template>
+    <template if:false={isUpdateMode}>Case Creation Wizard</template>
+  </div>
   <div class="wizard-subtitle">
     Go through all the steps and fill in the required information → Review and edit if needed → Save
   </div>
+  <template if:true={isSaving}>
+    <div class="wizard-overlay" role="status" aria-live="polite">
+      <div class="wizard-overlay-card">
+        <lightning-spinner alternative-text="Saving" size="medium"></lightning-spinner>
+        <span class="wizard-overlay-text">{savingLabel}</span>
+      </div>
+    </div>
+  </template>
     <div class={wizardLayoutClass}>
       <div class="sidebar">
         <div class="sidebar-title">Steps</div>
@@ -33,12 +44,6 @@
     <div class="step-panel">
       <h2 class="step-title">Step {currentStep} — {currentSectionName}</h2>
       <p class="step-description">{currentDescription}</p>
-      <template if:true={isSaving}>
-        <div class="saving-indicator">
-          <lightning-spinner alternative-text="Saving" size="small"></lightning-spinner>
-          <span class="saving-text">Processing...</span>
-        </div>
-      </template>
       <template if:true={inlineMessage}>
         <div class="inline-alert" role="alert">
           <span class="inline-alert-title">{inlineMessage.title}</span>
@@ -144,6 +149,7 @@
       <template if:true={isStep10}>
         <c-gp-case-step-medications
           case-id={caseId}
+          case-type={caseType}
           data={form.medications}
           onnext={handleNext}
           ondataupdated={handleDataUpdated}
@@ -155,6 +161,7 @@
       <template if:true={isStep11}>
         <c-gp-case-step-substances
           case-id={caseId}
+          case-type={caseType}
           data={form.substances}
           onnext={handleNext}
           ondataupdated={handleDataUpdated}
@@ -166,6 +173,7 @@
       <template if:true={isStep12}>
         <c-gp-case-step-screeners
           case-id={caseId}
+          case-type={caseType}
           data={form.screeners}
           onnext={handleNext}
           ondataupdated={handleDataUpdated}
@@ -177,6 +185,7 @@
       <template if:true={isStep13}>
         <c-gp-case-step-concerns
           case-id={caseId}
+          case-type={caseType}
           data={form.concerns}
           onnext={handleNext}
           ondataupdated={handleDataUpdated}
@@ -187,6 +196,7 @@
       <template if:true={isStep14}>
         <c-gp-case-step-safety-risks
           case-id={caseId}
+          case-type={caseType}
           data={form.safetyRisks}
           onnext={handleNext}
           ondataupdated={handleDataUpdated}

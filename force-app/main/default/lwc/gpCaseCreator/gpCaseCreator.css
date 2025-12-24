@@ -211,6 +211,33 @@
 	font-size: 0.95rem;
 }
 
+/* Full-screen blocking spinner */
+.wizard-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(15, 23, 42, 0.35);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 9999;
+}
+
+.wizard-overlay-card {
+	background: #ffffff;
+	border-radius: 0.75rem;
+	padding: 1.5rem 2rem;
+	box-shadow: 0 20px 40px rgba(15, 23, 42, 0.2);
+	display: inline-flex;
+	align-items: center;
+	gap: 0.75rem;
+	color: #0f172a;
+	font-weight: 600;
+}
+
+.wizard-overlay-text {
+	font-size: 1rem;
+}
+
 /* ------------------------------------------------------------ */
 /* MOBILE LAYOUT                                                */
 /* ------------------------------------------------------------ */

@@ -1,11 +1,11 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getCaseFullData from '@salesforce/apex/GPCaseService.getCaseFullData';
+import getSafetyRiskCatalog from '@salesforce/apex/GPCaseService.getSafetyRiskCatalog';
 import saveSafetyRisks from '@salesforce/apex/GPCaseService.saveSafetyRisks';
-import { SAFETY_RISK_ITEMS as SAFETY_RISK_CATALOG, SAFETY_RISK_INDEX as SAFETY_RISK_LOOKUP } from 'c/gpCaseCatalogs';
-
-const SAFETY_RISKS = SAFETY_RISK_CATALOG;
-const RISK_INDEX = SAFETY_RISK_LOOKUP;
+import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { getRecord } from 'lightning/uiRecordApi';
+import CASE_TYPE_FIELD from '@salesforce/schema/Case.Case_Type__c';
 
 const cloneList = (list = []) => JSON.parse(JSON.stringify(list || []));
 
@@ -15,6 +15,10 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
     @api layoutMode = false;
     @api caseType;
     _layoutContext = 'auto'; // auto | case | relatedcase
+
+    @track catalog = [];
+    @track catalogIndex = {};
+    caseTypeFromRecord;
 
     @track safetyMode = 'grid';
     @track risks = [];
@@ -136,6 +140,24 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
         return this.caseId || this.recordId || null;
     }
 
+    get catalogCaseType() {
+        if (this.caseType) {
+            return this.caseType;
+        }
+        return this.caseTypeFromRecord || null;
+    }
+
+    @wire(getRecord, { recordId: '$wireCaseId', fields: [CASE_TYPE_FIELD] })
+    wiredCaseRecord({ data, error }) {
+        if (data) {
+            this.caseTypeFromRecord = data.fields.Case_Type__c?.value || null;
+        }
+        if (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error loading case type', error);
+        }
+    }
+
     @wire(getCaseFullData, { caseId: '$wireCaseId' })
     wiredCaseData({ data, error }) {
         if (data && !this.hydratedFromServer && !this.risks.length) {
@@ -149,6 +171,26 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
         if (error) {
             // eslint-disable-next-line no-console
             console.error('Error loading safety risks', error);
+        }
+    }
+
+    @wire(getSafetyRiskCatalog, { caseType: '$catalogCaseType' })
+    wiredSafetyCatalog({ data, error }) {
+        if (data && Array.isArray(data) && data.length) {
+            this.catalog = data.map(item => ({
+                id: item.id,
+                name: item.name,
+                category: item.category || ''
+            }));
+            const index = {};
+            this.catalog.forEach(item => {
+                index[item.id] = item;
+            });
+            this.catalogIndex = index;
+        }
+        if (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error loading safety risk catalog', error);
         }
     }
 
@@ -182,7 +224,7 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
             .map(item => ({
                 ...item,
                 meta: (() => {
-                    const base = RISK_INDEX[item.id] || {};
+                    const base = this.catalogIndex[item.id] || {};
                     const displayName = item.catalogName
                         || item.meta?.name
                         || base.name
@@ -251,7 +293,7 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
         this.safetyMode = 'wizard';
         this.wizardSelection = current.map(risk => risk.id);
         this.wizardDraft = current.map(risk => {
-            const meta = RISK_INDEX[risk.id] || {
+            const meta = this.catalogIndex[risk.id] || {
                 name: risk.catalogName || risk.id,
                 category: risk.catalogCategory || ''
             };
@@ -345,14 +387,14 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
     }
 
     get wizardCategoryOptions() {
-        const categories = Array.from(new Set(SAFETY_RISKS.map(item => item.category)));
+        const categories = Array.from(new Set(this.catalog.map(item => item.category).filter(Boolean)));
         return [{ label: 'All categories', value: 'all' }, ...categories.map(cat => ({ label: cat, value: cat }))];
     }
 
     get wizardCatalogItems() {
         const existingIds = new Set(this.risks.map(risk => risk.id));
         const term = (this.wizardSearch || '').toLowerCase();
-        return SAFETY_RISKS
+        return this.catalog
             .filter(item => this.wizardCategoryFilter === 'all' || item.category === this.wizardCategoryFilter)
             .filter(item => {
                 if (!term) return true;
@@ -408,7 +450,7 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
         if (this.wizardStep === 0) {
             this.wizardDraft = this.wizardSelection.map(id => ({
                 id,
-                meta: RISK_INDEX[id],
+                meta: this.catalogIndex[id],
                 recent: false,
                 historical: false,
                 notes: '',
@@ -471,7 +513,7 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
 
     saveWizardDraft() {
         const additions = this.wizardDraft.map(item => {
-            const meta = RISK_INDEX[item.id] || {};
+            const meta = this.catalogIndex[item.id] || {};
             return {
                 id: item.id,
                 catalogName: meta.name || '',
@@ -520,11 +562,28 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
             const message = this.pendingSuccessMessage || 'Safety risks saved.';
             this.pendingSuccessMessage = null;
             this.showToast('Success', message, 'success');
+            if (!this.showNavigation) {
+                this.refreshPageLayout();
+            }
         } catch (err) {
             const message = err?.body?.message || err?.message || 'Unexpected error saving safety risks';
             this.showToast('Error', message, 'error');
         } finally {
             this.isSaving = false;
+        }
+    }
+
+    refreshPageLayout() {
+        try {
+            getRecordNotifyChange([{ recordId: this.effectiveCaseId }]);
+        } catch (e) {
+            // ignore notify issues
+        }
+        try {
+            // eslint-disable-next-line no-restricted-globals
+            window.location.reload();
+        } catch (e) {
+            // ignore reload issues
         }
     }
 
@@ -542,12 +601,19 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
     buildSafetyRiskPayload() {
         return cloneList(this.risks)
             .map(risk => {
-                const meta = RISK_INDEX[risk.id] || {};
+                const meta = this.catalogIndex[risk.id] || {};
                 const catalogName = risk.catalogName || meta.name || '';
                 if (!catalogName) {
                     return null;
                 }
+                const idValue = risk.catalogId || risk.id;
+                const catalogId = (typeof idValue === 'string'
+                    && (idValue.length === 15 || idValue.length === 18)
+                    && /^[a-zA-Z0-9]+$/.test(idValue))
+                    ? idValue
+                    : null;
                 return {
+                    catalogId,
                     catalogName,
                     catalogCategory: risk.catalogCategory || meta.category || '',
                     recent: risk.recent === undefined ? null : risk.recent,

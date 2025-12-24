@@ -11,6 +11,7 @@ export default class PcqtSelector extends LightningElement {
     @api required = false;
     @api disabled = false;
     @api showSaveButtons;
+    @api wizardMode = false;
 
     // Wizard-mode controlled prop:
     _value = [];
@@ -36,7 +37,7 @@ export default class PcqtSelector extends LightningElement {
 
     get isWizardMode() {
         // Si NO hay recordId, asumimos wizard controlled
-        return !this.recordId;
+        return this.wizardMode || !this.recordId;
     }
 
     get showSave() {
