@@ -6,6 +6,7 @@ public with sharing class GPCaseService {
     public class SupportCatalogItem {
         @AuraEnabled public Id id;
         @AuraEnabled public String name;
+        @AuraEnabled public String category;
     }
     public class ConcernCatalogItem {
         @AuraEnabled public Id id;
@@ -146,15 +147,36 @@ public with sharing class GPCaseService {
     // ======================================================
     //
     @AuraEnabled(cacheable=true)
-    public static List<SupportCatalogItem> getSupportCatalog() {
+    public static List<SupportCatalogItem> getSupportCatalog(String caseType) {
         Schema.SObjectType supportType = Schema.getGlobalDescribe().get('Support__c');
         if (supportType == null) {
             return new List<SupportCatalogItem>();
         }
         Map<String, Schema.SObjectField> fields = supportType.getDescribe().fields.getMap();
-        String query = 'SELECT Id, Name' + (fields.containsKey('Active__c') ? ', Active__c' : '') + ' FROM Support__c';
-        if (fields.containsKey('Active__c')) {
-            query += ' WHERE Active__c = true';
+        Boolean hasActive = fields.containsKey('Active__c');
+        Boolean hasAddiction = fields.containsKey('Addiction_Services__c');
+        Boolean hasGeneral = fields.containsKey('General_Psychiatry__c');
+
+        String normalized = normalizeCaseType(caseType);
+        List<String> filters = new List<String>();
+        if (hasActive) {
+            filters.add('Active__c = true');
+        }
+        if (normalized == 'addiction medicine' && hasAddiction) {
+            filters.add('Addiction_Services__c = true');
+        } else if (normalized == 'general psychiatry' && hasGeneral) {
+            filters.add('General_Psychiatry__c = true');
+        } else {
+            return new List<SupportCatalogItem>();
+        }
+
+        String query = 'SELECT Id, Name';
+        if (fields.containsKey('Category__c')) {
+            query += ', Category__c';
+        }
+        query += ' FROM Support__c';
+        if (!filters.isEmpty()) {
+            query += ' WHERE ' + String.join(filters, ' AND ');
         }
         query += ' ORDER BY Name ASC';
 
@@ -163,6 +185,7 @@ public with sharing class GPCaseService {
             SupportCatalogItem item = new SupportCatalogItem();
             item.id = (Id)row.get('Id');
             item.name = (String)row.get('Name');
+            item.category = fields.containsKey('Category__c') ? (String)row.get('Category__c') : null;
             out.add(item);
         }
         return out;
@@ -670,6 +693,11 @@ public with sharing class GPCaseService {
         payload.put('safetyRisks', loadSafetyRisksForCase(parentCaseId));
 
         return payload;
+    }
+
+    @AuraEnabled
+    public static Map<String, Object> getCaseFullDataFresh(Id caseId) {
+        return getCaseFullData(caseId);
     }
 
     @AuraEnabled(cacheable=true)

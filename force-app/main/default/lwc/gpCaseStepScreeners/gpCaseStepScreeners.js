@@ -4,6 +4,7 @@ import getCaseFullData from '@salesforce/apex/GPCaseService.getCaseFullData';
 import getScreenerCatalog from '@salesforce/apex/GPCaseService.getScreenerCatalog';
 import saveScreeners from '@salesforce/apex/GPCaseService.saveScreeners';
 import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { refreshApex } from '@salesforce/apex';
 import { getRecord } from 'lightning/uiRecordApi';
 import CASE_TYPE_FIELD from '@salesforce/schema/Case.Case_Type__c';
 
@@ -39,6 +40,7 @@ export default class GpCaseStepScreeners extends LightningElement {
     wizardFilter = 'name';
     wizardSearch = '';
     hydratedFromServer = false;
+    wiredCaseDataResult;
 
     @api
     set data(value) {
@@ -93,7 +95,7 @@ export default class GpCaseStepScreeners extends LightningElement {
     }
 
     get headerIconName() {
-        return 'utility:priority';
+        return 'utility:people';
     }
 
     get effectiveCaseId() {
@@ -155,7 +157,15 @@ export default class GpCaseStepScreeners extends LightningElement {
 
     @wire(getCaseFullData, { caseId: '$wireCaseId' })
     wiredCaseData({ data, error }) {
-        if (data && !this.hydratedFromServer && !this.screeners.length) {
+        this.wiredCaseDataResult = { data, error };
+        if (data && this.isStandaloneLayout) {
+            const scr = Array.isArray(data.screeners) ? data.screeners : [];
+            this.screeners = cloneList(scr);
+            this.hydratedFromServer = true;
+            this.hasLoadedInitialData = true;
+            // eslint-disable-next-line no-console
+            console.error(`[gpCaseStepScreeners] refreshed via wire len=${this.screeners.length}`);
+        } else if (data && !this.hydratedFromServer && !this.screeners.length) {
             const scr = Array.isArray(data.screeners) ? data.screeners : [];
             this.screeners = cloneList(scr);
             this.hydratedFromServer = true;
@@ -402,7 +412,7 @@ export default class GpCaseStepScreeners extends LightningElement {
     }
 
     get wizardCatalogItems() {
-        const existingIds = new Set(this.screeners.map(scr => scr.id));
+        const existingIds = new Set(this.screeners.map(scr => scr.catalogId || scr.id));
         const term = (this.wizardSearch || '').toLowerCase();
         return this.catalog
             .filter(item => {
@@ -456,6 +466,12 @@ export default class GpCaseStepScreeners extends LightningElement {
     handleWizardSelectionToggle(event) {
         const id = event.currentTarget.dataset.id;
         if (!id) return;
+        if (this.wizardMode === 'add') {
+            const existingIds = new Set(this.screeners.map(scr => scr.catalogId || scr.id));
+            if (existingIds.has(id)) {
+                return;
+            }
+        }
         if (this.wizardSelection.includes(id)) {
             this.wizardSelection = this.wizardSelection.filter(sel => sel !== id);
         } else {
@@ -607,11 +623,8 @@ export default class GpCaseStepScreeners extends LightningElement {
         } catch (e) {
             // ignore notify issues
         }
-        try {
-            // eslint-disable-next-line no-restricted-globals
-            window.location.reload();
-        } catch (e) {
-            // ignore reload issues
+        if (this.wiredCaseDataResult) {
+            refreshApex(this.wiredCaseDataResult);
         }
     }
 

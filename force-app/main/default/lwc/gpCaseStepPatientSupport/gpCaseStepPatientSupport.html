@@ -144,27 +144,27 @@
                                     </template>
                                     <div class="support-flags">
                                         <label class="flag-item">
-                                            <input type="checkbox" data-id={sup.id} data-field="scheduled" checked={sup.scheduled} onchange={handleCardFlagChange} />
+                                            <input type="checkbox" data-id={sup.id} data-field="scheduled" checked={sup.scheduled} disabled />
                                             <span>Scheduled</span>
                                         </label>
                                         <label class="flag-item">
-                                            <input type="checkbox" data-id={sup.id} data-field="going" checked={sup.going} onchange={handleCardFlagChange} />
+                                            <input type="checkbox" data-id={sup.id} data-field="going" checked={sup.going} disabled />
                                             <span>Going</span>
                                         </label>
                                         <label class="flag-item">
-                                            <input type="checkbox" data-id={sup.id} data-field="appointmentCompleted" checked={sup.appointmentCompleted} onchange={handleCardFlagChange} />
+                                            <input type="checkbox" data-id={sup.id} data-field="appointmentCompleted" checked={sup.appointmentCompleted} disabled />
                                             <span>Appointment Completed</span>
                                         </label>
                                         <label class="flag-item">
-                                            <input type="checkbox" data-id={sup.id} data-field="appointmentCompletedIneffective" checked={sup.appointmentCompletedIneffective} onchange={handleCardFlagChange} />
+                                            <input type="checkbox" data-id={sup.id} data-field="appointmentCompletedIneffective" checked={sup.appointmentCompletedIneffective} disabled />
                                             <span>Completed (Ineffective)</span>
                                         </label>
                                         <label class="flag-item">
-                                            <input type="checkbox" data-id={sup.id} data-field="suspended" checked={sup.suspended} onchange={handleCardFlagChange} />
+                                            <input type="checkbox" data-id={sup.id} data-field="suspended" checked={sup.suspended} disabled />
                                             <span>Suspended</span>
                                         </label>
                                         <label class="flag-item">
-                                            <input type="checkbox" data-id={sup.id} data-field="careNotApplicable" checked={sup.careNotApplicable} onchange={handleCardFlagChange} />
+                                            <input type="checkbox" data-id={sup.id} data-field="careNotApplicable" checked={sup.careNotApplicable} disabled />
                                             <span>Care Not Applicable</span>
                                         </label>
                                     </div>
@@ -327,7 +327,6 @@
                         </template>
 
                         <div class="wizard-footer">
-                            <button class="ghost-button" type="button" onclick={wizardBack}>Back</button>
                             <div class="wizard-actions">
                                 <template if:true={wizardStepIsReview}>
                                     <button class="ghost-button" type="button" onclick={handleReviewEditDetails}>Edit Details</button>

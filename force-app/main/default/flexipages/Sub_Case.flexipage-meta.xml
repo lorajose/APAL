@@ -8,6 +8,13 @@
                     <valueList>
                         <valueListItems>
                             <value>Case.Edit_via_Wizard</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Case_Type__c}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>General Psychiatry</rightValue>
+                                </criteria>
+                            </visibilityRule>
                         </valueListItems>
                         <valueListItems>
                             <value>Case.CareNoteCR</value>
@@ -1146,7 +1153,7 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>layoutContext</name>
-                    <value>auto</value>
+                    <value>relatedCase</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>layoutMode</name>

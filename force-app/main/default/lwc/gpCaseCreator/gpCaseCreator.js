@@ -17,6 +17,7 @@ import saveScreeners from '@salesforce/apex/GPCaseService.saveScreeners';
 import saveConcerns from '@salesforce/apex/GPCaseService.saveConcerns';
 import saveSafetyRisks from '@salesforce/apex/GPCaseService.saveSafetyRisks';
 import getCaseFullData from '@salesforce/apex/GPCaseService.getCaseFullData';
+import getCaseFullDataFresh from '@salesforce/apex/GPCaseService.getCaseFullDataFresh';
 import getPcqtSelections from '@salesforce/apex/PCQTSelectorController.getPcqtSelections';
 import savePcqtSelections from '@salesforce/apex/PCQTSelectorController.savePcqtSelections';
 import { MEDICATION_INDEX, SUBSTANCE_INDEX, SCREENER_INDEX, SAFETY_RISK_INDEX } from 'c/gpCaseCatalogs';
@@ -566,6 +567,7 @@ get stepsFormatted() {
             }
 
             if (this.caseId) {
+                await this.refreshRecordBeforeLoad();
                 const loadedFromServer = await this.loadFullCaseData();
                 const stepsToActivateWarning = [2, 4, 5, 8, 9, 13];
                 stepsToActivateWarning.forEach(step => {
@@ -583,6 +585,20 @@ get stepsFormatted() {
         } finally {
             this.initializingCaseContext = false;
         }
+    }
+
+    async refreshRecordBeforeLoad() {
+        const ids = new Set();
+        if (this.recordId) ids.add(this.recordId);
+        if (this.caseId) ids.add(this.caseId);
+        if (ids.size === 0) return;
+        try {
+            getRecordNotifyChange(Array.from(ids).map(recordId => ({ recordId })));
+        } catch (e) {
+            // ignore notify issues
+        }
+        // Allow LDS to process before pulling fresh apex data.
+        await new Promise(resolve => setTimeout(resolve, 0));
     }
 
     logCollectionState(contextLabel = 'state') {
@@ -611,7 +627,8 @@ get stepsFormatted() {
             return false;
         }
         try {
-            const serverData = await getCaseFullData({
+            const fetchCaseData = this.recordId ? getCaseFullDataFresh : getCaseFullData;
+            const serverData = await fetchCaseData({
                 caseId: this.caseId
             });
             if (serverData) {

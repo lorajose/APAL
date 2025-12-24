@@ -4,6 +4,7 @@ import getCaseFullData from '@salesforce/apex/GPCaseService.getCaseFullData';
 import getConcernCatalog from '@salesforce/apex/GPCaseService.getConcernCatalog';
 import saveConcerns from '@salesforce/apex/GPCaseService.saveConcerns';
 import { getRecord, getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { refreshApex } from '@salesforce/apex';
 import CASE_TYPE_FIELD from '@salesforce/schema/Case.Case_Type__c';
 
 const SOURCE_LABELS = {
@@ -169,6 +170,7 @@ export default class GpCaseStepConcerns extends LightningElement {
     wizardSearch = '';
     hydratedFromServer = false;
     caseTypeFromRecord;
+    wiredCaseDataResult;
 
     @api
     set data(value) {
@@ -261,7 +263,7 @@ export default class GpCaseStepConcerns extends LightningElement {
     get headerTitle() {
         switch (this.effectiveLayoutContext) {
         case 'relatedcase':
-            return `Patient Concerns for Parent Case (${this.concernsCountDisplay})`;
+            return `Concerns for Parent Case (${this.concernsCountDisplay})`;
         case 'patient':
             return `Patient Concerns (${this.concernsCountDisplay})`;
         default:
@@ -270,7 +272,7 @@ export default class GpCaseStepConcerns extends LightningElement {
     }
 
     get headerIconName() {
-        return 'utility:priority';
+        return 'utility:people';
     }
 
     get categoryOptions() {
@@ -439,7 +441,15 @@ export default class GpCaseStepConcerns extends LightningElement {
 
     @wire(getCaseFullData, { caseId: '$wireCaseId' })
     wiredCaseData({ data, error }) {
-        if (data && !this.hydratedFromServer && !this.concerns.length) {
+        this.wiredCaseDataResult = { data, error };
+        if (data && this.isStandaloneLayout) {
+            const cons = Array.isArray(data.concerns) ? data.concerns : [];
+            this.concerns = cloneList(cons);
+            this.hydratedFromServer = true;
+            this.hasLoadedInitialData = true;
+            // eslint-disable-next-line no-console
+            console.error(`[gpCaseStepConcerns] refreshed via wire len=${this.concerns.length}`);
+        } else if (data && !this.hydratedFromServer && !this.concerns.length) {
             const cons = Array.isArray(data.concerns) ? data.concerns : [];
             this.concerns = cloneList(cons);
             this.hydratedFromServer = true;
@@ -543,6 +553,12 @@ export default class GpCaseStepConcerns extends LightningElement {
     handleWizardSelectionToggle(event) {
         const id = event.currentTarget.dataset.id;
         if (!id) return;
+        if (this.wizardMode === 'add') {
+            const existingIds = new Set(this.concerns.map(concern => concern.id));
+            if (existingIds.has(id)) {
+                return;
+            }
+        }
         if (this.wizardSelection.includes(id)) {
             this.wizardSelection = this.wizardSelection.filter(sel => sel !== id);
         } else {
@@ -678,11 +694,8 @@ export default class GpCaseStepConcerns extends LightningElement {
         } catch (e) {
             // ignore notify issues
         }
-        try {
-            // eslint-disable-next-line no-restricted-globals
-            window.location.reload();
-        } catch (e) {
-            // ignore reload issues
+        if (this.wiredCaseDataResult) {
+            refreshApex(this.wiredCaseDataResult);
         }
     }
 
