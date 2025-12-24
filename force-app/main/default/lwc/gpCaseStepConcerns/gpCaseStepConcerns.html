@@ -87,13 +87,13 @@
                                 </p>
                             </template>
                             <div class="card-actions">
-                                <button class="pill-button danger" type="button" data-id={concern.id} onclick={handleRemoveConcern}>Remove</button>
+                                <button class="pill-button danger" type="button" data-id={concern.id} data-label={concern.label} data-category={concern.category} onclick={handleRemoveConcern}>Remove</button>
                             </div>
                             <template if:true={concern.showConfirm}>
                                 <div class="remove-confirm">
                                     <p>Remove this concern?</p>
                                     <div class="remove-actions">
-                                        <button class="pill-button danger" type="button" data-id={concern.id} onclick={confirmRemove}>Confirm Remove</button>
+                                        <button class="pill-button danger" type="button" data-id={concern.id} data-label={concern.label} data-category={concern.category} onclick={confirmRemove}>Confirm Remove</button>
                                         <button class="pill-button secondary" type="button" onclick={cancelRemove}>Cancel</button>
                                     </div>
                                 </div>

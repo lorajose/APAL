@@ -1,8 +1,11 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import { SUBSTANCE_ITEMS as SUBSTANCE_CATALOG, SUBSTANCE_INDEX as SUBSTANCE_LOOKUP } from 'c/gpCaseCatalogs';
 import getCaseFullData from '@salesforce/apex/GPCaseService.getCaseFullData';
+import getSubstanceCatalog from '@salesforce/apex/GPCaseService.getSubstanceCatalog';
 import saveSubstances from '@salesforce/apex/GPCaseService.saveSubstances';
+import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { getRecord } from 'lightning/uiRecordApi';
+import CASE_TYPE_FIELD from '@salesforce/schema/Case.Case_Type__c';
 
 const FILTER_OPTIONS = [
     { label: 'Name', value: 'name' },
@@ -25,8 +28,6 @@ const FREQUENCY_OPTIONS = [
     'Rarely'
 ];
 
-const SUBSTANCES = SUBSTANCE_CATALOG;
-const SUBSTANCE_INDEX = SUBSTANCE_LOOKUP;
 
 const cloneList = (list = []) => JSON.parse(JSON.stringify(list || []));
 const STEP_NUMBER = 11;
@@ -37,6 +38,10 @@ export default class GpCaseStepSubstances extends LightningElement {
     @api layoutMode = false;
     @api caseType;
     _layoutContext = 'auto'; // auto | case | relatedcase
+
+    @track catalog = [];
+    @track catalogIndex = {};
+    caseTypeFromRecord;
 
     @track subMode = 'grid';
     @track substances = [];
@@ -184,7 +189,7 @@ export default class GpCaseStepSubstances extends LightningElement {
         return this.substances
             .map(item => ({
                 ...item,
-                meta: SUBSTANCE_INDEX[item.id] || {
+                meta: this.catalogIndex[item.id] || {
                     name: item.catalogName || item.meta?.name || item.id,
                     category: item.catalogCategory || item.meta?.category || ''
                 },
@@ -258,7 +263,7 @@ export default class GpCaseStepSubstances extends LightningElement {
         this.wizardMode = 'edit';
         this.wizardSelection = current.map(sub => sub.id);
         this.wizardDraft = this.decorateWizardDraft(current.map(sub => {
-            const meta = SUBSTANCE_INDEX[sub.id] || {
+            const meta = this.catalogIndex[sub.id] || {
                 name: sub.catalogName || sub.id,
                 category: sub.catalogCategory || ''
             };
@@ -286,7 +291,7 @@ export default class GpCaseStepSubstances extends LightningElement {
         this.wizardSelection = [id];
         this.wizardDraft = this.decorateWizardDraft([{
             id,
-            meta: SUBSTANCE_INDEX[id],
+            meta: this.catalogIndex[id],
             frequency: existing.frequency || '',
             current: !!existing.current,
             notes: existing.notes || ''
@@ -335,6 +340,24 @@ export default class GpCaseStepSubstances extends LightningElement {
         return this.caseId || this.recordId || null;
     }
 
+    get catalogCaseType() {
+        if (this.caseType) {
+            return this.caseType;
+        }
+        return this.caseTypeFromRecord || null;
+    }
+
+    @wire(getRecord, { recordId: '$wireCaseId', fields: [CASE_TYPE_FIELD] })
+    wiredCaseRecord({ data, error }) {
+        if (data) {
+            this.caseTypeFromRecord = data.fields.Case_Type__c?.value || null;
+        }
+        if (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error loading case type', error);
+        }
+    }
+
     @wire(getCaseFullData, { caseId: '$wireCaseId' })
     wiredCaseData({ data, error }) {
         if (data && !this.hydratedFromServer && !this.substances.length) {
@@ -348,6 +371,27 @@ export default class GpCaseStepSubstances extends LightningElement {
         if (error) {
             // eslint-disable-next-line no-console
             console.error('Error loading substances', error);
+        }
+    }
+
+    @wire(getSubstanceCatalog, { caseType: '$catalogCaseType' })
+    wiredSubstanceCatalog({ data, error }) {
+        if (data && Array.isArray(data) && data.length) {
+            this.catalog = data.map(item => ({
+                id: item.id,
+                name: item.name,
+                category: item.category || '',
+                description: item.description || ''
+            }));
+            const index = {};
+            this.catalog.forEach(item => {
+                index[item.id] = item;
+            });
+            this.catalogIndex = index;
+        }
+        if (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error loading substance catalog', error);
         }
     }
 
@@ -384,7 +428,7 @@ export default class GpCaseStepSubstances extends LightningElement {
     get wizardCatalogItems() {
         const existingIds = new Set(this.substances.map(sub => sub.id));
         const term = (this.wizardSearch || '').toLowerCase();
-        return SUBSTANCES
+        return this.catalog
             .filter(item => {
                 if (!term) return true;
                 if (this.wizardFilter === 'category') {
@@ -447,7 +491,7 @@ export default class GpCaseStepSubstances extends LightningElement {
         if (this.wizardStep === 0) {
             this.wizardDraft = this.decorateWizardDraft(this.wizardSelection.map(id => ({
                 id,
-                meta: SUBSTANCE_INDEX[id],
+                meta: this.catalogIndex[id],
                 frequency: '',
                 current: false,
                 notes: ''
@@ -485,7 +529,7 @@ export default class GpCaseStepSubstances extends LightningElement {
 
     saveWizardDraft() {
         const draft = this.wizardDraft.map(item => {
-            const meta = SUBSTANCE_INDEX[item.id] || {};
+            const meta = this.catalogIndex[item.id] || {};
             return {
                 id: item.id,
                 catalogName: item.catalogName || meta.name || item.meta?.name || item.id,
@@ -567,11 +611,28 @@ export default class GpCaseStepSubstances extends LightningElement {
             const message = this.pendingSuccessMessage || 'Substances saved.';
             this.pendingSuccessMessage = null;
             this.showToast('Success', message, 'success');
+            if (!this.showNavigation) {
+                this.refreshPageLayout();
+            }
         } catch (err) {
             const message = err?.body?.message || err?.message || 'Unexpected error saving substances';
             this.showToast('Error', message, 'error');
         } finally {
             this.isSaving = false;
+        }
+    }
+
+    refreshPageLayout() {
+        try {
+            getRecordNotifyChange([{ recordId: this.effectiveCaseId }]);
+        } catch (e) {
+            // ignore notify issues
+        }
+        try {
+            // eslint-disable-next-line no-restricted-globals
+            window.location.reload();
+        } catch (e) {
+            // ignore reload issues
         }
     }
 
@@ -607,7 +668,7 @@ export default class GpCaseStepSubstances extends LightningElement {
 
     decorateWizardItem(entry = {}) {
         const base = { ...entry };
-        base.meta = base.meta || SUBSTANCE_INDEX[base.id] || {};
+        base.meta = base.meta || this.catalogIndex[base.id] || {};
         base.frequencyBlankSelected = !base.frequency;
         base.frequencyOptionsDecorated = this.decorateOptionList(FREQUENCY_OPTIONS, base.frequency || '');
         return base;
@@ -628,8 +689,8 @@ export default class GpCaseStepSubstances extends LightningElement {
     buildSubstancePayload() {
         return cloneList(this.substances)
             .map(sub => ({
-                catalogName: sub.catalogName || (SUBSTANCE_INDEX[sub.id]?.name || ''),
-                catalogCategory: sub.catalogCategory || (SUBSTANCE_INDEX[sub.id]?.category || ''),
+                catalogName: sub.catalogName || (this.catalogIndex[sub.id]?.name || ''),
+                catalogCategory: sub.catalogCategory || (this.catalogIndex[sub.id]?.category || ''),
                 frequency: sub.frequency || '',
                 current: sub.current === undefined ? null : sub.current,
                 notes: sub.notes || null

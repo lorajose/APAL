@@ -1,11 +1,12 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getCaseFullData from '@salesforce/apex/GPCaseService.getCaseFullData';
+import getScreenerCatalog from '@salesforce/apex/GPCaseService.getScreenerCatalog';
 import saveScreeners from '@salesforce/apex/GPCaseService.saveScreeners';
-import { SCREENER_ITEMS as SCREENER_CATALOG, SCREENER_INDEX as SCREENER_LOOKUP } from 'c/gpCaseCatalogs';
+import { getRecordNotifyChange } from 'lightning/uiRecordApi';
+import { getRecord } from 'lightning/uiRecordApi';
+import CASE_TYPE_FIELD from '@salesforce/schema/Case.Case_Type__c';
 
-const SCREENERS = SCREENER_CATALOG;
-const SCREENER_INDEX = SCREENER_LOOKUP;
 
 const cloneList = (list = []) => JSON.parse(JSON.stringify(list || []));
 const STEP_NUMBER = 12;
@@ -16,6 +17,10 @@ export default class GpCaseStepScreeners extends LightningElement {
     @api layoutMode = false;
     @api caseType;
     _layoutContext = 'auto'; // auto | case | relatedcase
+    caseTypeFromRecord;
+
+    @track catalog = [];
+    @track catalogIndex = {};
 
     @track screenerMode = 'grid';
     @track screeners = [];
@@ -130,6 +135,24 @@ export default class GpCaseStepScreeners extends LightningElement {
         return this.caseId || this.recordId || null;
     }
 
+    get catalogCaseType() {
+        if (this.caseType) {
+            return this.caseType;
+        }
+        return this.caseTypeFromRecord || null;
+    }
+
+    @wire(getRecord, { recordId: '$wireCaseId', fields: [CASE_TYPE_FIELD] })
+    wiredCaseRecord({ data, error }) {
+        if (data) {
+            this.caseTypeFromRecord = data.fields.Case_Type__c?.value || null;
+        }
+        if (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error loading case type', error);
+        }
+    }
+
     @wire(getCaseFullData, { caseId: '$wireCaseId' })
     wiredCaseData({ data, error }) {
         if (data && !this.hydratedFromServer && !this.screeners.length) {
@@ -143,6 +166,28 @@ export default class GpCaseStepScreeners extends LightningElement {
         if (error) {
             // eslint-disable-next-line no-console
             console.error('Error loading screeners', error);
+        }
+    }
+
+    @wire(getScreenerCatalog, { caseType: '$catalogCaseType' })
+    wiredScreenerCatalog({ data, error }) {
+        if (data && Array.isArray(data) && data.length) {
+            this.catalog = data.map(item => ({
+                id: item.id,
+                name: item.name,
+                type: item.type || '',
+                notes: item.otherNotes || '',
+                positiveOutcome: item.positiveOutcome || ''
+            }));
+            const index = {};
+            this.catalog.forEach(item => {
+                index[item.id] = item;
+            });
+            this.catalogIndex = index;
+        }
+        if (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error loading screener catalog', error);
         }
     }
 
@@ -179,7 +224,7 @@ export default class GpCaseStepScreeners extends LightningElement {
         return this.screeners
             .map(item => ({
                 ...item,
-                meta: SCREENER_INDEX[item.id] || {
+                meta: this.catalogIndex[item.id] || {
                     name: item.catalogName || item.meta?.name || item.id,
                     type: item.catalogType || item.meta?.type || ''
                 },
@@ -252,7 +297,7 @@ export default class GpCaseStepScreeners extends LightningElement {
         this.wizardMode = 'edit';
         this.wizardSelection = current.map(scr => scr.id);
         this.wizardDraft = current.map(scr => {
-            const meta = SCREENER_INDEX[scr.id] || {
+            const meta = this.catalogIndex[scr.id] || {
                 name: scr.catalogName || scr.id,
                 type: scr.catalogType || ''
             };
@@ -281,7 +326,7 @@ export default class GpCaseStepScreeners extends LightningElement {
         this.wizardSelection = [id];
         this.wizardDraft = [{
             id,
-            meta: SCREENER_INDEX[id],
+            meta: this.catalogIndex[id],
             date: existing.date || '',
             score: existing.score || '',
             positive: !!existing.positive,
@@ -359,7 +404,7 @@ export default class GpCaseStepScreeners extends LightningElement {
     get wizardCatalogItems() {
         const existingIds = new Set(this.screeners.map(scr => scr.id));
         const term = (this.wizardSearch || '').toLowerCase();
-        return SCREENERS
+        return this.catalog
             .filter(item => {
                 if (!term) return true;
                 if (this.wizardFilter === 'type') {
@@ -422,7 +467,7 @@ export default class GpCaseStepScreeners extends LightningElement {
         if (this.wizardStep === 0) {
             this.wizardDraft = this.wizardSelection.map(id => ({
                 id,
-                meta: SCREENER_INDEX[id],
+                meta: this.catalogIndex[id],
                 date: '',
                 score: '',
                 positive: false,
@@ -461,7 +506,7 @@ export default class GpCaseStepScreeners extends LightningElement {
 
     saveWizardDraft() {
         const draft = this.wizardDraft.map(item => {
-            const meta = SCREENER_INDEX[item.id] || {};
+            const meta = this.catalogIndex[item.id] || {};
             return {
                 id: item.id,
                 catalogName: item.catalogName || meta.name || item.meta?.name || item.id,
@@ -543,11 +588,30 @@ export default class GpCaseStepScreeners extends LightningElement {
             const message = this.pendingSuccessMessage || 'Screeners saved.';
             this.pendingSuccessMessage = null;
             this.showToast('Success', message, 'success');
+            if (!this.showNavigation) {
+                this.refreshPageLayout();
+            }
         } catch (err) {
-            const message = err?.body?.message || err?.message || 'Unexpected error saving screeners';
+            // eslint-disable-next-line no-console
+            console.error('Screeners save error', JSON.parse(JSON.stringify(err)));
+            const message = err?.body?.message || err?.message || 'Unexpected error saving screeners (see console)';
             this.showToast('Error', message, 'error');
         } finally {
             this.isSaving = false;
+        }
+    }
+
+    refreshPageLayout() {
+        try {
+            getRecordNotifyChange([{ recordId: this.effectiveCaseId }]);
+        } catch (e) {
+            // ignore notify issues
+        }
+        try {
+            // eslint-disable-next-line no-restricted-globals
+            window.location.reload();
+        } catch (e) {
+            // ignore reload issues
         }
     }
 
@@ -572,7 +636,7 @@ export default class GpCaseStepScreeners extends LightningElement {
     buildScreenerPayload() {
         return cloneList(this.screeners)
             .map(scr => {
-                const meta = SCREENER_INDEX[scr.id] || {};
+                const meta = this.catalogIndex[scr.id] || {};
                 const catalogName = scr.catalogName || meta.name || '';
                 if (!catalogName) {
                     return null;

@@ -229,6 +229,7 @@ export default class GpCaseStepPresenting extends LightningElement {
     @api errors = {};
     _caseType;
     pcqtRequired = true;
+    pcqtWizardMode = true;
 
     @track pcqtSelected = []; // labels (picklist)
     @track pcqtSelectedIds = []; // ids from selector

@@ -1,7 +1,10 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getCaseFullData from '@salesforce/apex/GPCaseService.getCaseFullData';
+import getConcernCatalog from '@salesforce/apex/GPCaseService.getConcernCatalog';
 import saveConcerns from '@salesforce/apex/GPCaseService.saveConcerns';
+import { getRecord, getRecordNotifyChange } from 'lightning/uiRecordApi';
+import CASE_TYPE_FIELD from '@salesforce/schema/Case.Case_Type__c';
 
 const SOURCE_LABELS = {
     topSymptoms: 'Top Symptoms',
@@ -25,6 +28,17 @@ const TOP_SYMPTOM_OPTIONS = [
     'Agitation/violence', 'Cognitive change', 'Trauma symptoms', 'Substance-related',
     'Suicidal thoughts', 'Homicidal thoughts', 'Somatic symptoms'
 ];
+
+const looksLikeId = (value) => {
+    if (!value || typeof value !== 'string') {
+        return false;
+    }
+    const trimmed = value.trim();
+    if (trimmed.length !== 15 && trimmed.length !== 18) {
+        return false;
+    }
+    return /^[a-zA-Z0-9]+$/.test(trimmed);
+};
 
 const PRIOR_DX_OPTIONS = [
     'MDD', 'Bipolar I', 'Bipolar II', 'GAD', 'Panic Disorder', 'PTSD',
@@ -132,6 +146,10 @@ export default class GpCaseStepConcerns extends LightningElement {
     @api caseId;
     @api recordId;
     @api layoutMode = false;
+    @api caseType;
+
+    @track catalog = [];
+    @track catalogIndex = {};
 
     @track concernMode = 'list';
     @track concerns = [];
@@ -150,6 +168,7 @@ export default class GpCaseStepConcerns extends LightningElement {
     wizardCategoryFilter = 'all';
     wizardSearch = '';
     hydratedFromServer = false;
+    caseTypeFromRecord;
 
     @api
     set data(value) {
@@ -255,7 +274,7 @@ export default class GpCaseStepConcerns extends LightningElement {
     }
 
     get categoryOptions() {
-        const categories = Array.from(new Set(CATALOG.map(item => item.category)));
+        const categories = Array.from(new Set(this.catalog.map(item => item.category).filter(Boolean)));
         return [{ label: 'All categories', value: 'all' }, ...categories.map(cat => ({ label: cat, value: cat }))];
     }
 
@@ -306,12 +325,23 @@ export default class GpCaseStepConcerns extends LightningElement {
         this.confirmRemoveId = event.currentTarget.dataset.id;
     }
 
-    confirmRemove(event) {
+    async confirmRemove(event) {
         const id = event.currentTarget.dataset.id;
-        this.concerns = this.concerns.filter(item => item.id !== id);
+        const label = event.currentTarget.dataset.label;
+        const category = event.currentTarget.dataset.category;
+        this.concerns = this.concerns.filter(item => {
+            if (id) {
+                return item.id !== id;
+            }
+            return !(item.label === label && item.category === category);
+        });
         this.confirmRemoveId = null;
         this.pendingSuccessMessage = 'Concern was removed.';
-        this.emitDraftChange();
+        if (!this.showNavigation) {
+            await this.handleStandaloneSave();
+        } else {
+            this.emitDraftChange();
+        }
     }
 
     cancelRemove() {
@@ -355,7 +385,7 @@ export default class GpCaseStepConcerns extends LightningElement {
         this.wizardSelection = currentConcerns.map(item => item.id);
         this.wizardDraft = currentConcerns.map(item => ({
             id: item.id,
-            meta: CATALOG_INDEX[item.id] || {
+            meta: this.catalogIndex[item.id] || {
                 label: item.label || item.id,
                 category: item.category || ''
             },
@@ -389,6 +419,24 @@ export default class GpCaseStepConcerns extends LightningElement {
         return this.caseId || this.recordId || null;
     }
 
+    get catalogCaseType() {
+        if (this.caseType) {
+            return this.caseType;
+        }
+        return this.caseTypeFromRecord || null;
+    }
+
+    @wire(getRecord, { recordId: '$wireCaseId', fields: [CASE_TYPE_FIELD] })
+    wiredCaseRecord({ data, error }) {
+        if (data) {
+            this.caseTypeFromRecord = data.fields.Case_Type__c?.value || null;
+        }
+        if (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error loading case type', error);
+        }
+    }
+
     @wire(getCaseFullData, { caseId: '$wireCaseId' })
     wiredCaseData({ data, error }) {
         if (data && !this.hydratedFromServer && !this.concerns.length) {
@@ -403,6 +451,26 @@ export default class GpCaseStepConcerns extends LightningElement {
             // Surface wire issues to console; UI is read-only until data loads.
             // eslint-disable-next-line no-console
             console.error('Error loading concerns', error);
+        }
+    }
+
+    @wire(getConcernCatalog, { caseType: '$catalogCaseType' })
+    wiredConcernCatalog({ data, error }) {
+        if (data && Array.isArray(data) && data.length) {
+            this.catalog = data.map(item => ({
+                id: item.id,
+                label: item.label,
+                category: item.category || ''
+            }));
+            const index = {};
+            this.catalog.forEach(item => {
+                index[item.id] = item;
+            });
+            this.catalogIndex = index;
+        }
+        if (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error loading concern catalog', error);
         }
     }
 
@@ -439,7 +507,7 @@ export default class GpCaseStepConcerns extends LightningElement {
     get wizardCatalogItems() {
         const existingIds = new Set(this.concerns.map(c => c.id));
         const term = (this.wizardSearch || '').toLowerCase();
-        return CATALOG
+        return this.catalog
             .filter(item => this.wizardCategoryFilter === 'all' || item.category === this.wizardCategoryFilter)
             .filter(item => {
                 if (!term) return true;
@@ -495,9 +563,9 @@ export default class GpCaseStepConcerns extends LightningElement {
         if (this.wizardStep === 0) {
             this.wizardDraft = this.wizardSelection.map(id => ({
                 id,
-                meta: CATALOG_INDEX[id] || {
-                    label: (CATALOG_INDEX[id] && CATALOG_INDEX[id].label) || id,
-                    category: (CATALOG_INDEX[id] && CATALOG_INDEX[id].category) || ''
+                meta: this.catalogIndex[id] || {
+                    label: (this.catalogIndex[id] && this.catalogIndex[id].label) || id,
+                    category: (this.catalogIndex[id] && this.catalogIndex[id].category) || ''
                 },
                 notes: ''
             }));
@@ -587,16 +655,34 @@ export default class GpCaseStepConcerns extends LightningElement {
         try {
             await saveConcerns({
                 caseId: this.effectiveCaseId,
-                items: payload
+                items: payload,
+                deleteMissing: true
             });
             const message = this.pendingSuccessMessage || 'Concerns saved.';
             this.pendingSuccessMessage = null;
             this.showToast('Success', message, 'success');
+            if (!this.showNavigation) {
+                this.refreshPageLayout();
+            }
         } catch (err) {
             const message = err?.body?.message || err?.message || 'Unexpected error saving concerns';
             this.showToast('Error', message, 'error');
         } finally {
             this.isSaving = false;
+        }
+    }
+
+    refreshPageLayout() {
+        try {
+            getRecordNotifyChange([{ recordId: this.effectiveCaseId }]);
+        } catch (e) {
+            // ignore notify issues
+        }
+        try {
+            // eslint-disable-next-line no-restricted-globals
+            window.location.reload();
+        } catch (e) {
+            // ignore reload issues
         }
     }
 
@@ -612,13 +698,24 @@ export default class GpCaseStepConcerns extends LightningElement {
     }
 
     buildConcernPayload() {
-        return cloneList(this.concerns)
+        const mapped = cloneList(this.concerns)
             .map(item => ({
+                catalogId: looksLikeId(item.catalogId)
+                    ? item.catalogId
+                    : (looksLikeId(item.id) ? item.id : null),
                 label: item.label || '',
                 category: item.category || '',
                 notes: item.notes || null
             }))
             .filter(entry => entry.label);
+        const byKey = new Map();
+        mapped.forEach(item => {
+            const key = item.catalogId || item.label.toLowerCase();
+            if (!byKey.has(key)) {
+                byKey.set(key, item);
+            }
+        });
+        return Array.from(byKey.values());
     }
 
     showToast(title, message, variant) {

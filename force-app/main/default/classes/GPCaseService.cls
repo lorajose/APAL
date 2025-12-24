@@ -7,6 +7,36 @@ public with sharing class GPCaseService {
         @AuraEnabled public Id id;
         @AuraEnabled public String name;
     }
+    public class ConcernCatalogItem {
+        @AuraEnabled public Id id;
+        @AuraEnabled public String label;
+        @AuraEnabled public String category;
+    }
+    public class SafetyRiskCatalogItem {
+        @AuraEnabled public Id id;
+        @AuraEnabled public String name;
+        @AuraEnabled public String category;
+    }
+    public class SubstanceCatalogItem {
+        @AuraEnabled public Id id;
+        @AuraEnabled public String name;
+        @AuraEnabled public String category;
+        @AuraEnabled public String description;
+    }
+    public class MedicationCatalogItem {
+        @AuraEnabled public Id id;
+        @AuraEnabled public String name;
+        @AuraEnabled public String category;
+        @AuraEnabled public String description;
+        @AuraEnabled public String brand;
+    }
+    public class ScreenerCatalogItem {
+        @AuraEnabled public Id id;
+        @AuraEnabled public String name;
+        @AuraEnabled public String type;
+        @AuraEnabled public String positiveOutcome;
+        @AuraEnabled public String otherNotes;
+    }
     private static final List<String> DEFAULT_PCQT_OPTIONS = new List<String>{
         'Diagnosis clarification',
         'Medication strategy',
@@ -67,7 +97,7 @@ public with sharing class GPCaseService {
             return toPcqtOptions(DEFAULT_PCQT_OPTIONS);
         }
 
-        String normalized = String.isBlank(caseType) ? 'general' : caseType.toLowerCase();
+        String normalized = normalizeCaseType(caseType);
         String filterField;
         if (normalized.contains('addiction')) {
             filterField = 'Addiction_Services__c';
@@ -133,6 +163,285 @@ public with sharing class GPCaseService {
             SupportCatalogItem item = new SupportCatalogItem();
             item.id = (Id)row.get('Id');
             item.name = (String)row.get('Name');
+            out.add(item);
+        }
+        return out;
+    }
+
+    private static String normalizeCaseType(String caseType) {
+        if (String.isBlank(caseType)) {
+            return 'general psychiatry';
+        }
+        String normalized = caseType.toLowerCase().replace('_', ' ').trim();
+        if (normalized.contains('addiction')) {
+            return 'addiction medicine';
+        }
+        if (normalized.contains('general')) {
+            return 'general psychiatry';
+        }
+        return normalized;
+    }
+
+    //
+    // ======================================================
+    // 1d) CONCERN CATALOG LOADER
+    // ======================================================
+    //
+    @AuraEnabled(cacheable=true)
+    public static List<ConcernCatalogItem> getConcernCatalog(String caseType) {
+        Schema.SObjectType concernType = Schema.getGlobalDescribe().get('Concern_List__c');
+        if (concernType == null) {
+            return new List<ConcernCatalogItem>();
+        }
+        Map<String, Schema.SObjectField> fields = concernType.getDescribe().fields.getMap();
+        Boolean hasActive = fields.containsKey('Active__c');
+        Boolean hasAddiction = fields.containsKey('Addiction_Services__c');
+        Boolean hasGeneral = fields.containsKey('General_Psychiatry__c');
+
+        String normalized = normalizeCaseType(caseType);
+        List<String> filters = new List<String>();
+        if (hasActive) {
+            filters.add('Active__c = true');
+        }
+        if (normalized == 'addiction medicine' && hasAddiction) {
+            filters.add('Addiction_Services__c = true');
+        } else if (normalized == 'general psychiatry' && hasGeneral) {
+            filters.add('General_Psychiatry__c = true');
+        } else {
+            // Unknown/unsupported case type: return empty catalog.
+            return new List<ConcernCatalogItem>();
+        }
+
+        String query = 'SELECT Id, Name' + (fields.containsKey('Category__c') ? ', Category__c' : '') +
+            ' FROM Concern_List__c';
+        if (!filters.isEmpty()) {
+            query += ' WHERE ' + String.join(filters, ' AND ');
+        }
+        query += ' ORDER BY Name ASC';
+
+        List<ConcernCatalogItem> out = new List<ConcernCatalogItem>();
+        for (SObject row : Database.query(query)) {
+            ConcernCatalogItem item = new ConcernCatalogItem();
+            item.id = (Id)row.get('Id');
+            item.label = (String)row.get('Name');
+            item.category = fields.containsKey('Category__c') ? (String)row.get('Category__c') : null;
+            out.add(item);
+        }
+        return out;
+    }
+
+    //
+    // ======================================================
+    // 1e) SAFETY RISK CATALOG LOADER
+    // ======================================================
+    //
+    @AuraEnabled(cacheable=true)
+    public static List<SafetyRiskCatalogItem> getSafetyRiskCatalog(String caseType) {
+        Schema.SObjectType riskType = Schema.getGlobalDescribe().get('Safety_Risk__c');
+        if (riskType == null) {
+            return new List<SafetyRiskCatalogItem>();
+        }
+        Map<String, Schema.SObjectField> fields = riskType.getDescribe().fields.getMap();
+        Boolean hasActive = fields.containsKey('Active__c');
+        Boolean hasAddiction = fields.containsKey('Addiction_Services__c');
+        Boolean hasGeneral = fields.containsKey('General_Psychiatry__c');
+
+        String normalized = normalizeCaseType(caseType);
+        List<String> filters = new List<String>();
+        if (hasActive) {
+            filters.add('Active__c = true');
+        }
+        if (normalized == 'addiction medicine' && hasAddiction) {
+            filters.add('Addiction_Services__c = true');
+        } else if (normalized == 'general psychiatry' && hasGeneral) {
+            filters.add('General_Psychiatry__c = true');
+        } else {
+            return new List<SafetyRiskCatalogItem>();
+        }
+
+        String query = 'SELECT Id, Name' + (fields.containsKey('Category__c') ? ', Category__c' : '') +
+            ' FROM Safety_Risk__c';
+        if (!filters.isEmpty()) {
+            query += ' WHERE ' + String.join(filters, ' AND ');
+        }
+        query += ' ORDER BY Name ASC';
+
+        List<SafetyRiskCatalogItem> out = new List<SafetyRiskCatalogItem>();
+        for (SObject row : Database.query(query)) {
+            SafetyRiskCatalogItem item = new SafetyRiskCatalogItem();
+            item.id = (Id)row.get('Id');
+            item.name = (String)row.get('Name');
+            item.category = fields.containsKey('Category__c') ? (String)row.get('Category__c') : null;
+            out.add(item);
+        }
+        return out;
+    }
+
+    //
+    // ======================================================
+    // 1f) SUBSTANCE CATALOG LOADER
+    // ======================================================
+    //
+    @AuraEnabled(cacheable=true)
+    public static List<SubstanceCatalogItem> getSubstanceCatalog(String caseType) {
+        Schema.SObjectType subType = Schema.getGlobalDescribe().get('Substance_List__c');
+        if (subType == null) {
+            return new List<SubstanceCatalogItem>();
+        }
+        Map<String, Schema.SObjectField> fields = subType.getDescribe().fields.getMap();
+        Boolean hasActive = fields.containsKey('Active__c');
+        Boolean hasAddiction = fields.containsKey('Addiction_Services__c');
+        Boolean hasGeneral = fields.containsKey('General_Psychiatry__c');
+
+        String normalized = normalizeCaseType(caseType);
+        List<String> filters = new List<String>();
+        if (hasActive) {
+            filters.add('Active__c = true');
+        }
+        if (normalized == 'addiction medicine' && hasAddiction) {
+            filters.add('Addiction_Services__c = true');
+        } else if (normalized == 'general psychiatry' && hasGeneral) {
+            filters.add('General_Psychiatry__c = true');
+        } else {
+            return new List<SubstanceCatalogItem>();
+        }
+
+        String query = 'SELECT Id, Name';
+        if (fields.containsKey('Substance_Category__c')) {
+            query += ', Substance_Category__c';
+        }
+        if (fields.containsKey('Description__c')) {
+            query += ', Description__c';
+        }
+        query += ' FROM Substance_List__c';
+        if (!filters.isEmpty()) {
+            query += ' WHERE ' + String.join(filters, ' AND ');
+        }
+        query += ' ORDER BY Name ASC';
+
+        List<SubstanceCatalogItem> out = new List<SubstanceCatalogItem>();
+        for (SObject row : Database.query(query)) {
+            SubstanceCatalogItem item = new SubstanceCatalogItem();
+            item.id = (Id)row.get('Id');
+            item.name = (String)row.get('Name');
+            item.category = fields.containsKey('Substance_Category__c') ? (String)row.get('Substance_Category__c') : null;
+            item.description = fields.containsKey('Description__c') ? (String)row.get('Description__c') : null;
+            out.add(item);
+        }
+        return out;
+    }
+
+    //
+    // ======================================================
+    // 1g) MEDICATION CATALOG LOADER
+    // ======================================================
+    //
+    @AuraEnabled(cacheable=true)
+    public static List<MedicationCatalogItem> getMedicationCatalog(String caseType) {
+        Schema.SObjectType medType = Schema.getGlobalDescribe().get('Medication__c');
+        if (medType == null) {
+            return new List<MedicationCatalogItem>();
+        }
+        Map<String, Schema.SObjectField> fields = medType.getDescribe().fields.getMap();
+        Boolean hasActive = fields.containsKey('Active__c');
+        Boolean hasAddiction = fields.containsKey('Addiction_Services__c');
+        Boolean hasGeneral = fields.containsKey('General_Psychiatry__c');
+
+        String normalized = normalizeCaseType(caseType);
+        List<String> filters = new List<String>();
+        if (hasActive) {
+            filters.add('Active__c = true');
+        }
+        if (normalized == 'addiction medicine' && hasAddiction) {
+            filters.add('Addiction_Services__c = true');
+        } else if (normalized == 'general psychiatry' && hasGeneral) {
+            filters.add('General_Psychiatry__c = true');
+        } else {
+            return new List<MedicationCatalogItem>();
+        }
+
+        String query = 'SELECT Id, Name';
+        if (fields.containsKey('Category__c')) {
+            query += ', Category__c';
+        }
+        if (fields.containsKey('Description__c')) {
+            query += ', Description__c';
+        }
+        if (fields.containsKey('Brand_Name_s__c')) {
+            query += ', Brand_Name_s__c';
+        }
+        query += ' FROM Medication__c';
+        if (!filters.isEmpty()) {
+            query += ' WHERE ' + String.join(filters, ' AND ');
+        }
+        query += ' ORDER BY Name ASC';
+
+        List<MedicationCatalogItem> out = new List<MedicationCatalogItem>();
+        for (SObject row : Database.query(query)) {
+            MedicationCatalogItem item = new MedicationCatalogItem();
+            item.id = (Id)row.get('Id');
+            item.name = (String)row.get('Name');
+            item.category = fields.containsKey('Category__c') ? (String)row.get('Category__c') : null;
+            item.description = fields.containsKey('Description__c') ? (String)row.get('Description__c') : null;
+            item.brand = fields.containsKey('Brand_Name_s__c') ? (String)row.get('Brand_Name_s__c') : null;
+            out.add(item);
+        }
+        return out;
+    }
+
+    //
+    // ======================================================
+    // 1h) SCREENER CATALOG LOADER
+    // ======================================================
+    //
+    @AuraEnabled(cacheable=true)
+    public static List<ScreenerCatalogItem> getScreenerCatalog(String caseType) {
+        Schema.SObjectType scrType = Schema.getGlobalDescribe().get('Screener__c');
+        if (scrType == null) {
+            return new List<ScreenerCatalogItem>();
+        }
+        Map<String, Schema.SObjectField> fields = scrType.getDescribe().fields.getMap();
+        Boolean hasActive = fields.containsKey('Active__c');
+        Boolean hasAddiction = fields.containsKey('Addiction_Services__c');
+        Boolean hasGeneral = fields.containsKey('General_Psychiatry__c');
+
+        String normalized = normalizeCaseType(caseType);
+        List<String> filters = new List<String>();
+        if (hasActive) {
+            filters.add('Active__c = true');
+        }
+        if (normalized == 'addiction medicine' && hasAddiction) {
+            filters.add('Addiction_Services__c = true');
+        } else if (normalized == 'general psychiatry' && hasGeneral) {
+            filters.add('General_Psychiatry__c = true');
+        } else {
+            return new List<ScreenerCatalogItem>();
+        }
+
+        String query = 'SELECT Id, Name';
+        if (fields.containsKey('Screener_Type__c')) {
+            query += ', Screener_Type__c';
+        }
+        if (fields.containsKey('Positive_Outcome__c')) {
+            query += ', Positive_Outcome__c';
+        }
+        if (fields.containsKey('Other_Notes__c')) {
+            query += ', Other_Notes__c';
+        }
+        query += ' FROM Screener__c';
+        if (!filters.isEmpty()) {
+            query += ' WHERE ' + String.join(filters, ' AND ');
+        }
+        query += ' ORDER BY Name ASC';
+
+        List<ScreenerCatalogItem> out = new List<ScreenerCatalogItem>();
+        for (SObject row : Database.query(query)) {
+            ScreenerCatalogItem item = new ScreenerCatalogItem();
+            item.id = (Id)row.get('Id');
+            item.name = (String)row.get('Name');
+            item.type = fields.containsKey('Screener_Type__c') ? (String)row.get('Screener_Type__c') : null;
+            item.positiveOutcome = fields.containsKey('Positive_Outcome__c') ? (String)row.get('Positive_Outcome__c') : null;
+            item.otherNotes = fields.containsKey('Other_Notes__c') ? (String)row.get('Other_Notes__c') : null;
             out.add(item);
         }
         return out;
@@ -602,38 +911,78 @@ public with sharing class GPCaseService {
     }
 
     @AuraEnabled
-    public static void saveConcerns(Id caseId, List<ConcernInput> items) {
+    public static void saveConcerns(Id caseId, List<ConcernInput> items, Boolean deleteMissing) {
         Id parentCaseId = resolveCaseId(caseId);
         Id patientId = fetchCasePatient(parentCaseId);
         if (items == null) {
             items = new List<ConcernInput>();
         }
+        Boolean shouldDeleteMissing = (deleteMissing == true);
 
         // Catalog lookup for incoming payload
         Map<String, Id> concerns = fetchCatalogIds('Concern_List__c', collectNamesFromConcerns(items));
 
         // Existing records (to preserve manual)
-        Map<String, Patient_Concern__c> existingByLabel = new Map<String, Patient_Concern__c>();
-        for (Patient_Concern__c pc : [
-            SELECT Id, Concern__r.Name, Concern__c, Seed_Source__c, Notes_new__c
+        List<Patient_Concern__c> existingRecords = [
+            SELECT Id, Concern__r.Name, Concern__c, Seed_Source__c, Notes_new__c, CreatedDate
             FROM Patient_Concern__c
             WHERE Case__c = :parentCaseId
-        ]) {
-            if (pc.Concern__r == null) continue;
-            String key = pc.Concern__r.Name != null ? pc.Concern__r.Name.toLowerCase() : null;
-            if (String.isBlank(key)) continue;
-            existingByLabel.put(key, pc);
+            ORDER BY CreatedDate ASC
+        ];
+
+        List<Patient_Concern__c> duplicateDeletes = new List<Patient_Concern__c>();
+        List<Patient_Concern__c> dedupedExisting = new List<Patient_Concern__c>();
+        Set<String> seenExistingKeys = new Set<String>();
+        for (Patient_Concern__c pc : existingRecords) {
+            String key = pc.Concern__c != null
+                ? String.valueOf(pc.Concern__c)
+                : (pc.Concern__r != null && !String.isBlank(pc.Concern__r.Name)
+                    ? pc.Concern__r.Name.toLowerCase()
+                    : null);
+            if (String.isBlank(key)) {
+                dedupedExisting.add(pc);
+                continue;
+            }
+            if (seenExistingKeys.contains(key)) {
+                duplicateDeletes.add(new Patient_Concern__c(Id = pc.Id));
+            } else {
+                seenExistingKeys.add(key);
+                dedupedExisting.add(pc);
+            }
         }
 
-        // Deduplicate payload by label (case-insensitive)
-        Map<String, ConcernInput> payloadByLabel = new Map<String, ConcernInput>();
+        Map<String, Patient_Concern__c> existingByKey = new Map<String, Patient_Concern__c>();
+        Map<String, Patient_Concern__c> existingByLabel = new Map<String, Patient_Concern__c>();
+        for (Patient_Concern__c pc : dedupedExisting) {
+            if (pc.Concern__c != null) {
+                existingByKey.put(String.valueOf(pc.Concern__c), pc);
+            }
+            if (pc.Concern__r != null && !String.isBlank(pc.Concern__r.Name)) {
+                String labelKey = pc.Concern__r.Name.toLowerCase();
+                existingByKey.put(labelKey, pc);
+                existingByLabel.put(labelKey, pc);
+            }
+        }
+
+        // Deduplicate payload by catalogId (preferred) or label (case-insensitive)
+        Set<String> labelsWithCatalogId = new Set<String>();
+        for (ConcernInput item : items) {
+            if (item == null || item.catalogId == null || String.isBlank(item.label)) continue;
+            labelsWithCatalogId.add(item.label.toLowerCase());
+        }
+
+        Map<String, ConcernInput> payloadByKey = new Map<String, ConcernInput>();
         for (ConcernInput item : items) {
             if (item == null || String.isBlank(item.label)) continue;
-            String key = item.label.toLowerCase();
-            if (!payloadByLabel.containsKey(key)) {
-                payloadByLabel.put(key, item);
+            String labelKey = item.label.toLowerCase();
+            if (item.catalogId == null && labelsWithCatalogId.contains(labelKey)) {
+                continue;
+            }
+            String key = item.catalogId != null ? String.valueOf(item.catalogId) : labelKey;
+            if (!payloadByKey.containsKey(key)) {
+                payloadByKey.put(key, item);
             } else {
-                ConcernInput existing = payloadByLabel.get(key);
+                ConcernInput existing = payloadByKey.get(key);
                 // Prefer non-blank notes/category/source
                 if (String.isBlank(existing.notes) && !String.isBlank(item.notes)) {
                     existing.notes = item.notes;
@@ -644,27 +993,41 @@ public with sharing class GPCaseService {
                 if (String.isBlank(existing.source) && !String.isBlank(item.source)) {
                     existing.source = item.source;
                 }
-                payloadByLabel.put(key, existing);
+                payloadByKey.put(key, existing);
             }
         }
 
-        Set<String> payloadKeys = new Set<String>(payloadByLabel.keySet());
+        Set<String> payloadKeys = new Set<String>(payloadByKey.keySet());
         List<Patient_Concern__c> toUpsert = new List<Patient_Concern__c>();
-        for (String key : payloadByLabel.keySet()) {
-            ConcernInput item = payloadByLabel.get(key);
-            Id concernId = concerns.get(key);
+        for (String key : payloadByKey.keySet()) {
+            ConcernInput item = payloadByKey.get(key);
+            Id concernId = item.catalogId;
             if (concernId == null) {
-                concernId = ensureCatalogRecord('Concern_List__c', item.label, new Map<String, Object>{
-                    'Category__c' => item.category
-                });
-                concerns.put(key, concernId);
+                String lookupKey = item.label != null ? item.label.toLowerCase() : null;
+                concernId = lookupKey != null ? concerns.get(lookupKey) : null;
+                if (concernId == null) {
+                    concernId = ensureCatalogRecord('Concern_List__c', item.label, new Map<String, Object>{
+                        'Category__c' => item.category
+                    });
+                    if (lookupKey != null) {
+                        concerns.put(lookupKey, concernId);
+                    }
+                }
             }
 
-            Patient_Concern__c existing = existingByLabel.get(key);
+            Patient_Concern__c existing = existingByKey.get(key);
+            if (existing == null) {
+                String labelKey = item.label != null ? item.label.toLowerCase() : null;
+                if (labelKey != null) {
+                    existing = existingByLabel.get(labelKey);
+                }
+            }
             Patient_Concern__c record = new Patient_Concern__c();
             record.Id = existing != null ? existing.Id : null;
             if (record.Id == null) {
                 record.Case__c = parentCaseId;
+                record.Concern__c = concernId;
+            } else if (concernId != null && existing.Concern__c != concernId) {
                 record.Concern__c = concernId;
             }
             setPatientIfPossible(record, patientId);
@@ -676,17 +1039,25 @@ public with sharing class GPCaseService {
             toUpsert.add(record);
         }
 
-        // Delete only seeded records that are no longer present
+        // Delete seeded (or all missing when requested)
         Set<String> seededValues = new Set<String>{
             'Step2_TopSymptoms', 'Step3_PriorDiagnosis', 'Step6_PsychosisMania',
             'Step6_MedicalRedFlags', 'Step7_FamilyHistory'
         };
         List<Patient_Concern__c> toDelete = new List<Patient_Concern__c>();
-        for (String key : existingByLabel.keySet()) {
-            Patient_Concern__c existing = existingByLabel.get(key);
-            if (seededValues.contains(existing.Seed_Source__c) && !payloadKeys.contains(key)) {
+        for (Patient_Concern__c existing : dedupedExisting) {
+            String idKey = existing.Concern__c != null ? String.valueOf(existing.Concern__c) : null;
+            String labelKey = (existing.Concern__r != null && !String.isBlank(existing.Concern__r.Name))
+                ? existing.Concern__r.Name.toLowerCase()
+                : null;
+            Boolean inPayload = (idKey != null && payloadKeys.contains(idKey))
+                || (labelKey != null && payloadKeys.contains(labelKey));
+            if (!inPayload && (shouldDeleteMissing || seededValues.contains(existing.Seed_Source__c))) {
                 toDelete.add(new Patient_Concern__c(Id = existing.Id));
             }
+        }
+        if (!duplicateDeletes.isEmpty()) {
+            toDelete.addAll(duplicateDeletes);
         }
 
         if (!toUpsert.isEmpty()) {
@@ -708,26 +1079,66 @@ public with sharing class GPCaseService {
 
         Map<String, Id> risks = fetchCatalogIds('Safety_Risk__c', collectNamesFromSafetyRisks(items));
 
-        Map<String, Patient_Safety_Risk__c> existingByName = new Map<String, Patient_Safety_Risk__c>();
-        for (Patient_Safety_Risk__c risk : [
-            SELECT Id, Safety_Risk__r.Name, Safety_Risk__c, Seed_Source__c, Notes_new__c, Recent__c, Historical__c
+        List<Patient_Safety_Risk__c> existingRecords = [
+            SELECT Id, Safety_Risk__r.Name, Safety_Risk__c, Seed_Source__c, Notes_new__c, Recent__c, Historical__c, CreatedDate
             FROM Patient_Safety_Risk__c
             WHERE Case__c = :parentCaseId
-        ]) {
-            if (risk.Safety_Risk__r == null || String.isBlank(risk.Safety_Risk__r.Name)) continue;
-            String key = risk.Safety_Risk__r.Name.toLowerCase();
-            existingByName.put(key, risk);
+            ORDER BY CreatedDate ASC
+        ];
+
+        List<Patient_Safety_Risk__c> duplicateDeletes = new List<Patient_Safety_Risk__c>();
+        List<Patient_Safety_Risk__c> dedupedExisting = new List<Patient_Safety_Risk__c>();
+        Set<String> seenExistingKeys = new Set<String>();
+        for (Patient_Safety_Risk__c risk : existingRecords) {
+            String key = risk.Safety_Risk__c != null
+                ? String.valueOf(risk.Safety_Risk__c)
+                : (risk.Safety_Risk__r != null && !String.isBlank(risk.Safety_Risk__r.Name)
+                    ? risk.Safety_Risk__r.Name.toLowerCase()
+                    : null);
+            if (String.isBlank(key)) {
+                dedupedExisting.add(risk);
+                continue;
+            }
+            if (seenExistingKeys.contains(key)) {
+                duplicateDeletes.add(new Patient_Safety_Risk__c(Id = risk.Id));
+            } else {
+                seenExistingKeys.add(key);
+                dedupedExisting.add(risk);
+            }
         }
 
-        // Deduplicate payload by name
-        Map<String, SafetyRiskInput> payloadByName = new Map<String, SafetyRiskInput>();
+        Map<String, Patient_Safety_Risk__c> existingByKey = new Map<String, Patient_Safety_Risk__c>();
+        Map<String, Patient_Safety_Risk__c> existingByName = new Map<String, Patient_Safety_Risk__c>();
+        for (Patient_Safety_Risk__c risk : dedupedExisting) {
+            if (risk.Safety_Risk__c != null) {
+                existingByKey.put(String.valueOf(risk.Safety_Risk__c), risk);
+            }
+            if (risk.Safety_Risk__r != null && !String.isBlank(risk.Safety_Risk__r.Name)) {
+                String key = risk.Safety_Risk__r.Name.toLowerCase();
+                existingByKey.put(key, risk);
+                existingByName.put(key, risk);
+            }
+        }
+
+        // Deduplicate payload by catalogId (preferred) or name
+        Set<String> namesWithCatalogId = new Set<String>();
+        for (SafetyRiskInput item : items) {
+            if (item == null || item.catalogId == null || String.isBlank(item.catalogName)) continue;
+            namesWithCatalogId.add(item.catalogName.toLowerCase());
+        }
+
+        Map<String, SafetyRiskInput> payloadByKey = new Map<String, SafetyRiskInput>();
         for (SafetyRiskInput item : items) {
             if (item == null || String.isBlank(item.catalogName)) continue;
-            String key = item.catalogName.toLowerCase();
-            if (!payloadByName.containsKey(key)) {
-                payloadByName.put(key, item);
+            String nameKey = item.catalogName.toLowerCase();
+            if (item.catalogId == null && namesWithCatalogId.contains(nameKey)) {
+                continue;
+            }
+            String key = item.catalogId != null ? String.valueOf(item.catalogId) : nameKey;
+            if (!payloadByKey.containsKey(key)) {
+                payloadByKey.put(key, item);
             } else {
-                SafetyRiskInput existing = payloadByName.get(key);
+                SafetyRiskInput existing = payloadByKey.get(key);
                 existing.recent = existing.recent == true || item.recent == true;
                 existing.historical = existing.historical == true || item.historical == true;
                 if (String.isBlank(existing.notes) && !String.isBlank(item.notes)) {
@@ -739,27 +1150,42 @@ public with sharing class GPCaseService {
                 if (String.isBlank(existing.source) && !String.isBlank(item.source)) {
                     existing.source = item.source;
                 }
-                payloadByName.put(key, existing);
+                payloadByKey.put(key, existing);
             }
         }
 
-        Set<String> payloadKeys = new Set<String>(payloadByName.keySet());
+        Set<String> payloadKeys = new Set<String>(payloadByKey.keySet());
         List<Patient_Safety_Risk__c> toUpsert = new List<Patient_Safety_Risk__c>();
-        for (String key : payloadByName.keySet()) {
-            SafetyRiskInput item = payloadByName.get(key);
-            Id riskId = risks.get(key);
+        for (String key : payloadByKey.keySet()) {
+            SafetyRiskInput item = payloadByKey.get(key);
+            Id riskId = item.catalogId;
             if (riskId == null) {
-                riskId = ensureCatalogRecord('Safety_Risk__c', item.catalogName, new Map<String, Object>{
-                    'Category__c' => item.catalogCategory
-                });
-                risks.put(key, riskId);
+                String lookupKey = item.catalogName != null ? item.catalogName.toLowerCase() : null;
+                riskId = lookupKey != null ? risks.get(lookupKey) : null;
+                if (riskId == null) {
+                    riskId = ensureCatalogRecord('Safety_Risk__c', item.catalogName, new Map<String, Object>{
+                        'Category__c' => item.catalogCategory
+                    });
+                    if (lookupKey != null) {
+                        risks.put(lookupKey, riskId);
+                    }
+                }
             }
 
-            Patient_Safety_Risk__c existing = existingByName.get(key);
+            Patient_Safety_Risk__c existing = existingByKey.get(key);
+            if (existing == null) {
+                String nameKey = item.catalogName != null ? item.catalogName.toLowerCase() : null;
+                if (nameKey != null) {
+                    existing = existingByName.get(nameKey);
+                }
+            }
+
             Patient_Safety_Risk__c record = new Patient_Safety_Risk__c();
             record.Id = existing != null ? existing.Id : null;
             if (record.Id == null) {
                 record.Case__c = parentCaseId;
+                record.Safety_Risk__c = riskId;
+            } else if (riskId != null && existing.Safety_Risk__c != riskId) {
                 record.Safety_Risk__c = riskId;
             }
             setPatientIfPossible(record, patientId);
@@ -774,11 +1200,19 @@ public with sharing class GPCaseService {
         }
 
         List<Patient_Safety_Risk__c> toDelete = new List<Patient_Safety_Risk__c>();
-        for (String key : existingByName.keySet()) {
-            Patient_Safety_Risk__c existing = existingByName.get(key);
-            if (!payloadKeys.contains(key)) {
+        for (Patient_Safety_Risk__c existing : dedupedExisting) {
+            String idKey = existing.Safety_Risk__c != null ? String.valueOf(existing.Safety_Risk__c) : null;
+            String nameKey = (existing.Safety_Risk__r != null && !String.isBlank(existing.Safety_Risk__r.Name))
+                ? existing.Safety_Risk__r.Name.toLowerCase()
+                : null;
+            Boolean inPayload = (idKey != null && payloadKeys.contains(idKey))
+                || (nameKey != null && payloadKeys.contains(nameKey));
+            if (!inPayload) {
                 toDelete.add(new Patient_Safety_Risk__c(Id = existing.Id));
             }
+        }
+        if (!duplicateDeletes.isEmpty()) {
+            toDelete.addAll(duplicateDeletes);
         }
 
         if (!toUpsert.isEmpty()) {
@@ -1383,6 +1817,7 @@ public with sharing class GPCaseService {
     }
 
     public class ConcernInput {
+        @AuraEnabled public Id catalogId { get; set; }
         @AuraEnabled public String label { get; set; }
         @AuraEnabled public String category { get; set; }
         @AuraEnabled public String notes { get; set; }
@@ -1390,6 +1825,7 @@ public with sharing class GPCaseService {
     }
 
     public class SafetyRiskInput {
+        @AuraEnabled public Id catalogId { get; set; }
         @AuraEnabled public String catalogName { get; set; }
         @AuraEnabled public String catalogCategory { get; set; }
         @AuraEnabled public Boolean recent { get; set; }

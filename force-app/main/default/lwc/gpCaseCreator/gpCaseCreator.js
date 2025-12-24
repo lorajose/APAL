@@ -118,6 +118,8 @@ export default class gpCaseCreator extends NavigationMixin(LightningElement) {
     @track reviewSummaryReady = false;
     isSaving = false;
     forceErrorHighlight = false;
+    _persistingSteps = new Set();
+    _pendingPersistSteps = new Set();
     // Almacena los resultados de la validación de todos los pasos: { 1: { isValid, hardErrors, softWarnings }, ... }
     @track validationResults = {};
     @track showStepErrors = {};
@@ -1121,7 +1123,8 @@ async handleDataUpdated(event) {
             });
             await saveConcerns({
                 caseId,
-                items: this.buildConcernPayload()
+                items: this.buildConcernPayload(),
+                deleteMissing: true
             });
             await saveSafetyRisks({
                 caseId,
@@ -1158,6 +1161,10 @@ async handleDataUpdated(event) {
         } catch (e) {
             // swallow reload issues
         }
+    }
+
+    get savingLabel() {
+        return this.isUpdateMode ? 'Updating case' : 'Creating case';
     }
 
     handleEditFromReview(event) {
@@ -1555,7 +1562,13 @@ async handleDataUpdated(event) {
 
     buildConcernPayload() {
         const concerns = Array.isArray(this.form.concerns) ? this.form.concerns : [];
-        return concerns
+        const looksLikeId = (value) => {
+            if (!value || typeof value !== 'string') return false;
+            const trimmed = value.trim();
+            if (trimmed.length !== 15 && trimmed.length !== 18) return false;
+            return /^[a-zA-Z0-9]+$/.test(trimmed);
+        };
+        const mapped = concerns
             .map(entry => this.hydrateConcern(entry))
             .map(item => {
                 const label = item.label || '';
@@ -1563,6 +1576,9 @@ async handleDataUpdated(event) {
                     return null;
                 }
                 return {
+                    catalogId: looksLikeId(item.catalogId)
+                        ? item.catalogId
+                        : (looksLikeId(item.id) ? item.id : null),
                     label,
                     category: item.category || '',
                     notes: item.notes || null,
@@ -1570,11 +1586,25 @@ async handleDataUpdated(event) {
                 };
             })
             .filter(Boolean);
+        const byKey = new Map();
+        mapped.forEach(item => {
+            const key = item.catalogId || item.label.toLowerCase();
+            if (!byKey.has(key)) {
+                byKey.set(key, item);
+            }
+        });
+        return Array.from(byKey.values());
     }
 
     buildSafetyRiskPayload() {
         const risksSource = Array.isArray(this.form.safetyRisks)
              ? this.form.safetyRisks : [];
+        const looksLikeId = (value) => {
+            if (!value || typeof value !== 'string') return false;
+            const trimmed = value.trim();
+            if (trimmed.length !== 15 && trimmed.length !== 18) return false;
+            return /^[a-zA-Z0-9]+$/.test(trimmed);
+        };
         return risksSource
             .map(entry => this.hydrateSafetyRisk(entry))
             .map(risk => {
@@ -1583,6 +1613,9 @@ async handleDataUpdated(event) {
                     return null;
                 }
                 return {
+                    catalogId: looksLikeId(risk.catalogId)
+                        ? risk.catalogId
+                        : (looksLikeId(risk.id) ? risk.id : null),
                     catalogName,
                     catalogCategory: risk.catalogCategory || '',
                     recent: risk.recent === undefined ? null : risk.recent,
@@ -1619,6 +1652,11 @@ async handleDataUpdated(event) {
         if (!this.caseId) {
             return;
         }
+        if (this._persistingSteps.has(step)) {
+            this._pendingPersistSteps.add(step);
+            return;
+        }
+        this._persistingSteps.add(step);
         try {
             if (step === 10) {
                 const medPayload = JSON.parse(JSON.stringify(this.buildMedicationPayload()));
@@ -1643,7 +1681,8 @@ async handleDataUpdated(event) {
                 const concernPayload = JSON.parse(JSON.stringify(this.buildConcernPayload()));
                 await saveConcerns({
                     caseId: this.caseId,
-                    items: concernPayload
+                    items: concernPayload,
+                    deleteMissing: true
                 });
             } else if (step === 14) {
                 const riskPayload = JSON.parse(JSON.stringify(this.buildSafetyRiskPayload()));
@@ -1654,6 +1693,12 @@ async handleDataUpdated(event) {
             }
         } catch (error) {
             throw error;
+        } finally {
+            this._persistingSteps.delete(step);
+            if (this._pendingPersistSteps.has(step)) {
+                this._pendingPersistSteps.delete(step);
+                await this.persistRelatedCollections(step);
+            }
         }
     }
 
@@ -1680,7 +1725,8 @@ async handleDataUpdated(event) {
             const concernPayload = JSON.parse(JSON.stringify(this.buildConcernPayload()));
             await saveConcerns({
                 caseId: this.caseId,
-                items: concernPayload
+                items: concernPayload,
+                deleteMissing: true
             });
             const riskPayload = JSON.parse(JSON.stringify(this.buildSafetyRiskPayload()));
             await saveSafetyRisks({
