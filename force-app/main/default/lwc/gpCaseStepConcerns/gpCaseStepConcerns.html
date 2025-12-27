@@ -103,13 +103,17 @@
                 </div>
             </template>
             <template if:false={hasConcerns}>
+                <template if:true={showEmptyState}>
                 <section class="card empty-state-card">
                     <div>
                         <p class="empty-title">No concerns captured yet</p>
                         <p class="empty-subtitle">Use the button to add items manually.</p>
                     </div>
-                    <button class="primary-button" onclick={openWizard}>Add Concerns</button>
+                    <template if:true={showAddButton}>
+                        <button class="primary-button" onclick={openWizard}>Add Concerns</button>
+                    </template>
                 </section>
+                </template>
             </template>
         </template>
 

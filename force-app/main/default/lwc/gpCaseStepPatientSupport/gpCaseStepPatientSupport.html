@@ -67,7 +67,7 @@
 
             <template if:false={isReadOnlySurface}>
                 <template if:true={isGridView}>
-                    <template if:true={hasSupports}>
+                    <template if:true={showGridControls}>
                         <section class="card grid-controls">
                             <div class="grid-header-row">
                                 <div class="control-group">
@@ -129,7 +129,7 @@
                                     <template if:true={showAllNotes}>
                                         <div class="field field-full">
                                             <label class="input-label">Notes</label>
-                                            <textarea class="textarea" data-id={sup.id} data-field="notes" oninput={handleCardNoteChange}>{sup.notes}</textarea>
+                                            <textarea class="textarea" data-id={sup.id} data-field="notes" oninput={handleCardNoteChange} disabled={isStandaloneLayout} readonly={isStandaloneLayout}>{sup.notes}</textarea>
                                         </div>
                                     </template>
                                     <template if:false={showAllNotes}>
@@ -170,7 +170,7 @@
                                     </div>
                                     <div class="card-actions">
                                         <template if:true={showNavigation}>
-                                            <button class="pill-button" data-id={sup.id} onclick={handleEditSupport}>Edit</button>
+                                          <!--  <button class="pill-button" data-id={sup.id} onclick={handleEditSupport}>Edit</button> -->
                                         </template>
                                         <button class="pill-button danger" data-id={sup.id} onclick={handleRemoveSupport}>Remove</button>
                                     </div>
@@ -193,7 +193,9 @@
                                 <p class="empty-title">No patient support captured yet</p>
                                 <p class="empty-subtitle">Use the button to add items manually.</p>
                             </div>
-                            <button class="primary-button" onclick={handleAddSupport}>Add Patient Support</button>
+                            <template if:true={showAddButton}>
+                                <button class="primary-button" onclick={handleAddSupport}>Add Patient Support</button>
+                            </template>
                         </section>
                     </template>
                 </template>

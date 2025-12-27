@@ -113,7 +113,7 @@
                             </template>
                             <div class="card-actions">
                                 <template if:true={showNavigation}>
-                                    <button class="pill-button" data-id={risk.id} onclick={handleEditRisk}>Edit</button>
+                                  <!--  <button class="pill-button" data-id={risk.id} onclick={handleEditRisk}>Edit</button> -->
                                 </template>
                                 <button class="pill-button danger" data-id={risk.id} onclick={handleRemoveRisk}>Remove</button>
                             </div>
@@ -131,13 +131,17 @@
                 </div>
             </template>
             <template if:false={hasRisks}>
+                <template if:true={showEmptyState}>
                 <section class="card empty-state-card">
                     <div>
                         <p class="empty-title">No safety risks captured yet</p>
                         <p class="empty-subtitle">Use the button to add items manually.</p>
                     </div>
-                    <button class="primary-button" onclick={handleAddRisks}>Add Safety Risks</button>
+                    <template if:true={showAddButton}>
+                        <button class="primary-button" onclick={handleAddRisks}>Add Safety Risks</button>
+                    </template>
                 </section>
+                </template>
             </template>
         </template>
 
