@@ -91,12 +91,12 @@
 
 .chip:hover {
     border-color: #2563eb;
-    color: #2563eb;
+    color: #111827;
 }
 
 .chip-selected {
     background: #2563eb;
-    color: #fff;
+    color: #111827;
     border-color: #2563eb;
 }
 
