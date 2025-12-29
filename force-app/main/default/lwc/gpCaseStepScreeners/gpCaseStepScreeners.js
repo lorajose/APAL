@@ -111,7 +111,7 @@ export default class GpCaseStepScreeners extends LightningElement {
     }
 
     get readOnlyNotes() {
-        return this.isStandaloneLayout;
+        return this.isGridView;
     }
 
     notePreview(value) {
@@ -234,7 +234,7 @@ export default class GpCaseStepScreeners extends LightningElement {
         return this.screeners
             .map(item => ({
                 ...item,
-                meta: this.catalogIndex[item.id] || {
+                meta: this.catalogIndex[item.catalogId || item.id] || {
                     name: item.catalogName || item.meta?.name || item.id,
                     type: item.catalogType || item.meta?.type || ''
                 },
@@ -305,14 +305,14 @@ export default class GpCaseStepScreeners extends LightningElement {
         }
         this.setScreenerMode('wizard');
         this.wizardMode = 'edit';
-        this.wizardSelection = current.map(scr => scr.id);
+        this.wizardSelection = current.map(scr => scr.catalogId || scr.id);
         this.wizardDraft = current.map(scr => {
-            const meta = this.catalogIndex[scr.id] || {
+            const meta = this.catalogIndex[scr.catalogId || scr.id] || {
                 name: scr.catalogName || scr.id,
                 type: scr.catalogType || ''
             };
             return {
-                id: scr.id,
+                id: scr.catalogId || scr.id,
                 meta,
                 catalogName: scr.catalogName || meta.name || scr.id,
                 catalogType: scr.catalogType || meta.type || '',
@@ -331,12 +331,13 @@ export default class GpCaseStepScreeners extends LightningElement {
         const id = event.currentTarget.dataset.id;
         const existing = this.screeners.find(scr => scr.id === id);
         if (!existing) return;
+        const catalogId = existing.catalogId || existing.id;
         this.setScreenerMode('wizard');
         this.wizardMode = 'edit';
-        this.wizardSelection = [id];
+        this.wizardSelection = [catalogId];
         this.wizardDraft = [{
-            id,
-            meta: this.catalogIndex[id],
+            id: catalogId,
+            meta: this.catalogIndex[catalogId] || { name: existing.catalogName || existing.id, type: existing.catalogType || '' },
             date: existing.date || '',
             score: existing.score || '',
             positive: !!existing.positive,
@@ -427,7 +428,7 @@ export default class GpCaseStepScreeners extends LightningElement {
             })
             .map(item => {
                 const disabled = existingIds.has(item.id) && this.wizardMode === 'add';
-                const checked = this.wizardSelection.includes(item.id);
+                const checked = existingIds.has(item.id) || this.wizardSelection.includes(item.id);
                 const classList = ['catalog-card'];
                 if (checked) classList.push('selected');
                 if (disabled) classList.push('disabled');
@@ -481,14 +482,22 @@ export default class GpCaseStepScreeners extends LightningElement {
 
     wizardNext() {
         if (this.wizardStep === 0) {
-            this.wizardDraft = this.wizardSelection.map(id => ({
-                id,
-                meta: this.catalogIndex[id],
-                date: '',
-                score: '',
-                positive: false,
-                notes: ''
+            const draftById = new Map(this.wizardDraft.map(item => [item.id, item]));
+            const scrById = new Map((this.screeners || []).map(item => {
+                const key = item.catalogId || item.id;
+                return [key, item];
             }));
+            this.wizardDraft = this.wizardSelection.map(id => {
+                const existing = draftById.get(id) || scrById.get(id);
+                return {
+                    id,
+                    meta: existing?.meta || this.catalogIndex[id],
+                    date: existing?.date || '',
+                    score: existing?.score || '',
+                    positive: existing?.positive ?? false,
+                    notes: existing?.notes || ''
+                };
+            });
             this.wizardStep = 1;
             return;
         }
@@ -604,7 +613,7 @@ export default class GpCaseStepScreeners extends LightningElement {
             const message = this.pendingSuccessMessage || 'Screeners saved.';
             this.pendingSuccessMessage = null;
             this.showToast('Success', message, 'success');
-            if (!this.showNavigation) {
+            if (this.isStandaloneLayout) {
                 this.refreshPageLayout();
             }
         } catch (err) {
@@ -633,7 +642,7 @@ export default class GpCaseStepScreeners extends LightningElement {
         this.dispatchEvent(new CustomEvent('dataupdated', {
             detail: payload
         }));
-        if (!this.showNavigation && !this.isSaving) {
+        if (this.isStandaloneLayout && !this.isSaving) {
             // Auto-save when embedded standalone in a page layout
             this.handleStandaloneSave();
         }

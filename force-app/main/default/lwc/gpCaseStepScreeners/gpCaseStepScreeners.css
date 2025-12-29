@@ -119,7 +119,8 @@
 	display: flex;
 	gap: 0.5rem;
 	justify-content: flex-end;
-	flex-wrap: wrap;
+	align-items: center;
+	flex-wrap: nowrap;
 }
 
 .grid-actions .ghost-button,

@@ -174,24 +174,63 @@ export default class GpCaseStepReviewSave extends LightningElement {
     }
 
     get medications() {
-        return (Array.isArray(this.form.medications) ? this.form.medications : []).map(item => ({
-            ...item,
-            meta: MED_INDEX[item.id] || { title: item.id }
-        }));
+        return (Array.isArray(this.form.medications) ? this.form.medications : []).map(item => {
+            const catalog = MED_INDEX[item.catalogId || item.id] || {};
+            const title = item.catalogName
+                || item.meta?.name
+                || item.recordName
+                || item.name
+                || catalog.title
+                || item.id;
+            const category = item.meta?.category
+                || item.catalogCategory
+                || catalog.category
+                || '';
+            return {
+                ...item,
+                meta: { ...catalog, title, category }
+            };
+        });
     }
 
     get substances() {
-        return (Array.isArray(this.form.substances) ? this.form.substances : []).map(item => ({
-            ...item,
-            meta: SUBSTANCE_INDEX[item.id] || { name: item.id }
-        }));
+        return (Array.isArray(this.form.substances) ? this.form.substances : []).map(item => {
+            const catalog = SUBSTANCE_INDEX[item.catalogId || item.id] || {};
+            const name = item.catalogName
+                || item.meta?.name
+                || item.recordName
+                || item.name
+                || catalog.name
+                || item.id;
+            const category = item.meta?.category
+                || item.catalogCategory
+                || catalog.category
+                || '';
+            return {
+                ...item,
+                meta: { ...catalog, name, category }
+            };
+        });
     }
 
     get screeners() {
-        return (Array.isArray(this.form.screeners) ? this.form.screeners : []).map(item => ({
-            ...item,
-            meta: SCREENER_INDEX[item.id] || { name: item.id }
-        }));
+        return (Array.isArray(this.form.screeners) ? this.form.screeners : []).map(item => {
+            const catalog = SCREENER_INDEX[item.catalogId || item.id] || {};
+            const name = item.catalogName
+                || item.meta?.name
+                || item.recordName
+                || item.name
+                || catalog.name
+                || item.id;
+            const category = item.meta?.category
+                || item.catalogCategory
+                || catalog.type
+                || '';
+            return {
+                ...item,
+                meta: { ...catalog, name, category }
+            };
+        });
     }
 
     get safetyRisks() {

@@ -226,7 +226,21 @@ export default class GpCaseStepConcerns extends LightningElement {
 
     get showAddButton() {
         // Permite Add en relatedCase; oculto solo en patient
+        const caseType = (this.caseTypeFromRecord || this.caseType || '').toLowerCase();
+        const isAddictionMedicine = caseType === 'addiction medicine' || caseType.includes('addiction');
+        if (isAddictionMedicine && this.effectiveLayoutContext === 'case') {
+            return false;
+        }
         return this.isListMode && this.effectiveLayoutContext !== 'patient';
+    }
+
+    get showEmptyState() {
+        const caseType = (this.caseTypeFromRecord || this.caseType || '').toLowerCase();
+        const isAddictionMedicine = caseType === 'addiction medicine' || caseType.includes('addiction');
+        if (isAddictionMedicine && this.effectiveLayoutContext === 'case') {
+            return false;
+        }
+        return true;
     }
 
     get concernsCount() {
@@ -339,7 +353,7 @@ export default class GpCaseStepConcerns extends LightningElement {
         });
         this.confirmRemoveId = null;
         this.pendingSuccessMessage = 'Concern was removed.';
-        if (!this.showNavigation) {
+        if (this.isStandaloneLayout) {
             await this.handleStandaloneSave();
         } else {
             this.emitDraftChange();
@@ -515,7 +529,7 @@ export default class GpCaseStepConcerns extends LightningElement {
     }
 
     get wizardCatalogItems() {
-        const existingIds = new Set(this.concerns.map(c => c.id));
+        const existingIds = new Set(this.concerns.map(c => c.catalogId || c.id));
         const term = (this.wizardSearch || '').toLowerCase();
         return this.catalog
             .filter(item => this.wizardCategoryFilter === 'all' || item.category === this.wizardCategoryFilter)
@@ -525,7 +539,7 @@ export default class GpCaseStepConcerns extends LightningElement {
             })
             .map(item => {
                 const disabled = existingIds.has(item.id) && this.wizardMode === 'add';
-                const checked = this.wizardSelection.includes(item.id);
+                const checked = existingIds.has(item.id) || this.wizardSelection.includes(item.id);
                 const classes = ['catalog-card'];
                 if (checked) classes.push('selected');
                 if (disabled) classes.push('disabled');
@@ -577,14 +591,23 @@ export default class GpCaseStepConcerns extends LightningElement {
 
     wizardNext() {
         if (this.wizardStep === 0) {
-            this.wizardDraft = this.wizardSelection.map(id => ({
-                id,
-                meta: this.catalogIndex[id] || {
-                    label: (this.catalogIndex[id] && this.catalogIndex[id].label) || id,
-                    category: (this.catalogIndex[id] && this.catalogIndex[id].category) || ''
-                },
-                notes: ''
+            const draftById = new Map(this.wizardDraft.map(item => [item.id, item]));
+            const concernsById = new Map((this.concerns || []).map(item => {
+                const key = item.catalogId || item.id;
+                return [key, item];
             }));
+            this.wizardDraft = this.wizardSelection.map(id => {
+                const existing = draftById.get(id) || concernsById.get(id);
+                const meta = existing?.meta || this.catalogIndex[id] || {
+                    label: (this.catalogIndex[id] && this.catalogIndex[id].label) || existing?.label || id,
+                    category: (this.catalogIndex[id] && this.catalogIndex[id].category) || existing?.category || ''
+                };
+                return {
+                    id,
+                    meta,
+                    notes: existing?.notes || ''
+                };
+            });
             this.wizardStep = 1;
             return;
         }
@@ -677,7 +700,7 @@ export default class GpCaseStepConcerns extends LightningElement {
             const message = this.pendingSuccessMessage || 'Concerns saved.';
             this.pendingSuccessMessage = null;
             this.showToast('Success', message, 'success');
-            if (!this.showNavigation) {
+            if (this.isStandaloneLayout) {
                 this.refreshPageLayout();
             }
         } catch (err) {
@@ -704,7 +727,7 @@ export default class GpCaseStepConcerns extends LightningElement {
         this.dispatchEvent(new CustomEvent('dataupdated', {
             detail: payload
         }));
-        if (!this.showNavigation && !this.isSaving) {
+        if (this.isStandaloneLayout && !this.isSaving) {
             // Auto-save when used standalone in a page layout
             this.handleStandaloneSave();
         }

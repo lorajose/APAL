@@ -87,19 +87,27 @@ export default class GpCaseStepPatientSupport extends LightningElement {
         return this.effectiveLayoutContext === 'relatedcase';
     }
 
+    get isParentCaseWithControls() {
+        const caseType = (this.caseTypeFromRecord || this.caseType || '').toLowerCase();
+        const isAllowedType = caseType === 'addiction medicine' || caseType === 'general psychiatry';
+        return isAllowedType && this.effectiveLayoutContext === 'case';
+    }
+
     get isReadOnlySurface() {
-        return !this.isCareNavigation;
+        return !(this.isCareNavigation || this.isParentCaseWithControls);
     }
 
     get shouldRender() {
-        return this.isCareNavigation || this.supports.length > 0;
+        const caseType = (this.caseTypeFromRecord || this.caseType || '').toLowerCase();
+        const isAddictionMedicine = caseType === 'addiction medicine';
+        return this.isCareNavigation || this.supports.length > 0 || isAddictionMedicine;
     }
 
     get headerTitle() {
         if (this.effectiveLayoutContext === 'relatedcase') {
             return `Support for Parent Case (${this.supportsCountDisplay})`;
         }
-        return `Patient Support (${this.supportsCountDisplay})`;
+        return `Support (${this.supportsCountDisplay})`;
     }
 
     get headerIconName() {
@@ -119,7 +127,7 @@ export default class GpCaseStepPatientSupport extends LightningElement {
     }
 
     get showAddButton() {
-        return !this.isReadOnlySurface && this.isGridView;
+        return this.isCareNavigation && this.isGridView;
     }
 
     get hasSupports() {
@@ -128,6 +136,10 @@ export default class GpCaseStepPatientSupport extends LightningElement {
 
     get showShowMoreToggle() {
         return this.isReadOnlySurface && this.supports.length > READ_ONLY_LIMIT;
+    }
+
+    get showGridControls() {
+        return this.isGridView && (this.hasSupports || this.isParentCaseWithControls);
     }
 
     get visibleSupports() {
@@ -196,16 +208,16 @@ export default class GpCaseStepPatientSupport extends LightningElement {
 
     get wizardCatalogItems() {
         const term = (this.wizardSearch || '').toLowerCase();
-        const existingIds = new Set(this.supports.map(item => item.id));
+        const existingIds = new Set(this.supports.map(item => item.catalogId || item.id));
         return this.catalog
             .map(item => {
                 const disabled = existingIds.has(item.id) && this.wizardMode === 'add';
-                const checked = this.wizardSelection.includes(item.id);
+                const checked = existingIds.has(item.id) || this.wizardSelection.includes(item.id);
                 return {
                     ...item,
                     disabled,
                     checked,
-                    className: disabled ? 'catalog-card disabled' : 'catalog-card'
+                    className: `${disabled ? 'catalog-card disabled' : 'catalog-card'}${checked ? ' selected' : ''}`
                 };
             })
             .filter(item => {
@@ -448,17 +460,25 @@ export default class GpCaseStepPatientSupport extends LightningElement {
 
     wizardNext() {
         if (this.wizardStep === 0) {
-            this.wizardDraft = this.wizardSelection.map(id => ({
-                id,
-                meta: this.catalogIndex[id],
-                notes: '',
-                scheduled: false,
-                going: false,
-                appointmentCompleted: false,
-                appointmentCompletedIneffective: false,
-                suspended: false,
-                careNotApplicable: false
+            const draftById = new Map(this.wizardDraft.map(item => [item.id, item]));
+            const supportById = new Map((this.supports || []).map(item => {
+                const key = item.catalogId || item.id;
+                return [key, item];
             }));
+            this.wizardDraft = this.wizardSelection.map(id => {
+                const existing = draftById.get(id) || supportById.get(id);
+                return {
+                    id,
+                    meta: existing?.meta || this.catalogIndex[id],
+                    notes: existing?.notes || '',
+                    scheduled: existing?.scheduled ?? false,
+                    going: existing?.going ?? false,
+                    appointmentCompleted: existing?.appointmentCompleted ?? false,
+                    appointmentCompletedIneffective: existing?.appointmentCompletedIneffective ?? false,
+                    suspended: existing?.suspended ?? false,
+                    careNotApplicable: existing?.careNotApplicable ?? false
+                };
+            });
             this.wizardStep = 1;
             return;
         }
