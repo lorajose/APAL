@@ -162,7 +162,7 @@ export default class GpCaseStepSubstances extends LightningElement {
     }
 
     get readOnlyNotes() {
-        return this.isStandaloneLayout;
+        return this.isGridView;
     }
 
     notePreview(value) {
@@ -451,7 +451,7 @@ export default class GpCaseStepSubstances extends LightningElement {
             })
             .map(item => {
                 const disabled = existingIds.has(item.id) && this.wizardMode === 'add';
-                const checked = this.wizardSelection.includes(item.id);
+                const checked = existingIds.has(item.id) || this.wizardSelection.includes(item.id);
                 const classList = ['catalog-card'];
                 if (checked) classList.push('selected');
                 if (disabled) classList.push('disabled');
@@ -505,13 +505,21 @@ export default class GpCaseStepSubstances extends LightningElement {
 
     wizardNext() {
         if (this.wizardStep === 0) {
-            this.wizardDraft = this.decorateWizardDraft(this.wizardSelection.map(id => ({
-                id,
-                meta: this.catalogIndex[id],
-                frequency: '',
-                current: false,
-                notes: ''
-            })));
+            const draftById = new Map(this.wizardDraft.map(item => [item.id, item]));
+            const subsById = new Map((this.substances || []).map(item => {
+                const key = item.catalogId || item.id;
+                return [key, item];
+            }));
+            this.wizardDraft = this.decorateWizardDraft(this.wizardSelection.map(id => {
+                const existing = draftById.get(id) || subsById.get(id);
+                return {
+                    id,
+                    meta: existing?.meta || this.catalogIndex[id],
+                    frequency: existing?.frequency || '',
+                    current: existing?.current ?? false,
+                    notes: existing?.notes || ''
+                };
+            }));
             this.wizardStep = 1;
             return;
         }
@@ -627,7 +635,7 @@ export default class GpCaseStepSubstances extends LightningElement {
             const message = this.pendingSuccessMessage || 'Substances saved.';
             this.pendingSuccessMessage = null;
             this.showToast('Success', message, 'success');
-            if (!this.showNavigation) {
+            if (this.isStandaloneLayout) {
                 this.refreshPageLayout();
             }
         } catch (err) {
@@ -654,7 +662,7 @@ export default class GpCaseStepSubstances extends LightningElement {
         this.dispatchEvent(new CustomEvent('dataupdated', {
             detail: payload
         }));
-        if (!this.showNavigation && !this.isSaving) {
+        if (this.isStandaloneLayout && !this.isSaving) {
             // Auto-save when used standalone in a page layout
             this.handleStandaloneSave();
         }

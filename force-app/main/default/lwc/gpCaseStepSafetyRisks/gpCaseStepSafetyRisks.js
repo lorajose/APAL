@@ -108,15 +108,29 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
     }
 
     get showAddButton() {
+        const caseType = (this.caseTypeFromRecord || this.caseType || '').toLowerCase();
+        const isAddictionMedicine = caseType === 'addiction medicine' || caseType.includes('addiction');
+        if (isAddictionMedicine && this.effectiveLayoutContext === 'case') {
+            return false;
+        }
         return this.isGridView;
     }
 
+    get showEmptyState() {
+        const caseType = (this.caseTypeFromRecord || this.caseType || '').toLowerCase();
+        const isAddictionMedicine = caseType === 'addiction medicine' || caseType.includes('addiction');
+        if (isAddictionMedicine && this.effectiveLayoutContext === 'case') {
+            return false;
+        }
+        return true;
+    }
+
     get readOnlyNotes() {
-        return this.isStandaloneLayout;
+        return this.isGridView;
     }
 
     get readOnlyFields() {
-        return this.isStandaloneLayout;
+        return this.isGridView;
     }
 
     notePreview(value) {
@@ -402,7 +416,7 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
     }
 
     get wizardCatalogItems() {
-        const existingIds = new Set(this.risks.map(risk => risk.id));
+        const existingIds = new Set(this.risks.map(risk => risk.catalogId || risk.id));
         const term = (this.wizardSearch || '').toLowerCase();
         return this.catalog
             .filter(item => this.wizardCategoryFilter === 'all' || item.category === this.wizardCategoryFilter)
@@ -412,7 +426,7 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
             })
             .map(item => {
                 const disabled = existingIds.has(item.id);
-                const checked = this.wizardSelection.includes(item.id);
+                const checked = existingIds.has(item.id) || this.wizardSelection.includes(item.id);
                 const classList = ['catalog-card'];
                 if (checked) classList.push('selected');
                 if (disabled) classList.push('disabled');
@@ -464,14 +478,22 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
 
     wizardNext() {
         if (this.wizardStep === 0) {
-            this.wizardDraft = this.wizardSelection.map(id => ({
-                id,
-                meta: this.catalogIndex[id],
-                recent: false,
-                historical: false,
-                notes: '',
-                flagError: false
+            const draftById = new Map(this.wizardDraft.map(item => [item.id, item]));
+            const risksById = new Map((this.risks || []).map(item => {
+                const key = item.catalogId || item.id;
+                return [key, item];
             }));
+            this.wizardDraft = this.wizardSelection.map(id => {
+                const existing = draftById.get(id) || risksById.get(id);
+                return {
+                    id,
+                    meta: existing?.meta || this.catalogIndex[id],
+                    recent: existing?.recent ?? false,
+                    historical: existing?.historical ?? false,
+                    notes: existing?.notes || '',
+                    flagError: false
+                };
+            });
             this.wizardStep = 1;
             return;
         }
@@ -578,7 +600,7 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
             const message = this.pendingSuccessMessage || 'Safety risks saved.';
             this.pendingSuccessMessage = null;
             this.showToast('Success', message, 'success');
-            if (!this.showNavigation) {
+            if (this.isStandaloneLayout) {
                 this.refreshPageLayout();
             }
         } catch (err) {
@@ -605,7 +627,7 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
         this.dispatchEvent(new CustomEvent('dataupdated', {
             detail: payload
         }));
-        if (!this.showNavigation && !this.isSaving) {
+        if (this.isStandaloneLayout && !this.isSaving) {
             // Auto-save when used standalone in a page layout
             this.handleStandaloneSave();
         }

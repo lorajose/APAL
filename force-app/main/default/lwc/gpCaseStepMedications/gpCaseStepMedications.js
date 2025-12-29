@@ -165,7 +165,7 @@ export default class GpCaseStepMedications extends LightningElement {
     }
 
     get readOnlyNotes() {
-        return this.isStandaloneLayout;
+        return this.isGridView;
     }
 
     notePreview(value) {
@@ -487,17 +487,25 @@ export default class GpCaseStepMedications extends LightningElement {
 
     wizardNext() {
         if (this.wizardStep === 0) {
-            const draft = this.wizardSelection.map(id => ({
-                id,
-                meta: this.catalogIndex[id],
-                action: '',
-                frequency: '',
-                amount: '',
-                unit: '',
-                current: false,
-                allergy: false,
-                notes: ''
+            const draftById = new Map(this.wizardDraft.map(item => [item.id, item]));
+            const medsById = new Map((this.medications || []).map(item => {
+                const key = item.catalogId || item.id;
+                return [key, item];
             }));
+            const draft = this.wizardSelection.map(id => {
+                const existing = draftById.get(id) || medsById.get(id);
+                return {
+                    id,
+                    meta: existing?.meta || this.catalogIndex[id],
+                    action: existing?.action || '',
+                    frequency: existing?.frequency || '',
+                    amount: existing?.amount || '',
+                    unit: existing?.unit || '',
+                    current: existing?.current ?? false,
+                    allergy: existing?.allergy ?? false,
+                    notes: existing?.notes || ''
+                };
+            });
             this.wizardDraft = this.decorateWizardDraft(draft);
             this.wizardStep = 1;
             return;
@@ -686,7 +694,7 @@ export default class GpCaseStepMedications extends LightningElement {
             const message = this.pendingSuccessMessage || 'Medications saved.';
             this.pendingSuccessMessage = null;
             this.showToast('Success', message, 'success');
-            if (!this.showNavigation) {
+            if (this.isStandaloneLayout) {
                 this.refreshPageLayout();
             }
         } catch (err) {
@@ -713,7 +721,7 @@ export default class GpCaseStepMedications extends LightningElement {
         this.dispatchEvent(new CustomEvent('dataupdated', {
             detail: payload
         }));
-        if (!this.showNavigation && !this.isSaving) {
+        if (this.isStandaloneLayout && !this.isSaving) {
             // Auto-save in standalone layout
             this.handleStandaloneSave();
         }
@@ -744,7 +752,7 @@ export default class GpCaseStepMedications extends LightningElement {
             })
             .map(item => {
                 const disabled = existingIds.has(item.id) && this.wizardMode === 'add';
-                const checked = this.wizardSelection.includes(item.id);
+                const checked = existingIds.has(item.id) || this.wizardSelection.includes(item.id);
                 const classList = ['catalog-card'];
                 if (checked) classList.push('selected');
                 if (disabled) classList.push('disabled');
