@@ -225,21 +225,11 @@ export default class GpCaseStepConcerns extends LightningElement {
     }
 
     get showAddButton() {
-        // Permite Add en relatedCase; oculto solo en patient
-        const caseType = (this.caseTypeFromRecord || this.caseType || '').toLowerCase();
-        const isAddictionMedicine = caseType === 'addiction medicine' || caseType.includes('addiction');
-        if (isAddictionMedicine && this.effectiveLayoutContext === 'case') {
-            return false;
-        }
+        // Permite Add en relatedCase y case; oculto solo en patient
         return this.isListMode && this.effectiveLayoutContext !== 'patient';
     }
 
     get showEmptyState() {
-        const caseType = (this.caseTypeFromRecord || this.caseType || '').toLowerCase();
-        const isAddictionMedicine = caseType === 'addiction medicine' || caseType.includes('addiction');
-        if (isAddictionMedicine && this.effectiveLayoutContext === 'case') {
-            return false;
-        }
         return true;
     }
 
@@ -652,6 +642,7 @@ export default class GpCaseStepConcerns extends LightningElement {
     }
 
     handleReviewChangeSelection() {
+        this.wizardMode = 'add';
         this.wizardStep = 0;
     }
 

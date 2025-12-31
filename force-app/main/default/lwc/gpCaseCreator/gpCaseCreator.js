@@ -91,6 +91,51 @@ const MEDICATION_NAME_TO_ID = buildNameIndex(MEDICATION_INDEX, 'title');
 const SUBSTANCE_NAME_TO_ID = buildNameIndex(SUBSTANCE_INDEX, 'name');
 const SCREENER_NAME_TO_ID = buildNameIndex(SCREENER_INDEX, 'name');
 const SAFETY_RISK_NAME_TO_ID = buildNameIndex(SAFETY_RISK_INDEX, 'name');
+const PSYCHOSOCIAL_STRESSORS = new Set([
+    'housing insecurity',
+    'food insecurity',
+    'caregiver burden',
+    'legal issues',
+    'job/school risk',
+    'relationship conflict',
+    'limited supports',
+    'financial stress'
+]);
+const FAMILY_HISTORY_ITEMS = new Set([
+    'bipolar',
+    'psychosis/schizophrenia',
+    'suicide',
+    'sud',
+    'depression/anxiety',
+    'none',
+    'unknown'
+]);
+const PRIOR_DIAGNOSES_ITEMS = new Set([
+    'mdd',
+    'bipolar i',
+    'bipolar ii',
+    'gad',
+    'panic disorder',
+    'ptsd',
+    'psychotic disorder',
+    'adhd',
+    'ocd',
+    'sud',
+    'personality disorder',
+    'eating disorder',
+    'other'
+]);
+const TOP_SYMPTOMS_ITEMS = new Set([
+    'depressed mood',
+    'anhedonia',
+    'anxiety',
+    'panic',
+    'insomnia',
+    'hypersomnia',
+    'appetite change',
+    'low energy',
+    'poor concentration'
+]);
 // Importa el nuevo servicio de validación
 import {
     validateStep,
@@ -677,6 +722,9 @@ get stepsFormatted() {
                 if (Array.isArray(this.form?.homeSafety?.psychosocialStressorsDraft)) {
                     this.syncStressorsToSafetyRisks(this.form.homeSafety.psychosocialStressorsDraft);
                 }
+                if (Array.isArray(this.form?.safetyRisks)) {
+                    this.syncSafetyRisksToStressors(this.form.safetyRisks);
+                }
                 this.formLoadedFromServer = true;
                 this.runFullValidation(true);
                 return true;
@@ -776,6 +824,17 @@ async handleDataUpdated(event) {
                 console.error('Error persisting seeded safety risks', seedErr);
             }
         }
+    }
+    if (this.currentStep === 14) {
+        const risks = Array.isArray(data) ? data : this.form.safetyRisks;
+        if (Array.isArray(risks)) {
+            this.syncSafetyRisksToStressors(risks);
+        }
+    }
+    if (this.currentStep === 13 && Array.isArray(data)) {
+        this.syncConcernsToFamilyHistory(data);
+        this.syncConcernsToPriorDx(data);
+        this.syncConcernsToTopSymptoms(data);
     }
 
 
@@ -991,7 +1050,7 @@ async handleDataUpdated(event) {
             }
             this.inlineMessage = null;
             // 3. APEX Logic (Guardar datos si la validación es OK)
-            if (!this.caseId) {
+            if (!this.caseId && this.areRequiredCaseStepsValid()) {
                 const baseSeed = currentStep === 1 ? stepData : (this.form.basics || {});
                 const seedPayload = this.prepareCaseSeed({ ...(baseSeed || {}) });
                 if (seedPayload && seedPayload.Subject) {
@@ -1052,6 +1111,11 @@ async handleDataUpdated(event) {
             this.updateStepStatus(fromStep);
         }
     }
+
+    areRequiredCaseStepsValid() {
+        const requiredSteps = [1, 2, 4, 5, 8, 9];
+        return requiredSteps.every(step => validateStep(step, this.form).isValid);
+    }
     /* ------------------------------------------------------------
         STEP 15 → FINISH (Final Validation)
     ------------------------------------------------------------ */
@@ -1097,8 +1161,20 @@ async handleDataUpdated(event) {
         }
 
         if (!this.caseId) {
-            this.toast('Error', 'Unable to save related data because the Case has not been created yet.', 'error');
-            return;
+            if (!this.areRequiredCaseStepsValid()) {
+                this.toast('Error', 'Complete all required fields in Steps 1, 2, 4, 5, 8, and 9 before saving the case.', 'error');
+                return;
+            }
+            const seedPayload = this.prepareCaseSeed({ ...(this.form.basics || {}) });
+            if (!seedPayload || !seedPayload.Subject) {
+                this.toast('Error', 'Unable to save related data because the Case has not been created yet.', 'error');
+                return;
+            }
+            this.caseId = await createCase({ stepData: seedPayload });
+            await saveStepData({
+                caseId: this.caseId,
+                stepData: this.form.basics || {}
+            });
         }
 
         this.isSaving = true;
@@ -1266,8 +1342,6 @@ async handleDataUpdated(event) {
     // Sync Top Symptoms from Step 2 into Concerns (category: Top symptoms)
     syncTopSymptomsToConcerns(topSymptomsDraft = []) {
         const existing = Array.isArray(this.form.concerns) ? this.form.concerns : [];
-        const nonSeeded = existing.filter(item => item.category !== 'Top symptoms' || item.source !== 'presenting');
-
         const newTop = (topSymptomsDraft || [])
             .filter(item => item && item.value)
             .map(item => {
@@ -1280,6 +1354,21 @@ async handleDataUpdated(event) {
                     source: 'presenting'
                 };
             });
+        const mappedLabels = new Set(newTop.map(entry => (entry.label || '').toLowerCase()).filter(Boolean));
+        const nonSeeded = existing.filter(item => {
+            const category = (item.category || '').toLowerCase();
+            if (category !== 'top symptoms') {
+                return true;
+            }
+            if ((item.source || '').toLowerCase() === 'presenting') {
+                return false;
+            }
+            const labelKey = (item.label || item.name || '').toLowerCase();
+            if (mappedLabels.has(labelKey)) {
+                return false;
+            }
+            return true;
+        });
 
         // Deduplicate by label (case-insensitive)
         const byLabel = new Map();
@@ -1351,11 +1440,176 @@ async handleDataUpdated(event) {
         }
         return changed;
     }
+
+    syncSafetyRisksToStressors(risks = []) {
+        const existing = this.form?.homeSafety?.psychosocialStressorsDraft || [];
+        const existingByLabel = new Map();
+        existing.forEach(item => {
+            const key = (item.label || item.value || '').toString().toLowerCase();
+            if (key) existingByLabel.set(key, item);
+        });
+
+        const mapped = (risks || [])
+            .filter(item => {
+                const idCandidate = item.catalogId || item.id;
+                const localMeta = SAFETY_RISK_INDEX[idCandidate] || {};
+                const category = (item.catalogCategory
+                    || item.category
+                    || item.meta?.category
+                    || localMeta.category
+                    || '').toLowerCase();
+                const source = (item.source || item.Seed_Source__c || '').toString().toLowerCase();
+                const name = (item.catalogName
+                    || item.meta?.name
+                    || item.recordName
+                    || item.name
+                    || localMeta.name
+                    || item.label
+                    || '').toString().toLowerCase();
+                return category === 'psychological stressors'
+                    || source === 'stressors'
+                    || source === 'step8_psychologicalstressors'
+                    || PSYCHOSOCIAL_STRESSORS.has(name);
+            })
+            .map(item => {
+                const idCandidate = item.catalogId || item.id;
+                const localMeta = SAFETY_RISK_INDEX[idCandidate] || {};
+                const label = item.catalogName
+                    || item.meta?.name
+                    || item.recordName
+                    || item.name
+                    || localMeta.name
+                    || item.label
+                    || '';
+                const key = label.toLowerCase();
+                const existingItem = key ? existingByLabel.get(key) : null;
+                return {
+                    value: label || existingItem?.value,
+                    label: label || existingItem?.label,
+                    note: item.notes ?? existingItem?.note ?? '',
+                    recent: item.recent === undefined ? (existingItem?.recent ?? false) : !!item.recent,
+                    historical: item.historical === undefined ? (existingItem?.historical ?? false) : !!item.historical
+                };
+            })
+            .filter(item => !!item.value);
+
+        const changed = JSON.stringify(mapped) !== JSON.stringify(existing);
+        if (changed) {
+            this.form.homeSafety = {
+                ...(this.form.homeSafety || {}),
+                psychosocialStressorsDraft: mapped
+            };
+        }
+        return changed;
+    }
+
+    syncConcernsToFamilyHistory(concerns = []) {
+        const existing = this.form?.familyTrauma?.familyHistoryDraft || [];
+        const existingByLabel = new Map();
+        existing.forEach(item => {
+            const key = (item.label || item.value || '').toString().toLowerCase();
+            if (key) existingByLabel.set(key, item);
+        });
+
+        const mapped = (concerns || [])
+            .filter(item => (item.category || '').toLowerCase() === 'family history')
+            .map(item => {
+                const label = (item.label || item.name || item.catalogName || '').toString();
+                const key = label.toLowerCase();
+                if (!FAMILY_HISTORY_ITEMS.has(key)) {
+                    return null;
+                }
+                const existingItem = existingByLabel.get(key);
+                return {
+                    value: label || existingItem?.value,
+                    label: label || existingItem?.label,
+                    note: item.notes ?? existingItem?.note ?? ''
+                };
+            })
+            .filter(Boolean);
+
+        const changed = JSON.stringify(mapped) !== JSON.stringify(existing);
+        if (changed) {
+            this.form.familyTrauma = {
+                ...(this.form.familyTrauma || {}),
+                familyHistoryDraft: mapped
+            };
+        }
+        return changed;
+    }
+
+    syncConcernsToPriorDx(concerns = []) {
+        const existing = this.form?.priorDx?.priorDiagnosesDraft || [];
+        const existingByLabel = new Map();
+        existing.forEach(item => {
+            const key = (item.label || item.value || '').toString().toLowerCase();
+            if (key) existingByLabel.set(key, item);
+        });
+
+        const mapped = (concerns || [])
+            .filter(item => (item.category || '').toLowerCase() === 'prior diagnosis')
+            .map(item => {
+                const label = (item.label || item.name || item.catalogName || '').toString();
+                const key = label.toLowerCase();
+                if (!PRIOR_DIAGNOSES_ITEMS.has(key)) {
+                    return null;
+                }
+                const existingItem = existingByLabel.get(key);
+                return {
+                    value: label || existingItem?.value,
+                    label: label || existingItem?.label,
+                    note: item.notes ?? existingItem?.note ?? ''
+                };
+            })
+            .filter(Boolean);
+
+        const changed = JSON.stringify(mapped) !== JSON.stringify(existing);
+        if (changed) {
+            this.form.priorDx = {
+                ...(this.form.priorDx || {}),
+                priorDiagnosesDraft: mapped
+            };
+        }
+        return changed;
+    }
+
+    syncConcernsToTopSymptoms(concerns = []) {
+        const existing = this.form?.presenting?.topSymptomsDraft || [];
+        const existingByLabel = new Map();
+        existing.forEach(item => {
+            const key = (item.label || item.value || '').toString().toLowerCase();
+            if (key) existingByLabel.set(key, item);
+        });
+
+        const mapped = (concerns || [])
+            .filter(item => (item.category || '').toLowerCase() === 'top symptoms')
+            .map(item => {
+                const label = (item.label || item.name || item.catalogName || '').toString();
+                const key = label.toLowerCase();
+                if (!TOP_SYMPTOMS_ITEMS.has(key)) {
+                    return null;
+                }
+                const existingItem = existingByLabel.get(key);
+                return {
+                    value: label || existingItem?.value,
+                    label: label || existingItem?.label,
+                    note: item.notes ?? existingItem?.note ?? ''
+                };
+            })
+            .filter(Boolean);
+
+        const changed = JSON.stringify(mapped) !== JSON.stringify(existing);
+        if (changed) {
+            this.form.presenting = {
+                ...(this.form.presenting || {}),
+                topSymptomsDraft: mapped
+            };
+        }
+        return changed;
+    }
     // Sync Prior Diagnoses from Step 3 into Concerns (category: Prior diagnosis)
     syncPriorDxToConcerns(priorDiagnosesDraft = []) {
         const existing = Array.isArray(this.form.concerns) ? this.form.concerns : [];
-        const nonSeeded = existing.filter(item => item.category !== 'Prior diagnosis' || item.source !== 'priorDx');
-
         const mapped = (priorDiagnosesDraft || [])
             .filter(item => item && item.value)
             .map(item => {
@@ -1368,6 +1622,21 @@ async handleDataUpdated(event) {
                     source: 'priorDx'
                 };
             });
+        const mappedLabels = new Set(mapped.map(entry => (entry.label || '').toLowerCase()).filter(Boolean));
+        const nonSeeded = existing.filter(item => {
+            const category = (item.category || '').toLowerCase();
+            if (category !== 'prior diagnosis') {
+                return true;
+            }
+            if ((item.source || '').toLowerCase() === 'priordx') {
+                return false;
+            }
+            const labelKey = (item.label || item.name || '').toLowerCase();
+            if (mappedLabels.has(labelKey)) {
+                return false;
+            }
+            return true;
+        });
 
         const byLabel = new Map();
         mapped.forEach(entry => {
@@ -1448,8 +1717,8 @@ async handleDataUpdated(event) {
     }
     // Sync Family History (Step 7) into Concerns (category: Family history)
     syncFamilyHistoryToConcerns(familyHistoryDraft = []) {
+        const categoryLabel = 'Family History';
         const existing = Array.isArray(this.form.concerns) ? this.form.concerns : [];
-        const nonSeeded = existing.filter(item => item.category !== 'Family history' || item.source !== 'familyHistory');
 
         const mapped = (familyHistoryDraft || [])
             .filter(item => item && item.value)
@@ -1458,11 +1727,26 @@ async handleDataUpdated(event) {
                 return {
                     id: item.value || this.slugify(label),
                     label,
-                    category: 'Family history',
+                    category: categoryLabel,
                     notes: item.note || '',
                     source: 'familyHistory'
                 };
             });
+        const mappedLabels = new Set(mapped.map(entry => (entry.label || '').toLowerCase()).filter(Boolean));
+        const nonSeeded = existing.filter(item => {
+            const category = (item.category || '').toLowerCase();
+            if (category !== 'family history') {
+                return true;
+            }
+            if ((item.source || '').toLowerCase() === 'familyhistory') {
+                return false;
+            }
+            const labelKey = (item.label || item.name || '').toLowerCase();
+            if (mappedLabels.has(labelKey)) {
+                return false;
+            }
+            return true;
+        });
 
         const byLabel = new Map();
         mapped.forEach(entry => {
@@ -1969,6 +2253,16 @@ async handleDataUpdated(event) {
         this.stepsReady = true;
         this.formLoadedFromServer = false;
         this.initializingCaseContext = false;
+        this.clearLocalDrafts();
+    }
+
+    clearLocalDrafts() {
+        try {
+            if (typeof window === 'undefined') return;
+            window.localStorage.removeItem('gpCaseViolenceDraft_draft');
+        } catch (e) {
+            // ignore storage issues
+        }
     }
 
     prepareCaseSeed(seed = {}) {

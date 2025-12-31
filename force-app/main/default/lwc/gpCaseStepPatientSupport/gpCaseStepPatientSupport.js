@@ -93,21 +93,36 @@ export default class GpCaseStepPatientSupport extends LightningElement {
         return isAllowedType && this.effectiveLayoutContext === 'case';
     }
 
+    get isAddictionMedicineCase() {
+        const caseType = (this.caseTypeFromRecord || this.caseType || '').toLowerCase();
+        return caseType === 'addiction medicine' && this.effectiveLayoutContext === 'case';
+    }
+
+    get isGeneralPsychiatryCase() {
+        const caseType = (this.caseTypeFromRecord || this.caseType || '').toLowerCase();
+        return caseType === 'general psychiatry' && this.effectiveLayoutContext === 'case';
+    }
+
+    get hideEmptySubtitle() {
+        return this.isAddictionMedicineCase || this.isGeneralPsychiatryCase;
+    }
+
     get isReadOnlySurface() {
         return !(this.isCareNavigation || this.isParentCaseWithControls);
     }
 
     get shouldRender() {
-        const caseType = (this.caseTypeFromRecord || this.caseType || '').toLowerCase();
-        const isAddictionMedicine = caseType === 'addiction medicine';
-        return this.isCareNavigation || this.supports.length > 0 || isAddictionMedicine;
+        return this.isCareNavigation
+            || this.supports.length > 0
+            || this.isAddictionMedicineCase
+            || this.isGeneralPsychiatryCase;
     }
 
     get headerTitle() {
         if (this.effectiveLayoutContext === 'relatedcase') {
-            return `Support for Parent Case (${this.supportsCountDisplay})`;
+            return `Supports for Parent Case (${this.supportsCountDisplay})`;
         }
-        return `Support (${this.supportsCountDisplay})`;
+        return `Supports (${this.supportsCountDisplay})`;
     }
 
     get headerIconName() {
@@ -139,6 +154,9 @@ export default class GpCaseStepPatientSupport extends LightningElement {
     }
 
     get showGridControls() {
+        if (this.isAddictionMedicineCase || this.isGeneralPsychiatryCase) {
+            return false;
+        }
         return this.isGridView && (this.hasSupports || this.isParentCaseWithControls);
     }
 

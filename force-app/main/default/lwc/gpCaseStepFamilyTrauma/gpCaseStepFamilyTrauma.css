@@ -189,6 +189,15 @@
 	font-size: 0.85rem;
 }
 
+.error-text {
+	background: #fef2f2;
+	border: 1px solid #fecaca;
+	color: #dc2626;
+	padding: 0.5rem 0.75rem;
+	border-radius: 0.5rem;
+	font-size: 0.85rem;
+}
+
 .btn-back {
 	background-color: #f3f4f6;
 	color: #4b5563;

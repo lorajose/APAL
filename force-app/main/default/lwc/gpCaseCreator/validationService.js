@@ -291,6 +291,29 @@ function validateCognition(formData, config = {}) {
   };
 }
 
+function validateFamilyTrauma(formData) {
+  const data = formData.familyTrauma || {};
+  const errors = [];
+  const warnings = [];
+
+  const familyHistory = normalizeMultiValue(data.Family_History__c);
+  if (familyHistory.length > 0) {
+    const notes = (data.Family_History_Notes__c || '').toString().trim();
+    if (!notes) {
+      errors.push({
+        path: 'Family_History_Notes__c',
+        message: 'Family History Notes are Required.'
+      });
+    }
+  }
+
+  return {
+    isValid: errors.length === 0,
+    hardErrors: errors,
+    softWarnings: warnings
+  };
+}
+
 /**
  * Función de validación por defecto para pasos no críticos o vacíos.
  */
@@ -329,6 +352,7 @@ const validationMap = {
   2: validatePresenting,
   4: validateSuicide,
   5: validateHomicide,
+  7: validateFamilyTrauma,
   8: validateHomeSafety,
   9: validateCognition,
   13: validateConcerns,
