@@ -108,20 +108,10 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
     }
 
     get showAddButton() {
-        const caseType = (this.caseTypeFromRecord || this.caseType || '').toLowerCase();
-        const isAddictionMedicine = caseType === 'addiction medicine' || caseType.includes('addiction');
-        if (isAddictionMedicine && this.effectiveLayoutContext === 'case') {
-            return false;
-        }
         return this.isGridView;
     }
 
     get showEmptyState() {
-        const caseType = (this.caseTypeFromRecord || this.caseType || '').toLowerCase();
-        const isAddictionMedicine = caseType === 'addiction medicine' || caseType.includes('addiction');
-        if (isAddictionMedicine && this.effectiveLayoutContext === 'case') {
-            return false;
-        }
         return true;
     }
 
@@ -485,9 +475,15 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
             }));
             this.wizardDraft = this.wizardSelection.map(id => {
                 const existing = draftById.get(id) || risksById.get(id);
+                const meta = existing?.meta || this.catalogIndex[id] || {
+                    name: existing?.catalogName || existing?.recordName || id,
+                    category: existing?.catalogCategory || ''
+                };
                 return {
                     id,
-                    meta: existing?.meta || this.catalogIndex[id],
+                    meta,
+                    catalogName: existing?.catalogName || meta.name || id,
+                    catalogCategory: existing?.catalogCategory || meta.category || '',
                     recent: existing?.recent ?? false,
                     historical: existing?.historical ?? false,
                     notes: existing?.notes || '',
@@ -554,8 +550,8 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
             const meta = this.catalogIndex[item.id] || {};
             return {
                 id: item.id,
-                catalogName: meta.name || '',
-                catalogCategory: meta.category || '',
+                catalogName: item.catalogName || meta.name || '',
+                catalogCategory: item.catalogCategory || meta.category || '',
                 recent: item.recent,
                 historical: item.historical,
                 notes: item.notes

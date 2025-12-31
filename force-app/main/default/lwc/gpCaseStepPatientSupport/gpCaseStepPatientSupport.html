@@ -91,7 +91,7 @@
                                         <template if:true={hasSupports}>
                                             <button class="ghost-button" type="button" onclick={handleEditSupportWizard}>Edit</button>
                                         </template>
-                                        <button class="primary-button" type="button" onclick={handleAddSupport}>Add Patient Support</button>
+                                        <button class="primary-button" type="button" onclick={handleAddSupport}>Add Supports</button>
                                     </template>
                                 </div>
                             </div>
@@ -190,11 +190,13 @@
                     <template if:false={hasSupports}>
                         <section class="card empty-state-card">
                             <div>
-                                <p class="empty-title">No patient support captured yet</p>
-                                <p class="empty-subtitle">Use the button to add items manually.</p>
+                                <p class="empty-title">No supports captured yet</p>
+                                <template if:false={hideEmptySubtitle}>
+                                    <p class="empty-subtitle">Use the button to add items manually.</p>
+                                </template>
                             </div>
                             <template if:true={showAddButton}>
-                                <button class="primary-button" onclick={handleAddSupport}>Add Patient Support</button>
+                                <button class="primary-button" onclick={handleAddSupport}>Add Supports</button>
                             </template>
                         </section>
                     </template>

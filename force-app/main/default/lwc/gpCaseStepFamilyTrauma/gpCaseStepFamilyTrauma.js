@@ -68,6 +68,16 @@ export default class GpCaseStepFamilyTrauma extends LightningElement {
         return this.buildPayload();
     }
 
+    @api
+    focusFirstError(errorPath) {
+        if (errorPath === 'Family_History_Notes__c') {
+            const field = this.template.querySelector('.selected-card .textarea') || this.template.querySelector('#family-notes');
+            if (field && field.focus) {
+                field.focus();
+            }
+        }
+    }
+
     handleCheckboxChange(event) {
         const field = event.target.dataset.field;
         const checked = event.target.checked;

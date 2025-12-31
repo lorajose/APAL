@@ -22,7 +22,9 @@
 
         <section class="card">
             <div class="field field-full">
-                <label class="input-label" for="family-notes">Family History Notes</label>
+                <label class="input-label" for="family-notes">
+                    <span class="required">*</span>Family History Notes
+                </label>
                 <textarea
                     id="family-notes"
                     class="textarea"
@@ -30,6 +32,9 @@
                     oninput={handleNotesChange}
                 >{familyHistoryNotes}</textarea>
                 <p class="helper-text">Add context, protective relatives, or patterns.</p>
+                <template if:true={errors.Family_History_Notes__c}>
+                    <p class="error-text">{errors.Family_History_Notes__c}</p>
+                </template>
             </div>
         </section>
 
@@ -66,12 +71,17 @@
                                     <button class="link-button" type="button" data-value={item.value} onclick={handleFamilyRemove}>Remove</button>
                                 </header>
                                 <div class="field field-full">
-                                    <label class="input-label family-note-label">Notes</label>
+                                    <label class="input-label family-note-label">
+                                        <span class="required">*</span>Notes
+                                    </label>
                                     <textarea
                                         class="textarea"
                                         data-value={item.value}
                                         oninput={handleFamilyNoteChange}
                                     >{item.note}</textarea>
+                                    <template if:true={errors.Family_History_Notes__c}>
+                                        <p class="error-text">{errors.Family_History_Notes__c}</p>
+                                    </template>
                                 </div>
                             </div>
                         </template>

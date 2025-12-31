@@ -95,9 +95,10 @@
 }
 
 .chip-selected {
-    background: #2563eb;
-    color: #111827;
-    border-color: #2563eb;
+    background: #e0f2fe;
+    border-color: #0284c7;
+    color: #0369a1;
+    font-weight: 600;
 }
 
 .error-text {
