@@ -23,13 +23,6 @@ const SOURCE_LABELS = {
     manual: 'Manual Add'
 };
 
-const TOP_SYMPTOM_OPTIONS = [
-    'Depressed mood', 'Anhedonia', 'Anxiety', 'Panic', 'Insomnia', 'Hypersomnia',
-    'Appetite change', 'Low energy', 'Poor concentration', 'Psychosis', 'Mania/hypomania',
-    'Agitation/violence', 'Cognitive change', 'Trauma symptoms', 'Substance-related',
-    'Suicidal thoughts', 'Homicidal thoughts', 'Somatic symptoms'
-];
-
 const looksLikeId = (value) => {
     if (!value || typeof value !== 'string') {
         return false;
@@ -41,106 +34,6 @@ const looksLikeId = (value) => {
     return /^[a-zA-Z0-9]+$/.test(trimmed);
 };
 
-const PRIOR_DX_OPTIONS = [
-    'MDD', 'Bipolar I', 'Bipolar II', 'GAD', 'Panic Disorder', 'PTSD',
-    'Psychotic Disorder', 'ADHD', 'OCD', 'SUD', 'Personality Disorder', 'Eating Disorder'
-];
-
-const PSYCHOSIS_SYMPTOMS_OPTIONS = [
-    'Auditory hallucinations', 'Visual hallucinations', 'Tactile/other hallucinations',
-    'Persecutory delusions', 'Ideas of reference', 'Grandiosity',
-    'Thought disorganization', 'Bizarre behavior', 'Catatonia'
-];
-
-const MANIA_SYMPTOMS_OPTIONS = [
-    'Decreased need for sleep', 'Pressured speech', 'Racing thoughts',
-    'Grandiosity', 'Risky spending/sex/driving', 'Increased goal-directed activity', 'Irritability', 'Distractibility'
-];
-
-const MEDICAL_RED_FLAG_OPTIONS = [
-    'Fever/infection', 'Head injury', 'Seizure', 'Thyroid/endocrine',
-    'Pain/untreated', 'Steroid or stimulant use', 'Medication started/stopped',
-    'Delirium suspected', 'Sleep apnea'
-];
-
-const FAMILY_HISTORY_OPTIONS = [
-    'Bipolar', 'Psychosis/Schizophrenia', 'Suicide', 'SUD',
-    'Depression/Anxiety', 'Unknown'
-];
-
-const WITHDRAWAL_TREATMENT_OPTIONS = [
-    'Acute Withdrawal Symptoms',
-    'Medication-Assisted Treatment (MAT) Needs',
-    'Cravings Management'
-];
-
-const SUBSTANCE_USE_MENTAL_HEALTH_OPTIONS = [
-    'Chronic Substance Use',
-    'Dual Diagnosis (Substance Use and Mental Health)',
-    'Co-occurring Disorders',
-    'Trauma and Substance Use'
-];
-
-const PREVENTION_RISK_MANAGEMENT_OPTIONS = [
-    'Relapse Prevention',
-    'Overdose Risks',
-    'Harm Reduction Strategies'
-];
-
-const SOCIAL_ENVIRONMENTAL_FACTORS_OPTIONS = [
-    'Social Isolation due to Substance Use',
-    'Legal Issues Related to Substance Use',
-    'Family Dynamics and Substance Use',
-    'Housing Stability and Substance Use',
-    'Financial Instability Related to Substance Use',
-    'Social Determinants of Health Impacting Recovery'
-];
-
-const HEALTH_COMPLICATIONS_OPTIONS = [
-    'Physical Health Complications from Substance Use'
-];
-
-const SUPPORT_RECOVERY_OPTIONS = [
-    'Peer Support Group Needs'
-];
-
-const CATALOG = buildCatalog();
-
-function slugify(value = '') {
-    return value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-}
-
-function buildCatalog() {
-    const entries = [];
-    const addEntries = (category, list) => {
-        list.forEach(label => {
-            entries.push({
-                id: `${slugify(category)}-${slugify(label)}`,
-                category,
-                label
-            });
-        });
-    };
-    addEntries('Top Symptoms', TOP_SYMPTOM_OPTIONS);
-    addEntries('Prior Diagnoses', PRIOR_DX_OPTIONS);
-    addEntries('Psychosis Symptoms', PSYCHOSIS_SYMPTOMS_OPTIONS);
-    addEntries('Mania/Hypomania Symptoms', MANIA_SYMPTOMS_OPTIONS);
-    addEntries('Medical Red Flags', MEDICAL_RED_FLAG_OPTIONS);
-    addEntries('Family History (1st-degree)', FAMILY_HISTORY_OPTIONS);
-    addEntries('Withdrawal and Treatment', WITHDRAWAL_TREATMENT_OPTIONS);
-    addEntries('Substance Use and Mental Health', SUBSTANCE_USE_MENTAL_HEALTH_OPTIONS);
-    addEntries('Prevention and Risk Management', PREVENTION_RISK_MANAGEMENT_OPTIONS);
-    addEntries('Social and Environmental Factors', SOCIAL_ENVIRONMENTAL_FACTORS_OPTIONS);
-    addEntries('Health Complications', HEALTH_COMPLICATIONS_OPTIONS);
-    addEntries('Support and Recovery', SUPPORT_RECOVERY_OPTIONS);
-    return entries;
-}
-
-const CATALOG_INDEX = CATALOG.reduce((acc, item) => {
-    acc[item.id] = item;
-    return acc;
-}, {});
-
 const cloneList = (list = []) => JSON.parse(JSON.stringify(list || []));
 
 export default class GpCaseStepConcerns extends LightningElement {
@@ -148,6 +41,7 @@ export default class GpCaseStepConcerns extends LightningElement {
     @api recordId;
     @api layoutMode = false;
     @api caseType;
+    @api suppressAutoSave = false;
 
     @track catalog = [];
     @track catalogIndex = {};
@@ -718,7 +612,7 @@ export default class GpCaseStepConcerns extends LightningElement {
         this.dispatchEvent(new CustomEvent('dataupdated', {
             detail: payload
         }));
-        if (this.isStandaloneLayout && !this.isSaving) {
+        if (this.isStandaloneLayout && !this.isSaving && !this.suppressAutoSave) {
             // Auto-save when used standalone in a page layout
             this.handleStandaloneSave();
         }
