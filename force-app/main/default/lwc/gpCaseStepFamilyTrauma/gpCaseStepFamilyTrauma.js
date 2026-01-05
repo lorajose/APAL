@@ -1,4 +1,7 @@
-import { LightningElement, api, track } from 'lwc';
+import { LightningElement, api, track, wire } from 'lwc';
+import { getObjectInfo, getPicklistValues } from 'lightning/uiObjectInfoApi';
+import CASE_OBJECT from '@salesforce/schema/Case';
+import FAMILY_HISTORY_FIELD from '@salesforce/schema/Case.Family_History__c';
 
 const FAMILY_HISTORY_OPTIONS = [
     { label: 'Bipolar', value: 'Bipolar' },
@@ -21,11 +24,33 @@ export default class GpCaseStepFamilyTrauma extends LightningElement {
 
     @track familyHistory = [];
     @track familySearch = '';
+    @track familyHistoryOptions = [...FAMILY_HISTORY_OPTIONS];
+
+    @wire(getObjectInfo, { objectApiName: CASE_OBJECT })
+    caseInfo;
+
+    get caseRecordTypeId() {
+        return this.caseInfo?.data?.defaultRecordTypeId;
+    }
+
+    @wire(getPicklistValues, { recordTypeId: '$caseRecordTypeId', fieldApiName: FAMILY_HISTORY_FIELD })
+    wiredFamilyHistoryPicklist({ data, error }) {
+        if (data?.values?.length) {
+            this.familyHistoryOptions = data.values.map((entry) => ({
+                label: entry.label,
+                value: entry.value
+            }));
+        } else if (error) {
+            this.familyHistoryOptions = [...FAMILY_HISTORY_OPTIONS];
+            // eslint-disable-next-line no-console
+            console.warn('Failed to load Family_History__c picklist', error);
+        }
+    }
 
     get filteredFamilyOptions() {
         const term = (this.familySearch || '').toLowerCase();
         const selected = new Set(this.familyHistory.map(item => item.value));
-        return FAMILY_HISTORY_OPTIONS
+        return this.familyHistoryOptions
             .filter(option => option.label.toLowerCase().includes(term))
             .map(option => ({
                 ...option,
@@ -107,7 +132,7 @@ export default class GpCaseStepFamilyTrauma extends LightningElement {
         if (exists) {
             this.familyHistory = this.familyHistory.filter(item => item.value !== value);
         } else {
-            const option = FAMILY_HISTORY_OPTIONS.find(opt => opt.value === value);
+            const option = this.familyHistoryOptions.find(opt => opt.value === value);
             if (option) {
                 this.familyHistory = [
                     ...this.familyHistory,

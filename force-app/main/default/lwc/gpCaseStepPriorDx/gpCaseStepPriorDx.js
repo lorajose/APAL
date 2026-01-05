@@ -1,4 +1,7 @@
-import { LightningElement, api, track } from 'lwc';
+import { LightningElement, api, track, wire } from 'lwc';
+import { getObjectInfo, getPicklistValues } from 'lightning/uiObjectInfoApi';
+import CASE_OBJECT from '@salesforce/schema/Case';
+import PRIOR_DIAGNOSES_FIELD from '@salesforce/schema/Case.Prior_Diagnoses__c';
 
 const SELF_HARM_OPTIONS = [
     { label: 'None', value: 'None' },
@@ -6,22 +9,6 @@ const SELF_HARM_OPTIONS = [
     { label: 'Prior suicide attempt', value: 'Prior suicide attempt' },
     { label: 'Both', value: 'Both' },
     { label: 'Unknown', value: 'Unknown' }
-];
-
-const PRIOR_DIAGNOSIS_OPTIONS = [
-    { label: 'MDD', value: 'MDD' },
-    { label: 'Bipolar I', value: 'Bipolar I' },
-    { label: 'Bipolar II', value: 'Bipolar II' },
-    { label: 'GAD', value: 'GAD' },
-    { label: 'Panic Disorder', value: 'Panic Disorder' },
-    { label: 'PTSD', value: 'PTSD' },
-    { label: 'Psychotic Disorder', value: 'Psychotic Disorder' },
-    { label: 'ADHD', value: 'ADHD' },
-    { label: 'OCD', value: 'OCD' },
-    { label: 'SUD', value: 'SUD' },
-    { label: 'Personality Disorder', value: 'Personality Disorder' },
-    { label: 'Eating Disorder', value: 'Eating Disorder' },
-    { label: 'Other', value: 'Other' }
 ];
 
 function normalizeMultiValue(value) {
@@ -37,6 +24,8 @@ export default class GpCaseStepPriorDx extends LightningElement {
     @api errors = {};
     @api caseType;
 
+    @track priorDiagnosisOptions = [];
+
     psychHospitalizations = '';
     edVisits = '';
     selfHarmHistory = '';
@@ -44,6 +33,30 @@ export default class GpCaseStepPriorDx extends LightningElement {
 
     @track selectedDiagnoses = [];
     @track diagnosisSearch = '';
+    caseObjectInfo;
+
+    @wire(getObjectInfo, { objectApiName: CASE_OBJECT })
+    wiredCaseObjectInfo(result) {
+        this.caseObjectInfo = result;
+    }
+
+    get caseRecordTypeId() {
+        return this.caseObjectInfo?.data?.defaultRecordTypeId;
+    }
+
+    @wire(getPicklistValues, { recordTypeId: '$caseRecordTypeId', fieldApiName: PRIOR_DIAGNOSES_FIELD })
+    wiredPriorDiagnoses({ data, error }) {
+        if (data && Array.isArray(data.values)) {
+            this.priorDiagnosisOptions = data.values.map((item) => ({
+                label: item.label,
+                value: item.value
+            }));
+        }
+        if (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error loading Prior Diagnoses picklist', error);
+        }
+    }
 
     get selfHarmOptions() {
         return SELF_HARM_OPTIONS.map(option => ({
@@ -55,7 +68,7 @@ export default class GpCaseStepPriorDx extends LightningElement {
     get filteredDiagnosisOptions() {
         const term = (this.diagnosisSearch || '').toLowerCase();
         const selected = new Set(this.selectedDiagnoses.map((item) => item.value));
-        return PRIOR_DIAGNOSIS_OPTIONS
+        return this.priorDiagnosisOptions
             .filter((option) => option.label.toLowerCase().includes(term))
             .map((option) => ({
                 ...option,
@@ -130,17 +143,16 @@ export default class GpCaseStepPriorDx extends LightningElement {
         if (exists) {
             this.selectedDiagnoses = this.selectedDiagnoses.filter((item) => item.value !== value);
         } else {
-            const option = PRIOR_DIAGNOSIS_OPTIONS.find((opt) => opt.value === value);
-            if (option) {
-                this.selectedDiagnoses = [
-                    ...this.selectedDiagnoses,
-                    {
-                        value: option.value,
-                        label: option.label,
-                        note: ''
-                    }
-                ];
-            }
+            const option = this.priorDiagnosisOptions.find((opt) => opt.value === value);
+            const label = option?.label || value;
+            this.selectedDiagnoses = [
+                ...this.selectedDiagnoses,
+                {
+                    value,
+                    label,
+                    note: ''
+                }
+            ];
         }
         this.emitDraftChange();
     }

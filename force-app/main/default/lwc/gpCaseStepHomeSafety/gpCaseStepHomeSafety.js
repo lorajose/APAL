@@ -1,4 +1,8 @@
-import { LightningElement, api, track } from 'lwc';
+import { LightningElement, api, track, wire } from 'lwc';
+import { getObjectInfo, getPicklistValues } from 'lightning/uiObjectInfoApi';
+import CASE_OBJECT from '@salesforce/schema/Case';
+import LETHAL_MEANS_FIELD from '@salesforce/schema/Case.Lethal_Means_Access__c';
+import STRESSORS_FIELD from '@salesforce/schema/Case.Psychosocial_Stressors__c';
 
 const HOME_SAFETY_OPTIONS = [
     { label: 'Safe', value: 'Safe' },
@@ -52,6 +56,43 @@ export default class GpCaseStepHomeSafety extends LightningElement {
     reliableSupports = '';
     costCoverageIssues = false;
     supportsNotes = '';
+    @track lethalMeansOptionsCatalog = [...LETHAL_MEANS_OPTIONS];
+    @track stressorOptionsCatalog = [...STRESSOR_OPTIONS];
+
+    @wire(getObjectInfo, { objectApiName: CASE_OBJECT })
+    caseInfo;
+
+    get caseRecordTypeId() {
+        return this.caseInfo?.data?.defaultRecordTypeId;
+    }
+
+    @wire(getPicklistValues, { recordTypeId: '$caseRecordTypeId', fieldApiName: LETHAL_MEANS_FIELD })
+    wiredLethalMeans({ data, error }) {
+        if (data?.values?.length) {
+            this.lethalMeansOptionsCatalog = data.values.map((entry) => ({
+                label: entry.label,
+                value: entry.value
+            }));
+        } else if (error) {
+            this.lethalMeansOptionsCatalog = [...LETHAL_MEANS_OPTIONS];
+            // eslint-disable-next-line no-console
+            console.warn('Failed to load Lethal_Means_Access__c picklist', error);
+        }
+    }
+
+    @wire(getPicklistValues, { recordTypeId: '$caseRecordTypeId', fieldApiName: STRESSORS_FIELD })
+    wiredPsychosocialStressors({ data, error }) {
+        if (data?.values?.length) {
+            this.stressorOptionsCatalog = data.values.map((entry) => ({
+                label: entry.label,
+                value: entry.value
+            }));
+        } else if (error) {
+            this.stressorOptionsCatalog = [...STRESSOR_OPTIONS];
+            // eslint-disable-next-line no-console
+            console.warn('Failed to load Psychosocial_Stressors__c picklist', error);
+        }
+    }
 
     get homeSafetyOptionsComputed() {
         return HOME_SAFETY_OPTIONS.map(option => ({
@@ -73,7 +114,7 @@ export default class GpCaseStepHomeSafety extends LightningElement {
 
     get lethalMeansOptions() {
         const selected = new Set(this.lethalMeans);
-        return LETHAL_MEANS_OPTIONS.map(option => ({
+        return this.lethalMeansOptionsCatalog.map(option => ({
             ...option,
             chipClass: `chip ${selected.has(option.value) ? 'chip-selected' : ''}`
         }));
@@ -86,7 +127,7 @@ export default class GpCaseStepHomeSafety extends LightningElement {
     get filteredStressors() {
         const term = (this.stressorSearch || '').toLowerCase();
         const selected = new Set(this.stressors.map(item => item.value));
-        return STRESSOR_OPTIONS
+        return this.stressorOptionsCatalog
             .filter(option => option.label.toLowerCase().includes(term))
             .map(option => ({
                 ...option,
@@ -185,7 +226,7 @@ export default class GpCaseStepHomeSafety extends LightningElement {
         if (existing) {
             this.stressors = this.stressors.filter(item => item.value !== value);
         } else {
-            const option = STRESSOR_OPTIONS.find(opt => opt.value === value);
+            const option = this.stressorOptionsCatalog.find(opt => opt.value === value);
             if (option) {
                 this.stressors = [
                     ...this.stressors,

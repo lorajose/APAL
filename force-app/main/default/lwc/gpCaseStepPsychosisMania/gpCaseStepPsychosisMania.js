@@ -1,4 +1,9 @@
-import { LightningElement, api, track } from 'lwc';
+import { LightningElement, api, track, wire } from 'lwc';
+import { getObjectInfo, getPicklistValues } from 'lightning/uiObjectInfoApi';
+import CASE_OBJECT from '@salesforce/schema/Case';
+import PSYCHOSIS_FIELD from '@salesforce/schema/Case.Psychosis_Symptoms__c';
+import MANIA_FIELD from '@salesforce/schema/Case.Mania_Symptoms__c';
+import RED_FLAGS_FIELD from '@salesforce/schema/Case.Medical_Red_Flags__c';
 
 const CASE_LINES = {
     GENERAL: 'general',
@@ -75,6 +80,9 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
     psychosisOptions = [...PSYCHOSIS_OPTIONS];
     maniaOptions = [...MANIA_OPTIONS];
     redFlagOptions = [...RED_FLAG_OPTIONS];
+    psychosisCatalogOptions = null;
+    maniaCatalogOptions = null;
+    redFlagCatalogOptions = null;
 
     psychosisSearch = '';
     maniaSearch = '';
@@ -85,6 +93,58 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
 
     connectedCallback() {
         this.loadCatalogs();
+    }
+
+    @wire(getObjectInfo, { objectApiName: CASE_OBJECT })
+    caseInfo;
+
+    get caseRecordTypeId() {
+        return this.caseInfo?.data?.defaultRecordTypeId;
+    }
+
+    @wire(getPicklistValues, { recordTypeId: '$caseRecordTypeId', fieldApiName: PSYCHOSIS_FIELD })
+    wiredPsychosisPicklist({ data, error }) {
+        if (data?.values?.length) {
+            this.psychosisCatalogOptions = data.values.map((entry) => ({
+                label: entry.label,
+                value: entry.value
+            }));
+            this.loadCatalogs();
+        } else if (error) {
+            this.psychosisCatalogOptions = null;
+            // eslint-disable-next-line no-console
+            console.warn('Failed to load Psychosis_Symptoms__c picklist', error);
+        }
+    }
+
+    @wire(getPicklistValues, { recordTypeId: '$caseRecordTypeId', fieldApiName: MANIA_FIELD })
+    wiredManiaPicklist({ data, error }) {
+        if (data?.values?.length) {
+            this.maniaCatalogOptions = data.values.map((entry) => ({
+                label: entry.label,
+                value: entry.value
+            }));
+            this.loadCatalogs();
+        } else if (error) {
+            this.maniaCatalogOptions = null;
+            // eslint-disable-next-line no-console
+            console.warn('Failed to load Mania_Symptoms__c picklist', error);
+        }
+    }
+
+    @wire(getPicklistValues, { recordTypeId: '$caseRecordTypeId', fieldApiName: RED_FLAGS_FIELD })
+    wiredRedFlagsPicklist({ data, error }) {
+        if (data?.values?.length) {
+            this.redFlagCatalogOptions = data.values.map((entry) => ({
+                label: entry.label,
+                value: entry.value
+            }));
+            this.loadCatalogs();
+        } else if (error) {
+            this.redFlagCatalogOptions = null;
+            // eslint-disable-next-line no-console
+            console.warn('Failed to load Medical_Red_Flags__c picklist', error);
+        }
     }
 
     @api
@@ -148,9 +208,18 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
                 }));
         };
 
-        this.psychosisOptions = filterByLine(PSYCHOSIS_OPTIONS);
-        this.maniaOptions = filterByLine(MANIA_OPTIONS);
-        this.redFlagOptions = filterByLine(RED_FLAG_OPTIONS);
+        const psychosisBase = Array.isArray(this.psychosisCatalogOptions) && this.psychosisCatalogOptions.length
+            ? this.psychosisCatalogOptions
+            : PSYCHOSIS_OPTIONS;
+        const maniaBase = Array.isArray(this.maniaCatalogOptions) && this.maniaCatalogOptions.length
+            ? this.maniaCatalogOptions
+            : MANIA_OPTIONS;
+        const redFlagBase = Array.isArray(this.redFlagCatalogOptions) && this.redFlagCatalogOptions.length
+            ? this.redFlagCatalogOptions
+            : RED_FLAG_OPTIONS;
+        this.psychosisOptions = filterByLine(psychosisBase);
+        this.maniaOptions = filterByLine(maniaBase);
+        this.redFlagOptions = filterByLine(redFlagBase);
 
         this.syncSelections();
     }
@@ -178,7 +247,8 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
             ? [...value.medicalRedFlagsDraft]
             : normalizeMultiValue(value.Medical_Red_Flags__c);
         this.psychosisNotes = value.Psychosis_Notes__c || '';
-        this.redFlagNotes = value.Red_Flag_Notes__c || '';
+        const redFlagValue = value.Red_Flag_Notes__c || value.Medical_Notes__c || '';
+        this.redFlagNotes = redFlagValue === 'See medical red flag selections.' ? '' : redFlagValue;
     }
 
     get data() {
@@ -250,16 +320,21 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
     }
 
     buildPayload() {
-        const requiresMedicalNotes = this.redFlagSelections.length > 0;
-        const safeRedFlagNotes = requiresMedicalNotes
-            ? (this.redFlagNotes && this.redFlagNotes.trim() ? this.redFlagNotes : 'See medical red flag selections.')
+        const requiresPsychosisNotes =
+            this.psychosisSelections.length > 0 || this.maniaSelections.length > 0;
+        const safeRedFlagNotes =
+            this.redFlagNotes && this.redFlagNotes.trim()
+                ? this.redFlagNotes.trim()
+                : null;
+        const safePsychosisNotes = requiresPsychosisNotes
+            ? (this.psychosisNotes && this.psychosisNotes.trim() ? this.psychosisNotes.trim() : null)
             : null;
 
         return {
             Psychosis_Symptoms__c: serializeMultiValue(this.psychosisSelections),
             Mania_Symptoms__c: serializeMultiValue(this.maniaSelections),
             Medical_Red_Flags__c: serializeMultiValue(this.redFlagSelections),
-            Psychosis_Notes__c: this.psychosisNotes || null,
+            Psychosis_Notes__c: safePsychosisNotes,
             Red_Flag_Notes__c: safeRedFlagNotes,
             Medical_Notes__c: safeRedFlagNotes,
             psychosisSymptomsDraft: [...this.psychosisSelections],

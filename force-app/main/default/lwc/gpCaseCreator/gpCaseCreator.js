@@ -39,7 +39,17 @@ const createEmptyForm = () => ({
     priorDx: {},
     suicide: {},
     violence: {},
-    psychosisMania: {},
+    psychosisMania: {
+        Psychosis_Symptoms__c: null,
+        Mania_Symptoms__c: null,
+        Medical_Red_Flags__c: null,
+        Psychosis_Notes__c: '',
+        Red_Flag_Notes__c: '',
+        Medical_Notes__c: null,
+        psychosisSymptomsDraft: [],
+        maniaSymptomsDraft: [],
+        medicalRedFlagsDraft: []
+    },
     familyTrauma: {},
     medicalFlags: {},
     homeSafety: {},
@@ -110,21 +120,6 @@ const FAMILY_HISTORY_ITEMS = new Set([
     'none',
     'unknown'
 ]);
-const PRIOR_DIAGNOSES_ITEMS = new Set([
-    'mdd',
-    'bipolar i',
-    'bipolar ii',
-    'gad',
-    'panic disorder',
-    'ptsd',
-    'psychotic disorder',
-    'adhd',
-    'ocd',
-    'sud',
-    'personality disorder',
-    'eating disorder',
-    'other'
-]);
 const TOP_SYMPTOMS_ITEMS = new Set([
     'depressed mood',
     'anhedonia',
@@ -135,6 +130,38 @@ const TOP_SYMPTOMS_ITEMS = new Set([
     'appetite change',
     'low energy',
     'poor concentration'
+]);
+const PSYCHOSIS_ITEMS = new Set([
+    'auditory hallucinations',
+    'visual hallucinations',
+    'tactile/other hallucinations',
+    'persecutory delusions',
+    'ideas of reference',
+    'grandiosity',
+    'thought disorganization',
+    'bizarre behavior',
+    'catatonia'
+]);
+const MANIA_ITEMS = new Set([
+    'decreased need for sleep',
+    'pressured speech',
+    'racing thoughts',
+    'grandiosity',
+    'risky spending/sex/driving',
+    'increased goal-directed activity',
+    'irritability',
+    'distractibility'
+]);
+const RED_FLAG_ITEMS = new Set([
+    'fever/infection',
+    'head injury',
+    'seizure',
+    'thyroid/endocrine',
+    'pain/untreated',
+    'steroid or stimulant use',
+    'medication started/stopped',
+    'delirium suspected',
+    'sleep apnea'
 ]);
 // Importa el nuevo servicio de validación
 import {
@@ -304,7 +331,7 @@ export default class gpCaseCreator extends NavigationMixin(LightningElement) {
         return this.form[key] || {};
     }
     get isUpdateMode() {
-        return this.formLoadedFromServer;
+        return !!this.recordId || this.formLoadedFromServer;
     }
 
     get isPhone() {
@@ -554,6 +581,11 @@ get stepsFormatted() {
     ------------------------------------------------------------ */
     async connectedCallback() {
         this.hasConnected = true;
+        if (!this.recordId && !this.caseId) {
+            // New case wizard should always start clean (clear local drafts like Step 5).
+            this.form = createEmptyForm();
+            this.clearLocalDrafts();
+        }
         // eslint-disable-next-line no-console
         console.error("🔥 FORM BASICS LOADED:", JSON.stringify(this.form.basics));
         this.logCollectionState('connected:start');
@@ -702,12 +734,17 @@ get stepsFormatted() {
                     // eslint-disable-next-line no-console
                     console.warn('Failed to load PCQT selections', pcqtErr);
                 }
+                const hasConcerns = Array.isArray(this.form?.concerns) && this.form.concerns.length > 0;
+                // If concerns already exist, use them as the source of truth for prior dx notes.
+                if (hasConcerns) {
+                    this.syncConcernsToPriorDx(this.form.concerns, true);
+                }
                 // Seed Top Symptoms into concerns on initial load if present
                 if (Array.isArray(this.form?.presenting?.topSymptomsDraft)) {
                     this.syncTopSymptomsToConcerns(this.form.presenting.topSymptomsDraft);
                 }
-                // Seed Prior Diagnoses into concerns on initial load if present
-                if (Array.isArray(this.form?.priorDx?.priorDiagnosesDraft)) {
+                // Seed Prior Diagnoses into concerns on initial load if present (only when no concerns loaded)
+                if (!hasConcerns && Array.isArray(this.form?.priorDx?.priorDiagnosesDraft)) {
                     this.syncPriorDxToConcerns(this.form.priorDx.priorDiagnosesDraft);
                 }
                 // Seed Psychosis/Mania/Red Flags into concerns on initial load if present
@@ -768,7 +805,7 @@ async handleDataUpdated(event) {
     // Seed Top Symptoms → Concerns (Step 2)
     if (this.currentStep === 2 && Array.isArray(data.topSymptomsDraft)) {
         const seeded = this.syncTopSymptomsToConcerns(data.topSymptomsDraft);
-        if (seeded && this.caseId) {
+        if (seeded && this.caseId && !this.isUpdateMode) {
             try {
                 await this.persistRelatedCollections(13);
             } catch (seedErr) {
@@ -780,7 +817,7 @@ async handleDataUpdated(event) {
     // Seed Prior Diagnoses → Concerns (Step 3)
     if (this.currentStep === 3 && Array.isArray(data.priorDiagnosesDraft)) {
         const seededPrior = this.syncPriorDxToConcerns(data.priorDiagnosesDraft);
-        if (seededPrior && this.caseId) {
+        if (seededPrior && this.caseId && !this.isUpdateMode) {
             try {
                 await this.persistRelatedCollections(13);
             } catch (seedErr) {
@@ -792,7 +829,7 @@ async handleDataUpdated(event) {
     // Seed Psychosis/Mania/Red Flags → Concerns (Step 6)
     if (this.currentStep === 6 && data) {
         const seededPsychosis = this.syncPsychosisManiaToConcerns(data);
-        if (seededPsychosis && this.caseId) {
+        if (seededPsychosis && this.caseId && !this.isUpdateMode) {
             try {
                 await this.persistRelatedCollections(13);
             } catch (seedErr) {
@@ -804,7 +841,7 @@ async handleDataUpdated(event) {
     // Seed Family History → Concerns (Step 7)
     if (this.currentStep === 7 && Array.isArray(data.familyHistoryDraft)) {
         const seededFamily = this.syncFamilyHistoryToConcerns(data.familyHistoryDraft);
-        if (seededFamily && this.caseId) {
+        if (seededFamily && this.caseId && !this.isUpdateMode) {
             try {
                 await this.persistRelatedCollections(13);
             } catch (seedErr) {
@@ -816,7 +853,7 @@ async handleDataUpdated(event) {
     // Seed Psychological Stressors → Safety Risks (Step 8)
     if (this.currentStep === 8 && Array.isArray(data.psychosocialStressorsDraft)) {
         const seededStressors = this.syncStressorsToSafetyRisks(data.psychosocialStressorsDraft);
-        if (seededStressors && this.caseId) {
+        if (seededStressors && this.caseId && !this.isUpdateMode) {
             try {
                 await this.persistRelatedCollections(14);
             } catch (seedErr) {
@@ -835,6 +872,7 @@ async handleDataUpdated(event) {
         this.syncConcernsToFamilyHistory(data);
         this.syncConcernsToPriorDx(data);
         this.syncConcernsToTopSymptoms(data);
+        this.syncConcernsToPsychosisMania(data);
     }
 
 
@@ -844,7 +882,7 @@ async handleDataUpdated(event) {
 
     this.updateStepStatus(this.currentStep);
 
-    if (this.caseId) {
+    if (this.caseId && !this.isUpdateMode) {
         const step = this.currentStep;
         try {
             if (step >= 10 && step <= 14) {
@@ -971,6 +1009,9 @@ async handleDataUpdated(event) {
         // 2. Saltar al nuevo paso y marcarlo como 'active'
         this.currentStep = step;
         this.stepStatus[step] = 'active';
+        if (step === 3 && Array.isArray(this.form?.concerns) && this.form.concerns.length) {
+            this.syncConcernsToPriorDx(this.form.concerns, true);
+        }
         // 3. Actualiza el estado del paso que se deja (ya no es currentStep)
         if (this.validationResults[currentStep]) {
             this.updateStepStatus(currentStep);
@@ -996,6 +1037,9 @@ async handleDataUpdated(event) {
         this.currentStep = targetStep;
         this.stepStatus[targetStep] = 'active';
         this.inlineMessage = null;
+        if (targetStep === 3 && Array.isArray(this.form?.concerns) && this.form.concerns.length) {
+            this.syncConcernsToPriorDx(this.form.concerns, true);
+        }
 
         if (this.validationResults[leavingStep]) {
             this.updateStepStatus(leavingStep);
@@ -1066,7 +1110,7 @@ async handleDataUpdated(event) {
                 }
             }
 
-            if (this.caseId) {
+            if (this.caseId && !this.isUpdateMode) {
                 if (currentStep <= 9) {
                     await saveStepData({
                         caseId: this.caseId,
@@ -1076,6 +1120,9 @@ async handleDataUpdated(event) {
                 await this.persistRelatedCollections(currentStep);
             }
             this.advanceStep(currentStep);
+            if (this.currentStep === 3 && Array.isArray(this.form?.concerns) && this.form.concerns.length) {
+                this.syncConcernsToPriorDx(this.form.concerns, true);
+            }
         } catch (err) {
             const message = err?.body?.message || err?.message || (typeof err === 'string' ? err : 'Unexpected error');
             this.toast('Error', message, 'error');
@@ -1198,31 +1245,31 @@ async handleDataUpdated(event) {
             }
 
             const pcqtIds = this.getPcqtSelectionIds();
-            await savePcqtSelections({
+            await this.safeSave('PCQT', () => savePcqtSelections({
                 recordId: caseId,
                 selectionIds: pcqtIds
-            });
-            await saveMedications({
+            }));
+            await this.safeSave('Medications', () => saveMedications({
                 caseId,
-                items: this.buildMedicationPayload()
-            });
-            await saveSubstances({
+                items: this.toPlainList(this.buildMedicationPayload())
+            }));
+            await this.safeSave('Substances', () => saveSubstances({
                 caseId,
-                items: this.buildSubstancePayload()
-            });
-            await saveScreeners({
+                items: this.toPlainList(this.buildSubstancePayload())
+            }));
+            await this.safeSave('Screeners', () => saveScreeners({
                 caseId,
-                items: this.buildScreenerPayload()
-            });
-            await saveConcerns({
+                items: this.toPlainList(this.buildScreenerPayload())
+            }));
+            await this.safeSave('Concerns', () => saveConcerns({
                 caseId,
-                items: this.buildConcernPayload(),
+                items: this.toPlainList(this.sanitizeConcernsForApex(this.buildConcernPayload())),
                 deleteMissing: true
-            });
-            await saveSafetyRisks({
+            }));
+            await this.safeSave('Safety Risks', () => saveSafetyRisks({
                 caseId,
-                items: this.buildSafetyRiskPayload()
-            });
+                items: this.toPlainList(this.buildSafetyRiskPayload())
+            }));
             if (this.isUpdateMode) {
                 this.toast('Success', 'Case updated.', 'success');
                 getRecordNotifyChange([{ recordId: caseId }]);
@@ -1253,6 +1300,48 @@ async handleDataUpdated(event) {
             window.location.reload();
         } catch (e) {
             // swallow reload issues
+        }
+    }
+
+    ensureList(value) {
+        return Array.isArray(value) ? value : [];
+    }
+
+    toPlainList(value) {
+        const list = this.ensureList(value);
+        return JSON.parse(JSON.stringify(list));
+    }
+
+    sanitizeConcernsForApex(value) {
+        const list = this.ensureList(value);
+        const looksLikeId = (val) => {
+            if (!val || typeof val !== 'string') return false;
+            const trimmed = val.trim();
+            if (trimmed.length !== 15 && trimmed.length !== 18) return false;
+            return /^[a-zA-Z0-9]+$/.test(trimmed);
+        };
+        return list
+            .map(item => {
+                if (!item) return null;
+                const rawCatalogId = item.catalogId ? String(item.catalogId) : '';
+                const catalogId = looksLikeId(rawCatalogId) ? rawCatalogId : null;
+                return {
+                    catalogId,
+                    label: item.label ? String(item.label) : '',
+                    category: item.category ? String(item.category) : '',
+                    notes: item.notes !== undefined && item.notes !== null ? String(item.notes) : null,
+                    source: item.source ? String(item.source) : null
+                };
+            })
+            .filter(item => item && item.label);
+    }
+
+    async safeSave(label, fn) {
+        try {
+            return await fn();
+        } catch (error) {
+            const message = error?.body?.message || error?.message || 'Unexpected error';
+            throw new Error(`${label} save failed: ${message}`);
         }
     }
 
@@ -1538,7 +1627,7 @@ async handleDataUpdated(event) {
         return changed;
     }
 
-    syncConcernsToPriorDx(concerns = []) {
+    syncConcernsToPriorDx(concerns = [], force = false) {
         const existing = this.form?.priorDx?.priorDiagnosesDraft || [];
         const existingByLabel = new Map();
         existing.forEach(item => {
@@ -1547,13 +1636,10 @@ async handleDataUpdated(event) {
         });
 
         const mapped = (concerns || [])
-            .filter(item => (item.category || '').toLowerCase() === 'prior diagnosis')
+            .filter(item => (item.category || '').toLowerCase().includes('prior diagnos'))
             .map(item => {
                 const label = (item.label || item.name || item.catalogName || '').toString();
                 const key = label.toLowerCase();
-                if (!PRIOR_DIAGNOSES_ITEMS.has(key)) {
-                    return null;
-                }
                 const existingItem = existingByLabel.get(key);
                 return {
                     value: label || existingItem?.value,
@@ -1564,7 +1650,7 @@ async handleDataUpdated(event) {
             .filter(Boolean);
 
         const changed = JSON.stringify(mapped) !== JSON.stringify(existing);
-        if (changed) {
+        if (changed || force) {
             this.form.priorDx = {
                 ...(this.form.priorDx || {}),
                 priorDiagnosesDraft: mapped
@@ -1607,7 +1693,59 @@ async handleDataUpdated(event) {
         }
         return changed;
     }
-    // Sync Prior Diagnoses from Step 3 into Concerns (category: Prior diagnosis)
+
+    syncConcernsToPsychosisMania(concerns = []) {
+        const psychosis = [];
+        const mania = [];
+        const redFlags = [];
+        let psychosisNotes = '';
+        let redFlagNotes = '';
+        let psychosisNoteFound = false;
+        let redFlagNoteFound = false;
+
+        (concerns || []).forEach(item => {
+            const category = (item.category || '').toLowerCase();
+            const label = (item.label || item.name || item.catalogName || '').toString();
+            const key = label.toLowerCase();
+            if (category === 'psychosis symptoms' && PSYCHOSIS_ITEMS.has(key)) {
+                psychosis.push(label);
+                if (!psychosisNoteFound && item.notes !== undefined && item.notes !== null) {
+                    psychosisNotes = String(item.notes);
+                    psychosisNoteFound = true;
+                }
+            } else if (category === 'mania / hypomania symptoms' && MANIA_ITEMS.has(key)) {
+                mania.push(label);
+                if (!psychosisNoteFound && item.notes !== undefined && item.notes !== null) {
+                    psychosisNotes = String(item.notes);
+                    psychosisNoteFound = true;
+                }
+            } else if (category === 'medical red flags' && RED_FLAG_ITEMS.has(key)) {
+                redFlags.push(label);
+                if (!redFlagNoteFound && item.notes !== undefined && item.notes !== null) {
+                    redFlagNotes = String(item.notes);
+                    redFlagNoteFound = true;
+                }
+            }
+        });
+
+        const existing = this.form?.psychosisMania || {};
+        const next = {
+            ...(existing || {}),
+            psychosisSymptomsDraft: psychosis,
+            maniaSymptomsDraft: mania,
+            medicalRedFlagsDraft: redFlags,
+            Psychosis_Notes__c: psychosisNoteFound ? psychosisNotes : (existing.Psychosis_Notes__c || ''),
+            Red_Flag_Notes__c: redFlagNoteFound ? redFlagNotes : (existing.Red_Flag_Notes__c || ''),
+            Medical_Notes__c: redFlagNoteFound ? redFlagNotes : (existing.Medical_Notes__c || '')
+        };
+
+        const changed = JSON.stringify(next) !== JSON.stringify(existing);
+        if (changed) {
+            this.form.psychosisMania = next;
+        }
+        return changed;
+    }
+    // Sync Prior Diagnoses from Step 3 into Concerns (category: Prior Diagnoses)
     syncPriorDxToConcerns(priorDiagnosesDraft = []) {
         const existing = Array.isArray(this.form.concerns) ? this.form.concerns : [];
         const mapped = (priorDiagnosesDraft || [])
@@ -1617,25 +1755,14 @@ async handleDataUpdated(event) {
                 return {
                     id: item.value || this.slugify(label),
                     label,
-                    category: 'Prior diagnosis',
+                    category: 'Prior Diagnoses',
                     notes: item.note || '',
                     source: 'priorDx'
                 };
             });
-        const mappedLabels = new Set(mapped.map(entry => (entry.label || '').toLowerCase()).filter(Boolean));
         const nonSeeded = existing.filter(item => {
             const category = (item.category || '').toLowerCase();
-            if (category !== 'prior diagnosis') {
-                return true;
-            }
-            if ((item.source || '').toLowerCase() === 'priordx') {
-                return false;
-            }
-            const labelKey = (item.label || item.name || '').toLowerCase();
-            if (mappedLabels.has(labelKey)) {
-                return false;
-            }
-            return true;
+            return !category.includes('prior diagnos');
         });
 
         const byLabel = new Map();
@@ -1664,8 +1791,13 @@ async handleDataUpdated(event) {
     syncPsychosisManiaToConcerns(data = {}) {
         const existing = Array.isArray(this.form.concerns) ? this.form.concerns : [];
         const isSeededItem = (item) => {
-            const seededCategories = ['Psychosis symptoms', 'Mania / Hypomania symptoms', 'Medical red flags'];
-            return seededCategories.includes(item.category) && item.source === 'psychosisMania';
+            const seededCategories = [
+                'psychosis symptoms',
+                'mania / hypomania symptoms',
+                'medical red flags'
+            ];
+            const category = (item.category || '').toLowerCase();
+            return seededCategories.includes(category);
         };
         const nonSeeded = existing.filter(item => !isSeededItem(item));
 
@@ -1881,7 +2013,7 @@ async handleDataUpdated(event) {
                         ? item.catalogId
                         : (looksLikeId(item.id) ? item.id : null),
                     label,
-                    category: item.category || '',
+                    category: this.normalizeConcernCategory(item.category),
                     notes: item.notes || null,
                     source: this.mapConcernSeedSource(item)
                 };
@@ -1928,6 +2060,15 @@ async handleDataUpdated(event) {
             .filter(Boolean);
     }
 
+    normalizeConcernCategory(value) {
+        const raw = (value || '').toString().trim();
+        const normalized = raw.toLowerCase();
+        if (normalized.includes('prior diagnosis')) {
+            return 'Prior Diagnoses';
+        }
+        return raw;
+    }
+
     getPcqtSelectionIds() {
         const looksLikePcqtId = (val) => {
             if (typeof val !== 'string') return false;
@@ -1960,33 +2101,35 @@ async handleDataUpdated(event) {
         this._persistingSteps.add(step);
         try {
             if (step === 10) {
-                const medPayload = JSON.parse(JSON.stringify(this.buildMedicationPayload()));
+                const medPayload = this.ensureList(JSON.parse(JSON.stringify(this.buildMedicationPayload())));
                 console.warn('💾 APEX saveMedications payload:', medPayload);
                 await saveMedications({
                     caseId: this.caseId,
                     items: medPayload
                 });
             } else if (step === 11) {
-                const subPayload = JSON.parse(JSON.stringify(this.buildSubstancePayload()));
+                const subPayload = this.ensureList(JSON.parse(JSON.stringify(this.buildSubstancePayload())));
                 await saveSubstances({
                     caseId: this.caseId,
                     items: subPayload
                 });
             } else if (step === 12) {
-                const scrPayload = JSON.parse(JSON.stringify(this.buildScreenerPayload()));
+                const scrPayload = this.ensureList(JSON.parse(JSON.stringify(this.buildScreenerPayload())));
                 await saveScreeners({
                     caseId: this.caseId,
                     items: scrPayload
                 });
             } else if (step === 13) {
-                const concernPayload = JSON.parse(JSON.stringify(this.buildConcernPayload()));
+                const concernPayload = this.ensureList(
+                    JSON.parse(JSON.stringify(this.sanitizeConcernsForApex(this.buildConcernPayload())))
+                );
                 await saveConcerns({
                     caseId: this.caseId,
                     items: concernPayload,
                     deleteMissing: true
                 });
             } else if (step === 14) {
-                const riskPayload = JSON.parse(JSON.stringify(this.buildSafetyRiskPayload()));
+                const riskPayload = this.ensureList(JSON.parse(JSON.stringify(this.buildSafetyRiskPayload())));
                 await saveSafetyRisks({
                     caseId: this.caseId,
                     items: riskPayload
@@ -2008,28 +2151,28 @@ async handleDataUpdated(event) {
             return;
         }
         try {
-            const medPayload = JSON.parse(JSON.stringify(this.buildMedicationPayload()));
+            const medPayload = this.ensureList(JSON.parse(JSON.stringify(this.buildMedicationPayload())));
             await saveMedications({
                 caseId: this.caseId,
                 items: medPayload
             });
-            const subPayload = JSON.parse(JSON.stringify(this.buildSubstancePayload()));
+            const subPayload = this.ensureList(JSON.parse(JSON.stringify(this.buildSubstancePayload())));
             await saveSubstances({
                 caseId: this.caseId,
                 items: subPayload
             });
-            const scrPayload = JSON.parse(JSON.stringify(this.buildScreenerPayload()));
+            const scrPayload = this.ensureList(JSON.parse(JSON.stringify(this.buildScreenerPayload())));
             await saveScreeners({
                 caseId: this.caseId,
                 items: scrPayload
             });
-            const concernPayload = JSON.parse(JSON.stringify(this.buildConcernPayload()));
+            const concernPayload = this.ensureList(JSON.parse(JSON.stringify(this.buildConcernPayload())));
             await saveConcerns({
                 caseId: this.caseId,
-                items: concernPayload,
+                items: this.ensureList(JSON.parse(JSON.stringify(this.sanitizeConcernsForApex(concernPayload)))),
                 deleteMissing: true
             });
-            const riskPayload = JSON.parse(JSON.stringify(this.buildSafetyRiskPayload()));
+            const riskPayload = this.ensureList(JSON.parse(JSON.stringify(this.buildSafetyRiskPayload())));
             await saveSafetyRisks({
                 caseId: this.caseId,
                 items: riskPayload
