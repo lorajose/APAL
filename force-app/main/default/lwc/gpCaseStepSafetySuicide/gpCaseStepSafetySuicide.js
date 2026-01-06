@@ -1,4 +1,7 @@
-import { LightningElement, api, track } from 'lwc';
+import { LightningElement, api, track, wire } from 'lwc';
+import { getObjectInfo, getPicklistValues } from 'lightning/uiObjectInfoApi';
+import CASE_OBJECT from '@salesforce/schema/Case';
+import ACCESS_TO_MEANS_FIELD from '@salesforce/schema/Case.Access_to_Means__c';
 
 const IDEATION_OPTIONS = [
     { label: 'None', value: 'None' },
@@ -8,7 +11,7 @@ const IDEATION_OPTIONS = [
     { label: 'Unknown', value: 'Unknown' }
 ];
 
-const ACCESS_MEANS_OPTIONS = [
+const ACCESS_MEANS_FALLBACK = [
     { label: 'None', value: 'None' },
     { label: 'Firearms - Unlocked', value: 'Firearms - Unlocked' },
     { label: 'Firearms - Locked', value: 'Firearms - Locked' },
@@ -25,6 +28,26 @@ export default class GpCaseStepSafetySuicide extends LightningElement {
     suicidalIntent = false;
     pastAttempts = '';
     @track accessToMeans = [];
+    @track accessMeansOptions = [];
+
+    @wire(getObjectInfo, { objectApiName: CASE_OBJECT })
+    caseInfo;
+
+    get caseRecordTypeId() {
+        return this.caseInfo?.data?.defaultRecordTypeId;
+    }
+
+    @wire(getPicklistValues, { recordTypeId: '$caseRecordTypeId', fieldApiName: ACCESS_TO_MEANS_FIELD })
+    wiredAccessMeans({ data, error }) {
+        if (data?.values) {
+            this.accessMeansOptions = data.values.map((option) => ({
+                label: option.label,
+                value: option.value
+            }));
+        } else if (error) {
+            this.accessMeansOptions = [];
+        }
+    }
 
     get ideationOptions() {
         return IDEATION_OPTIONS.map(option => ({
@@ -39,7 +62,8 @@ export default class GpCaseStepSafetySuicide extends LightningElement {
 
     get meansOptions() {
         const selected = new Set(this.accessToMeans);
-        return ACCESS_MEANS_OPTIONS.map(option => ({
+        const options = this.accessMeansOptions.length ? this.accessMeansOptions : ACCESS_MEANS_FALLBACK;
+        return options.map(option => ({
             ...option,
             checked: selected.has(option.value)
         }));
