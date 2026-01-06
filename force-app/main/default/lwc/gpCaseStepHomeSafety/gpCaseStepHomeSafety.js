@@ -112,6 +112,10 @@ export default class GpCaseStepHomeSafety extends LightningElement {
         return this.homeSafetyStatus && this.homeSafetyStatus !== 'Safe';
     }
 
+    get isLethalMeansRequired() {
+        return this.showLethalMeans;
+    }
+
     get lethalMeansOptions() {
         const selected = new Set(this.lethalMeans);
         return this.lethalMeansOptionsCatalog.map(option => ({
