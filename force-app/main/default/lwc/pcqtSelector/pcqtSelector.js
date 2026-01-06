@@ -10,6 +10,7 @@ export default class PcqtSelector extends LightningElement {
     @api caseType;
     @api required = false;
     @api disabled = false;
+    @api errors;
     @api showSaveButtons;
     @api wizardMode = false;
 
@@ -54,6 +55,10 @@ export default class PcqtSelector extends LightningElement {
         return `${count} selected`;
     }
 
+    get cardClass() {
+        return this.showError ? 'card card-error' : 'card';
+    }
+
     get filteredOptions() {
         const term = (this.pcqtSearch || '').toLowerCase();
         const selected = new Set(this.selectedIds || []);
@@ -76,6 +81,16 @@ export default class PcqtSelector extends LightningElement {
 
     get hasSelection() {
         return Array.isArray(this.selectedIds) && this.selectedIds.length > 0;
+    }
+
+    @api
+    focusFirstError() {
+        const field = this.template.querySelector('#pcqt-search');
+        if (field && field.focus) {
+            field.focus();
+        }
+        this.hasInteracted = true;
+        this.updateErrorState();
     }
 
     connectedCallback() {
@@ -212,7 +227,8 @@ export default class PcqtSelector extends LightningElement {
     }
 
     updateErrorState() {
-        this.showError = this.required && this.hasInteracted && !this.hasSelection;
+        const hasExternalError = !!this.errors?.Primary_Clinical_Question_Types__c;
+        this.showError = hasExternalError || (this.required && this.hasInteracted && !this.hasSelection);
     }
 
     persistDraft() {

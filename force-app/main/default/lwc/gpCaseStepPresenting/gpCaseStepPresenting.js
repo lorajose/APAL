@@ -333,6 +333,21 @@ export default class GpCaseStepPresenting extends LightningElement {
         return `${count} selected`;
     }
 
+    @api
+    focusFirstError(errorPath) {
+        if (errorPath === 'Primary_Clinical_Question_Types__c') {
+            const pcqt = this.template.querySelector('c-pcqt-selector');
+            if (pcqt && pcqt.focusFirstError) {
+                pcqt.focusFirstError();
+                return;
+            }
+            const fallback = this.template.querySelector('#pcqt-search');
+            if (fallback && fallback.focus) {
+                fallback.focus();
+            }
+        }
+    }
+
     get pcqtSelectorValue() {
         // Enviamos ids y, si faltan, también las labels para que el selector las resuelva contra el catálogo
         const merged = new Set([

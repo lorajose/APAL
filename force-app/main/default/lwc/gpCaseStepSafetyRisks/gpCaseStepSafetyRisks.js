@@ -10,8 +10,8 @@ import CASE_TYPE_FIELD from '@salesforce/schema/Case.Case_Type__c';
 
 const cloneList = (list = []) => JSON.parse(JSON.stringify(list || []));
 const SOURCE_LABELS = {
-    Step8_PsychologicalStressors: 'Step 8: Psychosocial Stressors',
-    Manual: 'Manual Add',
+    Step8_PsychologicalStressors: 'Step8_PsychologicalStressors',
+    Manual: 'Manual',
     'Migration/Import': 'Migration/Import',
     Other: 'Other'
 };
@@ -241,7 +241,10 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
     get filteredRisks() {
         const term = (this.searchValue || '').toLowerCase();
         return this.risks
-            .map(item => ({
+            .map(item => {
+                const sourceKey = (item.source || '').trim();
+                const normalizedSource = sourceKey.toLowerCase() === 'manual' ? 'Manual' : sourceKey;
+                return {
                 ...item,
                 meta: (() => {
                     const base = this.catalogIndex[item.id] || {};
@@ -260,9 +263,10 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
                 recordName: item.recordName || item.name || null,
                 recordLink: this.buildPatientSafetyRiskLink(item.recordId),
                 showConfirm: this.confirmRemoveId === item.id,
-                sourceLabel: SOURCE_LABELS[item.source] || item.source || 'Manual',
+                sourceLabel: SOURCE_LABELS[normalizedSource] || normalizedSource || 'Manual',
                 previewNotes: this.notePreview(item.notes)
-            }))
+            };
+            })
             .filter(item => {
                 if (!term) return true;
                 if (this.filterBy === 'category') {

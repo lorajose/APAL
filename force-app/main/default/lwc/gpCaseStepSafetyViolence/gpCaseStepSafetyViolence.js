@@ -40,6 +40,23 @@ export default class GpCaseStepSafetyViolence extends LightningElement {
     }
 
     @api
+    focusFirstError(errorPath) {
+        if (errorPath === 'Homicidal_Ideation__c') {
+            const field = this.template.querySelector('#ideation');
+            if (field && field.focus) {
+                field.focus();
+            }
+            return;
+        }
+        if (errorPath === 'Violence_Details__c') {
+            const field = this.template.querySelector('#violence-details');
+            if (field && field.focus) {
+                field.focus();
+            }
+        }
+    }
+
+    @api
     set data(value) {
         const source = { ...(this.readDraft() || {}), ...(value || {}) };
         this.ideation = source.Homicidal_Ideation__c || source.homicidalIdeationDraft || '';

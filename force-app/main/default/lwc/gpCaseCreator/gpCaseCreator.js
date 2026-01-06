@@ -1045,6 +1045,9 @@ async handleDataUpdated(event) {
                 result;
             if (result && !result.isValid) {
                 this.showStepErrors = { ...this.showStepErrors, [currentStep]: true };
+                if (result.hardErrors && result.hardErrors.length) {
+                    this.focusFirstError(result.hardErrors[0].path);
+                }
             }
         }
         // 2. Saltar al nuevo paso y marcarlo como 'active'
@@ -2242,8 +2245,8 @@ async handleDataUpdated(event) {
                         : (looksLikeId(risk.id) ? risk.id : null),
                     catalogName,
                     catalogCategory: risk.catalogCategory || '',
-                    recent: risk.recent === undefined ? null : risk.recent,
-                    historical: risk.historical === undefined ? null : risk.historical,
+                    recent: this.normalizeBoolean(risk.recent),
+                    historical: this.normalizeBoolean(risk.historical),
                     notes: risk.notes || null,
                     source: this.mapRiskSeedSource(risk)
                 };
@@ -2472,11 +2475,30 @@ async handleDataUpdated(event) {
             id: derivedId || entry.id || null,
             catalogName: entry.catalogName || meta.name || '',
             catalogCategory: entry.catalogCategory || meta.category || '',
-            recent: entry.recent === undefined ? null : entry.recent,
-            historical: entry.historical === undefined ? null : entry.historical,
+            recent: this.normalizeBoolean(entry.recent),
+            historical: this.normalizeBoolean(entry.historical),
             notes: entry.notes || '',
             source: entry.source || entry.Seed_Source__c || 'Manual'
         };
+    }
+
+    normalizeBoolean(value) {
+        if (value === true || value === false) {
+            return value;
+        }
+        if (value === null || value === undefined || value === '') {
+            return null;
+        }
+        if (typeof value === 'string') {
+            const trimmed = value.trim().toLowerCase();
+            if (trimmed === 'true') return true;
+            if (trimmed === 'false') return false;
+        }
+        if (typeof value === 'number') {
+            if (value === 1) return true;
+            if (value === 0) return false;
+        }
+        return null;
     }
 
     lookupMedicationId(name) {

@@ -5,6 +5,11 @@
     padding: 1rem;
 }
 
+.card-error {
+    border-color: #d92d20;
+    box-shadow: 0 0 0 1px #d92d20;
+}
+
 .card-header {
     display: flex;
     justify-content: space-between;

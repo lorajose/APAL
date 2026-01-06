@@ -79,7 +79,7 @@ function validatePresenting(formData, config = {}) {
   const hasPcqt = pcqtPicklist.length > 0 || pcqtDraft.length > 0;
 
   if (!hasPcqt) {
-    const message = 'Select at least one primary clinical question.';
+    const message = 'The Primary Clinical Questions field is required.';
     if (config.strict) {
       errors.push({
         path: 'Primary_Clinical_Question_Types__c',
@@ -114,7 +114,7 @@ function validateSuicide(formData, config = {}) {
 
   const ideation = (data.Suicidal_Ideation__c || '').toString().trim();
   if (!ideation) {
-    const message = 'Suicidal Ideation is required.';
+    const message = 'The Suicidal Ideation field is required.';
     if (config.strict) {
       errors.push({
         path: 'Suicidal_Ideation__c',
@@ -179,7 +179,7 @@ function validateHomicide(formData, config = {}) {
   const requiresDetail = ideation && !['None'].includes(ideation);
 
   if (!ideation) {
-    const message = 'Homicidal Ideation is required.';
+    const message = 'The Homicidal Ideation field is required.';
     if (config.strict) {
       errors.push({
         path: 'Homicidal_Ideation__c',
@@ -222,7 +222,7 @@ function validateHomeSafety(formData, config = {}) {
 
   const status = (data.Home_Safety__c || '').toString().trim();
   if (!status) {
-    const message = 'Home Safety is required.';
+    const message = 'The Home Security field is required.';
     if (config.strict) {
       errors.push({
         path: 'Home_Safety__c',
@@ -260,7 +260,7 @@ function validateCognition(formData, config = {}) {
 
   const orientation = (data.Orientation__c || '').toString().trim();
   if (!orientation) {
-    const message = 'Orientation is required.';
+    const message = 'The Orientation field is required.';
     if (config.strict) {
       errors.push({
         path: 'Orientation__c',

@@ -878,9 +878,10 @@
         <label>New Case: Patient Case - Addiction</label>
         <locationX>226</locationX>
         <locationY>350</locationY>
-        <allowBack>false</allowBack>
+        <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
+        <backButtonLabel>Back</backButtonLabel>
         <connector>
             <targetReference>Should_create_VMAP_Account_Addiction</targetReference>
         </connector>
