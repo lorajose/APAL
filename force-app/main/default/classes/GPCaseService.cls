@@ -992,6 +992,15 @@ public with sharing class GPCaseService {
             }
         }
 
+        // Normalize category values (restricted picklists need exact matches)
+        for (ConcernInput item : items) {
+            if (item == null) continue;
+            String normalizedCategory = normalizeConcernCategory(item.category);
+            if (!String.isBlank(normalizedCategory)) {
+                item.category = normalizedCategory;
+            }
+        }
+
         // Deduplicate payload by catalogId (preferred) or label (case-insensitive)
         Set<String> labelsWithCatalogId = new Set<String>();
         for (ConcernInput item : items) {
@@ -1790,6 +1799,33 @@ public with sharing class GPCaseService {
             }
         }
         return null;
+    }
+
+    private static String normalizeConcernCategory(String category) {
+        if (String.isBlank(category)) {
+            return null;
+        }
+        String trimmed = category.trim();
+        String lower = trimmed.toLowerCase();
+        if (lower.contains('mania') && lower.contains('hypomania')) {
+            return 'Mania/Hypomania Symptoms';
+        }
+        if (lower.contains('psychosis')) {
+            return 'Psychosis Symptoms';
+        }
+        if (lower.contains('medical red flag')) {
+            return 'Medical Red Flags';
+        }
+        if (lower == 'prior diagnosis' || lower == 'prior diagnoses') {
+            return 'Prior Diagnoses';
+        }
+        if (lower == 'top symptoms' || lower == 'top symptom') {
+            return 'Top Symptoms';
+        }
+        if (lower == 'family history') {
+            return 'Family History';
+        }
+        return trimmed;
     }
 
     private static String resolveSafetySeed(String source, String category) {
