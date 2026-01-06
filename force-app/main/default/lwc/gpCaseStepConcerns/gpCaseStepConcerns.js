@@ -8,19 +8,13 @@ import { refreshApex } from '@salesforce/apex';
 import CASE_TYPE_FIELD from '@salesforce/schema/Case.Case_Type__c';
 
 const SOURCE_LABELS = {
-    topSymptoms: 'Top Symptoms',
-    priorDiagnoses: 'Prior Diagnoses',
-    psychosisSymptoms: 'Psychosis Symptoms',
-    maniaSymptoms: 'Mania/Hypomania Symptoms',
-    medicalRedFlags: 'Medical Red Flags',
-    familyHistory: 'Family History',
-    withdrawalTreatment: 'Withdrawal and Treatment',
-    substanceUseMentalHealth: 'Substance Use and Mental Health',
-    preventionRiskManagement: 'Prevention and Risk Management',
-    socialEnvironmentalFactors: 'Social and Environmental Factors',
-    healthComplications: 'Health Complications',
-    supportRecovery: 'Support and Recovery',
-    manual: 'Manual Add'
+    Step2_TopSymptoms: 'Step2_TopSymptoms',
+    Step3_PriorDiagnosis: 'Step3_PriorDiagnosis',
+    Step6_PsychosisMania: 'Step6_PsychosisMania',
+    Step6_MedicalRedFlags: 'Step6_MedicalRedFlags',
+    Step7_FamilyHistory: 'Step7_FamilyHistory',
+    Step8_PsychologicalStressors: 'Step8_PsychologicalStressors',
+    Manual: 'Manual'
 };
 
 const looksLikeId = (value) => {
@@ -194,12 +188,16 @@ export default class GpCaseStepConcerns extends LightningElement {
                 if (!term) return true;
                 return (item.label || '').toLowerCase().includes(term) || (item.notes || '').toLowerCase().includes(term);
             })
-            .map(item => ({
-                ...item,
-                showConfirm: this.confirmRemoveId === item.id,
-                sourceLabel: SOURCE_LABELS[item.source] || item.source || 'Manual',
-                previewNotes: this.notePreview(item.notes)
-            }));
+            .map(item => {
+                const sourceKey = (item.source || '').trim();
+                const normalizedSource = sourceKey.toLowerCase() === 'manual' ? 'Manual' : sourceKey;
+                return {
+                    ...item,
+                    showConfirm: this.confirmRemoveId === item.id,
+                    sourceLabel: SOURCE_LABELS[normalizedSource] || normalizedSource || 'Manual',
+                    previewNotes: this.notePreview(item.notes)
+                };
+            });
     }
 
     handleCategoryFilter(event) {

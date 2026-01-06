@@ -85,6 +85,37 @@ export default class GpCaseStepSafetySuicide extends LightningElement {
         return this.errors?.Access_to_Means__c;
     }
 
+    @api
+    focusFirstError(errorPath) {
+        if (errorPath === 'Suicidal_Ideation__c') {
+            const field = this.template.querySelector('#ideation');
+            if (field && field.focus) {
+                field.focus();
+            }
+            return;
+        }
+        if (errorPath === 'Protective_Factors__c') {
+            const field = this.template.querySelector('#protective-factors');
+            if (field && field.focus) {
+                field.focus();
+            }
+            return;
+        }
+        if (errorPath === 'Past_Suicide_Attempts__c') {
+            const field = this.template.querySelector('#past-attempts');
+            if (field && field.focus) {
+                field.focus();
+            }
+            return;
+        }
+        if (errorPath === 'Access_to_Means__c') {
+            const field = this.template.querySelector('#access-to-means');
+            if (field && field.focus) {
+                field.focus();
+            }
+        }
+    }
+
     formatDateForInput(value) {
         if (!value) return '';
         if (value instanceof Date) {

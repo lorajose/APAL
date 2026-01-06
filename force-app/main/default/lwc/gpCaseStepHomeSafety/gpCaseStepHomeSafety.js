@@ -186,6 +186,21 @@ export default class GpCaseStepHomeSafety extends LightningElement {
         return this.buildPayload();
     }
 
+    @api
+    focusFirstError(errorPath) {
+        if (errorPath === 'Home_Safety__c') {
+            const field = this.template.querySelector('#home-safety');
+            if (field && field.focus) {
+                field.focus();
+            }
+        } else if (errorPath === 'Lethal_Means_Access__c') {
+            const field = this.template.querySelector('.lethal-section .chip');
+            if (field && field.focus) {
+                field.focus();
+            }
+        }
+    }
+
     handleHomeSafetyChange(event) {
         this.homeSafetyStatus = event.target.value;
         if (!this.showLethalMeans) {

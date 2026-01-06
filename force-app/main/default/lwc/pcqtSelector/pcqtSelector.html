@@ -1,5 +1,5 @@
 <template>
-    <section class="card">
+    <section class={cardClass}>
         <header class="card-header">
             <div>
                 <p class="card-title"><template if:true={required}><span class="required">*</span></template>Primary Clinical Questions</p>
@@ -35,7 +35,7 @@
             </template>
         </div>
         <template if:true={showError}>
-            <p class="error-text">Select at least one option.</p>
+            <p class="error-text">The Primary Clinical Questions field is required.</p>
         </template>
     </section>
 </template>

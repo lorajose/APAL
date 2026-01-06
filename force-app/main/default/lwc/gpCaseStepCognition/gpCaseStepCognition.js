@@ -44,6 +44,21 @@ export default class GpCaseStepCognition extends LightningElement {
         return this.buildPayload();
     }
 
+    @api
+    focusFirstError(errorPath) {
+        if (errorPath === 'Orientation__c') {
+            const field = this.template.querySelector('#orientation');
+            if (field && field.focus) {
+                field.focus();
+            }
+        } else if (errorPath === 'Cognition_Notes__c') {
+            const field = this.template.querySelector('#cognition-notes');
+            if (field && field.focus) {
+                field.focus();
+            }
+        }
+    }
+
     handleOrientationChange(event) {
         this.orientation = event.target.value;
         if (!this.showCognitionNotes) {
