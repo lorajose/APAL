@@ -769,8 +769,15 @@ get stepsFormatted() {
                 if (Array.isArray(this.form?.homeSafety?.psychosocialStressorsDraft)) {
                     this.syncStressorsToSafetyRisks(this.form.homeSafety.psychosocialStressorsDraft);
                 }
+                const accessMeansDraft = Array.isArray(this.form?.suicide?.accessToMeansDraft)
+                    ? this.form.suicide.accessToMeansDraft
+                    : this.parseMultiValue(this.form?.suicide?.Access_to_Means__c);
+                if (accessMeansDraft.length) {
+                    this.syncAccessMeansToSafetyRisks(accessMeansDraft);
+                }
                 if (Array.isArray(this.form?.safetyRisks)) {
                     this.syncSafetyRisksToStressors(this.form.safetyRisks);
+                    this.syncSafetyRisksToAccessMeans(this.form.safetyRisks);
                 }
                 this.formLoadedFromServer = true;
                 this.runFullValidation(true);
@@ -872,10 +879,26 @@ async handleDataUpdated(event) {
             }
         }
     }
+    // Seed Access to Means → Safety Risks (Step 4)
+    if (this.currentStep === 4 && data) {
+        const accessDraft = Array.isArray(data.accessToMeansDraft)
+            ? data.accessToMeansDraft
+            : this.parseMultiValue(data.Access_to_Means__c);
+        const seededMeans = this.syncAccessMeansToSafetyRisks(accessDraft);
+        if (seededMeans && this.caseId && !this.isUpdateMode) {
+            try {
+                await this.persistRelatedCollections(14);
+            } catch (seedErr) {
+                // eslint-disable-next-line no-console
+                console.error('Error persisting seeded access-to-means safety risks', seedErr);
+            }
+        }
+    }
     if (this.currentStep === 14) {
         const risks = Array.isArray(data) ? data : this.form.safetyRisks;
         if (Array.isArray(risks)) {
             this.syncSafetyRisksToStressors(risks);
+            this.syncSafetyRisksToAccessMeans(risks);
         }
     }
     if (this.currentStep === 13 && Array.isArray(data)) {
@@ -1457,6 +1480,18 @@ async handleDataUpdated(event) {
         }
     }
 
+    parseMultiValue(value) {
+        if (!value) return [];
+        if (Array.isArray(value)) return value.filter(Boolean);
+        if (typeof value === 'string') {
+            return value
+                .split(';')
+                .map(item => item.trim())
+                .filter(Boolean);
+        }
+        return [];
+    }
+
     // Sync Top Symptoms from Step 2 into Concerns (category: Top symptoms)
     syncTopSymptomsToConcerns(topSymptomsDraft = []) {
         const existing = Array.isArray(this.form.concerns) ? this.form.concerns : [];
@@ -1559,6 +1594,46 @@ async handleDataUpdated(event) {
         return changed;
     }
 
+    // Sync Access to Means (Step 4) into Safety Risks (match by catalog name)
+    syncAccessMeansToSafetyRisks(accessMeansDraft = []) {
+        const existing = Array.isArray(this.form.safetyRisks) ? this.form.safetyRisks : [];
+        const nonSeeded = existing.filter(item => item.source !== 'accessMeans');
+
+        const mapped = (accessMeansDraft || [])
+            .filter(item => item)
+            .map(item => {
+                const label = item.label || item.value || item;
+                const catalogId = this.lookupSafetyRiskId(label);
+                const meta = SAFETY_RISK_INDEX[catalogId] || {};
+                return {
+                    id: catalogId || this.slugify(label),
+                    catalogId: catalogId || null,
+                    catalogName: label,
+                    catalogCategory: meta.category || '',
+                    recent: null,
+                    historical: null,
+                    notes: '',
+                    source: 'accessMeans'
+                };
+            });
+
+        const byLabel = new Map();
+        mapped.forEach(entry => {
+            const key = (entry.catalogName || '').toLowerCase();
+            if (!key) return;
+            if (!byLabel.has(key)) {
+                byLabel.set(key, entry);
+            }
+        });
+
+        const merged = [...nonSeeded, ...byLabel.values()];
+        const changed = JSON.stringify(merged) !== JSON.stringify(existing);
+        if (changed) {
+            this.form.safetyRisks = merged;
+        }
+        return changed;
+    }
+
     syncSafetyRisksToStressors(risks = []) {
         const existing = this.form?.homeSafety?.psychosocialStressorsDraft || [];
         const existingByLabel = new Map();
@@ -1616,6 +1691,58 @@ async handleDataUpdated(event) {
             this.form.homeSafety = {
                 ...(this.form.homeSafety || {}),
                 psychosocialStressorsDraft: mapped
+            };
+        }
+        return changed;
+    }
+
+    syncSafetyRisksToAccessMeans(risks = []) {
+        const ACCESS_MEANS_LABELS = new Set([
+            'none',
+            'firearms - unlocked',
+            'firearms - locked',
+            'large medication supply',
+            'ligature risk'
+        ]);
+
+        const existing = this.form?.suicide?.accessToMeansDraft || [];
+        const existingNormalized = existing.map(item => item.toString().toLowerCase());
+        const existingByLabel = new Map();
+        existingNormalized.forEach((label, index) => {
+            if (label) existingByLabel.set(label, existing[index]);
+        });
+
+        const mapped = (risks || [])
+            .filter(item => {
+                const source = (item.source || item.Seed_Source__c || '').toString().toLowerCase();
+                const name = (item.catalogName
+                    || item.meta?.name
+                    || item.recordName
+                    || item.name
+                    || item.label
+                    || '').toString().toLowerCase();
+                return source === 'accessmeans' || ACCESS_MEANS_LABELS.has(name);
+            })
+            .map(item => {
+                const label = item.catalogName
+                    || item.meta?.name
+                    || item.recordName
+                    || item.name
+                    || item.label
+                    || '';
+                return label;
+            })
+            .filter(Boolean);
+
+        const unique = Array.from(new Set(mapped.map(label => label.trim())))
+            .filter(Boolean);
+
+        const changed = JSON.stringify(unique) !== JSON.stringify(existing);
+        if (changed) {
+            this.form.suicide = {
+                ...(this.form.suicide || {}),
+                accessToMeansDraft: unique,
+                Access_to_Means__c: unique.length ? unique.join(';') : null
             };
         }
         return changed;
