@@ -531,26 +531,27 @@ get stepsFormatted() {
     return this.steps.map(s => {
         // 1. Obtener el estado
         const status = this.stepStatus[s.value];
+        const isCurrent = s.value === this.currentStep;
+        const displayStatus = this.isUpdateMode ? 'final-completed' : status;
+        const showActive = !this.isUpdateMode && isCurrent;
         let css = "step-item ";
         
         console.warn(`\nProcesando Paso ${s.value} (${s.label}):`);
         console.warn(` -> Estado encontrado: ${status}`);
 
         // 2. Asignación de la clase CSS de estado
-        const isCurrent = s.value === this.currentStep;
-
-        if (isCurrent) {
+        if (showActive) {
             css += "step-active";
-        } else if (status === 'active') {
+        } else if (displayStatus === 'active') {
             // Si no es el paso actual, no mantenerlo en activo; mostrar como completado
             css += "step-completed";
-        } else if (status === 'final-completed') {
+        } else if (displayStatus === 'final-completed') {
             css += "step-final-completed"; // Clase Verde con Check
-        } else if (status === 'completed') {
+        } else if (displayStatus === 'completed') {
             css += "step-completed"; // Gris claro
-        } else if (status === 'warning') {
+        } else if (displayStatus === 'warning') {
             css += "step-warning";
-        } else if (status === 'in-progress') {
+        } else if (displayStatus === 'in-progress') {
             css += "step-in-progress";
         } else {
             css += "step-locked"; // locked (default)
@@ -558,10 +559,10 @@ get stepsFormatted() {
         
         // 3. Determinar la clickeabilidad
         // Permite saltar a cualquier paso que no esté 'locked'
-        const isClickable = status !== 'locked';
+        const isClickable = this.isUpdateMode ? true : status !== 'locked';
         
         // 4. Determinar si mostrar el ícono de check
-        const isCompleteAndChecked = status === 'final-completed';
+        const isCompleteAndChecked = this.isUpdateMode ? true : displayStatus === 'final-completed';
         
         console.warn(` -> Clase CSS final: ${css}`);
         console.warn(` -> ¿Es clickeable?: ${isClickable}`);
@@ -646,6 +647,13 @@ get stepsFormatted() {
             if (this.caseId) {
                 await this.refreshRecordBeforeLoad();
                 const loadedFromServer = await this.loadFullCaseData();
+                if (loadedFromServer && this.isUpdateMode) {
+                    for (let step = 1; step <= 15; step++) {
+                        this.stepStatus[step] = 'completed';
+                    }
+                    this.stepStatus[this.currentStep] = 'active';
+                    this.runFullValidation(true);
+                }
                 const stepsToActivateWarning = [2, 4, 5, 8, 9, 13];
                 stepsToActivateWarning.forEach(step => {
                     if (this.stepStatus[step] === "locked") {
@@ -738,6 +746,7 @@ get stepsFormatted() {
                 // If concerns already exist, use them as the source of truth for prior dx notes.
                 if (hasConcerns) {
                     this.syncConcernsToPriorDx(this.form.concerns, true);
+                    this.syncConcernsToPsychosisMania(this.form.concerns);
                 }
                 // Seed Top Symptoms into concerns on initial load if present
                 if (Array.isArray(this.form?.presenting?.topSymptomsDraft)) {
@@ -983,14 +992,14 @@ async handleDataUpdated(event) {
         SIDEBAR → JUMP TO STEP (solo si no está 'locked')
     ------------------------------------------------------------ */
     handleJumpToStep(event) {
+        this.captureCurrentStepDraft();
         const step = Number(event
             .currentTarget
             .dataset
             .step);
-        if (this.stepStatus[
-                step] ===
-            "locked")
-            return; // prevent clicking locked
+        if (this.stepStatus[step] === "locked" && !this.isUpdateMode) {
+            return; // prevent clicking locked for new cases
+        }
         // 1. Marcar el paso actual con su estado de validación final antes de saltar
         const currentStep = this.currentStep;
         // Solo validamos si el paso actual ya ha sido visitado o no está 'locked'
@@ -1029,6 +1038,7 @@ async handleDataUpdated(event) {
         if (this.currentStep <= 1) {
             return;
         }
+        this.captureCurrentStepDraft();
         if (this.reviewSummaryReady && this.currentStep === 15) {
             this.reviewSummaryReady = false;
         }
@@ -1043,6 +1053,24 @@ async handleDataUpdated(event) {
 
         if (this.validationResults[leavingStep]) {
             this.updateStepStatus(leavingStep);
+        }
+    }
+
+    captureCurrentStepDraft() {
+        const key = this.getStepFormKey(this.currentStep);
+        if (!key) return;
+        const selector = 'c-gp-case-step-' + key;
+        const stepComponent = this.template.querySelector(selector);
+        if (!stepComponent) return;
+        try {
+            if ('data' in stepComponent) {
+                const draft = stepComponent.data;
+                if (draft) {
+                    this.mergeFormData(draft);
+                }
+            }
+        } catch (error) {
+            console.warn('Failed to capture step draft before navigation', error);
         }
     }
 
@@ -1702,38 +1730,64 @@ async handleDataUpdated(event) {
         let redFlagNotes = '';
         let psychosisNoteFound = false;
         let redFlagNoteFound = false;
+        let psychosisFound = false;
+        let maniaFound = false;
+        let redFlagsFound = false;
 
         (concerns || []).forEach(item => {
-            const category = (item.category || '').toLowerCase();
-            const label = (item.label || item.name || item.catalogName || '').toString();
+            const category = (item.category || '').toString().trim().toLowerCase();
+            const label = (item.label || item.name || item.catalogName || '').toString().trim();
             const key = label.toLowerCase();
             if (category === 'psychosis symptoms' && PSYCHOSIS_ITEMS.has(key)) {
                 psychosis.push(label);
+                psychosisFound = true;
                 if (!psychosisNoteFound && item.notes !== undefined && item.notes !== null) {
-                    psychosisNotes = String(item.notes);
-                    psychosisNoteFound = true;
+                    const noteText = String(item.notes).trim();
+                    if (noteText) {
+                        psychosisNotes = noteText;
+                        psychosisNoteFound = true;
+                    }
                 }
             } else if (category === 'mania / hypomania symptoms' && MANIA_ITEMS.has(key)) {
                 mania.push(label);
+                maniaFound = true;
                 if (!psychosisNoteFound && item.notes !== undefined && item.notes !== null) {
-                    psychosisNotes = String(item.notes);
-                    psychosisNoteFound = true;
+                    const noteText = String(item.notes).trim();
+                    if (noteText) {
+                        psychosisNotes = noteText;
+                        psychosisNoteFound = true;
+                    }
                 }
-            } else if (category === 'medical red flags' && RED_FLAG_ITEMS.has(key)) {
-                redFlags.push(label);
+            } else if (category === 'medical red flags') {
+                if (RED_FLAG_ITEMS.has(key)) {
+                    redFlags.push(label);
+                    redFlagsFound = true;
+                }
                 if (!redFlagNoteFound && item.notes !== undefined && item.notes !== null) {
-                    redFlagNotes = String(item.notes);
-                    redFlagNoteFound = true;
+                    const noteText = String(item.notes).trim();
+                    if (noteText) {
+                        redFlagNotes = noteText;
+                        redFlagNoteFound = true;
+                    }
                 }
             }
         });
 
         const existing = this.form?.psychosisMania || {};
+        const existingPsychosis = Array.isArray(existing.psychosisSymptomsDraft)
+            ? existing.psychosisSymptomsDraft
+            : normalizeMultiValue(existing.Psychosis_Symptoms__c);
+        const existingMania = Array.isArray(existing.maniaSymptomsDraft)
+            ? existing.maniaSymptomsDraft
+            : normalizeMultiValue(existing.Mania_Symptoms__c);
+        const existingRedFlags = Array.isArray(existing.medicalRedFlagsDraft)
+            ? existing.medicalRedFlagsDraft
+            : normalizeMultiValue(existing.Medical_Red_Flags__c);
         const next = {
             ...(existing || {}),
-            psychosisSymptomsDraft: psychosis,
-            maniaSymptomsDraft: mania,
-            medicalRedFlagsDraft: redFlags,
+            psychosisSymptomsDraft: psychosisFound ? psychosis : existingPsychosis,
+            maniaSymptomsDraft: maniaFound ? mania : existingMania,
+            medicalRedFlagsDraft: redFlagsFound ? redFlags : existingRedFlags,
             Psychosis_Notes__c: psychosisNoteFound ? psychosisNotes : (existing.Psychosis_Notes__c || ''),
             Red_Flag_Notes__c: redFlagNoteFound ? redFlagNotes : (existing.Red_Flag_Notes__c || ''),
             Medical_Notes__c: redFlagNoteFound ? redFlagNotes : (existing.Medical_Notes__c || '')
