@@ -834,7 +834,7 @@
             <fieldText>Case Type</fieldText>
             <fieldType>RadioButtons</fieldType>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-            <isRequired>false</isRequired>
+            <isRequired>true</isRequired>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
@@ -1523,9 +1523,10 @@
         <label>New Case: Patient Case - Unrelated Call</label>
         <locationX>1722</locationX>
         <locationY>350</locationY>
-        <allowBack>false</allowBack>
+        <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
+        <backButtonLabel>Back</backButtonLabel>
         <connector>
             <targetReference>Should_create_VMAP_Account_Unrelated</targetReference>
         </connector>
