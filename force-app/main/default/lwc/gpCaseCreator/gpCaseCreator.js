@@ -531,9 +531,13 @@ get stepsFormatted() {
     return this.steps.map(s => {
         // 1. Obtener el estado
         const status = this.stepStatus[s.value];
+        const result = this.validationResults[s.value];
+        const hasError = !!(result && !result.isValid);
         const isCurrent = s.value === this.currentStep;
-        const displayStatus = this.isUpdateMode ? 'final-completed' : status;
-        const showActive = !this.isUpdateMode && isCurrent;
+        const displayStatus = this.isUpdateMode
+            ? (hasError ? 'in-progress' : 'final-completed')
+            : status;
+        const showActive = isCurrent;
         let css = "step-item ";
         
         console.warn(`\nProcesando Paso ${s.value} (${s.label}):`);
@@ -562,7 +566,7 @@ get stepsFormatted() {
         const isClickable = this.isUpdateMode ? true : status !== 'locked';
         
         // 4. Determinar si mostrar el ícono de check
-        const isCompleteAndChecked = this.isUpdateMode ? true : displayStatus === 'final-completed';
+        const isCompleteAndChecked = this.isUpdateMode ? !hasError : displayStatus === 'final-completed';
         
         console.warn(` -> Clase CSS final: ${css}`);
         console.warn(` -> ¿Es clickeable?: ${isClickable}`);
@@ -910,7 +914,7 @@ async handleDataUpdated(event) {
 
 
     // Validar el step actual
-    const result = validateStep(this.currentStep, this.form);
+    const result = validateStep(this.currentStep, this.form, { strict: this.isUpdateMode });
     this.validationResults[this.currentStep] = result;
 
     this.updateStepStatus(this.currentStep);
@@ -1033,11 +1037,15 @@ async handleDataUpdated(event) {
             const result =
                 validateStep(
                     currentStep,
-                    this.form
+                    this.form,
+                    { strict: this.isUpdateMode }
                 );
             this.validationResults[
                     currentStep] =
                 result;
+            if (result && !result.isValid) {
+                this.showStepErrors = { ...this.showStepErrors, [currentStep]: true };
+            }
         }
         // 2. Saltar al nuevo paso y marcarlo como 'active'
         this.currentStep = step;
@@ -1113,7 +1121,8 @@ async handleDataUpdated(event) {
             const result =
                 validateStep(
                     currentStep,
-                    this.form
+                    this.form,
+                    { strict: this.isUpdateMode }
                 );
             this.validationResults[
                     currentStep] =
@@ -1213,7 +1222,7 @@ async handleDataUpdated(event) {
 
     areRequiredCaseStepsValid() {
         const requiredSteps = [1, 2, 4, 5, 8, 9];
-        return requiredSteps.every(step => validateStep(step, this.form).isValid);
+        return requiredSteps.every(step => validateStep(step, this.form, { strict: this.isUpdateMode }).isValid);
     }
     /* ------------------------------------------------------------
         STEP 15 → FINISH (Final Validation)
