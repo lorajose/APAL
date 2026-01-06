@@ -9,6 +9,12 @@ import { getRecord } from 'lightning/uiRecordApi';
 import CASE_TYPE_FIELD from '@salesforce/schema/Case.Case_Type__c';
 
 const cloneList = (list = []) => JSON.parse(JSON.stringify(list || []));
+const SOURCE_LABELS = {
+    Step8_PsychologicalStressors: 'Step 8: Psychosocial Stressors',
+    Manual: 'Manual Add',
+    'Migration/Import': 'Migration/Import',
+    Other: 'Other'
+};
 
 export default class GpCaseStepSafetyRisks extends LightningElement {
     @api caseId;
@@ -254,6 +260,7 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
                 recordName: item.recordName || item.name || null,
                 recordLink: this.buildPatientSafetyRiskLink(item.recordId),
                 showConfirm: this.confirmRemoveId === item.id,
+                sourceLabel: SOURCE_LABELS[item.source] || item.source || 'Manual',
                 previewNotes: this.notePreview(item.notes)
             }))
             .filter(item => {

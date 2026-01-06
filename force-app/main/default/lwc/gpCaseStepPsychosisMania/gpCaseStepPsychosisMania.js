@@ -1,4 +1,6 @@
 import { LightningElement, api, track, wire } from 'lwc';
+import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
+import MEDICAL_NOTES_FIELD from '@salesforce/schema/Case.Medical_Notes__c';
 import { getObjectInfo, getPicklistValues } from 'lightning/uiObjectInfoApi';
 import CASE_OBJECT from '@salesforce/schema/Case';
 import PSYCHOSIS_FIELD from '@salesforce/schema/Case.Psychosis_Symptoms__c';
@@ -90,6 +92,8 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
 
     psychosisNotes = '';
     redFlagNotes = '';
+    dataInitialized = false;
+    redFlagNotesDirty = false;
 
     connectedCallback() {
         this.loadCatalogs();
@@ -97,6 +101,18 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
 
     @wire(getObjectInfo, { objectApiName: CASE_OBJECT })
     caseInfo;
+
+    @api caseId;
+
+    @wire(getRecord, { recordId: '$caseId', fields: [MEDICAL_NOTES_FIELD] })
+    wiredCaseNotes({ data }) {
+        const medicalNotes = getFieldValue(data, MEDICAL_NOTES_FIELD);
+        if (medicalNotes && !this.redFlagNotesDirty && !this.redFlagNotes) {
+            this.redFlagNotes = medicalNotes;
+            this.dataInitialized = true;
+            this.emitDraftChange();
+        }
+    }
 
     get caseRecordTypeId() {
         return this.caseInfo?.data?.defaultRecordTypeId;
@@ -224,17 +240,20 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
         this.syncSelections();
     }
 
-    syncSelections() {
+    syncSelections(emit = true) {
         const keepIfPresent = (current, options) => current.filter(value => options.some(opt => opt.value === value));
         this.psychosisSelections = keepIfPresent(this.psychosisSelections, this.psychosisOptions);
         this.maniaSelections = keepIfPresent(this.maniaSelections, this.maniaOptions);
         this.redFlagSelections = keepIfPresent(this.redFlagSelections, this.redFlagOptions);
-        this.emitDraftChange();
+        if (emit && this.dataInitialized) {
+            this.emitDraftChange();
+        }
     }
 
     @api
     set data(value) {
         if (!value) return;
+        this.dataInitialized = true;
         this.psychosisSelections = Array.isArray(value.psychosisSymptomsDraft)
             ? [...value.psychosisSymptomsDraft]
             : normalizeMultiValue(value.Psychosis_Symptoms__c);
@@ -247,8 +266,17 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
             ? [...value.medicalRedFlagsDraft]
             : normalizeMultiValue(value.Medical_Red_Flags__c);
         this.psychosisNotes = value.Psychosis_Notes__c || '';
-        const redFlagValue = value.Red_Flag_Notes__c || value.Medical_Notes__c || '';
-        this.redFlagNotes = redFlagValue === 'See medical red flag selections.' ? '' : redFlagValue;
+        const hasRedFlagNoteProp = Object.prototype.hasOwnProperty.call(value, 'Red_Flag_Notes__c');
+        const hasMedicalNoteProp = Object.prototype.hasOwnProperty.call(value, 'Medical_Notes__c');
+        if (hasRedFlagNoteProp || hasMedicalNoteProp) {
+            const redFlagValue = (hasRedFlagNoteProp ? value.Red_Flag_Notes__c : null)
+                ?? (hasMedicalNoteProp ? value.Medical_Notes__c : null)
+                ?? '';
+            this.redFlagNotes = redFlagValue === 'See medical red flag selections.' ? '' : redFlagValue;
+        }
+        if (this.psychosisOptions.length || this.maniaOptions.length || this.redFlagOptions.length) {
+            this.syncSelections(false);
+        }
     }
 
     get data() {
@@ -300,6 +328,7 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
 
     handleRedFlagNotesChange(event) {
         this.redFlagNotes = event.target.value;
+        this.redFlagNotesDirty = true;
         this.emitDraftChange();
     }
 
