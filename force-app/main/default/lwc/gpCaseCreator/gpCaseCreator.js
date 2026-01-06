@@ -745,6 +745,7 @@ get stepsFormatted() {
                 const hasConcerns = Array.isArray(this.form?.concerns) && this.form.concerns.length > 0;
                 // If concerns already exist, use them as the source of truth for prior dx notes.
                 if (hasConcerns) {
+                    this.syncConcernsToTopSymptoms(this.form.concerns);
                     this.syncConcernsToPriorDx(this.form.concerns, true);
                     this.syncConcernsToPsychosisMania(this.form.concerns);
                 }
@@ -1748,7 +1749,7 @@ async handleDataUpdated(event) {
                         psychosisNoteFound = true;
                     }
                 }
-            } else if (category === 'mania / hypomania symptoms' && MANIA_ITEMS.has(key)) {
+            } else if (category === 'mania/hypomania symptoms' && MANIA_ITEMS.has(key)) {
                 mania.push(label);
                 maniaFound = true;
                 if (!psychosisNoteFound && item.notes !== undefined && item.notes !== null) {
@@ -1847,7 +1848,7 @@ async handleDataUpdated(event) {
         const isSeededItem = (item) => {
             const seededCategories = [
                 'psychosis symptoms',
-                'mania / hypomania symptoms',
+                'mania/hypomania symptoms',
                 'medical red flags'
             ];
             const category = (item.category || '').toLowerCase();
@@ -1877,9 +1878,9 @@ async handleDataUpdated(event) {
                 });
         };
 
-        const psychosisEntries = buildEntries(psychosisList, 'Psychosis symptoms', sharedPsychosisNote);
-        const maniaEntries = buildEntries(maniaList, 'Mania / Hypomania symptoms', sharedPsychosisNote);
-        const redFlagEntries = buildEntries(redFlagList, 'Medical red flags', sharedRedFlagNote);
+        const psychosisEntries = buildEntries(psychosisList, 'Psychosis Symptoms', sharedPsychosisNote);
+        const maniaEntries = buildEntries(maniaList, 'Mania/Hypomania Symptoms', sharedPsychosisNote);
+        const redFlagEntries = buildEntries(redFlagList, 'Medical Red Flags', sharedRedFlagNote);
 
         // Deduplicate by category + label (case-insensitive)
         const byKey = new Map();
