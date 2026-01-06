@@ -1667,7 +1667,7 @@ public with sharing class GPCaseService {
         for (String val : parseMultiValue(c.Psychosis_Symptoms__c)) {
             ConcernInput ci = new ConcernInput();
             ci.label = val;
-            ci.category = 'Psychosis symptoms';
+            ci.category = 'Psychosis Symptoms';
             ci.notes = sharedPsychosisNote;
             ci.source = 'Step6_PsychosisMania';
             results.add(ci);
@@ -1676,7 +1676,7 @@ public with sharing class GPCaseService {
         for (String val : parseMultiValue(c.Mania_Symptoms__c)) {
             ConcernInput ci = new ConcernInput();
             ci.label = val;
-            ci.category = 'Mania/Hypomania symptoms';
+            ci.category = 'Mania/Hypomania Symptoms';
             ci.notes = sharedPsychosisNote;
             ci.source = 'Step6_PsychosisMania';
             results.add(ci);
@@ -1685,7 +1685,7 @@ public with sharing class GPCaseService {
         for (String val : parseMultiValue(c.Medical_Red_Flags__c)) {
             ConcernInput ci = new ConcernInput();
             ci.label = val;
-            ci.category = 'Medical red flags';
+            ci.category = 'Medical Red Flags';
             ci.notes = sharedRedFlagNote;
             ci.source = 'Step6_MedicalRedFlags';
             results.add(ci);
