@@ -10,10 +10,26 @@ import CASE_TYPE_FIELD from '@salesforce/schema/Case.Case_Type__c';
 
 const cloneList = (list = []) => JSON.parse(JSON.stringify(list || []));
 const SOURCE_LABELS = {
+    Step4_AccessToMeans: 'Step4_AccessToMeans',
     Step8_PsychologicalStressors: 'Step8_PsychologicalStressors',
     Manual: 'Manual',
     'Migration/Import': 'Migration/Import',
     Other: 'Other'
+};
+const SOURCE_ALIASES = {
+    accessmeans: 'Step4_AccessToMeans',
+    accesstomeans: 'Step4_AccessToMeans',
+    stressors: 'Step8_PsychologicalStressors',
+    psychosocialstressors: 'Step8_PsychologicalStressors',
+    psychologicalstressors: 'Step8_PsychologicalStressors'
+};
+const normalizeSourceKey = (value) => {
+    const raw = (value || '').toString().trim();
+    if (!raw) return '';
+    if (raw.toLowerCase() === 'manual') return 'Manual';
+    if (SOURCE_LABELS[raw]) return raw;
+    const compact = raw.toLowerCase().replace(/[^a-z0-9]/g, '');
+    return SOURCE_ALIASES[compact] || raw;
 };
 
 export default class GpCaseStepSafetyRisks extends LightningElement {
@@ -242,8 +258,7 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
         const term = (this.searchValue || '').toLowerCase();
         return this.risks
             .map(item => {
-                const sourceKey = (item.source || '').trim();
-                const normalizedSource = sourceKey.toLowerCase() === 'manual' ? 'Manual' : sourceKey;
+                const normalizedSource = normalizeSourceKey(item.source);
                 return {
                 ...item,
                 meta: (() => {

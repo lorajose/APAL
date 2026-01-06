@@ -517,6 +517,26 @@ export default class gpCaseCreator extends NavigationMixin(LightningElement) {
             }
         }
     }
+
+    getInvalidStepLabels() {
+        const invalidSteps = [];
+        const stepLabelByValue = new Map(
+            (this.steps || []).map(step => [step.value, step.label])
+        );
+        Object.entries(this.validationResults || {}).forEach(([key, result]) => {
+            if (!result || result.isValid) {
+                return;
+            }
+            const stepNumber = Number(key);
+            const label = stepLabelByValue.get(stepNumber);
+            if (label) {
+                invalidSteps.push(`Step ${stepNumber} — ${label}`);
+            } else {
+                invalidSteps.push(`Step ${stepNumber}`);
+            }
+        });
+        return invalidSteps;
+    }
     /* ------------------------------------------------------------
         SIDEBAR STYLE FORMATTER (Añadido 'final-completed')
     ------------------------------------------------------------ *//**
@@ -1250,9 +1270,11 @@ async handleDataUpdated(event) {
                 'success');
         } else {
             this.reviewSummaryReady = false;
-            this.toast('Error',
-                'The process cannot be completed. Please review the steps marked with an error.',
-                'error');
+            const invalidSteps = this.getInvalidStepLabels();
+            const message = invalidSteps.length > 0
+                ? `The process cannot be completed. Review: ${invalidSteps.join(', ')}.`
+                : 'The process cannot be completed. Please review the steps marked with an error.';
+            this.toast('Error', message, 'error');
             this.navigateToFirstInvalidStep();
         }
     }
@@ -1266,7 +1288,11 @@ async handleDataUpdated(event) {
         const allStepsValid = Object.values(this.validationResults).every(res => res.isValid);
         if (!allStepsValid) {
             this.reviewSummaryReady = false;
-            this.toast('Error', 'The process cannot be completed. Please review the steps marked with an error.', 'error');
+            const invalidSteps = this.getInvalidStepLabels();
+            const message = invalidSteps.length > 0
+                ? `The process cannot be completed. Review: ${invalidSteps.join(', ')}.`
+                : 'The process cannot be completed. Please review the steps marked with an error.';
+            this.toast('Error', message, 'error');
             this.navigateToFirstInvalidStep();
             return;
         }
