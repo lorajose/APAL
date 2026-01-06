@@ -16,6 +16,18 @@ const SOURCE_LABELS = {
     Step8_PsychologicalStressors: 'Step8_PsychologicalStressors',
     Manual: 'Manual'
 };
+const SOURCE_ALIASES = {
+    presenting: 'Step2_TopSymptoms',
+    topsymptoms: 'Step2_TopSymptoms',
+    topconcerns: 'Step2_TopSymptoms',
+    priordx: 'Step3_PriorDiagnosis',
+    priordiagnosis: 'Step3_PriorDiagnosis',
+    psychosismania: 'Step6_PsychosisMania',
+    medicalredflags: 'Step6_MedicalRedFlags',
+    familyhistory: 'Step7_FamilyHistory',
+    psychologicalstressors: 'Step8_PsychologicalStressors',
+    stressors: 'Step8_PsychologicalStressors'
+};
 
 const looksLikeId = (value) => {
     if (!value || typeof value !== 'string') {
@@ -29,6 +41,14 @@ const looksLikeId = (value) => {
 };
 
 const cloneList = (list = []) => JSON.parse(JSON.stringify(list || []));
+const normalizeSourceKey = (value) => {
+    const raw = (value || '').toString().trim();
+    if (!raw) return '';
+    if (raw.toLowerCase() === 'manual') return 'Manual';
+    if (SOURCE_LABELS[raw]) return raw;
+    const compact = raw.toLowerCase().replace(/[^a-z0-9]/g, '');
+    return SOURCE_ALIASES[compact] || raw;
+};
 
 export default class GpCaseStepConcerns extends LightningElement {
     @api caseId;
@@ -189,8 +209,7 @@ export default class GpCaseStepConcerns extends LightningElement {
                 return (item.label || '').toLowerCase().includes(term) || (item.notes || '').toLowerCase().includes(term);
             })
             .map(item => {
-                const sourceKey = (item.source || '').trim();
-                const normalizedSource = sourceKey.toLowerCase() === 'manual' ? 'Manual' : sourceKey;
+                const normalizedSource = normalizeSourceKey(item.source);
                 return {
                     ...item,
                     showConfirm: this.confirmRemoveId === item.id,

@@ -1226,8 +1226,8 @@ public with sharing class GPCaseService {
                 record.Safety_Risk__c = riskId;
             }
             setPatientIfPossible(record, patientId);
-            record.Recent__c = item.recent;
-            record.Historical__c = item.historical;
+            setBooleanFieldSafely(record, 'Recent__c', item.recent);
+            setBooleanFieldSafely(record, 'Historical__c', item.historical);
             record.Notes_new__c = item.notes;
             String seed = resolveSafetySeed(item.source, item.catalogCategory);
             if (seed != null) {
@@ -1923,5 +1923,58 @@ public with sharing class GPCaseService {
             return;
         }
         record.put(fieldApiName, parsed);
+    }
+
+    private static void setBooleanFieldSafely(SObject record, String fieldApiName, Object value) {
+        if (record == null || String.isBlank(fieldApiName)) {
+            return;
+        }
+        try {
+            Map<String, Schema.SObjectField> fieldMap = record.getSObjectType().getDescribe().fields.getMap();
+            if (!fieldMap.containsKey(fieldApiName)) {
+                return;
+            }
+            Schema.DisplayType fieldType = fieldMap.get(fieldApiName).getDescribe().getType();
+            if (fieldType != Schema.DisplayType.Boolean) {
+                return;
+            }
+            Boolean coerced = coerceBoolean(value);
+            if (coerced == null) {
+                return;
+            }
+            record.put(fieldApiName, coerced);
+        } catch (Exception ex) {
+            System.debug(LoggingLevel.WARN, 'Skipping assignment for ' + fieldApiName + ' due to invalid boolean value: ' + value);
+        }
+    }
+
+    private static Boolean coerceBoolean(Object value) {
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof Boolean) {
+            return (Boolean)value;
+        }
+        if (value instanceof String) {
+            String trimmed = ((String)value).trim().toLowerCase();
+            if (trimmed == 'true') return true;
+            if (trimmed == 'false') return false;
+        }
+        if (value instanceof Integer) {
+            Integer num = (Integer)value;
+            if (num == 1) return true;
+            if (num == 0) return false;
+        }
+        if (value instanceof Long) {
+            Long num = (Long)value;
+            if (num == 1) return true;
+            if (num == 0) return false;
+        }
+        if (value instanceof Decimal) {
+            Decimal num = (Decimal)value;
+            if (num == 1) return true;
+            if (num == 0) return false;
+        }
+        return null;
     }
 }

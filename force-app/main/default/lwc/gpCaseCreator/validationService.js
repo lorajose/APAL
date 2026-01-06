@@ -80,17 +80,10 @@ function validatePresenting(formData, config = {}) {
 
   if (!hasPcqt) {
     const message = 'The Primary Clinical Questions field is required.';
-    if (config.strict) {
-      errors.push({
-        path: 'Primary_Clinical_Question_Types__c',
-        message
-      });
-    } else {
-      warnings.push({
-        path: 'Primary_Clinical_Question_Types__c',
-        message
-      });
-    }
+    errors.push({
+      path: 'Primary_Clinical_Question_Types__c',
+      message
+    });
   }
 
   if (data.reasonForReferral && data.reasonForReferral.trim().length < 50) {
@@ -115,17 +108,10 @@ function validateSuicide(formData, config = {}) {
   const ideation = (data.Suicidal_Ideation__c || '').toString().trim();
   if (!ideation) {
     const message = 'The Suicidal Ideation field is required.';
-    if (config.strict) {
-      errors.push({
-        path: 'Suicidal_Ideation__c',
-        message
-      });
-    } else {
-      warnings.push({
-        path: 'Suicidal_Ideation__c',
-        message
-      });
-    }
+    errors.push({
+      path: 'Suicidal_Ideation__c',
+      message
+    });
   }
 
   const requiresDetail = ideation && ideation !== 'None';
@@ -180,22 +166,10 @@ function validateHomicide(formData, config = {}) {
 
   if (!ideation) {
     const message = 'The Homicidal Ideation field is required.';
-    if (config.strict) {
-      errors.push({
-        path: 'Homicidal_Ideation__c',
-        message
-      });
-    } else {
-      warnings.push({
-        path: 'Homicidal_Ideation__c',
-        message
-      });
-      return {
-        isValid: true,
-        hardErrors: [],
-        softWarnings: warnings
-      };
-    }
+    errors.push({
+      path: 'Homicidal_Ideation__c',
+      message
+    });
   }
 
   if (requiresDetail) {
@@ -222,18 +196,11 @@ function validateHomeSafety(formData, config = {}) {
 
   const status = (data.Home_Safety__c || '').toString().trim();
   if (!status) {
-    const message = 'The Home Security field is required.';
-    if (config.strict) {
-      errors.push({
-        path: 'Home_Safety__c',
-        message
-      });
-    } else {
-      warnings.push({
-        path: 'Home_Safety__c',
-        message
-      });
-    }
+    const message = 'The Home Safety field is required.';
+    errors.push({
+      path: 'Home_Safety__c',
+      message
+    });
   }
 
   if (status && status !== 'Safe') {
@@ -261,17 +228,10 @@ function validateCognition(formData, config = {}) {
   const orientation = (data.Orientation__c || '').toString().trim();
   if (!orientation) {
     const message = 'The Orientation field is required.';
-    if (config.strict) {
-      errors.push({
-        path: 'Orientation__c',
-        message
-      });
-    } else {
-      warnings.push({
-        path: 'Orientation__c',
-        message
-      });
-    }
+    errors.push({
+      path: 'Orientation__c',
+      message
+    });
   }
 
   if (orientation && orientation !== 'Alert & oriented (x3)') {
@@ -295,17 +255,6 @@ function validateFamilyTrauma(formData) {
   const data = formData.familyTrauma || {};
   const errors = [];
   const warnings = [];
-
-  const familyHistory = normalizeMultiValue(data.Family_History__c);
-  if (familyHistory.length > 0) {
-    const notes = (data.Family_History_Notes__c || '').toString().trim();
-    if (!notes) {
-      errors.push({
-        path: 'Family_History_Notes__c',
-        message: 'Family History Notes are Required.'
-      });
-    }
-  }
 
   return {
     isValid: errors.length === 0,
