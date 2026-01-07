@@ -313,7 +313,8 @@ export default class GpCaseStepScreeners extends LightningElement {
                 type: scr.catalogType || ''
             };
             return {
-                id: scr.catalogId || scr.id,
+                id: scr.id,
+                catalogId: scr.catalogId || scr.id,
                 meta,
                 catalogName: scr.catalogName || meta.name || scr.id,
                 catalogType: scr.catalogType || meta.type || '',
@@ -337,7 +338,8 @@ export default class GpCaseStepScreeners extends LightningElement {
         this.wizardMode = 'edit';
         this.wizardSelection = [catalogId];
         this.wizardDraft = [{
-            id: catalogId,
+            id: existing.id,
+            catalogId,
             meta: this.catalogIndex[catalogId] || { name: existing.catalogName || existing.id, type: existing.catalogType || '' },
             date: existing.date || '',
             score: existing.score || '',
@@ -491,7 +493,8 @@ export default class GpCaseStepScreeners extends LightningElement {
             this.wizardDraft = this.wizardSelection.map(id => {
                 const existing = draftById.get(id) || scrById.get(id);
                 return {
-                    id,
+                    id: existing?.id || id,
+                    catalogId: existing?.catalogId || id,
                     meta: existing?.meta || this.catalogIndex[id],
                     date: existing?.date || '',
                     score: existing?.score || '',
@@ -535,6 +538,7 @@ export default class GpCaseStepScreeners extends LightningElement {
             const meta = this.catalogIndex[item.id] || {};
             return {
                 id: item.id,
+                catalogId: item.catalogId || item.id,
                 catalogName: item.catalogName || meta.name || item.meta?.name || item.id,
                 catalogType: item.catalogType || meta.type || item.meta?.type || '',
                 date: item.date,
@@ -546,9 +550,18 @@ export default class GpCaseStepScreeners extends LightningElement {
 
         let next = [...this.screeners];
         draft.forEach(entry => {
-            const existingIndex = next.findIndex(scr => scr.id === entry.id);
+            const existingIndex = next.findIndex(scr =>
+                scr.id === entry.id ||
+                scr.catalogId === entry.catalogId ||
+                scr.id === entry.catalogId
+            );
             if (existingIndex > -1) {
-                next[existingIndex] = entry;
+                const existing = next[existingIndex];
+                next[existingIndex] = {
+                    ...entry,
+                    id: existing.id,
+                    recordId: existing.recordId
+                };
             } else {
                 next = [...next, entry];
             }

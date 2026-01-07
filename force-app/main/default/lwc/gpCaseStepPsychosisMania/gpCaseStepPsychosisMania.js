@@ -1,6 +1,7 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import MEDICAL_NOTES_FIELD from '@salesforce/schema/Case.Medical_Notes__c';
+import CASE_RECORDTYPE_FIELD from '@salesforce/schema/Case.RecordTypeId';
 import { getObjectInfo, getPicklistValues } from 'lightning/uiObjectInfoApi';
 import CASE_OBJECT from '@salesforce/schema/Case';
 import PSYCHOSIS_FIELD from '@salesforce/schema/Case.Psychosis_Symptoms__c';
@@ -51,12 +52,17 @@ const MANIA_VALUE_FIXES = {
     'Grandiosity (mania)': 'Grandiosity'
 };
 
+function normalizePicklistValue(value) {
+    if (!value || typeof value !== 'string') return value;
+    return value.replace(/\s+/g, ' ').trim();
+}
+
 function normalizeMultiValue(value) {
     if (!value) return [];
     if (Array.isArray(value)) return value.filter(Boolean);
     return value
         .split(';')
-        .map((item) => item.trim())
+        .map((item) => normalizePicklistValue(item))
         .filter(Boolean);
 }
 
@@ -68,6 +74,7 @@ function serializeMultiValue(values) {
 function normalizeManiaValues(list = []) {
     return list
         .map(value => MANIA_VALUE_FIXES[value] || value)
+        .map(normalizePicklistValue)
         .filter(Boolean);
 }
 
@@ -94,6 +101,7 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
     redFlagNotes = '';
     dataInitialized = false;
     redFlagNotesDirty = false;
+    recordTypeId;
 
     connectedCallback() {
         this.loadCatalogs();
@@ -104,9 +112,13 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
 
     @api caseId;
 
-    @wire(getRecord, { recordId: '$caseId', fields: [MEDICAL_NOTES_FIELD] })
+    @wire(getRecord, { recordId: '$caseId', fields: [MEDICAL_NOTES_FIELD, CASE_RECORDTYPE_FIELD] })
     wiredCaseNotes({ data }) {
         const medicalNotes = getFieldValue(data, MEDICAL_NOTES_FIELD);
+        const recordTypeId = getFieldValue(data, CASE_RECORDTYPE_FIELD);
+        if (recordTypeId) {
+            this.recordTypeId = recordTypeId;
+        }
         if (medicalNotes && !this.redFlagNotesDirty && !this.redFlagNotes) {
             this.redFlagNotes = medicalNotes;
             this.dataInitialized = true;
@@ -115,15 +127,15 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
     }
 
     get caseRecordTypeId() {
-        return this.caseInfo?.data?.defaultRecordTypeId;
+        return this.recordTypeId || this.caseInfo?.data?.defaultRecordTypeId;
     }
 
     @wire(getPicklistValues, { recordTypeId: '$caseRecordTypeId', fieldApiName: PSYCHOSIS_FIELD })
     wiredPsychosisPicklist({ data, error }) {
         if (data?.values?.length) {
             this.psychosisCatalogOptions = data.values.map((entry) => ({
-                label: entry.label,
-                value: entry.value
+                label: normalizePicklistValue(entry.label),
+                value: normalizePicklistValue(entry.value)
             }));
             this.loadCatalogs();
         } else if (error) {
@@ -137,8 +149,8 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
     wiredManiaPicklist({ data, error }) {
         if (data?.values?.length) {
             this.maniaCatalogOptions = data.values.map((entry) => ({
-                label: entry.label,
-                value: entry.value
+                label: normalizePicklistValue(entry.label),
+                value: normalizePicklistValue(entry.value)
             }));
             this.loadCatalogs();
         } else if (error) {
@@ -152,8 +164,8 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
     wiredRedFlagsPicklist({ data, error }) {
         if (data?.values?.length) {
             this.redFlagCatalogOptions = data.values.map((entry) => ({
-                label: entry.label,
-                value: entry.value
+                label: normalizePicklistValue(entry.label),
+                value: normalizePicklistValue(entry.value)
             }));
             this.loadCatalogs();
         } else if (error) {
@@ -210,7 +222,7 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
 
     mergeSelectionsIntoOptions(options, selections) {
         const values = Array.isArray(options) ? options : [];
-        const selected = Array.isArray(selections) ? selections : [];
+        const selected = Array.isArray(selections) ? selections.map(normalizePicklistValue) : [];
         const existing = new Set(values.map(opt => opt.value));
         const extras = selected
             .filter(value => value && !existing.has(value))
@@ -234,18 +246,20 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
                 }));
         };
 
-        const psychosisBase = Array.isArray(this.psychosisCatalogOptions) && this.psychosisCatalogOptions.length
-            ? this.psychosisCatalogOptions
-            : PSYCHOSIS_OPTIONS;
-        const maniaBase = Array.isArray(this.maniaCatalogOptions) && this.maniaCatalogOptions.length
-            ? this.maniaCatalogOptions
-            : MANIA_OPTIONS;
-        const redFlagBase = Array.isArray(this.redFlagCatalogOptions) && this.redFlagCatalogOptions.length
-            ? this.redFlagCatalogOptions
-            : RED_FLAG_OPTIONS;
+        const picklistOrFallback = (catalogOptions, fallbackOptions) => {
+            const catalog = Array.isArray(catalogOptions) && catalogOptions.length ? catalogOptions : [];
+            if (catalog.length) return catalog;
+            return Array.isArray(fallbackOptions) ? fallbackOptions : [];
+        };
+
+        const psychosisBase = picklistOrFallback(this.psychosisCatalogOptions, PSYCHOSIS_OPTIONS);
+        const maniaBase = picklistOrFallback(this.maniaCatalogOptions, MANIA_OPTIONS);
+        const redFlagBase = picklistOrFallback(this.redFlagCatalogOptions, RED_FLAG_OPTIONS);
         this.psychosisOptions = filterByLine(psychosisBase);
         this.maniaOptions = filterByLine(maniaBase);
         this.redFlagOptions = filterByLine(redFlagBase);
+        this.psychosisOptions = this.mergeSelectionsIntoOptions(this.psychosisOptions, this.psychosisSelections);
+        this.maniaOptions = this.mergeSelectionsIntoOptions(this.maniaOptions, this.maniaSelections);
         this.redFlagOptions = this.mergeSelectionsIntoOptions(this.redFlagOptions, this.redFlagSelections);
 
         this.syncSelections();
@@ -288,6 +302,12 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
         if (this.redFlagOptions.length) {
             this.redFlagOptions = this.mergeSelectionsIntoOptions(this.redFlagOptions, this.redFlagSelections);
         }
+        if (this.psychosisOptions.length) {
+            this.psychosisOptions = this.mergeSelectionsIntoOptions(this.psychosisOptions, this.psychosisSelections);
+        }
+        if (this.maniaOptions.length) {
+            this.maniaOptions = this.mergeSelectionsIntoOptions(this.maniaOptions, this.maniaSelections);
+        }
         if (this.psychosisOptions.length || this.maniaOptions.length || this.redFlagOptions.length) {
             this.syncSelections(false);
         }
@@ -326,11 +346,12 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
 
     toggleValue(list, value) {
         if (!value) return list;
+        const normalizedValue = normalizePicklistValue(value);
         const set = new Set(list);
-        if (set.has(value)) {
-            set.delete(value);
+        if (set.has(normalizedValue)) {
+            set.delete(normalizedValue);
         } else {
-            set.add(value);
+            set.add(normalizedValue);
         }
         return Array.from(set);
     }

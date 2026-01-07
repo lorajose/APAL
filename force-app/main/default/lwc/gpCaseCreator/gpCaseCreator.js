@@ -1351,9 +1351,29 @@ async handleDataUpdated(event) {
                 caseId,
                 items: this.toPlainList(this.buildScreenerPayload())
             }));
+            const concernItems = this.toPlainList(this.getConcernsForApex());
+            this.lastConcernsPayload = concernItems;
+            try {
+                // eslint-disable-next-line no-console
+                console.error('[GPCaseCreator] saveConcerns payload JSON (pre-save)', JSON.stringify(concernItems));
+                // eslint-disable-next-line no-restricted-globals
+                window.__lastConcernsPayloadJson = JSON.stringify(concernItems);
+            } catch (e) {
+                // eslint-disable-next-line no-console
+                console.error('[GPCaseCreator] saveConcerns payload JSON (pre-save) error', e);
+            }
+            // TEMP debug: verify payload shape before Apex
+            // eslint-disable-next-line no-console
+            console.log('[GPCaseCreator] saveConcerns payload', {
+                isArray: Array.isArray(concernItems),
+                length: Array.isArray(concernItems) ? concernItems.length : undefined,
+                sample: Array.isArray(concernItems) ? concernItems.slice(0, 3) : concernItems
+            });
+            // eslint-disable-next-line no-console
+            console.log('[GPCaseCreator] saveConcerns payload JSON', JSON.stringify(concernItems));
             await this.safeSave('Concerns', () => saveConcerns({
                 caseId,
-                items: this.toPlainList(this.sanitizeConcernsForApex(this.buildConcernPayload())),
+                items: concernItems,
                 deleteMissing: true
             }));
             await this.safeSave('Safety Risks', () => saveSafetyRisks({
@@ -1394,12 +1414,19 @@ async handleDataUpdated(event) {
     }
 
     ensureList(value) {
-        return Array.isArray(value) ? value : [];
+        if (Array.isArray(value)) return value;
+        if (value && typeof value === 'object') return Object.values(value);
+        return [];
     }
 
     toPlainList(value) {
         const list = this.ensureList(value);
         return JSON.parse(JSON.stringify(list));
+    }
+
+    toPlainObjectList(value) {
+        const list = this.ensureList(value);
+        return list.map(item => (item ? { ...item } : item)).filter(Boolean);
     }
 
     sanitizeConcernsForApex(value) {
@@ -1415,10 +1442,11 @@ async handleDataUpdated(event) {
                 if (!item) return null;
                 const rawCatalogId = item.catalogId ? String(item.catalogId) : '';
                 const catalogId = looksLikeId(rawCatalogId) ? rawCatalogId : null;
+                const normalizedCategory = this.normalizeConcernCategory(item.category);
                 return {
                     catalogId,
                     label: item.label ? String(item.label) : '',
-                    category: item.category ? String(item.category) : '',
+                    category: normalizedCategory ? String(normalizedCategory) : '',
                     notes: item.notes !== undefined && item.notes !== null ? String(item.notes) : null,
                     source: item.source ? String(item.source) : null
                 };
@@ -1426,10 +1454,44 @@ async handleDataUpdated(event) {
             .filter(item => item && item.label);
     }
 
+    getConcernsForApex() {
+        const sanitized = this.sanitizeConcernsForApex(this.buildConcernPayload());
+        const list = Array.isArray(sanitized) ? sanitized : [];
+        const plain = this.toPlainList(list);
+        if (!Array.isArray(plain)) {
+            return [];
+        }
+        const normalized = plain.map(item => ({
+            catalogId: item.catalogId || null,
+            label: item.label || '',
+            category: this.normalizeConcernCategory(item.category) || '',
+            notes: item.notes !== undefined ? item.notes : null,
+            source: item.source || null
+        }));
+        return this.toPlainList(this.ensureList(normalized));
+    }
+
     async safeSave(label, fn) {
         try {
+            // TEMP debug: mark save start
+            // eslint-disable-next-line no-console
+            console.log('[GPCaseCreator] safeSave start', label);
             return await fn();
         } catch (error) {
+            // TEMP debug: surface full error and last payload snapshot
+            let concernsPayloadString = null;
+            if (label === 'Concerns') {
+                try {
+                    concernsPayloadString = JSON.stringify(this.lastConcernsPayload);
+                } catch (payloadError) {
+                    concernsPayloadString = String(this.lastConcernsPayload);
+                }
+            }
+            // eslint-disable-next-line no-console
+            console.error('[GPCaseCreator] safeSave error', label, error, {
+                lastConcernsPayload: label === 'Concerns' ? this.lastConcernsPayload : undefined,
+                payloadJson: concernsPayloadString
+            });
             const message = error?.body?.message || error?.message || 'Unexpected error';
             throw new Error(`${label} save failed: ${message}`);
         }
@@ -2030,17 +2092,19 @@ async handleDataUpdated(event) {
 
         const buildEntries = (list, category, note) => {
             return (list || [])
-                .filter(val => !!val)
-                .map(val => {
-                    const label = val;
+                .map((val) => {
+                    if (val === null || val === undefined) return null;
+                    const label = typeof val === 'string' ? val.trim() : String(val).trim();
+                    if (!label) return null;
                     return {
-                        id: val || this.slugify(label),
+                        id: this.slugify(label),
                         label,
                         category,
                         notes: note || '',
                         source: 'psychosisMania'
                     };
-                });
+                })
+                .filter(Boolean);
         };
 
         const psychosisEntries = buildEntries(psychosisList, 'Psychosis Symptoms', sharedPsychosisNote);
@@ -2231,7 +2295,7 @@ async handleDataUpdated(event) {
                 return {
                     catalogId: looksLikeId(item.catalogId)
                         ? item.catalogId
-                        : (looksLikeId(item.id) ? item.id : null),
+                        : null,
                     label,
                     category: this.normalizeConcernCategory(item.category),
                     notes: item.notes || null,
@@ -2282,9 +2346,24 @@ async handleDataUpdated(event) {
 
     normalizeConcernCategory(value) {
         const raw = (value || '').toString().trim();
-        const normalized = raw.toLowerCase();
+        const normalized = raw.toLowerCase().replace(/\s*\/\s*/g, '/');
+        if (normalized.includes('mania') && normalized.includes('hypomania')) {
+            return 'Mania/Hypomania Symptoms';
+        }
+        if (normalized.includes('psychosis')) {
+            return 'Psychosis Symptoms';
+        }
+        if (normalized.includes('medical red flag')) {
+            return 'Medical Red Flags';
+        }
         if (normalized.includes('prior diagnosis')) {
             return 'Prior Diagnoses';
+        }
+        if (normalized.includes('top symptom')) {
+            return 'Top Symptoms';
+        }
+        if (normalized.includes('family history')) {
+            return 'Family History';
         }
         return raw;
     }
@@ -2340,9 +2419,17 @@ async handleDataUpdated(event) {
                     items: scrPayload
                 });
             } else if (step === 13) {
-                const concernPayload = this.ensureList(
-                    JSON.parse(JSON.stringify(this.sanitizeConcernsForApex(this.buildConcernPayload())))
-                );
+                const concernPayload = this.toPlainList(this.getConcernsForApex());
+                this.lastConcernsPayload = concernPayload;
+                // TEMP debug: verify payload shape before Apex
+                // eslint-disable-next-line no-console
+                console.log('[GPCaseCreator] persistRelatedCollections saveConcerns payload', {
+                    isArray: Array.isArray(concernPayload),
+                    length: Array.isArray(concernPayload) ? concernPayload.length : undefined,
+                    sample: Array.isArray(concernPayload) ? concernPayload.slice(0, 3) : concernPayload
+                });
+                // eslint-disable-next-line no-console
+                console.log('[GPCaseCreator] persistRelatedCollections saveConcerns payload JSON', JSON.stringify(concernPayload));
                 await saveConcerns({
                     caseId: this.caseId,
                     items: concernPayload,
@@ -2386,10 +2473,20 @@ async handleDataUpdated(event) {
                 caseId: this.caseId,
                 items: scrPayload
             });
-            const concernPayload = this.ensureList(JSON.parse(JSON.stringify(this.buildConcernPayload())));
+            const concernPayload = this.toPlainList(this.getConcernsForApex());
+            this.lastConcernsPayload = concernPayload;
+            // TEMP debug: verify payload shape before Apex
+            // eslint-disable-next-line no-console
+            console.log('[GPCaseCreator] persistAllCollections saveConcerns payload', {
+                isArray: Array.isArray(concernPayload),
+                length: Array.isArray(concernPayload) ? concernPayload.length : undefined,
+                sample: Array.isArray(concernPayload) ? concernPayload.slice(0, 3) : concernPayload
+            });
+            // eslint-disable-next-line no-console
+            console.log('[GPCaseCreator] persistAllCollections saveConcerns payload JSON', JSON.stringify(concernPayload));
             await saveConcerns({
                 caseId: this.caseId,
-                items: this.ensureList(JSON.parse(JSON.stringify(this.sanitizeConcernsForApex(concernPayload)))),
+                items: concernPayload,
                 deleteMissing: true
             });
             const riskPayload = this.ensureList(JSON.parse(JSON.stringify(this.buildSafetyRiskPayload())));

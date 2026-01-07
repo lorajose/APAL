@@ -561,6 +561,7 @@ export default class GpCaseStepConcerns extends LightningElement {
     saveWizardDraft() {
         const additions = this.wizardDraft.map(item => ({
             id: item.id,
+            catalogId: item.id,
             label: item.meta.label,
             category: item.meta.category,
             notes: item.notes,
@@ -641,7 +642,7 @@ export default class GpCaseStepConcerns extends LightningElement {
             .map(item => ({
                 catalogId: looksLikeId(item.catalogId)
                     ? item.catalogId
-                    : (looksLikeId(item.id) ? item.id : null),
+                    : null,
                 label: item.label || '',
                 category: item.category || '',
                 notes: item.notes || null

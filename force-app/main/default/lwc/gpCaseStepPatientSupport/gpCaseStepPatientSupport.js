@@ -154,9 +154,6 @@ export default class GpCaseStepPatientSupport extends LightningElement {
     }
 
     get showGridControls() {
-        if (this.isAddictionMedicineCase || this.isGeneralPsychiatryCase) {
-            return false;
-        }
         return this.isGridView && (this.hasSupports || this.isParentCaseWithControls);
     }
 
@@ -361,11 +358,13 @@ export default class GpCaseStepPatientSupport extends LightningElement {
         }
         this.setSupportMode('wizard');
         this.wizardMode = 'edit';
-        this.wizardSelection = current.map(item => item.id);
+        this.wizardSelection = current.map(item => item.catalogId || item.id);
         this.wizardDraft = current.map(item => {
-            const meta = this.catalogIndex[item.id] || { name: item.catalogName || item.name || item.id };
+            const catalogId = item.catalogId || item.id;
+            const meta = this.catalogIndex[catalogId] || { name: item.catalogName || item.name || catalogId };
             return {
                 id: item.id,
+                catalogId,
                 meta,
                 notes: item.notes || '',
                 scheduled: !!item.scheduled,
@@ -385,12 +384,14 @@ export default class GpCaseStepPatientSupport extends LightningElement {
         const id = event.currentTarget.dataset.id;
         const found = this.supports.find(item => item.id === id);
         if (!found) return;
+        const catalogId = found.catalogId || found.catalogName || found.name || id;
         this.setSupportMode('wizard');
         this.wizardMode = 'edit';
-        this.wizardSelection = [id];
+        this.wizardSelection = [catalogId];
         this.wizardDraft = [{
             id,
-            meta: this.catalogIndex[id] || { name: found.catalogName || found.name || id },
+            catalogId,
+            meta: this.catalogIndex[catalogId] || { name: found.catalogName || found.name || catalogId },
             notes: found.notes || '',
             scheduled: !!found.scheduled,
             going: !!found.going,
@@ -465,7 +466,7 @@ export default class GpCaseStepPatientSupport extends LightningElement {
         const id = event.target.dataset.id;
         if (!id) return;
         if (this.wizardMode === 'add') {
-            const existingIds = new Set(this.supports.map(item => item.id));
+            const existingIds = new Set(this.supports.map(item => item.catalogId || item.id));
             if (existingIds.has(id)) {
                 return;
             }
@@ -479,7 +480,7 @@ export default class GpCaseStepPatientSupport extends LightningElement {
 
     wizardNext() {
         if (this.wizardStep === 0) {
-            const draftById = new Map(this.wizardDraft.map(item => [item.id, item]));
+            const draftById = new Map(this.wizardDraft.map(item => [item.catalogId || item.id, item]));
             const supportById = new Map((this.supports || []).map(item => {
                 const key = item.catalogId || item.id;
                 return [key, item];
@@ -487,7 +488,8 @@ export default class GpCaseStepPatientSupport extends LightningElement {
             this.wizardDraft = this.wizardSelection.map(id => {
                 const existing = draftById.get(id) || supportById.get(id);
                 return {
-                    id,
+                    id: existing?.id || id,
+                    catalogId: existing?.catalogId || id,
                     meta: existing?.meta || this.catalogIndex[id],
                     notes: existing?.notes || '',
                     scheduled: existing?.scheduled ?? false,
@@ -531,10 +533,12 @@ export default class GpCaseStepPatientSupport extends LightningElement {
 
     saveWizardDraft() {
         const draft = this.wizardDraft.map(item => {
-            const meta = this.catalogIndex[item.id] || {};
+            const catalogId = item.catalogId || item.id;
+            const meta = this.catalogIndex[catalogId] || {};
             return {
                 id: item.id,
-                catalogName: item.catalogName || meta.name || item.meta?.name || item.id,
+                catalogId,
+                catalogName: item.catalogName || meta.name || item.meta?.name || catalogId,
                 notes: item.notes,
                 scheduled: !!item.scheduled,
                 going: !!item.going,
@@ -547,9 +551,18 @@ export default class GpCaseStepPatientSupport extends LightningElement {
 
         let next = [...this.supports];
         draft.forEach(entry => {
-            const existingIndex = next.findIndex(item => item.id === entry.id);
+            const existingIndex = next.findIndex(item =>
+                item.id === entry.id ||
+                item.catalogId === entry.catalogId ||
+                item.id === entry.catalogId
+            );
             if (existingIndex > -1) {
-                next[existingIndex] = entry;
+                const prev = next[existingIndex];
+                next[existingIndex] = {
+                    ...entry,
+                    id: prev.id,
+                    recordId: prev.recordId
+                };
             } else {
                 next = [...next, entry];
             }
@@ -660,7 +673,7 @@ export default class GpCaseStepPatientSupport extends LightningElement {
     buildSupportPayload() {
         return cloneList(this.supports)
             .map(item => {
-                const meta = this.catalogIndex[item.id] || {};
+                const meta = this.catalogIndex[item.catalogId || item.id] || {};
                 const supportName = item.catalogName || meta.name || '';
                 if (!item.id && !supportName) {
                     return null;

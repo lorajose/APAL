@@ -392,7 +392,8 @@ export default class GpCaseStepMedications extends LightningElement {
         const current = (this.medications || [])
             .map(med => {
                 const id = med?.id || med?.catalogName || med?.meta?.title;
-                return id ? { ...med, id } : null;
+                const catalogId = med?.catalogId || med?.catalogName || med?.meta?.title || id;
+                return id ? { ...med, id, catalogId } : null;
             })
             .filter(Boolean);
         if (!current.length) {
@@ -401,16 +402,18 @@ export default class GpCaseStepMedications extends LightningElement {
         }
         this.setMedMode('wizard');
         this.wizardMode = 'edit';
-        this.wizardSelection = current.map(med => med.id);
+        this.wizardSelection = current.map(med => med.catalogId || med.id);
         this.wizardDraft = this.decorateWizardDraft(current.map(med => {
-            const meta = this.catalogIndex[med.id] || {
-                title: med.catalogName || med.id,
+            const catalogId = med.catalogId || med.id;
+            const meta = this.catalogIndex[catalogId] || {
+                title: med.catalogName || catalogId,
                 category: med.catalogCategory || ''
             };
             return {
                 id: med.id,
+                catalogId,
                 meta,
-                catalogName: med.catalogName || meta.title || med.id,
+                catalogName: med.catalogName || meta.title || catalogId,
                 catalogCategory: med.catalogCategory || meta.category || '',
                 action: med.action || '',
                 frequency: med.frequency || '',
@@ -431,13 +434,15 @@ export default class GpCaseStepMedications extends LightningElement {
         const id = event.currentTarget.dataset.id;
         const existing = this.medications.find(med => med.id === id);
         if (!existing) return;
+        const catalogId = existing.catalogId || existing.catalogName || existing.meta?.title || id;
         this.setMedMode('wizard');
         this.wizardMode = 'edit';
         this.editingId = id;
-        this.wizardSelection = [id];
+        this.wizardSelection = [catalogId];
         this.wizardDraft = this.decorateWizardDraft([{
             id,
-            meta: this.catalogIndex[id],
+            catalogId,
+            meta: this.catalogIndex[catalogId],
             action: existing.action || '',
             frequency: existing.frequency || '',
             amount: existing.amount || '',
@@ -488,7 +493,7 @@ export default class GpCaseStepMedications extends LightningElement {
 
     wizardNext() {
         if (this.wizardStep === 0) {
-            const draftById = new Map(this.wizardDraft.map(item => [item.id, item]));
+            const draftById = new Map(this.wizardDraft.map(item => [item.catalogId || item.id, item]));
             const medsById = new Map((this.medications || []).map(item => {
                 const key = item.catalogId || item.id;
                 return [key, item];
@@ -496,7 +501,8 @@ export default class GpCaseStepMedications extends LightningElement {
             const draft = this.wizardSelection.map(id => {
                 const existing = draftById.get(id) || medsById.get(id);
                 return {
-                    id,
+                    id: existing?.id || id,
+                    catalogId: existing?.catalogId || id,
                     meta: existing?.meta || this.catalogIndex[id],
                     action: existing?.action || '',
                     frequency: existing?.frequency || '',
@@ -573,10 +579,12 @@ export default class GpCaseStepMedications extends LightningElement {
 
     saveWizardDraft() {
         const draft = this.wizardDraft.map(item => {
-            const meta = this.catalogIndex[item.id] || {};
+            const catalogId = item.catalogId || item.id;
+            const meta = this.catalogIndex[catalogId] || {};
             return {
                 id: item.id,
-                catalogName: item.catalogName || meta.title || item.meta?.title || item.id,
+                catalogId,
+                catalogName: item.catalogName || meta.title || item.meta?.title || catalogId,
                 catalogCategory: item.catalogCategory || meta.category || item.meta?.category || '',
                 action: item.action,
                 frequency: item.frequency,
@@ -590,9 +598,18 @@ export default class GpCaseStepMedications extends LightningElement {
 
         let next = [...this.medications];
         draft.forEach(entry => {
-            const existingIndex = next.findIndex(med => med.id === entry.id);
+            const existingIndex = next.findIndex(med =>
+                med.id === entry.id ||
+                med.catalogId === entry.catalogId ||
+                med.id === entry.catalogId
+            );
             if (existingIndex > -1) {
-                next[existingIndex] = entry;
+                const prev = next[existingIndex];
+                next[existingIndex] = {
+                    ...entry,
+                    id: prev.id,
+                    recordId: prev.recordId
+                };
             } else {
                 next = [...next, entry];
             }
@@ -812,7 +829,8 @@ export default class GpCaseStepMedications extends LightningElement {
 
     decorateWizardItem(entry) {
         const base = { ...entry };
-        base.meta = base.meta || this.catalogIndex[base.id] || {};
+        const catalogId = base.catalogId || base.id;
+        base.meta = base.meta || this.catalogIndex[catalogId] || {};
         base.actionOptionsDecorated = this.decorateOptionList(ACTION_OPTIONS, base.action || '');
         base.frequencyOptionsDecorated = this.decorateOptionList(FREQ, base.frequency || '');
         base.unitOptionsDecorated = this.decorateOptionList(UNITS, base.unit || '');
@@ -837,7 +855,8 @@ export default class GpCaseStepMedications extends LightningElement {
     buildMedicationPayload() {
         return cloneMedList(this.medications)
             .map(med => {
-                const meta = this.catalogIndex[med.id] || {};
+                const catalogId = med.catalogId || med.id;
+                const meta = this.catalogIndex[catalogId] || {};
                 const catalogName = med.catalogName || meta.title || '';
                 if (!catalogName) {
                     return null;
