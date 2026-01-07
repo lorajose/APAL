@@ -254,7 +254,8 @@ export default class GpCaseStepSubstances extends LightningElement {
         const current = (this.substances || [])
             .map(sub => {
                 const id = sub?.id || sub?.catalogName || sub?.meta?.name;
-                return id ? { ...sub, id } : null;
+                const catalogId = sub?.catalogId || sub?.catalogName || sub?.meta?.name || id;
+                return id ? { ...sub, id, catalogId } : null;
             })
             .filter(Boolean);
         if (!current.length) {
@@ -263,16 +264,18 @@ export default class GpCaseStepSubstances extends LightningElement {
         }
         this.setSubMode('wizard');
         this.wizardMode = 'edit';
-        this.wizardSelection = current.map(sub => sub.id);
+        this.wizardSelection = current.map(sub => sub.catalogId || sub.id);
         this.wizardDraft = this.decorateWizardDraft(current.map(sub => {
-            const meta = this.catalogIndex[sub.id] || {
-                name: sub.catalogName || sub.id,
+            const catalogId = sub.catalogId || sub.id;
+            const meta = this.catalogIndex[catalogId] || {
+                name: sub.catalogName || catalogId,
                 category: sub.catalogCategory || ''
             };
             return {
                 id: sub.id,
+                catalogId,
                 meta,
-                catalogName: sub.catalogName || meta.name || sub.id,
+                catalogName: sub.catalogName || meta.name || catalogId,
                 catalogCategory: sub.catalogCategory || meta.category || '',
                 frequency: sub.frequency || '',
                 current: sub.current === undefined ? false : sub.current,
@@ -288,12 +291,14 @@ export default class GpCaseStepSubstances extends LightningElement {
         const id = event.currentTarget.dataset.id;
         const existing = this.substances.find(sub => sub.id === id);
         if (!existing) return;
+        const catalogId = existing.catalogId || existing.catalogName || existing.meta?.name || id;
         this.setSubMode('wizard');
         this.wizardMode = 'edit';
-        this.wizardSelection = [id];
+        this.wizardSelection = [catalogId];
         this.wizardDraft = this.decorateWizardDraft([{
             id,
-            meta: this.catalogIndex[id],
+            catalogId,
+            meta: this.catalogIndex[catalogId],
             frequency: existing.frequency || '',
             current: !!existing.current,
             notes: existing.notes || ''
@@ -506,7 +511,7 @@ export default class GpCaseStepSubstances extends LightningElement {
 
     wizardNext() {
         if (this.wizardStep === 0) {
-            const draftById = new Map(this.wizardDraft.map(item => [item.id, item]));
+            const draftById = new Map(this.wizardDraft.map(item => [item.catalogId || item.id, item]));
             const subsById = new Map((this.substances || []).map(item => {
                 const key = item.catalogId || item.id;
                 return [key, item];
@@ -514,7 +519,8 @@ export default class GpCaseStepSubstances extends LightningElement {
             this.wizardDraft = this.decorateWizardDraft(this.wizardSelection.map(id => {
                 const existing = draftById.get(id) || subsById.get(id);
                 return {
-                    id,
+                    id: existing?.id || id,
+                    catalogId: existing?.catalogId || id,
                     meta: existing?.meta || this.catalogIndex[id],
                     frequency: existing?.frequency || '',
                     current: existing?.current ?? false,
@@ -554,10 +560,12 @@ export default class GpCaseStepSubstances extends LightningElement {
 
     saveWizardDraft() {
         const draft = this.wizardDraft.map(item => {
-            const meta = this.catalogIndex[item.id] || {};
+            const catalogId = item.catalogId || item.id;
+            const meta = this.catalogIndex[catalogId] || {};
             return {
                 id: item.id,
-                catalogName: item.catalogName || meta.name || item.meta?.name || item.id,
+                catalogId,
+                catalogName: item.catalogName || meta.name || item.meta?.name || catalogId,
                 catalogCategory: item.catalogCategory || meta.category || item.meta?.category || '',
                 frequency: item.frequency,
                 current: item.current,
@@ -567,9 +575,18 @@ export default class GpCaseStepSubstances extends LightningElement {
 
         let next = [...this.substances];
         draft.forEach(entry => {
-            const existingIndex = next.findIndex(sub => sub.id === entry.id);
+            const existingIndex = next.findIndex(sub =>
+                sub.id === entry.id ||
+                sub.catalogId === entry.catalogId ||
+                sub.id === entry.catalogId
+            );
             if (existingIndex > -1) {
-                next[existingIndex] = entry;
+                const prev = next[existingIndex];
+                next[existingIndex] = {
+                    ...entry,
+                    id: prev.id,
+                    recordId: prev.recordId
+                };
             } else {
                 next = [...next, entry];
             }
@@ -690,7 +707,8 @@ export default class GpCaseStepSubstances extends LightningElement {
 
     decorateWizardItem(entry = {}) {
         const base = { ...entry };
-        base.meta = base.meta || this.catalogIndex[base.id] || {};
+        const catalogId = base.catalogId || base.id;
+        base.meta = base.meta || this.catalogIndex[catalogId] || {};
         base.frequencyBlankSelected = !base.frequency;
         base.frequencyOptionsDecorated = this.decorateOptionList(FREQUENCY_OPTIONS, base.frequency || '');
         return base;
@@ -711,8 +729,8 @@ export default class GpCaseStepSubstances extends LightningElement {
     buildSubstancePayload() {
         return cloneList(this.substances)
             .map(sub => ({
-                catalogName: sub.catalogName || (this.catalogIndex[sub.id]?.name || ''),
-                catalogCategory: sub.catalogCategory || (this.catalogIndex[sub.id]?.category || ''),
+                catalogName: sub.catalogName || (this.catalogIndex[sub.catalogId || sub.id]?.name || ''),
+                catalogCategory: sub.catalogCategory || (this.catalogIndex[sub.catalogId || sub.id]?.category || ''),
                 frequency: sub.frequency || '',
                 current: sub.current === undefined ? null : sub.current,
                 notes: sub.notes || null
