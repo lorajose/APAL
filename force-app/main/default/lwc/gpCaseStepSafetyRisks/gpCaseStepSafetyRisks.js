@@ -7,6 +7,7 @@ import { getRecordNotifyChange } from 'lightning/uiRecordApi';
 import { refreshApex } from '@salesforce/apex';
 import { getRecord } from 'lightning/uiRecordApi';
 import CASE_TYPE_FIELD from '@salesforce/schema/Case.Case_Type__c';
+import { RefreshEvent } from 'lightning/refresh';
 
 const cloneList = (list = []) => JSON.parse(JSON.stringify(list || []));
 const SOURCE_LABELS = {
@@ -187,8 +188,9 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
     }
 
     @wire(getCaseFullData, { caseId: '$wireCaseId' })
-    wiredCaseData({ data, error }) {
-        this.wiredCaseDataResult = { data, error };
+    wiredCaseData(result) {
+        this.wiredCaseDataResult = result;
+        const { data, error } = result || {};
         if (data && this.isStandaloneLayout) {
             const risks = Array.isArray(data.safetyRisks) ? data.safetyRisks : [];
             this.risks = cloneList(risks);
@@ -641,6 +643,11 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
         }
         if (this.wiredCaseDataResult) {
             refreshApex(this.wiredCaseDataResult);
+        }
+        try {
+            this.dispatchEvent(new RefreshEvent());
+        } catch (e) {
+            // ignore refresh event issues
         }
     }
 
