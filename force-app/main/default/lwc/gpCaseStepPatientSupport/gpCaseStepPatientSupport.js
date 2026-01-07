@@ -278,8 +278,9 @@ export default class GpCaseStepPatientSupport extends LightningElement {
     }
 
     @wire(getPatientSupports, { caseId: '$effectiveCaseId' })
-    wiredSupports({ data, error }) {
-        this.wiredSupportsResult = { data, error };
+    wiredSupports(result) {
+        this.wiredSupportsResult = result;
+        const { data, error } = result || {};
         if (data) {
             this.supports = Array.isArray(data) ? cloneList(data) : [];
             if (this.supports.length) {

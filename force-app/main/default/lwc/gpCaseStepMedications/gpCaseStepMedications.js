@@ -210,8 +210,9 @@ export default class GpCaseStepMedications extends LightningElement {
     }
 
     @wire(getCaseFullData, { caseId: '$wireCaseId' })
-    wiredCaseData({ data, error }) {
-        this.wiredCaseDataResult = { data, error };
+    wiredCaseData(result) {
+        this.wiredCaseDataResult = result;
+        const { data, error } = result || {};
         if (data && this.isStandaloneLayout) {
             const meds = Array.isArray(data.medications) ? data.medications : [];
             this.medications = cloneMedList(meds);

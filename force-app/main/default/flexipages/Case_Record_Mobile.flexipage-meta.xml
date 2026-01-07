@@ -2047,6 +2047,20 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>layoutContext</name>
+                    <value>case</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>layoutMode</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentName>gpCaseStepPatientSupport</componentName>
+                <identifier>c_gpCaseStepPatientSupport</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
                     <name>additionalMargin</name>
                 </componentInstanceProperties>
                 <componentInstanceProperties>

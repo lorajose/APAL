@@ -361,8 +361,9 @@ export default class GpCaseStepSubstances extends LightningElement {
     }
 
     @wire(getCaseFullData, { caseId: '$wireCaseId' })
-    wiredCaseData({ data, error }) {
-        this.wiredCaseDataResult = { data, error };
+    wiredCaseData(result) {
+        this.wiredCaseDataResult = result;
+        const { data, error } = result || {};
         if (data && this.isStandaloneLayout) {
             const subs = Array.isArray(data.substances) ? data.substances : [];
             this.substances = cloneList(subs);
