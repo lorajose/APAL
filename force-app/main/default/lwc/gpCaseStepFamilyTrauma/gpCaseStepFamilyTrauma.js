@@ -13,6 +13,15 @@ const FAMILY_HISTORY_OPTIONS = [
     { label: 'Unknown', value: 'Unknown' }
 ];
 
+function normalizeMultiValue(value) {
+    if (!value) return [];
+    if (Array.isArray(value)) return value.filter(Boolean);
+    return value
+        .split(';')
+        .map((v) => v.trim())
+        .filter(Boolean);
+}
+
 export default class GpCaseStepFamilyTrauma extends LightningElement {
     @api errors = {};
     @api caseType;
@@ -40,6 +49,7 @@ export default class GpCaseStepFamilyTrauma extends LightningElement {
                 label: entry.label,
                 value: entry.value
             }));
+            this.mergeSelectedFamilyIntoOptions();
         } else if (error) {
             this.familyHistoryOptions = [...FAMILY_HISTORY_OPTIONS];
             // eslint-disable-next-line no-console
@@ -84,9 +94,26 @@ export default class GpCaseStepFamilyTrauma extends LightningElement {
                 label: item.label || item.value,
                 note: item.note || ''
             }));
+            const parsed = normalizeMultiValue(value.Family_History__c);
+            const existing = new Set(this.familyHistory.map(item => item.value));
+            parsed.forEach(label => {
+                if (!existing.has(label)) {
+                    this.familyHistory = [
+                        ...this.familyHistory,
+                        { value: label, label, note: '' }
+                    ];
+                    existing.add(label);
+                }
+            });
         } else {
-            this.familyHistory = [];
+            const parsed = normalizeMultiValue(value.Family_History__c);
+            this.familyHistory = parsed.map(label => ({
+                value: label,
+                label,
+                note: ''
+            }));
         }
+        this.mergeSelectedFamilyIntoOptions();
     }
 
     get data() {
@@ -178,6 +205,24 @@ export default class GpCaseStepFamilyTrauma extends LightningElement {
         this.dispatchEvent(new CustomEvent('dataupdated', {
             detail: this.buildPayload()
         }));
+    }
+
+    mergeSelectedFamilyIntoOptions() {
+        if (!Array.isArray(this.familyHistory) || this.familyHistory.length === 0) {
+            return;
+        }
+        const existingValues = new Set(
+            (this.familyHistoryOptions || [])
+                .map((option) => (option?.value || '').toString().trim())
+                .filter(Boolean)
+        );
+        const extras = this.familyHistory
+            .map((item) => (item?.value || item?.label || '').toString().trim())
+            .filter((value) => value && !existingValues.has(value))
+            .map((value) => ({ label: value, value }));
+        if (extras.length) {
+            this.familyHistoryOptions = [...(this.familyHistoryOptions || []), ...extras];
+        }
     }
 
     buildPayload() {
