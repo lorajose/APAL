@@ -162,8 +162,8 @@
                             <p class="grid-notes">
                                 Source:
                                 <span>
-                                    <template if:true={concern.source}>{concern.source}</template>
-                                    <template if:false={concern.source}>manual</template>
+                                    <template if:true={concern.sourceLabel}>{concern.sourceLabel}</template>
+                                    <template if:false={concern.sourceLabel}>Manual</template>
                                 </span>
                             </p>
                             <p class="grid-notes">
@@ -331,6 +331,13 @@
                                     <template if:false={risk.historical}>No</template>
                                 </span>
                             </div>
+                            <p class="grid-notes">
+                                Source:
+                                <span>
+                                    <template if:true={risk.sourceLabel}>{risk.sourceLabel}</template>
+                                    <template if:false={risk.sourceLabel}>Manual</template>
+                                </span>
+                            </p>
                             <p class="grid-notes">
                                 Notes:
                                 <span>

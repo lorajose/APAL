@@ -1,6 +1,27 @@
 import { LightningElement, api } from 'lwc';
 
 const FALLBACK = '—';
+const SOURCE_LABELS = {
+    Step2_TopSymptoms: 'Step2_TopSymptoms',
+    Step3_PriorDiagnosis: 'Step3_PriorDiagnosis',
+    Step6_PsychosisMania: 'Step6_PsychosisMania',
+    Step6_MedicalRedFlags: 'Step6_MedicalRedFlags',
+    Step7_FamilyHistory: 'Step7_FamilyHistory',
+    Step8_PsychologicalStressors: 'Step8_PsychologicalStressors',
+    Manual: 'Manual'
+};
+const SOURCE_ALIASES = {
+    presenting: 'Step2_TopSymptoms',
+    topsymptoms: 'Step2_TopSymptoms',
+    topconcerns: 'Step2_TopSymptoms',
+    priordx: 'Step3_PriorDiagnosis',
+    priordiagnosis: 'Step3_PriorDiagnosis',
+    psychosismania: 'Step6_PsychosisMania',
+    medicalredflags: 'Step6_MedicalRedFlags',
+    familyhistory: 'Step7_FamilyHistory',
+    psychologicalstressors: 'Step8_PsychologicalStressors',
+    stressors: 'Step8_PsychologicalStressors'
+};
 
 const MED_CATALOG = [
     { id: '1', title: 'Buprenorphine/Naloxone', brand: 'Suboxone, Zubsolv', category: 'Medication-Assisted Treatment (MAT)' },
@@ -127,6 +148,20 @@ function buildIndex(list) {
     }, {});
 }
 
+function normalizeSourceKey(value) {
+    const raw = (value || '').toString().trim();
+    if (!raw) return '';
+    if (raw.toLowerCase() === 'manual') return 'Manual';
+    if (SOURCE_LABELS[raw]) return raw;
+    const compact = raw.toLowerCase().replace(/[^a-z0-9]/g, '');
+    return SOURCE_ALIASES[compact] || raw;
+}
+
+function formatSourceLabel(value) {
+    const normalized = normalizeSourceKey(value);
+    return SOURCE_LABELS[normalized] || normalized || SOURCE_LABELS.Manual;
+}
+
 export default class GpCaseStepReviewSave extends LightningElement {
     @api caseId;
     @api form = {};
@@ -170,7 +205,10 @@ export default class GpCaseStepReviewSave extends LightningElement {
     }
 
     get concerns() {
-        return Array.isArray(this.form.concerns) ? this.form.concerns : [];
+        return (Array.isArray(this.form.concerns) ? this.form.concerns : []).map(item => ({
+            ...item,
+            sourceLabel: formatSourceLabel(item.source || item.Seed_Source__c)
+        }));
     }
 
     get medications() {
@@ -248,7 +286,8 @@ export default class GpCaseStepReviewSave extends LightningElement {
                 || '';
             return {
                 ...item,
-                meta: { ...catalog, name: displayName, category }
+                meta: { ...catalog, name: displayName, category },
+                sourceLabel: formatSourceLabel(item.source || item.Seed_Source__c)
             };
         });
     }

@@ -208,6 +208,16 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
             }));
     }
 
+    mergeSelectionsIntoOptions(options, selections) {
+        const values = Array.isArray(options) ? options : [];
+        const selected = Array.isArray(selections) ? selections : [];
+        const existing = new Set(values.map(opt => opt.value));
+        const extras = selected
+            .filter(value => value && !existing.has(value))
+            .map(value => ({ label: value, value }));
+        return extras.length ? [...values, ...extras] : values;
+    }
+
     loadCatalogs() {
         const normalized = (this.caseType || CASE_LINES.GENERAL).toLowerCase();
         const useAddiction = normalized.includes('addiction');
@@ -236,6 +246,7 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
         this.psychosisOptions = filterByLine(psychosisBase);
         this.maniaOptions = filterByLine(maniaBase);
         this.redFlagOptions = filterByLine(redFlagBase);
+        this.redFlagOptions = this.mergeSelectionsIntoOptions(this.redFlagOptions, this.redFlagSelections);
 
         this.syncSelections();
     }
@@ -273,6 +284,9 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
                 ?? (hasMedicalNoteProp ? value.Medical_Notes__c : null)
                 ?? '';
             this.redFlagNotes = redFlagValue === 'See medical red flag selections.' ? '' : redFlagValue;
+        }
+        if (this.redFlagOptions.length) {
+            this.redFlagOptions = this.mergeSelectionsIntoOptions(this.redFlagOptions, this.redFlagSelections);
         }
         if (this.psychosisOptions.length || this.maniaOptions.length || this.redFlagOptions.length) {
             this.syncSelections(false);

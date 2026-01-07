@@ -51,6 +51,7 @@ export default class GpCaseStepPriorDx extends LightningElement {
                 label: item.label,
                 value: item.value
             }));
+            this.mergeSelectedDiagnosesIntoOptions();
         }
         if (error) {
             // eslint-disable-next-line no-console
@@ -96,6 +97,17 @@ export default class GpCaseStepPriorDx extends LightningElement {
                 label: item.label || item.value,
                 note: item.note || ''
             }));
+            const parsed = normalizeMultiValue(value.Prior_Diagnoses__c);
+            const existing = new Set(this.selectedDiagnoses.map(item => item.value));
+            parsed.forEach(label => {
+                if (!existing.has(label)) {
+                    this.selectedDiagnoses = [
+                        ...this.selectedDiagnoses,
+                        { value: label, label, note: '' }
+                    ];
+                    existing.add(label);
+                }
+            });
         } else {
             const parsed = normalizeMultiValue(value.Prior_Diagnoses__c);
             this.selectedDiagnoses = parsed.map(label => ({
@@ -104,6 +116,7 @@ export default class GpCaseStepPriorDx extends LightningElement {
                 note: ''
             }));
         }
+        this.mergeSelectedDiagnosesIntoOptions();
     }
 
     get data() {
@@ -113,6 +126,24 @@ export default class GpCaseStepPriorDx extends LightningElement {
     normalizeNumber(value) {
         if (value === null || typeof value === 'undefined') return '';
         return value;
+    }
+
+    mergeSelectedDiagnosesIntoOptions() {
+        if (!Array.isArray(this.selectedDiagnoses) || this.selectedDiagnoses.length === 0) {
+            return;
+        }
+        const existingValues = new Set(
+            (this.priorDiagnosisOptions || [])
+                .map((option) => (option?.value || '').toString().trim())
+                .filter(Boolean)
+        );
+        const extras = this.selectedDiagnoses
+            .map((item) => (item?.value || item?.label || '').toString().trim())
+            .filter((value) => value && !existingValues.has(value))
+            .map((value) => ({ label: value, value }));
+        if (extras.length) {
+            this.priorDiagnosisOptions = [...(this.priorDiagnosisOptions || []), ...extras];
+        }
     }
 
     handleInputChange(event) {
