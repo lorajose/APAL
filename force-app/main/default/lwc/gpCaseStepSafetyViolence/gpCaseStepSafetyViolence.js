@@ -78,7 +78,7 @@ export default class GpCaseStepSafetyViolence extends LightningElement {
     handleIdeationChange(event) {
         this.ideation = event.target.value;
         if (!this.showDetail) {
-            this.weaponsAccess = '';
+            this.weaponsAccess = false;
             this.violenceDetails = '';
         }
         this.emitDraftChange();

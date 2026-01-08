@@ -72,7 +72,7 @@ export default class GpCaseStepFamilyTrauma extends LightningElement {
         return this.familyHistory.map(item => ({
             value: item.value,
             label: item.label || item.value,
-            note: item.note || ''
+            note: item.note ?? item.notes ?? item.Notes_new__c ?? item.Notes__c ?? ''
         }));
     }
 
@@ -92,7 +92,7 @@ export default class GpCaseStepFamilyTrauma extends LightningElement {
             this.familyHistory = value.familyHistoryDraft.map(item => ({
                 value: item.value,
                 label: item.label || item.value,
-                note: item.note || ''
+                note: item.note ?? item.notes ?? item.Notes_new__c ?? item.Notes__c ?? ''
             }));
             const parsed = normalizeMultiValue(value.Family_History__c);
             const existing = new Set(this.familyHistory.map(item => item.value));
@@ -183,10 +183,13 @@ export default class GpCaseStepFamilyTrauma extends LightningElement {
 
     handleFamilyNoteChange(event) {
         const value = event.target.dataset.value;
+        const note = event.target.value;
         if (!value) return;
-        const note = event.target.value || '';
+
         this.familyHistory = this.familyHistory.map(item =>
-            item.value === value ? { ...item, note } : item
+            item.value === value
+                ? { ...item, note }
+                : item
         );
         this.emitDraftChange();
     }
