@@ -1328,6 +1328,7 @@ async handleDataUpdated(event) {
         this.isSaving = true;
         try {
             const caseId = this.caseId;
+            this.form.violence = this.normalizeViolenceForSave(this.form.violence || {});
 
             // Persist core steps (1-9) in update mode to capture edits before final save
             const coreSteps = [
@@ -1527,7 +1528,7 @@ async handleDataUpdated(event) {
         normalized.presenting = { ...(serverData.presenting || {}) };
         normalized.priorDx = { ...(serverData.priorDx || {}) };
         normalized.suicide = { ...(serverData.suicide || {}) };
-        normalized.violence = { ...(serverData.violence || {}) };
+        normalized.violence = this.normalizeViolenceForSave({ ...(serverData.violence || {}) });
         normalized.psychosisMania = { ...(serverData.psychosisMania || {}) };
         normalized.familyTrauma = { ...(serverData.familyTrauma || {}) };
         normalized.medicalFlags = { ...(serverData.medicalFlags || {}) };
@@ -1587,8 +1588,23 @@ async handleDataUpdated(event) {
                     next[field] = value;
                 }
             });
-            this.form[key] = next;
+            this.form[key] = key === 'violence'
+                ? this.normalizeViolenceForSave(next)
+                : next;
         }
+    }
+
+    normalizeViolenceForSave(value = {}) {
+        const normalized = { ...(value || {}) };
+        const draftAccess = (normalized.weaponsAccessDraft || '').trim();
+        const draftDetails = (normalized.violenceDetailsDraft || '').trim();
+        if (!normalized.Weapons_Access__c && draftAccess) {
+            normalized.Weapons_Access__c = draftAccess;
+        }
+        if (!normalized.Violence_Details__c && draftDetails) {
+            normalized.Violence_Details__c = draftDetails;
+        }
+        return normalized;
     }
 
     parseMultiValue(value) {
@@ -1889,18 +1905,28 @@ async handleDataUpdated(event) {
         });
 
         const mapped = (concerns || [])
-            .filter(item => (item.category || '').toLowerCase() === 'family history')
+            .filter(item => {
+                const category = (item.category || '').toString().toLowerCase();
+                const source = (item.source || '').toString().toLowerCase();
+                return category.includes('family history') || source === 'step7_familyhistory';
+            })
             .map(item => {
-                const label = (item.label || item.name || item.catalogName || '').toString();
+                const label = (item.label || item.name || item.catalogName || '').toString().trim();
                 const key = label.toLowerCase();
-                if (!FAMILY_HISTORY_ITEMS.has(key)) {
+                if (!key) {
                     return null;
                 }
                 const existingItem = existingByLabel.get(key);
+                const notesValue = item.notes
+                    ?? item.Notes_new__c
+                    ?? item.Notes__c
+                    ?? item.notes_new__c
+                    ?? item.notes__c
+                    ?? '';
                 return {
                     value: label || existingItem?.value,
                     label: label || existingItem?.label,
-                    note: item.notes ?? existingItem?.note ?? ''
+                    note: notesValue ?? existingItem?.note ?? ''
                 };
             })
             .filter(Boolean);
@@ -2612,12 +2638,18 @@ async handleDataUpdated(event) {
     hydrateConcern(entry = {}) {
         const label = entry.label || entry.name || '';
         const derivedId = entry.id || this.slugify(label);
+        const notesValue = entry.notes
+            ?? entry.Notes_new__c
+            ?? entry.Notes__c
+            ?? entry.notes_new__c
+            ?? entry.notes__c
+            ?? '';
         return {
             ...entry,
             id: derivedId || entry.id || label || null,
             label,
             category: entry.category || '',
-            notes: entry.notes || '',
+            notes: notesValue || '',
             source: entry.source || entry.Seed_Source__c || 'Manual'
         };
     }

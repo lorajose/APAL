@@ -1,6 +1,7 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import MEDICAL_NOTES_FIELD from '@salesforce/schema/Case.Medical_Notes__c';
+import PSYCHOSIS_NOTES_FIELD from '@salesforce/schema/Case.Psychosis_Notes__c';
 import CASE_RECORDTYPE_FIELD from '@salesforce/schema/Case.RecordTypeId';
 import { getObjectInfo, getPicklistValues } from 'lightning/uiObjectInfoApi';
 import CASE_OBJECT from '@salesforce/schema/Case';
@@ -101,6 +102,7 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
     redFlagNotes = '';
     dataInitialized = false;
     redFlagNotesDirty = false;
+    psychosisNotesDirty = false;
     recordTypeId;
 
     connectedCallback() {
@@ -112,12 +114,18 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
 
     @api caseId;
 
-    @wire(getRecord, { recordId: '$caseId', fields: [MEDICAL_NOTES_FIELD, CASE_RECORDTYPE_FIELD] })
+    @wire(getRecord, { recordId: '$caseId', fields: [MEDICAL_NOTES_FIELD, PSYCHOSIS_NOTES_FIELD, CASE_RECORDTYPE_FIELD] })
     wiredCaseNotes({ data }) {
         const medicalNotes = getFieldValue(data, MEDICAL_NOTES_FIELD);
+        const psychosisNotes = getFieldValue(data, PSYCHOSIS_NOTES_FIELD);
         const recordTypeId = getFieldValue(data, CASE_RECORDTYPE_FIELD);
         if (recordTypeId) {
             this.recordTypeId = recordTypeId;
+        }
+        if (psychosisNotes && !this.psychosisNotesDirty && !this.psychosisNotes) {
+            this.psychosisNotes = psychosisNotes;
+            this.dataInitialized = true;
+            this.emitDraftChange();
         }
         if (medicalNotes && !this.redFlagNotesDirty && !this.redFlagNotes) {
             this.redFlagNotes = medicalNotes;
@@ -358,6 +366,7 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
 
     handlePsychosisNotesChange(event) {
         this.psychosisNotes = event.target.value;
+        this.psychosisNotesDirty = true;
         this.emitDraftChange();
     }
 
