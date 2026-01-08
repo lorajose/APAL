@@ -83,8 +83,11 @@ export default class GpCaseStepPatientSupport extends LightningElement {
                 return true;
             }
         }
-        // Fallback for Care Navigation subcase pages where record type isn't loaded yet.
-        return this.effectiveLayoutContext === 'relatedcase';
+        return false;
+    }
+
+    get canEditSupports() {
+        return this.isCareNavigation;
     }
 
     get isParentCaseWithControls() {
@@ -142,7 +145,7 @@ export default class GpCaseStepPatientSupport extends LightningElement {
     }
 
     get showAddButton() {
-        return this.isCareNavigation && this.isGridView;
+        return this.canEditSupports && this.isGridView;
     }
 
     get hasSupports() {
