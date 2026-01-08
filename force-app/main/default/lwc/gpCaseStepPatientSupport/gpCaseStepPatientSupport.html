@@ -168,20 +168,22 @@
                                             <span>Care Not Applicable</span>
                                         </label>
                                     </div>
-                                    <div class="card-actions">
-                                        <template if:true={showNavigation}>
-                                          <!--  <button class="pill-button" data-id={sup.id} onclick={handleEditSupport}>Edit</button> -->
-                                        </template>
-                                        <button class="pill-button danger" data-id={sup.id} onclick={handleRemoveSupport}>Remove</button>
-                                    </div>
-                                    <template if:true={sup.showConfirm}>
-                                        <div class="remove-confirm">
-                                            <p>Remove this support?</p>
-                                            <div class="remove-actions">
-                                                <button class="pill-button danger" data-id={sup.id} onclick={confirmRemove}>Confirm Remove</button>
-                                                <button class="pill-button secondary" onclick={cancelRemove}>Cancel</button>
-                                            </div>
+                                    <template if:true={canEditSupports}>
+                                        <div class="card-actions">
+                                            <template if:true={showNavigation}>
+                                              <!--  <button class="pill-button" data-id={sup.id} onclick={handleEditSupport}>Edit</button> -->
+                                            </template>
+                                            <button class="pill-button danger" data-id={sup.id} onclick={handleRemoveSupport}>Remove</button>
                                         </div>
+                                        <template if:true={sup.showConfirm}>
+                                            <div class="remove-confirm">
+                                                <p>Remove this support?</p>
+                                                <div class="remove-actions">
+                                                    <button class="pill-button danger" data-id={sup.id} onclick={confirmRemove}>Confirm Remove</button>
+                                                    <button class="pill-button secondary" onclick={cancelRemove}>Cancel</button>
+                                                </div>
+                                            </div>
+                                        </template>
                                     </template>
                                 </article>
                             </template>

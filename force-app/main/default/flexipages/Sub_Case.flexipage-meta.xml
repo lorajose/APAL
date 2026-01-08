@@ -1864,13 +1864,6 @@
                 </componentInstanceProperties>
                 <componentName>gpCaseStepPatientSupport</componentName>
                 <identifier>c_gpCaseStepPatientSupport</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.RecordType.DeveloperName}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>Care_Navigation</rightValue>
-                    </criteria>
-                </visibilityRule>
             </componentInstance>
         </itemInstances>
         <name>main</name>
