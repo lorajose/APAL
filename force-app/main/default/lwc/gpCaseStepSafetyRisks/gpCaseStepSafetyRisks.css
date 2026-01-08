@@ -652,6 +652,22 @@
 		grid-template-columns: 1fr;
 	}
 
+	.grid-actions {
+		width: 100%;
+		flex-direction: column;
+		flex-wrap: wrap;
+		justify-content: stretch;
+		align-items: stretch;
+	}
+
+	.grid-actions .ghost-button,
+	.grid-actions .primary-button {
+		width: 100%;
+		min-width: 0;
+		max-width: 100%;
+		flex: 1 1 100%;
+	}
+
 	.risk-grid {
 		grid-template-columns: 1fr;
 	}

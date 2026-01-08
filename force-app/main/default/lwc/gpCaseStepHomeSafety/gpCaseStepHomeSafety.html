@@ -105,7 +105,12 @@
                                 </header>
                                 <div class="field field-full">
                                     <label class="input-label stressor-note-label">Notes</label>
-                                    <textarea class="textarea" data-value={item.value} oninput={handleStressorNoteChange}>{item.note}</textarea>
+                                    <textarea
+                                        class="textarea"
+                                        data-value={item.value}
+                                        value={item.note}
+                                        oninput={handleStressorNoteChange}
+                                    ></textarea>
                                 </div>
                                 <div class="flag-row">
                                     <label class="checkbox-field">

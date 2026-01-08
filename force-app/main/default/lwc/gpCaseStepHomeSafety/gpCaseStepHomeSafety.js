@@ -165,14 +165,30 @@ export default class GpCaseStepHomeSafety extends LightningElement {
         this.meansSafetyPlan = Boolean(value.Means_Safety_Plan__c);
         this.safetyNotes = value.Safety_Notes__c || '';
 
-        if (Array.isArray(value.psychosocialStressorsDraft)) {
-            this.stressors = value.psychosocialStressorsDraft.map(item => ({
+        const draftStressors = Array.isArray(value.psychosocialStressorsDraft)
+            ? value.psychosocialStressorsDraft
+            : null;
+        const caseStressors = normalizeMultiValue(value.Psychosocial_Stressors__c);
+
+        if (draftStressors) {
+            this.stressors = draftStressors.map(item => ({
                 value: item.value,
                 label: item.label || item.value,
                 note: item.note || '',
                 recent: !!item.recent,
                 historical: !!item.historical
             }));
+        } else if (caseStressors.length) {
+            this.stressors = caseStressors.map((entry) => {
+                const match = this.stressorOptionsCatalog.find(option => option.value === entry);
+                return {
+                    value: entry,
+                    label: match ? match.label : entry,
+                    note: '',
+                    recent: false,
+                    historical: false
+                };
+            });
         } else {
             this.stressors = [];
         }
@@ -239,7 +255,7 @@ export default class GpCaseStepHomeSafety extends LightningElement {
     }
 
     handleStressorToggle(event) {
-        const value = event.target.dataset.value;
+        const value = event.currentTarget.dataset.value;
         if (!value) return;
         const existing = this.stressors.find(item => item.value === value);
         if (existing) {
@@ -270,9 +286,9 @@ export default class GpCaseStepHomeSafety extends LightningElement {
     }
 
     handleStressorNoteChange(event) {
-        const value = event.target.dataset.value;
+        const value = event.currentTarget.dataset.value;
         if (!value) return;
-        const note = event.target.value || '';
+        const note = event.currentTarget.value || '';
         this.stressors = this.stressors.map(item =>
             item.value === value ? { ...item, note } : item
         );
@@ -280,10 +296,10 @@ export default class GpCaseStepHomeSafety extends LightningElement {
     }
 
     handleStressorFlagChange(event) {
-        const value = event.target.dataset.value;
-        const flag = event.target.dataset.flag;
+        const value = event.currentTarget.dataset.value;
+        const flag = event.currentTarget.dataset.flag;
         if (!value || !flag) return;
-        const checked = event.target.checked;
+        const checked = event.currentTarget.checked;
         this.stressors = this.stressors.map(item =>
             item.value === value ? { ...item, [flag]: checked } : item
         );
@@ -330,6 +346,9 @@ export default class GpCaseStepHomeSafety extends LightningElement {
             recent: !!item.recent,
             historical: !!item.historical
         }));
+        const stressorValues = stressorDraft
+            .map(item => item.value)
+            .filter(Boolean);
 
         return {
             Home_Safety__c: this.homeSafetyStatus || null,
@@ -340,7 +359,8 @@ export default class GpCaseStepHomeSafety extends LightningElement {
             Cost_Coverage_Issues__c: this.costCoverageIssues,
             Supports_Notes__c: this.supportsNotes || null,
             lethalMeansDraft: this.showLethalMeans ? lethalDraft : [],
-            psychosocialStressorsDraft: stressorDraft
+            psychosocialStressorsDraft: stressorDraft,
+            Psychosocial_Stressors__c: stressorValues.length ? stressorValues.join(';') : null
         };
     }
 }
