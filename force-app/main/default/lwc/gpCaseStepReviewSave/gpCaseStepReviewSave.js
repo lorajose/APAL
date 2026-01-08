@@ -334,6 +334,7 @@ export default class GpCaseStepReviewSave extends LightningElement {
     get homicideSummary() {
         return [
             { label: 'Homicidal Ideation', value: this.formatValue(this.homicide.Homicidal_Ideation__c) },
+            { label: 'Weapons Access', value: this.formatValue(this.homicide.Weapons_Access__c) },
             { label: 'Violence Details', value: this.formatValue(this.homicide.Violence_Details__c) },
             { label: 'Recent Violence?', value: this.homicide.Violence_Recent__c ? 'Yes' : 'No' }
         ];
@@ -366,7 +367,7 @@ export default class GpCaseStepReviewSave extends LightningElement {
             { label: 'Psychosocial Stressors', value: this.formatStressorDraft(this.homeSafety.psychosocialStressorsDraft, this.homeSafety.Psychosocial_Stressors__c) },
             { label: 'Reliable Supports', value: this.formatValue(this.homeSafety.Reliable_Supports__c) },
             { label: 'Cost/Coverage Issues', value: this.homeSafety.Cost_Coverage_Issues__c ? 'Yes' : 'No' },
-            { label: 'Safety Notes', value: this.formatValue(this.homeSafety.Safety_Notes__c) }
+            { label: 'Supports Notes', value: this.formatValue(this.homeSafety.Supports_Notes__c) }
         ];
     }
 

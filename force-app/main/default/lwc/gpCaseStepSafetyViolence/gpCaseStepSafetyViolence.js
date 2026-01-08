@@ -17,7 +17,7 @@ export default class GpCaseStepSafetyViolence extends LightningElement {
 
     ideation = '';
     recentViolence = false;
-    weaponsAccess = '';
+    weaponsAccess = false;
     violenceDetails = '';
 
     get ideationOptions() {
@@ -64,7 +64,10 @@ export default class GpCaseStepSafetyViolence extends LightningElement {
             source.Violence_Recent__c,
             source.violenceRecentDraft
         );
-        this.weaponsAccess = source.Weapons_Access__c || source.weaponsAccessDraft || '';
+        this.weaponsAccess = this.normalizeBoolean(
+            source.Weapons_Access__c,
+            source.weaponsAccessDraft
+        );
         this.violenceDetails = source.Violence_Details__c || source.violenceDetailsDraft || '';
     }
 
@@ -88,7 +91,9 @@ export default class GpCaseStepSafetyViolence extends LightningElement {
 
     handleInputChange(event) {
         const field = event.target.dataset.field;
-        const value = event.target.value;
+        const value = event.target.type === 'checkbox'
+            ? event.target.checked
+            : event.target.value;
         if (!field) return;
 
         if (field === 'Weapons_Access__c') {
@@ -118,12 +123,12 @@ export default class GpCaseStepSafetyViolence extends LightningElement {
     }
 
     buildPayload() {
-        const access = (this.weaponsAccess || '').trim();
+        const access = this.normalizeBoolean(this.weaponsAccess);
         const details = (this.violenceDetails || '').trim();
         return {
             Homicidal_Ideation__c: this.ideation || null,
             Violence_Recent__c: this.normalizeBoolean(this.recentViolence),
-            Weapons_Access__c: this.showDetail ? (access || null) : null,
+            Weapons_Access__c: this.showDetail ? access : null,
             Violence_Details__c: this.showDetail ? (details || null) : null,
             homicidalIdeationDraft: this.ideation,
             violenceRecentDraft: this.recentViolence,

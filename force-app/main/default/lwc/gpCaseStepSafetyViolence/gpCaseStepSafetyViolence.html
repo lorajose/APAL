@@ -35,16 +35,16 @@
 
         <template if:true={showDetail}>
             <section class="card">
-                <label class="input-label" for="weapons-access">Weapons Access</label>
-                <input
-                    id="weapons-access"
-                    type="text"
-                    class="text-input"
-                    value={weaponsAccess}
-                    data-field="Weapons_Access__c"
-                    oninput={handleInputChange}
-                    placeholder="Describe any known access to weapons."
-                />
+                <label class="checkbox-field">
+                    <input
+                        id="weapons-access"
+                        type="checkbox"
+                        checked={weaponsAccess}
+                        data-field="Weapons_Access__c"
+                        onchange={handleInputChange}
+                    />
+                    <span class="input-label">Weapons Access</span>
+                </label>
             </section>
 
             <section class="card">

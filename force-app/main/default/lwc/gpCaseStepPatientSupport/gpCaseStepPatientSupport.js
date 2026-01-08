@@ -154,7 +154,7 @@ export default class GpCaseStepPatientSupport extends LightningElement {
     }
 
     get showGridControls() {
-        return this.isGridView && (this.hasSupports || this.isParentCaseWithControls);
+        return this.isGridView && this.hasSupports;
     }
 
     get visibleSupports() {

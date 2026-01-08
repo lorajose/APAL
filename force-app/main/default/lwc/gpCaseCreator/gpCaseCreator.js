@@ -772,6 +772,7 @@ get stepsFormatted() {
                     this.syncConcernsToTopSymptoms(this.form.concerns);
                     this.syncConcernsToPriorDx(this.form.concerns, true);
                     this.syncConcernsToPsychosisMania(this.form.concerns);
+                    this.syncConcernsToFamilyHistory(this.form.concerns);
                 }
                 // Seed Top Symptoms into concerns on initial load if present
                 if (Array.isArray(this.form?.presenting?.topSymptomsDraft)) {
@@ -1073,6 +1074,9 @@ async handleDataUpdated(event) {
         // 2. Saltar al nuevo paso y marcarlo como 'active'
         this.currentStep = step;
         this.stepStatus[step] = 'active';
+        if (step === 8 && Array.isArray(this.form?.safetyRisks)) {
+            this.syncSafetyRisksToStressors(this.form.safetyRisks);
+        }
         if (step === 3 && Array.isArray(this.form?.concerns) && this.form.concerns.length) {
             this.syncConcernsToPriorDx(this.form.concerns, true);
         }
@@ -1102,6 +1106,9 @@ async handleDataUpdated(event) {
         this.currentStep = targetStep;
         this.stepStatus[targetStep] = 'active';
         this.inlineMessage = null;
+        if (targetStep === 8 && Array.isArray(this.form?.safetyRisks)) {
+            this.syncSafetyRisksToStressors(this.form.safetyRisks);
+        }
         if (targetStep === 3 && Array.isArray(this.form?.concerns) && this.form.concerns.length) {
             this.syncConcernsToPriorDx(this.form.concerns, true);
         }
@@ -1236,6 +1243,10 @@ async handleDataUpdated(event) {
             this.evaluateReviewReady();
         } else if (advancedToStep !== null) {
             this.reviewSummaryReady = false;
+        }
+
+        if (advancedToStep === 8 && Array.isArray(this.form?.safetyRisks)) {
+            this.syncSafetyRisksToStressors(this.form.safetyRisks);
         }
 
         if (advancedToStep !== null) {
@@ -1649,7 +1660,10 @@ async handleDataUpdated(event) {
     // Sync Psychological Stressors (Step 8) into Safety Risks (category: Psychological stressors)
     syncStressorsToSafetyRisks(stressorsDraft = []) {
         const existing = Array.isArray(this.form.safetyRisks) ? this.form.safetyRisks : [];
-        const nonSeeded = existing.filter(item => item.catalogCategory !== 'Psychological stressors' || item.source !== 'stressors');
+        const nonSeeded = existing.filter(item => {
+            const category = (item.catalogCategory || item.category || item.meta?.category || '').toLowerCase();
+            return category !== 'psychological stressors';
+        });
 
         const mapped = (stressorsDraft || [])
             .filter(item => item && item.value)
@@ -1776,18 +1790,36 @@ async handleDataUpdated(event) {
                     || '';
                 const key = label.toLowerCase();
                 const existingItem = key ? existingByLabel.get(key) : null;
+                const notesFromRisk = item.notes
+                    ?? item.Notes_new__c
+                    ?? item.Notes__c
+                    ?? item.notes_new__c
+                    ?? item.notes__c;
+                const notesFallback = existingItem?.note ?? '';
+                const notes = (notesFromRisk === undefined || notesFromRisk === null || notesFromRisk === '')
+                    ? notesFallback
+                    : notesFromRisk;
+                const recentFromRisk = item.recent ?? item.Recent__c ?? item.recent__c;
+                const historicalFromRisk = item.historical ?? item.Historical__c ?? item.historical__c;
+                const recent = (recentFromRisk === undefined || recentFromRisk === null)
+                    ? (existingItem?.recent ?? false)
+                    : !!recentFromRisk;
+                const historical = (historicalFromRisk === undefined || historicalFromRisk === null)
+                    ? (existingItem?.historical ?? false)
+                    : !!historicalFromRisk;
                 return {
                     value: label || existingItem?.value,
                     label: label || existingItem?.label,
-                    note: item.notes ?? existingItem?.note ?? '',
-                    recent: item.recent === undefined ? (existingItem?.recent ?? false) : !!item.recent,
-                    historical: item.historical === undefined ? (existingItem?.historical ?? false) : !!item.historical
+                    note: notes,
+                    recent,
+                    historical
                 };
             })
             .filter(item => !!item.value);
 
         const changed = JSON.stringify(mapped) !== JSON.stringify(existing);
-        if (changed) {
+        const hasDraft = Array.isArray(this.form?.homeSafety?.psychosocialStressorsDraft);
+        if (changed || !hasDraft) {
             this.form.homeSafety = {
                 ...(this.form.homeSafety || {}),
                 psychosocialStressorsDraft: mapped
@@ -2593,14 +2625,22 @@ async handleDataUpdated(event) {
     hydrateSafetyRisk(entry = {}) {
         const derivedId = entry.id || this.lookupSafetyRiskId(entry.catalogName);
         const meta = SAFETY_RISK_INDEX[derivedId] || {};
+        const notesValue = entry.notes
+            ?? entry.Notes_new__c
+            ?? entry.Notes__c
+            ?? entry.notes_new__c
+            ?? entry.notes__c
+            ?? '';
+        const recentValue = entry.recent ?? entry.Recent__c ?? entry.recent__c;
+        const historicalValue = entry.historical ?? entry.Historical__c ?? entry.historical__c;
         return {
             ...entry,
             id: derivedId || entry.id || null,
             catalogName: entry.catalogName || meta.name || '',
             catalogCategory: entry.catalogCategory || meta.category || '',
-            recent: this.normalizeBoolean(entry.recent),
-            historical: this.normalizeBoolean(entry.historical),
-            notes: entry.notes || '',
+            recent: this.normalizeBoolean(recentValue),
+            historical: this.normalizeBoolean(historicalValue),
+            notes: notesValue || '',
             source: entry.source || entry.Seed_Source__c || 'Manual'
         };
     }
