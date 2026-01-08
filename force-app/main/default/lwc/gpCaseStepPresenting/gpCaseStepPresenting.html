@@ -1,0 +1,175 @@
+<template>
+    <div class="step-section">
+       <!-- <div class="section-header">
+            <h2>Step 2 — Presenting &amp; Availability</h2>
+            <p>Capture primary questions, domains, and presenting context together.</p>
+        </div> -->
+
+       <!-- <section class="card">
+            <header class="card-header">
+                <div>
+                    <p class="card-title"><span class="required">*</span>Primary Clinical Questions</p>
+                    <p class="card-subtitle">
+                        Select every reason this case is landing on your desk.
+                    </p>
+                </div>
+                <span class="selected-counter">{chipCountLabel}</span>
+            </header>
+            <div class="input-row">
+                <label class="input-label" for="pcqt-search">Search</label>
+                <input id="pcqt-search" type="search" class="pill-search" placeholder="Filter options..."
+                    value={pcqtSearch} oninput={handlePcqtSearch}>
+            </div>
+            <div class="chip-grid">
+                <template for:each={pcqtFilteredOptions} for:item="option">
+                    <button key={option.value} type="button" class={option.chipClass} data-id={option.value}
+                        onclick={handlePcqtToggle}>
+                        {option.label}
+                    </button>
+                </template>
+            </div>
+            <template if:true={errors.Primary_Clinical_Question_Types__c}>
+                <p class="error-text">{errors.Primary_Clinical_Question_Types__c}</p>
+            </template>
+        </section> -->
+
+        <!-- PCQT Selector (wizard-controlled) en card independiente -->
+        <section class="card">
+            <c-pcqt-selector
+                case-type={caseType}
+                value={pcqtSelectorValue}
+                required={pcqtRequired}
+                errors={errors}
+                record-id={caseId}
+                wizard-mode={pcqtWizardMode}
+                show-save-buttons="false"
+                onchange={handlePcqtChange}>
+            </c-pcqt-selector>
+        </section>
+
+        <section class="card">
+            <header class="card-header">
+                <div>
+                    <p class="card-title">Impaired Domains</p>
+                    <p class="card-subtitle">Highlight where functioning is taking the biggest hit.</p>
+                </div>
+                <span class="selected-counter">{impairedCountLabel}</span>
+            </header>
+            <div class="input-row">
+                <label class="input-label" for="domains-search">Search</label>
+                <input id="domains-search" type="search" class="pill-search" placeholder="Filter options..."
+                    value={domainsSearch} oninput={handleDomainSearch}>
+            </div>
+            <div class="chip-grid">
+                <template for:each={impairedFilteredOptions} for:item="option">
+                    <button key={option.value} type="button" class={option.chipClass} data-value={option.value}
+                        onclick={handleDomainToggle}>
+                        {option.label}
+                    </button>
+                </template>
+            </div>
+        </section>
+
+        <section class="card form-grid">
+            <div class="field">
+                <label class="input-label" for="onset-date">Symptom Onset Date</label>
+                <input id="onset-date" type="date" class="text-input" value={symptomOnsetDate}
+                    data-field="Symptom_Onset_Date__c" oninput={handleInputChange}>
+            </div>
+            <div class="field">
+                <label class="input-label" for="impairment-level">Impairment Level</label>
+                <select id="impairment-level" class="text-input"
+                    data-field="Impairment_Level__c" onchange={handleInputChange}>
+                    <template for:each={impairmentLevelOptions} for:item="option">
+                        <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
+                    </template>
+                </select>
+            </div>
+            <div class="field">
+                <label class="input-label" for="course">Course</label>
+                <select id="course" class="text-input" data-field="Course__c"
+                    onchange={handleInputChange}>
+                    <template for:each={courseOptions} for:item="option">
+                        <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
+                    </template>
+                </select>
+            </div>
+            <div class="field checkbox-field">
+                <label class="input-label">Abrupt change since onset?</label>
+                <input type="checkbox" class="checkbox" checked={abruptChange} onchange={handleCheckboxChange}>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="field field-full">
+                <label class="input-label" for="other-symptoms">Other Symptoms</label>
+                <textarea
+                    id="other-symptoms"
+                    class="textarea"
+                    placeholder="Only fill this out if a symptom is missing."
+                    data-field="Other_Symptoms__c"
+                    oninput={handleInputChange}
+                >{otherSymptoms}</textarea>
+                <p class="helper-text">Only fill this out if a symptom is missing.</p>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="top-symptoms-header">
+                <div>
+                    <p class="card-title">Top Symptoms / Concerns</p>
+                    <p class="card-subtitle">Select concerns; add notes for the ones you choose.</p>
+                </div>
+                <div class="input-row condensed">
+                    <label class="input-label" for="symptom-search">Search</label>
+                    <input id="symptom-search" type="search" class="pill-search" placeholder="Filter concerns..."
+                        value={symptomSearch} oninput={handleSymptomSearch}>
+                </div>
+            </div>
+                <div class="top-symptoms-grid">
+                <div class="available-column">
+                    <p class="column-title">Available</p>
+                    <div class="checkbox-list">
+                        <template for:each={filteredTopSymptoms} for:item="option">
+                            <label key={option.value} class="checkbox-row">
+                                <input type="checkbox" data-value={option.value} checked={option.checked}
+                                    onchange={handleSymptomToggle}>
+                                <span>{option.label}</span>
+                            </label>
+                        </template>
+                    </div>
+                </div>
+                <div class="selected-column">
+                    <p class="column-title">Selected</p>
+                    <template if:true={hasSelectedTopSymptoms}>
+                        <template for:each={selectedTopSymptoms} for:item="item">
+                            <div key={item.value} class="selected-card">
+                                <header>
+                                    <span>{item.label}</span>
+                                    <button class="link-button" type="button" data-value={item.value}
+                                        onclick={handleSymptomRemove}>Remove</button>
+                                </header>
+                                <div class="field field-full">
+                                    <label class="input-label">Notes</label>
+                                    <textarea
+                                        class="textarea"
+                                        data-value={item.value}
+                                        oninput={handleSymptomNoteChange}
+                                    >{item.note}</textarea>
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+                    <template if:false={hasSelectedTopSymptoms}>
+                        <p class="empty-state">Select symptoms to capture notes.</p>
+                    </template>
+                </div>
+            </div>
+        </section>
+
+        <div class="slds-grid slds-grid_align-spread slds-var-m-top_large">
+            <button class="slds-button btn-back" type="button" onclick={handleBack}>Back</button>
+            <button class="slds-button btn-next" type="button" onclick={handleNext}>Next</button>
+        </div>
+    </div>
+</template>

@@ -38,7 +38,7 @@
         <name>Create_APAL_Account_Psychiatry</name>
         <label>Create APAL Account - Psychiatry</label>
         <locationX>930</locationX>
-        <locationY>1766</locationY>
+        <locationY>566</locationY>
         <actionName>ExternalAccountCreatorApal</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -70,7 +70,7 @@
         <description>Creates an Account record that was retrieved from VMAP organization.</description>
         <name>Create_APAL_Account_Unrelated</name>
         <label>Create APAL Account - Unrelated</label>
-        <locationX>1854</locationX>
+        <locationX>1546</locationX>
         <locationY>566</locationY>
         <actionName>ExternalAccountCreatorApal</actionName>
         <actionType>apex</actionType>
@@ -114,22 +114,9 @@
         </assignmentItems>
     </assignments>
     <assignments>
-        <name>assignNewPatientCase_Psychiatry</name>
-        <label>assignNewPatientCase - Psychiatry</label>
-        <locationX>1106</locationX>
-        <locationY>2324</locationY>
-        <assignmentItems>
-            <assignToReference>patientCase</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Create_Patient_Case_Psychiatry</elementReference>
-            </value>
-        </assignmentItems>
-    </assignments>
-    <assignments>
         <name>AssignNewPatientCase_Unrelated</name>
         <label>AssignNewPatientCase - Unrelated</label>
-        <locationX>2030</locationX>
+        <locationX>1722</locationX>
         <locationY>1124</locationY>
         <assignmentItems>
             <assignToReference>patientCase</assignToReference>
@@ -139,138 +126,10 @@
             </value>
         </assignmentItems>
     </assignments>
-    <assignments>
-        <name>Set_IPVConcern</name>
-        <label>Set_IPVConcern</label>
-        <locationX>1238</locationX>
-        <locationY>566</locationY>
-        <assignmentItems>
-            <assignToReference>IPVCheckboxBoolean</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>IPV_Concern</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Weapons_Access_is_Null</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Set_IPVConcern_Default</name>
-        <label>Set_IPVConcern_Default</label>
-        <locationX>974</locationX>
-        <locationY>566</locationY>
-        <assignmentItems>
-            <assignToReference>IPVCheckboxBoolean</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <booleanValue>false</booleanValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Weapons_Access_is_Null</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Set_Means_Safety_Plane_Agreed</name>
-        <label>Set Means Safety Plane Agreed</label>
-        <locationX>1238</locationX>
-        <locationY>1166</locationY>
-        <assignmentItems>
-            <assignToReference>MeansSafetyPlaneAgreedBoolean</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Means_Safety_Plan_Agreed</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Suicidal_Intent_is_Null</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Set_Means_Safety_Plane_Agreed_Default</name>
-        <label>Set Means Safety Plane Agreed Default</label>
-        <locationX>974</locationX>
-        <locationY>1166</locationY>
-        <assignmentItems>
-            <assignToReference>MeansSafetyPlaneAgreedBoolean</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <booleanValue>false</booleanValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Suicidal_Intent_is_Null</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Set_Suicidal_Intent</name>
-        <label>Set Suicidal Intent</label>
-        <locationX>1238</locationX>
-        <locationY>1466</locationY>
-        <assignmentItems>
-            <assignToReference>SuicidalIntentBoolean</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Suicidal_Intent</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Should_create_VMAP_Account_Psychiatry</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Set_Suicidal_Intent_default</name>
-        <label>Set Suicidal Intent default</label>
-        <locationX>974</locationX>
-        <locationY>1466</locationY>
-        <assignmentItems>
-            <assignToReference>SuicidalIntentBoolean</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <booleanValue>false</booleanValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Should_create_VMAP_Account_Psychiatry</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Set_Weapons_Access</name>
-        <label>Set Weapons Access</label>
-        <locationX>1238</locationX>
-        <locationY>866</locationY>
-        <assignmentItems>
-            <assignToReference>WeaponsAccessBoolean</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>Weapons_Access</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Means_Safety_Plane_Agreed_is_Null</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
-        <name>Set_Weapons_Access_Default</name>
-        <label>Set Weapons Access Default</label>
-        <locationX>974</locationX>
-        <locationY>866</locationY>
-        <assignmentItems>
-            <assignToReference>WeaponsAccessBoolean</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <booleanValue>false</booleanValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Means_Safety_Plane_Agreed_is_Null</targetReference>
-        </connector>
-    </assignments>
     <decisions>
         <name>Case_Type_Selection</name>
         <label>Case Type Selection</label>
-        <locationX>1138</locationX>
+        <locationX>974</locationX>
         <locationY>242</locationY>
         <defaultConnector>
             <targetReference>New_Case_Patient_Case_Unrelated_Call</targetReference>
@@ -308,56 +167,6 @@
         </rules>
     </decisions>
     <decisions>
-        <name>IPV_Concern_is_Null</name>
-        <label>IPV Concern is Null?</label>
-        <locationX>1106</locationX>
-        <locationY>458</locationY>
-        <defaultConnector>
-            <targetReference>Set_IPVConcern</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Yes_Isnull</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>IPV_Concern</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Set_IPVConcern_Default</targetReference>
-            </connector>
-            <label>Yes_Isnull</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Means_Safety_Plane_Agreed_is_Null</name>
-        <label>Means Safety Plane Agreed is Null?</label>
-        <locationX>1106</locationX>
-        <locationY>1058</locationY>
-        <defaultConnector>
-            <targetReference>Set_Means_Safety_Plane_Agreed</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Yes_Means_Safety_Plane_Agreed_is_Null</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Means_Safety_Plan_Agreed</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Set_Means_Safety_Plane_Agreed_Default</targetReference>
-            </connector>
-            <label>Yes Means Safety Plane Agreed is Null</label>
-        </rules>
-    </decisions>
-    <decisions>
         <name>Should_create_VMAP_Account_Addiction</name>
         <label>Should create VMAP Account - Addiction</label>
         <locationX>226</locationX>
@@ -386,9 +195,9 @@
         <name>Should_create_VMAP_Account_Psychiatry</name>
         <label>Should create VMAP Account - Psychiatry</label>
         <locationX>1106</locationX>
-        <locationY>1658</locationY>
+        <locationY>458</locationY>
         <defaultConnector>
-            <targetReference>Create_Patient_Case_Psychiatry</targetReference>
+            <targetReference>wizard</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No New Provider Needed</defaultConnectorLabel>
         <rules>
@@ -410,7 +219,7 @@
     <decisions>
         <name>Should_create_VMAP_Account_Unrelated</name>
         <label>Should create VMAP Account - Unrelated</label>
-        <locationX>2030</locationX>
+        <locationX>1722</locationX>
         <locationY>458</locationY>
         <defaultConnector>
             <targetReference>Create_Patient_Case_Unrelated</targetReference>
@@ -430,31 +239,6 @@
                 <targetReference>Create_APAL_Account_Unrelated</targetReference>
             </connector>
             <label>Create New Provider - Unrelated</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Suicidal_Intent_is_Null</name>
-        <label>Suicidal Intent is Null</label>
-        <locationX>1106</locationX>
-        <locationY>1358</locationY>
-        <defaultConnector>
-            <targetReference>Set_Suicidal_Intent</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Yes_Suicidal_Intent_is_Null</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Suicidal_Intent</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Set_Suicidal_Intent_default</targetReference>
-            </connector>
-            <label>Yes Suicidal Intent is Null</label>
         </rules>
     </decisions>
     <decisions>
@@ -487,7 +271,7 @@
         <name>Was_VMAP_Account_Created_Successfully_Psychiatry</name>
         <label>Was VMAP Account Created Successfully - Psychiatry</label>
         <locationX>930</locationX>
-        <locationY>1874</locationY>
+        <locationY>674</locationY>
         <defaultConnector>
             <isGoTo>true</isGoTo>
             <targetReference>New_Case_Patient_Case_Psychiatry</targetReference>
@@ -504,7 +288,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Create_Patient_Case_Psychiatry</targetReference>
+                <targetReference>wizard</targetReference>
             </connector>
             <label>Account was created - Psychiatry</label>
         </rules>
@@ -512,7 +296,7 @@
     <decisions>
         <name>Was_VMAP_Account_Created_Successfully_Unrelated</name>
         <label>Was VMAP Account Created Successfully - Unrelated</label>
-        <locationX>1854</locationX>
+        <locationX>1546</locationX>
         <locationY>674</locationY>
         <defaultConnector>
             <isGoTo>true</isGoTo>
@@ -533,31 +317,6 @@
                 <targetReference>Create_Patient_Case_Unrelated</targetReference>
             </connector>
             <label>Account was created - Unrelated</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Weapons_Access_is_Null</name>
-        <label>Weapons Access is Null?</label>
-        <locationX>1106</locationX>
-        <locationY>758</locationY>
-        <defaultConnector>
-            <targetReference>Set_Weapons_Access</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Yes_Weapons_Null</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Weapons_Access</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Set_Weapons_Access_Default</targetReference>
-            </connector>
-            <label>Yes Weapons Null</label>
         </rules>
     </decisions>
     <dynamicChoiceSets>
@@ -1019,335 +778,9 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
     <recordCreates>
-        <name>Create_Patient_Case_Psychiatry</name>
-        <label>Create Patient Case - Psychiatry</label>
-        <locationX>1106</locationX>
-        <locationY>2216</locationY>
-        <connector>
-            <targetReference>assignNewPatientCase_Psychiatry</targetReference>
-        </connector>
-        <faultConnector>
-            <targetReference>fault_Psychiatry</targetReference>
-        </faultConnector>
-        <inputAssignments>
-            <field>Abrupt_Change__c</field>
-            <value>
-                <elementReference>Abrupt_Change</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Access_to_Means__c</field>
-            <value>
-                <elementReference>Access_to_Means</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>AccountId</field>
-            <value>
-                <elementReference>practiceRecord.Id</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Case_Type__c</field>
-            <value>
-                <stringValue>General Psychiatry</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Cognition_Notes__c</field>
-            <value>
-                <elementReference>Cognition_Notes</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>ContactId</field>
-            <value>
-                <elementReference>patientRecord.Id</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Cost_Coverage_Issues__c</field>
-            <value>
-                <elementReference>Cost_Coverage_Issues</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Course__c</field>
-            <value>
-                <elementReference>Course</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Dependent_Safety_Concern__c</field>
-            <value>
-                <elementReference>Child_Elder_Safety_Concern</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>ED_Visits_Count__c</field>
-            <value>
-                <elementReference>ED_Visits_for_Psych</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Family_History_Notes__c</field>
-            <value>
-                <elementReference>Family_History_Notes</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Family_History__c</field>
-            <value>
-                <elementReference>Family_History_1st_degree</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Home_Safety__c</field>
-            <value>
-                <elementReference>Home_Safety_field</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Homicidal_Ideation__c</field>
-            <value>
-                <elementReference>Homicidal_Ideation</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>IPV_Concern__c</field>
-            <value>
-                <elementReference>IPVCheckboxBoolean</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Impaired_Domains__c</field>
-            <value>
-                <elementReference>Impaired_Domains</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Impairment_Level__c</field>
-            <value>
-                <elementReference>Impairment_Level</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Last_Attempt_Date__c</field>
-            <value>
-                <elementReference>Last_Attempt_Date</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Lethal_Means_Access__c</field>
-            <value>
-                <elementReference>Lethal_Means_Access</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Mania_Notes__c</field>
-            <value>
-                <elementReference>Mania_Notes</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Mania_Symptoms__c</field>
-            <value>
-                <elementReference>Mania_Hypomania_Symptoms</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Means_Safety_Plan__c</field>
-            <value>
-                <elementReference>MeansSafetyPlaneAgreedBoolean</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Medical_Notes__c</field>
-            <value>
-                <elementReference>Medical_Notes</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Medical_Red_Flags__c</field>
-            <value>
-                <elementReference>Medical_Red_Flags</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Orientation__c</field>
-            <value>
-                <elementReference>Orientation2</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Other_Prior_Diagnosis__c</field>
-            <value>
-                <elementReference>Other_Prior_Diagnosis</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Other_Symptoms__c</field>
-            <value>
-                <elementReference>Other_Symptoms</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Past_Suicide_Attempts__c</field>
-            <value>
-                <elementReference>Past_Suicide_Attempts</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Primary_Clinical_Question_Types__c</field>
-            <value>
-                <elementReference>Primary_Clinical_Question_Types</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Prior_Diagnoses__c</field>
-            <value>
-                <elementReference>Prior_Diagnoses</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Priority</field>
-            <value>
-                <elementReference>Priority_Psychiatry</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Protective_Factors__c</field>
-            <value>
-                <elementReference>Protective_Factors</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Provider__c</field>
-            <value>
-                <elementReference>new_case.AccountId</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Psych_Hospitalizations__c</field>
-            <value>
-                <elementReference>Psych_Hospitalizations</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Psychosis_Notes__c</field>
-            <value>
-                <elementReference>Psychosis_Notes</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Psychosis_Symptoms__c</field>
-            <value>
-                <elementReference>Psychosis_Symptoms</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Psychosocial_Stressors__c</field>
-            <value>
-                <elementReference>Psychosocial_Stressors</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Recent_Trauma__c</field>
-            <value>
-                <elementReference>Recent_Trauma</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Reliable_Supports__c</field>
-            <value>
-                <elementReference>Reliable_Supports</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Safety_Notes__c</field>
-            <value>
-                <elementReference>Safety_Notes</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Self_Harm_History__c</field>
-            <value>
-                <elementReference>Self_Harm_History</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Status</field>
-            <value>
-                <elementReference>Status_Psychiatry</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Subject</field>
-            <value>
-                <elementReference>Subject_Psychiatry</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Suicidal_Ideation__c</field>
-            <value>
-                <elementReference>Suicidal_Ideation</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Suicidal_Intent__c</field>
-            <value>
-                <elementReference>SuicidalIntentBoolean</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Suicide_Plan_Details__c</field>
-            <value>
-                <elementReference>Suicide_Plan_Details</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Supports_Notes__c</field>
-            <value>
-                <elementReference>Supports_Notes</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Symptom_Onset_Date__c</field>
-            <value>
-                <elementReference>Symptom_Onset_Date</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Top_Symptoms__c</field>
-            <value>
-                <elementReference>Top_Symptoms</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Violence_Details__c</field>
-            <value>
-                <elementReference>Violence_Threat_Details</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Violence_Recent__c</field>
-            <value>
-                <elementReference>Recent_Violence_Agitation</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Weapons_Access__c</field>
-            <value>
-                <elementReference>WeaponsAccessBoolean</elementReference>
-            </value>
-        </inputAssignments>
-        <object>Case</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordCreates>
-    <recordCreates>
         <name>Create_Patient_Case_Unrelated</name>
         <label>Create Patient Case - Unrelated</label>
-        <locationX>2030</locationX>
+        <locationX>1722</locationX>
         <locationY>1016</locationY>
         <connector>
             <targetReference>AssignNewPatientCase_Unrelated</targetReference>
@@ -1386,7 +819,7 @@
     <screens>
         <name>Choose_Case_Type</name>
         <label>Choose Case Type</label>
-        <locationX>1138</locationX>
+        <locationX>974</locationX>
         <locationY>134</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
@@ -1401,7 +834,7 @@
             <fieldText>Case Type</fieldText>
             <fieldType>RadioButtons</fieldType>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-            <isRequired>false</isRequired>
+            <isRequired>true</isRequired>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
@@ -1424,26 +857,9 @@
         <showHeader>true</showHeader>
     </screens>
     <screens>
-        <name>fault_Psychiatry</name>
-        <label>fault - Psychiatry</label>
-        <locationX>1502</locationX>
-        <locationY>2324</locationY>
-        <allowBack>true</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>false</allowPause>
-        <backButtonLabel>Back</backButtonLabel>
-        <fields>
-            <name>Copy_1_of_fault_message</name>
-            <fieldText>&lt;p&gt;&lt;span style=&quot;color: rgb(234, 0, 0); background-color: rgb(255, 255, 255);&quot;&gt;{!friendlyFaultMessage}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt;Press&lt;/span&gt;&lt;strong style=&quot;font-size: 18px;&quot;&gt; Back&lt;/strong&gt;&lt;span style=&quot;font-size: 18px;&quot;&gt; and update the required fields.&lt;/span&gt;&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-        </fields>
-        <showFooter>true</showFooter>
-        <showHeader>true</showHeader>
-    </screens>
-    <screens>
         <name>fault_unrelated</name>
         <label>fault - unrelated</label>
-        <locationX>2382</locationX>
+        <locationX>2074</locationX>
         <locationY>1124</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
@@ -1462,9 +878,10 @@
         <label>New Case: Patient Case - Addiction</label>
         <locationX>226</locationX>
         <locationY>350</locationY>
-        <allowBack>false</allowBack>
+        <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
+        <backButtonLabel>Back</backButtonLabel>
         <connector>
             <targetReference>Should_create_VMAP_Account_Addiction</targetReference>
         </connector>
@@ -1896,1057 +1313,13 @@
         <label>New Case: Patient Case - Psychiatry</label>
         <locationX>1106</locationX>
         <locationY>350</locationY>
-        <allowBack>false</allowBack>
+        <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
+        <backButtonLabel>Back</backButtonLabel>
         <connector>
-            <targetReference>IPV_Concern_is_Null</targetReference>
+            <targetReference>Should_create_VMAP_Account_Psychiatry</targetReference>
         </connector>
-        <fields>
-            <name>Case_Status_Psychiatry</name>
-            <fieldText>Case Status</fieldText>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>Case_Status_Psychiatry_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Status_Psychiatry</name>
-                    <choiceReferences>StatusPicklist</choiceReferences>
-                    <dataType>String</dataType>
-                    <defaultValue>
-                        <stringValue>New</stringValue>
-                    </defaultValue>
-                    <fieldText>Status</fieldText>
-                    <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>Case_Status_Psychiatry_Column2</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Priority_Psychiatry</name>
-                    <choiceReferences>PriorityPicklist</choiceReferences>
-                    <dataType>String</dataType>
-                    <defaultValue>
-                        <stringValue>Medium</stringValue>
-                    </defaultValue>
-                    <fieldText>Priority</fieldText>
-                    <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithHeader</regionContainerType>
-        </fields>
-        <fields>
-            <name>Case_Details_Psychiatry</name>
-            <fieldText>Case Details</fieldText>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>Case_Details_Psychiatry_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Subject_Psychiatry</name>
-                    <dataType>String</dataType>
-                    <fieldText>Subject</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>Case_Details_Psychiatry_Column2</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Description_Psychiatry</name>
-                    <dataType>String</dataType>
-                    <fieldText>Description</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithHeader</regionContainerType>
-        </fields>
-        <fields>
-            <name>Presenting_Availability</name>
-            <fieldText>Presenting &amp; Availability</fieldText>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>Presenting_Availability_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Primary_Clinical_Question_Types</name>
-                    <choiceReferences>PrimaryClinicalQuestionTypes</choiceReferences>
-                    <dataType>String</dataType>
-                    <fieldText>Primary Clinical Question Types</fieldText>
-                    <fieldType>MultiSelectPicklist</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                </fields>
-                <fields>
-                    <name>Top_Symptoms</name>
-                    <choiceReferences>TopSymptoms</choiceReferences>
-                    <dataType>String</dataType>
-                    <fieldText>Top Symptoms</fieldText>
-                    <fieldType>MultiSelectPicklist</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <fields>
-                    <name>Symptom_Onset_Date</name>
-                    <dataType>Date</dataType>
-                    <fieldText>Symptom Onset Date</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <fields>
-                    <name>Impairment_Level</name>
-                    <choiceReferences>ImpairmentLevel</choiceReferences>
-                    <dataType>String</dataType>
-                    <fieldText>Impairment Level</fieldText>
-                    <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>Presenting_Availability_Column2</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Abrupt_Change</name>
-                    <dataType>Boolean</dataType>
-                    <fieldText>Abrupt Change</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                </fields>
-                <fields>
-                    <name>Course</name>
-                    <choiceReferences>Coursepicklist</choiceReferences>
-                    <dataType>String</dataType>
-                    <fieldText>Course</fieldText>
-                    <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <fields>
-                    <name>Impaired_Domains</name>
-                    <choiceReferences>ImpairedDomains</choiceReferences>
-                    <dataType>String</dataType>
-                    <fieldText>Impaired Domains</fieldText>
-                    <fieldType>MultiSelectPicklist</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <fields>
-                    <name>Other_Symptoms</name>
-                    <fieldText>Other Symptoms</fieldText>
-                    <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithHeader</regionContainerType>
-        </fields>
-        <fields>
-            <name>Prior_Diagnoses_Utilization</name>
-            <fieldText>Prior Diagnoses &amp; Utilization</fieldText>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>Prior_Diagnoses_Utilization_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Prior_Diagnoses</name>
-                    <choiceReferences>PriorDiagnoses</choiceReferences>
-                    <dataType>String</dataType>
-                    <fieldText>Prior Diagnoses</fieldText>
-                    <fieldType>MultiSelectPicklist</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <fields>
-                    <name>Psych_Hospitalizations</name>
-                    <dataType>Number</dataType>
-                    <fieldText>Psych Hospitalizations (#)</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <scale>0</scale>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>Prior_Diagnoses_Utilization_Column2</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Self_Harm_History</name>
-                    <choiceReferences>SelfHarmHistory</choiceReferences>
-                    <dataType>String</dataType>
-                    <fieldText>Self-Harm History</fieldText>
-                    <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <fields>
-                    <name>ED_Visits_for_Psych</name>
-                    <dataType>Number</dataType>
-                    <fieldText>ED Visits for Psych (#)</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <scale>0</scale>
-                </fields>
-                <fields>
-                    <name>Other_Prior_Diagnosis</name>
-                    <fieldText>Other Prior Diagnosis</fieldText>
-                    <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithHeader</regionContainerType>
-        </fields>
-        <fields>
-            <name>Safety_Suicide_Risk</name>
-            <fieldText>Safety: Suicide Risk</fieldText>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>Safety_Suicide_Risk_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Suicidal_Ideation</name>
-                    <choiceReferences>SuicidalIdeation</choiceReferences>
-                    <dataType>String</dataType>
-                    <defaultValue>
-                        <stringValue>None</stringValue>
-                    </defaultValue>
-                    <fieldText>Suicidal Ideation</fieldText>
-                    <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                </fields>
-                <fields>
-                    <name>Suicide_Plan_Details</name>
-                    <fieldText>Suicide Plan Details</fieldText>
-                    <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                    <visibilityRule>
-                        <conditionLogic>and</conditionLogic>
-                        <conditions>
-                            <leftValueReference>Suicidal_Ideation</leftValueReference>
-                            <operator>EqualTo</operator>
-                            <rightValue>
-                                <stringValue>Active - With Plan</stringValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
-                </fields>
-                <fields>
-                    <name>Protective_Factors</name>
-                    <fieldText>Protective Factors</fieldText>
-                    <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                    <visibilityRule>
-                        <conditionLogic>and</conditionLogic>
-                        <conditions>
-                            <leftValueReference>Suicidal_Ideation</leftValueReference>
-                            <operator>NotEqualTo</operator>
-                            <rightValue>
-                                <stringValue>None</stringValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
-                </fields>
-                <fields>
-                    <name>Last_Attempt_Date</name>
-                    <dataType>Date</dataType>
-                    <fieldText>Last Attempt Date</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <visibilityRule>
-                        <conditionLogic>and</conditionLogic>
-                        <conditions>
-                            <leftValueReference>Past_Suicide_Attempts</leftValueReference>
-                            <operator>GreaterThan</operator>
-                            <rightValue>
-                                <numberValue>0.0</numberValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>Safety_Suicide_Risk_Column2</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Suicidal_Intent</name>
-                    <dataType>Boolean</dataType>
-                    <fieldText>Suicidal Intent</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                    <visibilityRule>
-                        <conditionLogic>and</conditionLogic>
-                        <conditions>
-                            <leftValueReference>Suicidal_Ideation</leftValueReference>
-                            <operator>NotEqualTo</operator>
-                            <rightValue>
-                                <stringValue>None</stringValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
-                </fields>
-                <fields>
-                    <name>Access_to_Means</name>
-                    <choiceReferences>AccesstoMeans</choiceReferences>
-                    <dataType>String</dataType>
-                    <fieldText>Access to Means</fieldText>
-                    <fieldType>MultiSelectPicklist</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                    <visibilityRule>
-                        <conditionLogic>and</conditionLogic>
-                        <conditions>
-                            <leftValueReference>Suicidal_Ideation</leftValueReference>
-                            <operator>NotEqualTo</operator>
-                            <rightValue>
-                                <stringValue>None</stringValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
-                </fields>
-                <fields>
-                    <name>Past_Suicide_Attempts</name>
-                    <dataType>Number</dataType>
-                    <fieldText>Past Suicide Attempts (#)</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                    <scale>0</scale>
-                    <visibilityRule>
-                        <conditionLogic>and</conditionLogic>
-                        <conditions>
-                            <leftValueReference>Suicidal_Ideation</leftValueReference>
-                            <operator>NotEqualTo</operator>
-                            <rightValue>
-                                <stringValue>None</stringValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithHeader</regionContainerType>
-        </fields>
-        <fields>
-            <name>Safety_Homicide_Violence</name>
-            <fieldText>Safety: Homicide / Violence</fieldText>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>Safety_Homicide_Violence_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Homicidal_Ideation</name>
-                    <choiceReferences>HomicidalIdeation</choiceReferences>
-                    <dataType>String</dataType>
-                    <defaultValue>
-                        <stringValue>None</stringValue>
-                    </defaultValue>
-                    <fieldText>Homicidal Ideation</fieldText>
-                    <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <fields>
-                    <name>Violence_Threat_Details</name>
-                    <fieldText>Violence/Threat Details</fieldText>
-                    <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                    <visibilityRule>
-                        <conditionLogic>or</conditionLogic>
-                        <conditions>
-                            <leftValueReference>Recent_Violence_Agitation</leftValueReference>
-                            <operator>EqualTo</operator>
-                            <rightValue>
-                                <booleanValue>true</booleanValue>
-                            </rightValue>
-                        </conditions>
-                        <conditions>
-                            <leftValueReference>Homicidal_Ideation</leftValueReference>
-                            <operator>NotEqualTo</operator>
-                            <rightValue>
-                                <stringValue>None</stringValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>Safety_Homicide_Violence_Column2</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Recent_Violence_Agitation</name>
-                    <dataType>Boolean</dataType>
-                    <fieldText>Recent Violence/Agitation</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                </fields>
-                <fields>
-                    <name>Weapons_Access</name>
-                    <dataType>Boolean</dataType>
-                    <defaultValue>
-                        <booleanValue>false</booleanValue>
-                    </defaultValue>
-                    <fieldText>Weapons Access</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                    <visibilityRule>
-                        <conditionLogic>or</conditionLogic>
-                        <conditions>
-                            <leftValueReference>Homicidal_Ideation</leftValueReference>
-                            <operator>NotEqualTo</operator>
-                            <rightValue>
-                                <stringValue>None</stringValue>
-                            </rightValue>
-                        </conditions>
-                        <conditions>
-                            <leftValueReference>Recent_Violence_Agitation</leftValueReference>
-                            <operator>EqualTo</operator>
-                            <rightValue>
-                                <booleanValue>true</booleanValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithHeader</regionContainerType>
-        </fields>
-        <fields>
-            <name>Psychosis</name>
-            <fieldText>Psychosis</fieldText>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>Psychosis_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Psychosis_Symptoms</name>
-                    <choiceReferences>PsychosisSymptoms</choiceReferences>
-                    <dataType>String</dataType>
-                    <fieldText>Psychosis Symptoms</fieldText>
-                    <fieldType>MultiSelectPicklist</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>Psychosis_Column2</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Psychosis_Notes</name>
-                    <fieldText>Psychosis Notes</fieldText>
-                    <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <visibilityRule>
-                        <conditionLogic>and</conditionLogic>
-                        <conditions>
-                            <leftValueReference>Psychosis_Symptoms</leftValueReference>
-                            <operator>IsNull</operator>
-                            <rightValue>
-                                <booleanValue>false</booleanValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithHeader</regionContainerType>
-        </fields>
-        <fields>
-            <name>Mania_Hypomania</name>
-            <fieldText>Mania / Hypomania</fieldText>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>Mania_Hypomania_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Mania_Hypomania_Symptoms</name>
-                    <choiceReferences>ManiaHypomaniaSymptoms</choiceReferences>
-                    <dataType>String</dataType>
-                    <fieldText>Mania/Hypomania Symptoms</fieldText>
-                    <fieldType>MultiSelectPicklist</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>Mania_Hypomania_Column2</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Mania_Notes</name>
-                    <fieldText>Mania Notes</fieldText>
-                    <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <visibilityRule>
-                        <conditionLogic>and</conditionLogic>
-                        <conditions>
-                            <leftValueReference>Mania_Hypomania_Symptoms</leftValueReference>
-                            <operator>IsNull</operator>
-                            <rightValue>
-                                <booleanValue>false</booleanValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithHeader</regionContainerType>
-        </fields>
-        <fields>
-            <name>Medical_Contributors_Red_Flags</name>
-            <fieldText>Medical Contributors / Red Flags</fieldText>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>Medical_Contributors_Red_Flags_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Medical_Red_Flags</name>
-                    <choiceReferences>MedicalRedFlags</choiceReferences>
-                    <dataType>String</dataType>
-                    <fieldText>Medical Red Flags</fieldText>
-                    <fieldType>MultiSelectPicklist</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>Medical_Contributors_Red_Flags_Column2</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Medical_Notes</name>
-                    <fieldText>Medical Notes</fieldText>
-                    <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <visibilityRule>
-                        <conditionLogic>and</conditionLogic>
-                        <conditions>
-                            <leftValueReference>Medical_Red_Flags</leftValueReference>
-                            <operator>IsNull</operator>
-                            <rightValue>
-                                <booleanValue>false</booleanValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithHeader</regionContainerType>
-        </fields>
-        <fields>
-            <name>Family_Trauma</name>
-            <fieldText>Family &amp; Trauma</fieldText>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>Family_Trauma_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Family_History_1st_degree</name>
-                    <choiceReferences>FamilyHistory1stdegree</choiceReferences>
-                    <dataType>String</dataType>
-                    <fieldText>Family History (1st-degree)</fieldText>
-                    <fieldType>MultiSelectPicklist</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <fields>
-                    <name>Recent_Trauma</name>
-                    <dataType>Boolean</dataType>
-                    <fieldText>Recent Trauma</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                </fields>
-                <fields>
-                    <name>Child_Elder_Safety_Concern</name>
-                    <dataType>Boolean</dataType>
-                    <fieldText>Child/Elder Safety Concern</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>Family_Trauma_Column2</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Family_History_Notes</name>
-                    <fieldText>Family History Notes</fieldText>
-                    <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                    <visibilityRule>
-                        <conditionLogic>and</conditionLogic>
-                        <conditions>
-                            <leftValueReference>Family_History_1st_degree</leftValueReference>
-                            <operator>IsNull</operator>
-                            <rightValue>
-                                <booleanValue>false</booleanValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
-                </fields>
-                <fields>
-                    <name>IPV_Concern</name>
-                    <dataType>Boolean</dataType>
-                    <defaultValue>
-                        <booleanValue>false</booleanValue>
-                    </defaultValue>
-                    <fieldText>IPV Concern</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                    <visibilityRule>
-                        <conditionLogic>or</conditionLogic>
-                        <conditions>
-                            <leftValueReference>Recent_Trauma</leftValueReference>
-                            <operator>EqualTo</operator>
-                            <rightValue>
-                                <booleanValue>true</booleanValue>
-                            </rightValue>
-                        </conditions>
-                        <conditions>
-                            <leftValueReference>Primary_Clinical_Question_Types</leftValueReference>
-                            <operator>Contains</operator>
-                            <rightValue>
-                                <stringValue>Legal/safety (IPV, abuse, duty to warn)</stringValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithHeader</regionContainerType>
-        </fields>
-        <fields>
-            <name>Home_Safety</name>
-            <fieldText>Home Safety</fieldText>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>Home_Safety_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Home_Safety_field</name>
-                    <choiceReferences>HomeSafety</choiceReferences>
-                    <dataType>String</dataType>
-                    <fieldText>Home Safety</fieldText>
-                    <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                </fields>
-                <fields>
-                    <name>Safety_Notes</name>
-                    <fieldText>Safety Notes</fieldText>
-                    <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                    <visibilityRule>
-                        <conditionLogic>or</conditionLogic>
-                        <conditions>
-                            <leftValueReference>Home_Safety_field</leftValueReference>
-                            <operator>NotEqualTo</operator>
-                            <rightValue>
-                                <stringValue>Safe</stringValue>
-                            </rightValue>
-                        </conditions>
-                        <conditions>
-                            <leftValueReference>Lethal_Means_Access</leftValueReference>
-                            <operator>IsNull</operator>
-                            <rightValue>
-                                <booleanValue>false</booleanValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>Home_Safety_Column2</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Lethal_Means_Access</name>
-                    <choiceReferences>LethalMeansAccess</choiceReferences>
-                    <dataType>String</dataType>
-                    <fieldText>Lethal Means Access</fieldText>
-                    <fieldType>MultiSelectPicklist</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                    <visibilityRule>
-                        <conditionLogic>or</conditionLogic>
-                        <conditions>
-                            <leftValueReference>Home_Safety_field</leftValueReference>
-                            <operator>EqualTo</operator>
-                            <rightValue>
-                                <stringValue>Unsafe</stringValue>
-                            </rightValue>
-                        </conditions>
-                        <conditions>
-                            <leftValueReference>Suicidal_Ideation</leftValueReference>
-                            <operator>NotEqualTo</operator>
-                            <rightValue>
-                                <stringValue>None</stringValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
-                </fields>
-                <fields>
-                    <name>Means_Safety_Plan_Agreed</name>
-                    <dataType>Boolean</dataType>
-                    <defaultValue>
-                        <booleanValue>false</booleanValue>
-                    </defaultValue>
-                    <fieldText>Means Safety Plan Agreed</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                    <visibilityRule>
-                        <conditionLogic>or</conditionLogic>
-                        <conditions>
-                            <leftValueReference>Lethal_Means_Access</leftValueReference>
-                            <operator>Contains</operator>
-                            <rightValue>
-                                <stringValue>Firearms - Unlocked</stringValue>
-                            </rightValue>
-                        </conditions>
-                        <conditions>
-                            <leftValueReference>Lethal_Means_Access</leftValueReference>
-                            <operator>Contains</operator>
-                            <rightValue>
-                                <stringValue>Firearms - Locked</stringValue>
-                            </rightValue>
-                        </conditions>
-                        <conditions>
-                            <leftValueReference>Lethal_Means_Access</leftValueReference>
-                            <operator>Contains</operator>
-                            <rightValue>
-                                <stringValue>Large medication supply</stringValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithHeader</regionContainerType>
-        </fields>
-        <fields>
-            <name>Orientation_Cognition</name>
-            <fieldText>Orientation &amp; Cognition</fieldText>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>Orientation_Cognition_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Orientation2</name>
-                    <choiceReferences>Orientation</choiceReferences>
-                    <dataType>String</dataType>
-                    <fieldText>Orientation</fieldText>
-                    <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>Orientation_Cognition_Column2</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Cognition_Notes</name>
-                    <fieldText>Cognition Notes</fieldText>
-                    <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                    <visibilityRule>
-                        <conditionLogic>and</conditionLogic>
-                        <conditions>
-                            <leftValueReference>Orientation2</leftValueReference>
-                            <operator>NotEqualTo</operator>
-                            <rightValue>
-                                <stringValue>Alert &amp; oriented (x3)</stringValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithHeader</regionContainerType>
-        </fields>
-        <fields>
-            <name>Psychosocial_Supports</name>
-            <fieldText>Psychosocial &amp; Supports</fieldText>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>Psychosocial_Supports_Column1</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Psychosocial_Stressors</name>
-                    <choiceReferences>PsychosocialStressors</choiceReferences>
-                    <dataType>String</dataType>
-                    <fieldText>Psychosocial Stressors</fieldText>
-                    <fieldType>MultiSelectPicklist</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <fields>
-                    <name>Reliable_Supports</name>
-                    <choiceReferences>ReliableSupports</choiceReferences>
-                    <dataType>String</dataType>
-                    <fieldText>Reliable Supports</fieldText>
-                    <fieldType>DropdownBox</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>false</isRequired>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <fields>
-                <name>Psychosocial_Supports_Column2</name>
-                <fieldType>Region</fieldType>
-                <fields>
-                    <name>Cost_Coverage_Issues</name>
-                    <dataType>Boolean</dataType>
-                    <fieldText>Cost/Coverage Issues</fieldText>
-                    <fieldType>InputField</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                </fields>
-                <fields>
-                    <name>Supports_Notes</name>
-                    <fieldText>Supports Notes</fieldText>
-                    <fieldType>LargeTextArea</fieldType>
-                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-                    <isRequired>true</isRequired>
-                    <visibilityRule>
-                        <conditionLogic>or</conditionLogic>
-                        <conditions>
-                            <leftValueReference>Reliable_Supports</leftValueReference>
-                            <operator>EqualTo</operator>
-                            <rightValue>
-                                <stringValue>No</stringValue>
-                            </rightValue>
-                        </conditions>
-                        <conditions>
-                            <leftValueReference>Reliable_Supports</leftValueReference>
-                            <operator>EqualTo</operator>
-                            <rightValue>
-                                <stringValue>Limited</stringValue>
-                            </rightValue>
-                        </conditions>
-                        <conditions>
-                            <leftValueReference>Psychosocial_Stressors</leftValueReference>
-                            <operator>IsNull</operator>
-                            <rightValue>
-                                <booleanValue>false</booleanValue>
-                            </rightValue>
-                        </conditions>
-                    </visibilityRule>
-                </fields>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>6</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithHeader</regionContainerType>
-        </fields>
         <fields>
             <name>Provider_Psychiatry</name>
             <fieldText>Provider</fieldText>
@@ -3125,18 +1498,36 @@
             <isRequired>false</isRequired>
             <regionContainerType>SectionWithHeader</regionContainerType>
         </fields>
-        <nextOrFinishButtonLabel>Save</nextOrFinishButtonLabel>
+        <fields>
+            <name>New_Case_Patient_Case_Psychiatry_Section4</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>New_Case_Patient_Case_Psychiatry_Section4_Column1</name>
+                <fieldType>Region</fieldType>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+        </fields>
+        <nextOrFinishButtonLabel>Continue to Wizard</nextOrFinishButtonLabel>
         <showFooter>true</showFooter>
         <showHeader>false</showHeader>
     </screens>
     <screens>
         <name>New_Case_Patient_Case_Unrelated_Call</name>
         <label>New Case: Patient Case - Unrelated Call</label>
-        <locationX>2030</locationX>
+        <locationX>1722</locationX>
         <locationY>350</locationY>
-        <allowBack>false</allowBack>
+        <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
+        <backButtonLabel>Back</backButtonLabel>
         <connector>
             <targetReference>Should_create_VMAP_Account_Unrelated</targetReference>
         </connector>
@@ -3179,8 +1570,45 @@
         <showFooter>true</showFooter>
         <showHeader>false</showHeader>
     </screens>
+    <screens>
+        <name>wizard</name>
+        <label>wizard</label>
+        <locationX>1106</locationX>
+        <locationY>1016</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>gpCreator</name>
+            <extensionName>c:gpCaseCreator</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>patientContactId</name>
+                <value>
+                    <elementReference>patientRecord.Id</elementReference>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>practiceAccountId</name>
+                <value>
+                    <stringValue>{!practiceRecord.Id} </stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>providerId</name>
+                <value>
+                    <elementReference>new_case.AccountId</elementReference>
+                </value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+        </fields>
+        <showFooter>false</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
     <start>
-        <locationX>1012</locationX>
+        <locationX>848</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Choose_Case_Type</targetReference>
@@ -3312,6 +1740,14 @@
         <dataType>Boolean</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>varRecordTypeDevName</description>
+        <name>varRecordTypeDevName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>

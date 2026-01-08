@@ -1,0 +1,295 @@
+<template>
+    <div class="step-section">
+        <div class="section-header">
+            <div class="section-heading">
+                <template if:true={isGridView}>
+                    <h2>
+                        <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
+                        {headerTitle}
+                    </h2>
+                </template>
+                <template if:true={isWizardView}>
+                    <div class="wizard-heading">
+                        <h3>Screeners</h3>
+                       <!-- <p class="wizard-subcopy">Compact. Step 1: choose. Step 2: enter details. Step 3: review.</p>
+                        <div class="wizard-inline-progress">
+                            <span class={wizardInlineDotPick}></span>
+                            <span class={wizardInlineDotDetails}></span>
+                            <span class={wizardInlineDotReview}></span>
+                            <span class="wizard-inline-label">Pick → Details → Review</span>
+                        </div> -->
+                    </div>
+                </template>
+            </div>
+            <template if:true={isWizardView}>
+                <button class="ghost-button wizard-cancel" onclick={cancelWizard}>Cancel</button>
+            </template>
+        </div>
+
+        <template if:true={isGridView}>
+            <template if:true={hasScreeners}>
+                <section class="card grid-controls">
+                    <div class="grid-header-row">
+                        <div class="control-group">
+                            <label class="input-label" for="grid-filter">Filter by</label>
+                            <select id="grid-filter" class="text-input" value={filterBy} onchange={handleFilterChange}>
+                                <template for:each={filterOptions} for:item="option">
+                                    <option key={option.value} value={option.value}>{option.label}</option>
+                                </template>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label class="input-label" for="grid-search">Search</label>
+                            <input id="grid-search" class="text-input" type="search" placeholder="Filter by name..." value={searchValue} oninput={handleSearchChange} />
+                        </div>
+                        <div class="grid-actions">
+                        <button class="ghost-button" type="button" onclick={toggleShowNotes}>
+                            <template if:true={showAllNotes}>Hide notes</template>
+                            <template if:false={showAllNotes}>Show notes</template>
+                        </button>
+                            <template if:true={showAddButton}>
+                                <template if:true={hasScreeners}>
+                                    <button class="ghost-button" type="button" onclick={handleEditScreenersWizard}>Edit</button>
+                                </template>
+                                <button class="primary-button" type="button" onclick={handleAddScreeners}>Add Screeners</button>
+                            </template>
+                        </div>
+                    </div>
+                </section>
+            </template>
+            <template if:true={hasScreeners}>
+                <div class="scr-grid">
+                    <template for:each={filteredScreeners} for:item="scr">
+                        <article key={scr.id} class={scr.cardClass}>
+                            <header class="scr-card-header">
+                                <div>
+                                    <h3>{scr.meta.name}</h3>
+                                    <span class="scr-category-pill">{scr.meta.type}</span>
+                                </div>
+                            </header>
+                            <div class="pill-row">
+                                <span class="summary-pill">{scr.meta.type}</span>
+                                <template if:true={scr.date}>
+                                    <span class="summary-pill">{scr.date}</span>
+                                </template>
+                                <template if:true={scr.score}>
+                                    <span class="summary-pill">{scr.score}</span>
+                                </template>
+                                <template if:true={scr.positive}>
+                                    <span class="summary-pill positive">Positive</span>
+                                </template>
+                                <template if:true={isRelatedCase}>
+                                    <template if:true={scr.recordName}>
+                                        <span class="summary-pill link-pill">
+                                            Screener Reference Number:
+                                            <template if:true={scr.recordLink}>
+                                                <a href={scr.recordLink} target="_blank">{scr.recordName}</a>
+                                            </template>
+                                            <template if:false={scr.recordLink}>
+                                                {scr.recordName}
+                                            </template>
+                                        </span>
+                                    </template>
+                                </template>
+                            </div>
+                            <template if:true={showAllNotes}>
+                                <div class="field field-full">
+                                    <label class="input-label">Notes</label>
+                                    <textarea class="textarea" data-id={scr.id} data-field="notes" oninput={handleCardNoteChange} disabled={readOnlyNotes}>{scr.notes}</textarea>
+                                </div>
+                            </template>
+                            <template if:false={showAllNotes}>
+                                <p class="scr-notes">
+                                    <template if:true={scr.notes}>
+                                        {scr.previewNotes}
+                                    </template>
+                                    <template if:false={scr.notes}>
+                                        —
+                                    </template>
+                                </p>
+                            </template>
+                            <div class="card-actions">
+                                <template if:true={showNavigation}>
+                                 <!--   <button class="pill-button" data-id={scr.id} onclick={handleEditScreener}>Edit</button> -->
+                                </template>
+                                <button class="pill-button danger" data-id={scr.id} onclick={handleRemoveScreener}>Remove</button>
+                            </div>
+                            <template if:true={scr.showConfirm}>
+                                <div class="remove-confirm">
+                                    <p>Remove this screener?</p>
+                                    <div class="remove-actions">
+                                        <button class="pill-button danger" data-id={scr.id} onclick={confirmRemove}>Confirm Remove</button>
+                                        <button class="pill-button secondary" onclick={cancelRemove}>Cancel</button>
+                                    </div>
+                                </div>
+                            </template>
+                        </article>
+                    </template>
+                </div>
+            </template>
+            <template if:false={hasScreeners}>
+                <section class="card empty-state-card">
+                    <div>
+                        <p class="empty-title">No screeners captured yet</p>
+                        <p class="empty-subtitle">Use the button to add items manually.</p>
+                    </div>
+                    <button class="primary-button" onclick={handleAddScreeners}>Add Screeners</button>
+                </section>
+            </template>
+        </template>
+
+        <template if:true={isWizardView}>
+            <section class="card wizard-shell">
+              <!--  <div class="wizard-progress">
+                    <span class={wizardStep >= 0 ? 'dot active' : 'dot'}></span>
+                    <span class={wizardStep >= 1 ? 'dot active' : 'dot'}></span>
+                    <span class={wizardStep >= 2 ? 'dot active' : 'dot'}></span>
+                    <span class="wizard-label">{wizardStepLabel}</span> 
+                </div> -->
+
+                <template if:true={wizardStepIsPick}>
+                    <div class="wizard-controls">
+                        <div class="control-group">
+                            <label class="input-label" for="wizard-filter">Filter by</label>
+                            <select id="wizard-filter" class="text-input" value={wizardFilter} onchange={handleWizardFilterChange}>
+                                <option value="name">Name</option>
+                                <option value="type">Type</option>
+                                <option value="notes">Notes</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label class="input-label" for="wizard-search">Search</label>
+                            <input id="wizard-search" class="text-input" type="search" placeholder="Filter by name..." value={wizardSearch} oninput={handleWizardSearchChange} />
+                        </div>
+                    </div>
+                    <div class="wizard-result-row">
+                        <span class="result-pill">{wizardResultCount} result(s)</span>
+                        <div class="result-actions">
+                            <button class="ghost-button" onclick={handleSelectAllFiltered}>Select all (filtered)</button>
+                            <button class="ghost-button" onclick={handleClearSelection}>Clear</button>
+                        </div>
+                    </div>
+                    <div class="wizard-catalog">
+                        <template for:each={wizardCatalogItems} for:item="item">
+                            <label key={item.id} class={item.className}>
+                                <input
+                                    type="checkbox"
+                                    data-id={item.id}
+                                    checked={item.checked}
+                                    disabled={item.disabled}
+                                    onchange={handleWizardSelectionToggle}
+                                />
+                                <div class="catalog-details">
+                                    <p class="catalog-title">{item.name}</p>
+                                    <p class="catalog-brand">{item.type}</p>
+                                    <p class="catalog-description">{item.positiveOutcome}</p>
+                                    <template if:true={item.disabled}>
+                                        <span class="catalog-added">Added</span>
+                                    </template>
+                                </div>
+                            </label>
+                        </template>
+                    </div>
+                </template>
+
+                <template if:true={wizardStepIsDetails}>
+                    <template for:each={wizardDraft} for:item="item">
+                        <section key={item.id} class="detail-card">
+                            <header class="detail-header">
+                                <div>
+                                    <h3>{item.meta.name}</h3>
+                                    <p class="detail-brand">{item.meta.type}</p>
+                                </div>
+                                <button class="text-button" data-id={item.id} onclick={handleWizardRemoveDraft}>Remove</button>
+                            </header>
+                            <div class="detail-grid">
+                                <label class="input-label">Approximate Date
+                                    <input type="date" class="text-input" data-id={item.id} data-field="date" value={item.date} onchange={handleWizardDetailChange} />
+                                </label>
+                                <label class="input-label">Score
+                                    <input type="text" class="text-input" data-id={item.id} data-field="score" value={item.score} oninput={handleWizardDetailChange} />
+                                </label>
+                                <label class="checkbox-field success">
+                                    <input type="checkbox" data-id={item.id} data-field="positive" checked={item.positive} onchange={handleWizardDetailChange} />
+                                    <span>Positive outcome?</span>
+                                </label>
+                            </div>
+                            <div class="field field-full">
+                                <label class="input-label">Notes</label>
+                                <textarea class="textarea" data-id={item.id} data-field="notes" oninput={handleWizardDetailChange}>{item.notes}</textarea>
+                            </div>
+                        </section>
+                    </template>
+                </template>
+
+                <template if:true={wizardStepIsReview}>
+                    <div class="review-panel">
+                        <h3>Review</h3>
+                        <div class="review-list">
+                            <template for:each={wizardDraft} for:item="item">
+                                <article key={item.id} class="review-entry">
+                                    <div class="review-heading">
+                                        <div>
+                                            <h4>{item.meta.name}</h4>
+                                            <p class="review-subtitle">{item.meta.type}</p>
+                                        </div>
+                                    </div>
+                                    <p class="review-line">
+                                        Date:
+                                        <template if:true={item.date}>
+                                            {item.date}
+                                        </template>
+                                        <template if:false={item.date}>
+                                            --
+                                        </template>
+                                        <template if:true={item.score}>
+                                            | Score: {item.score}
+                                        </template>
+                                        <template if:true={item.positive}>
+                                            | Positive outcome
+                                        </template>
+                                    </p>
+                                    <p class="review-notes">
+                                        <span>Notes:</span>
+                                        <span>
+                                            <template if:true={item.notes}>
+                                                {item.notes}
+                                            </template>
+                                            <template if:false={item.notes}>
+                                                —
+                                            </template>
+                                        </span>
+                                    </p>
+                                </article>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+
+                <div class="wizard-footer">
+                   <!-- <button class="ghost-button" onclick={wizardBack} disabled={wizardBackDisabled}>Back</button> -->
+                    <div class="wizard-actions">
+                        <template if:true={wizardStepIsReview}>
+                            <button class="ghost-button" onclick={handleReviewEditDetails}>Edit Details</button>
+                            <button class="ghost-button" onclick={handleReviewChangeSelection}>Change Selection</button>
+                        </template>
+                        <template if:false={wizardStepIsReview}>
+                            <button class="ghost-button wizard-cancel" onclick={cancelWizard}>Cancel</button>
+                        </template>
+                        <button class="primary-button" onclick={wizardNext} disabled={wizardNextDisabled}>
+                            <template if:true={wizardStepIsReview}>Save</template>
+                            <template if:false={wizardStepIsReview}>Next</template>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </template>
+
+        <template if:true={showNavigation}>
+            <div class="slds-grid slds-grid_align-spread slds-var-m-top_large">
+                <button class="slds-button btn-back" type="button" onclick={handleBack}>Back</button>
+                <button class="slds-button btn-next" type="button" onclick={handleNext}>Next</button>
+            </div>
+        </template>
+    </div>
+</template>

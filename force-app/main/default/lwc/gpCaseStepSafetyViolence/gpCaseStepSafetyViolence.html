@@ -1,0 +1,70 @@
+<template>
+    <div class="step-section">
+       <!-- <div class="section-header">
+            <h2>Step 5 — Safety: Homicide / Violence</h2>
+            <p>Track ideation and any weaponized risk details.</p>
+        </div> -->
+
+        <section class="card">
+            <label class="input-label" for="ideation"><span class="required">*</span>Homicidal Ideation</label>
+            <select
+                id="ideation"
+                class="text-input"
+                onchange={handleIdeationChange}
+            >
+                <option value="">—</option>
+                <template for:each={ideationOptions} for:item="option">
+                    <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
+                </template>
+            </select>
+            <template if:true={ideationError}>
+                <p class="error-text">{ideationError}</p>
+            </template>
+        </section>
+
+        <section class="card">
+            <label class="checkbox-field">
+                <input
+                    type="checkbox"
+                    checked={recentViolence}
+                    onchange={handleCheckboxChange}
+                />
+                <span  class="input-label">Recent violence or agitation observed?</span>
+            </label>
+        </section>
+
+        <template if:true={showDetail}>
+            <section class="card">
+                <label class="checkbox-field">
+                    <input
+                        id="weapons-access"
+                        type="checkbox"
+                        checked={weaponsAccess}
+                        data-field="Weapons_Access__c"
+                        onchange={handleInputChange}
+                    />
+                    <span class="input-label">Weapons Access</span>
+                </label>
+            </section>
+
+            <section class="card">
+                <label class="input-label" for="violence-details"><span class="required">*</span>Violence / Threat Details</label>
+                <textarea
+                    id="violence-details"
+                    class="textarea"
+                    data-field="Violence_Details__c"
+                    oninput={handleInputChange}
+                    placeholder="Summarize threats, targets, timelines, etc."
+                >{violenceDetails}</textarea>
+                <template if:true={violenceDetailsError}>
+                    <p class="error-text">{violenceDetailsError}</p>
+                </template>
+            </section>
+        </template>
+
+        <div class="slds-grid slds-grid_align-spread slds-var-m-top_large">
+            <button class="slds-button btn-back" type="button" onclick={handleBack}>Back</button>
+            <button class="slds-button btn-next" type="button" onclick={handleNext}>Next</button>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,129 @@
+<template>
+    <div class="step-section">
+       <!-- <div class="section-header">
+            <h2>Step 3 — Prior Diagnosis &amp; Utilization</h2>
+            <p>Capture history, utilization, and diagnosis notes together.</p>
+        </div> -->
+
+        <section class="card form-grid">
+            <div class="field">
+                <label class="input-label" for="psych-hosp">Psych Hospitalizations (#)</label>
+                <input
+                    id="psych-hosp"
+                    type="number"
+                    min="0"
+                    class="text-input"
+                    value={psychHospitalizations}
+                    data-field="Psych_Hospitalizations__c"
+                    oninput={handleInputChange}
+                />
+            </div>
+            <div class="field">
+                <label class="input-label" for="ed-visits">ED Visits for Psych (#)</label>
+                <input
+                    id="ed-visits"
+                    type="number"
+                    min="0"
+                    class="text-input"
+                    value={edVisits}
+                    data-field="ED_Visits_Count__c"
+                    oninput={handleInputChange}
+                />
+            </div>
+        </section>
+
+        <section class="card form-grid">
+            <div class="field">
+                <label class="input-label" for="self-harm-history">Self-Harm History</label>
+                <select
+                    id="self-harm-history"
+                    class="text-input"
+                    data-field="Self_Harm_History__c"
+                    onchange={handleInputChange}
+                >
+                    <template for:each={selfHarmOptions} for:item="option">
+                        <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
+                    </template>
+                </select>
+            </div>
+            <div class="field field-full">
+                <label class="input-label" for="other-dx">Other Prior Diagnosis</label>
+                <textarea
+                    id="other-dx"
+                    class="textarea"
+                    placeholder="Only fill this out if a diagnosis is missing below."
+                    data-field="Other_Prior_Diagnosis__c"
+                    oninput={handleInputChange}
+                >{otherPriorDiagnosis}</textarea>
+                <p class="helper-text">Only fill this out if a diagnosis is missing below.</p>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="top-section-header">
+                <div>
+                    <p class="card-title">Prior Diagnoses</p>
+                    <p class="card-subtitle">Select concerns; add notes for the ones you choose.</p>
+                </div>
+                <div class="input-row condensed">
+                    <label class="input-label" for="diagnosis-search">Search</label>
+                    <input
+                        id="diagnosis-search"
+                        type="search"
+                        class="pill-search"
+                        placeholder="Filter concerns..."
+                        value={diagnosisSearch}
+                        oninput={handleDiagnosisSearch}
+                    />
+                </div>
+            </div>
+            <div class="top-symptoms-grid">
+                <div class="available-column">
+                    <p class="column-title">Available</p>
+                    <div class="checkbox-list">
+                        <template for:each={filteredDiagnosisOptions} for:item="option">
+                            <label key={option.value} class="checkbox-row">
+                                <input
+                                    type="checkbox"
+                                    data-value={option.value}
+                                    checked={option.checked}
+                                    onchange={handleDiagnosisToggle}
+                                />
+                                <span>{option.label}</span>
+                            </label>
+                        </template>
+                    </div>
+                </div>
+                <div class="selected-column">
+                    <p class="column-title">Selected</p>
+                    <template if:true={hasSelectedDiagnoses}>
+                        <template for:each={selectedDiagnoses} for:item="item">
+                            <div key={item.value} class="selected-card">
+                                <header>
+                                    <span>{item.label}</span>
+                                    <button class="link-button" type="button" data-value={item.value} onclick={handleDiagnosisRemove}>Remove</button>
+                                </header>
+                                <div class="field field-full">
+                                    <label class="input-label">Notes</label>
+                                    <textarea
+                                        class="textarea"
+                                        data-value={item.value}
+                                        oninput={handleDiagnosisNoteChange}
+                                    >{item.note}</textarea>
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+                    <template if:false={hasSelectedDiagnoses}>
+                        <p class="empty-state">Select diagnoses to capture notes.</p>
+                    </template>
+                </div>
+            </div>
+        </section>
+
+        <div class="slds-grid slds-grid_align-spread slds-var-m-top_large">
+            <button class="slds-button btn-back" type="button" onclick={handleBack}>Back</button>
+            <button class="slds-button btn-next" type="button" onclick={handleNext}>Next</button>
+        </div>
+    </div>
+</template>
