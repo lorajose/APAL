@@ -1080,6 +1080,9 @@ async handleDataUpdated(event) {
         if (step === 3 && Array.isArray(this.form?.concerns) && this.form.concerns.length) {
             this.syncConcernsToPriorDx(this.form.concerns, true);
         }
+        if (step === 7 && Array.isArray(this.form?.concerns) && this.form.concerns.length) {
+            this.syncConcernsToFamilyHistory(this.form.concerns);
+        }
         // 3. Actualiza el estado del paso que se deja (ya no es currentStep)
         if (this.validationResults[currentStep]) {
             this.updateStepStatus(currentStep);
@@ -1111,6 +1114,9 @@ async handleDataUpdated(event) {
         }
         if (targetStep === 3 && Array.isArray(this.form?.concerns) && this.form.concerns.length) {
             this.syncConcernsToPriorDx(this.form.concerns, true);
+        }
+        if (targetStep === 7 && Array.isArray(this.form?.concerns) && this.form.concerns.length) {
+            this.syncConcernsToFamilyHistory(this.form.concerns);
         }
 
         if (this.validationResults[leavingStep]) {
@@ -1596,10 +1602,12 @@ async handleDataUpdated(event) {
 
     normalizeViolenceForSave(value = {}) {
         const normalized = { ...(value || {}) };
-        const draftAccess = (normalized.weaponsAccessDraft || '').trim();
+        const draftAccess = normalized.weaponsAccessDraft;
         const draftDetails = (normalized.violenceDetailsDraft || '').trim();
-        if (!normalized.Weapons_Access__c && draftAccess) {
-            normalized.Weapons_Access__c = draftAccess;
+        if (typeof normalized.Weapons_Access__c === 'undefined' || normalized.Weapons_Access__c === null) {
+            if (draftAccess === true || draftAccess === false || draftAccess === 'true' || draftAccess === 'false') {
+                normalized.Weapons_Access__c = (draftAccess === true || draftAccess === 'true');
+            }
         }
         if (!normalized.Violence_Details__c && draftDetails) {
             normalized.Violence_Details__c = draftDetails;
@@ -1918,6 +1926,7 @@ async handleDataUpdated(event) {
                 }
                 const existingItem = existingByLabel.get(key);
                 const notesValue = item.notes
+                    ?? item.note
                     ?? item.Notes_new__c
                     ?? item.Notes__c
                     ?? item.notes_new__c
