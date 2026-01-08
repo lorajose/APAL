@@ -111,6 +111,9 @@ export default class GpCaseStepPatientSupport extends LightningElement {
     }
 
     get isReadOnlySurface() {
+        if (this.effectiveLayoutContext === 'relatedcase') {
+            return false;
+        }
         return !(this.isCareNavigation || this.isParentCaseWithControls);
     }
 
