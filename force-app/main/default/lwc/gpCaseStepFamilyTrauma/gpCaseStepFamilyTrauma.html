@@ -23,13 +23,12 @@
         <section class="card">
             <div class="field field-full">
                 <label class="input-label" for="family-notes">Family History Notes</label>
-                <lightning-textarea
+                <textarea
                     id="family-notes"
                     class="textarea"
                     placeholder="Add context, protective relatives, or patterns."
-                    value={familyHistoryNotes}
-                    oninput={handleNotesChange}>
-                </lightning-textarea>
+                    oninput={handleNotesChange}
+                >{familyHistoryNotes}</textarea>
                 <p class="helper-text">Add context, protective relatives, or patterns.</p>
             </div>
         </section>
