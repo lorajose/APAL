@@ -113,6 +113,13 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
 
     connectedCallback() {
         this.loadCatalogs();
+        if (!this.caseId) {
+            try {
+                window.sessionStorage.removeItem(getPsychosisNotesStorageKey(this.caseId));
+            } catch {
+                // Ignore storage errors to avoid blocking the step.
+            }
+        }
     }
 
     @wire(getObjectInfo, { objectApiName: CASE_OBJECT })
@@ -317,7 +324,7 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
         } else {
             this.psychosisNotes = '';
         }
-        if (!this.psychosisNotes) {
+        if (!this.psychosisNotes && this.caseId) {
             try {
                 const cached = window.sessionStorage.getItem(getPsychosisNotesStorageKey(this.caseId));
                 if (cached) {
@@ -399,15 +406,17 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
         const value = event?.detail?.value ?? event?.target?.value ?? '';
         this.psychosisNotes = value;
         this.psychosisNotesDirty = true;
-        try {
-            const key = getPsychosisNotesStorageKey(this.caseId);
-            if (this.psychosisNotes) {
-                window.sessionStorage.setItem(key, this.psychosisNotes);
-            } else {
-                window.sessionStorage.removeItem(key);
+        if (this.caseId) {
+            try {
+                const key = getPsychosisNotesStorageKey(this.caseId);
+                if (this.psychosisNotes) {
+                    window.sessionStorage.setItem(key, this.psychosisNotes);
+                } else {
+                    window.sessionStorage.removeItem(key);
+                }
+            } catch {
+                // Ignore storage errors to avoid blocking input.
             }
-        } catch {
-            // Ignore storage errors to avoid blocking input.
         }
         this.emitDraftChange();
     }
