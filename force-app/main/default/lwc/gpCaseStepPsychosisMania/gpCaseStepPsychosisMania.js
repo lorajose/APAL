@@ -49,6 +49,8 @@ const RED_FLAG_OPTIONS = [
     { label: 'Sleep apnea', value: 'Sleep apnea' }
 ];
 
+const PSYCHOSIS_NOTES_DRAFT_KEY = 'gpCasePsychosisNotesDraft';
+
 const MANIA_VALUE_FIXES = {
     'Grandiosity (mania)': 'Grandiosity'
 };
@@ -77,6 +79,10 @@ function normalizeManiaValues(list = []) {
         .map(value => MANIA_VALUE_FIXES[value] || value)
         .map(normalizePicklistValue)
         .filter(Boolean);
+}
+
+function getPsychosisNotesStorageKey(caseId) {
+    return `${PSYCHOSIS_NOTES_DRAFT_KEY}_${caseId || 'new'}`;
 }
 
 export default class GpCaseStepPsychosisMania extends LightningElement {
@@ -298,10 +304,35 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
         this.redFlagSelections = Array.isArray(value.medicalRedFlagsDraft)
             ? [...value.medicalRedFlagsDraft]
             : normalizeMultiValue(value.Medical_Red_Flags__c);
-        this.psychosisNotes = value.Psychosis_Notes__c || '';
+        const hasPsychosisDraft = Object.prototype.hasOwnProperty.call(value, 'psychosisNotesDraft');
+        const draftPsychosisNotes = hasPsychosisDraft ? (value.psychosisNotesDraft || '') : '';
+        const recordPsychosisNotes = value.Psychosis_Notes__c || '';
+        if (draftPsychosisNotes) {
+            this.psychosisNotes = draftPsychosisNotes;
+        } else if (recordPsychosisNotes) {
+            this.psychosisNotes = recordPsychosisNotes;
+        } else if (this.psychosisNotesDirty && this.psychosisNotes) {
+            // Keep local draft when parent sends an empty draft on step change.
+            this.psychosisNotes = this.psychosisNotes;
+        } else {
+            this.psychosisNotes = '';
+        }
+        if (!this.psychosisNotes) {
+            try {
+                const cached = window.sessionStorage.getItem(getPsychosisNotesStorageKey(this.caseId));
+                if (cached) {
+                    this.psychosisNotes = cached;
+                }
+            } catch {
+                // Ignore storage errors to avoid blocking the step.
+            }
+        }
+        const hasRedFlagDraft = Object.prototype.hasOwnProperty.call(value, 'redFlagNotesDraft');
         const hasRedFlagNoteProp = Object.prototype.hasOwnProperty.call(value, 'Red_Flag_Notes__c');
         const hasMedicalNoteProp = Object.prototype.hasOwnProperty.call(value, 'Medical_Notes__c');
-        if (hasRedFlagNoteProp || hasMedicalNoteProp) {
+        if (hasRedFlagDraft) {
+            this.redFlagNotes = value.redFlagNotesDraft || '';
+        } else if (hasRedFlagNoteProp || hasMedicalNoteProp) {
             const redFlagValue = (hasRedFlagNoteProp ? value.Red_Flag_Notes__c : null)
                 ?? (hasMedicalNoteProp ? value.Medical_Notes__c : null)
                 ?? '';
@@ -365,8 +396,19 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
     }
 
     handlePsychosisNotesChange(event) {
-        this.psychosisNotes = event.target.value;
+        const value = event?.detail?.value ?? event?.target?.value ?? '';
+        this.psychosisNotes = value;
         this.psychosisNotesDirty = true;
+        try {
+            const key = getPsychosisNotesStorageKey(this.caseId);
+            if (this.psychosisNotes) {
+                window.sessionStorage.setItem(key, this.psychosisNotes);
+            } else {
+                window.sessionStorage.removeItem(key);
+            }
+        } catch {
+            // Ignore storage errors to avoid blocking input.
+        }
         this.emitDraftChange();
     }
 
@@ -412,7 +454,9 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
             Medical_Notes__c: safeRedFlagNotes,
             psychosisSymptomsDraft: [...this.psychosisSelections],
             maniaSymptomsDraft: [...this.maniaSelections],
-            medicalRedFlagsDraft: [...this.redFlagSelections]
+            medicalRedFlagsDraft: [...this.redFlagSelections],
+            psychosisNotesDraft: this.psychosisNotes || '',
+            redFlagNotesDraft: this.redFlagNotes || ''
         };
     }
 }
