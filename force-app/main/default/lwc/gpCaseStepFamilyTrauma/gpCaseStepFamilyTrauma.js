@@ -80,6 +80,30 @@ export default class GpCaseStepFamilyTrauma extends LightningElement {
         return this.familyHistory.length > 0;
     }
 
+    renderedCallback() {
+        const familyNotes = this.template.querySelector('#family-notes');
+        if (familyNotes && familyNotes.value !== (this.familyHistoryNotes || '')) {
+            familyNotes.value = this.familyHistoryNotes || '';
+        }
+        const textareas = this.template.querySelectorAll('textarea[data-value]');
+        if (!textareas.length) {
+            return;
+        }
+        const notesByValue = new Map(
+            this.selectedFamilyHistory.map(item => [item.value, item.note || ''])
+        );
+        textareas.forEach((textarea) => {
+            const value = textarea.dataset.value;
+            if (!value) {
+                return;
+            }
+            const note = notesByValue.get(value) ?? '';
+            if (textarea.value !== note) {
+                textarea.value = note;
+            }
+        });
+    }
+
     @api
     set data(value) {
         if (!value) return;
