@@ -364,6 +364,7 @@ export default class GpCaseStepReviewSave extends LightningElement {
             { label: 'Home Safety', value: this.formatValue(this.homeSafety.Home_Safety__c) },
             { label: 'Lethal Means Access', value: this.formatList(this.homeSafety.Lethal_Means_Access__c) },
             { label: 'Means Safety Plan', value: this.homeSafety.Means_Safety_Plan__c ? 'Yes' : 'No' },
+            { label: 'Safety Notes', value: this.formatValue(this.homeSafety.Safety_Notes__c) },
             { label: 'Psychosocial Stressors', value: this.formatStressorDraft(this.homeSafety.psychosocialStressorsDraft, this.homeSafety.Psychosocial_Stressors__c) },
             { label: 'Reliable Supports', value: this.formatValue(this.homeSafety.Reliable_Supports__c) },
             { label: 'Cost/Coverage Issues', value: this.homeSafety.Cost_Coverage_Issues__c ? 'Yes' : 'No' },

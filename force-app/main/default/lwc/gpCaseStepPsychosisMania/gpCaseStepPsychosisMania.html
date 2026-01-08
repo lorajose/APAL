@@ -56,9 +56,13 @@
         <section class="card">
             <div class="field field-full">
                 <label class="input-label" for="psychosis-notes">Other Psychosis &amp; Mania Notes</label>
-                <textarea id="psychosis-notes" class="textarea"
+                <lightning-textarea
+                    id="psychosis-notes"
+                    class="textarea"
                     placeholder="Document context, quotes, or caregiver observations."
-                    oninput={handlePsychosisNotesChange}>{psychosisNotes}</textarea>
+                    value={psychosisNotes}
+                    oninput={handlePsychosisNotesChange}>
+                </lightning-textarea>
                 <p class="helper-text">Document context, quotes, or caregiver observations.</p>
             </div>
         </section>
