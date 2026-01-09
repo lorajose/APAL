@@ -72,11 +72,10 @@ function validatePresenting(formData, config = {}) {
   const errors = [];
   const warnings = [];
 
-  const pcqtPicklist = normalizeMultiValue(data.Primary_Clinical_Question_Types__c);
   const pcqtDraft = Array.isArray(data.primaryClinicalQuestionTypesDraft)
     ? data.primaryClinicalQuestionTypesDraft.filter(Boolean)
     : [];
-  const hasPcqt = pcqtPicklist.length > 0 || pcqtDraft.length > 0;
+  const hasPcqt = pcqtDraft.length > 0;
 
   if (!hasPcqt) {
     const message = 'The Primary Clinical Questions field is required.';

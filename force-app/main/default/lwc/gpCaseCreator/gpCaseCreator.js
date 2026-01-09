@@ -951,7 +951,7 @@ async handleDataUpdated(event) {
                        this.isObjectPayload(data)) {
                 await saveStepData({
                     caseId: this.caseId,
-                    stepData: data
+                    stepData: this.sanitizeStepData(data)
                 });
             }
         } catch (error) {
@@ -1211,7 +1211,7 @@ async handleDataUpdated(event) {
                 if (currentStep <= 9) {
                     await saveStepData({
                         caseId: this.caseId,
-                        stepData
+                        stepData: this.sanitizeStepData(stepData)
                     });
                 }
                 await this.persistRelatedCollections(currentStep);
@@ -1349,7 +1349,10 @@ async handleDataUpdated(event) {
                 this.form.cognition || {}
             ];
             for (const stepData of coreSteps) {
-                await saveStepData({ caseId, stepData });
+                await saveStepData({
+                    caseId,
+                    stepData: this.sanitizeStepData(stepData)
+                });
             }
 
             const pcqtIds = this.getPcqtSelectionIds();
@@ -1431,6 +1434,15 @@ async handleDataUpdated(event) {
         }
     }
 
+    sanitizeStepData(stepData) {
+        if (!stepData || typeof stepData !== 'object' || Array.isArray(stepData)) {
+            return stepData;
+        }
+        const sanitized = { ...stepData };
+        delete sanitized.Primary_Clinical_Question_Types__c;
+        return sanitized;
+    }
+
     ensureList(value) {
         if (Array.isArray(value)) return value;
         if (value && typeof value === 'object') return Object.values(value);
@@ -1453,7 +1465,7 @@ async handleDataUpdated(event) {
             if (!val || typeof val !== 'string') return false;
             const trimmed = val.trim();
             if (trimmed.length !== 15 && trimmed.length !== 18) return false;
-            return /^[a-zA-Z0-9]+$/.test(trimmed);
+            return /^[a-zA-Z0-9]+$/.test(trimmed) && /\d/.test(trimmed);
         };
         return list
             .map(item => {
@@ -2273,6 +2285,7 @@ async handleDataUpdated(event) {
         } [step];
     }
 
+
     /* ------------------------------------------------------------
         RELATED RECORD PAYLOAD BUILDERS
     ------------------------------------------------------------ */
@@ -2350,7 +2363,7 @@ async handleDataUpdated(event) {
             if (!value || typeof value !== 'string') return false;
             const trimmed = value.trim();
             if (trimmed.length !== 15 && trimmed.length !== 18) return false;
-            return /^[a-zA-Z0-9]+$/.test(trimmed);
+            return /^[a-zA-Z0-9]+$/.test(trimmed) && /\d/.test(trimmed);
         };
         const mapped = concerns
             .map(entry => this.hydrateConcern(entry))
@@ -2387,7 +2400,7 @@ async handleDataUpdated(event) {
             if (!value || typeof value !== 'string') return false;
             const trimmed = value.trim();
             if (trimmed.length !== 15 && trimmed.length !== 18) return false;
-            return /^[a-zA-Z0-9]+$/.test(trimmed);
+            return /^[a-zA-Z0-9]+$/.test(trimmed) && /\d/.test(trimmed);
         };
         return risksSource
             .map(entry => this.hydrateSafetyRisk(entry))
@@ -2445,13 +2458,6 @@ async handleDataUpdated(event) {
         const presenting = this.form?.presenting || {};
         if (Array.isArray(presenting.primaryClinicalQuestionTypesDraft)) {
             return presenting.primaryClinicalQuestionTypesDraft.filter(looksLikePcqtId);
-        }
-        const raw = presenting.Primary_Clinical_Question_Types__c;
-        if (raw && typeof raw === 'string') {
-            return raw
-                .split(';')
-                .map(v => v.trim())
-                .filter(looksLikePcqtId);
         }
         return [];
     }

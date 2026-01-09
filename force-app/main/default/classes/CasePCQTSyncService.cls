@@ -1,4 +1,6 @@
 public with sharing class CasePCQTSyncService {
+    // Keep the wizard/source of truth on Case_PCQT__c. Disable picklist writes.
+    private static final Boolean ENABLE_PICKLIST_SYNC = false;
     private static Boolean isSyncingFromCase = false;
     private static Boolean isSyncingFromJunction = false;
     private static Set<Id> caseIdsFromCase = new Set<Id>();
@@ -117,6 +119,7 @@ public with sharing class CasePCQTSyncService {
     public static void syncFromJunction(Set<Id> caseIds) {
         if (caseIds == null || caseIds.isEmpty()) return;
         if (isSyncingFromCase) return;
+        if (!ENABLE_PICKLIST_SYNC) return;
 
         Set<Id> targetCaseIds = new Set<Id>();
         for (Id caseId : caseIds) {
@@ -136,13 +139,17 @@ public with sharing class CasePCQTSyncService {
             ORDER BY PCQT__r.Order__c NULLS LAST, PCQT__r.Name
         ];
 
+        Set<String> allowedValues = getAllowedPrimaryClinicalQuestionTypes();
         Map<Id, List<String>> labelsByCase = new Map<Id, List<String>>();
         for (Case_PCQT__c row : rows) {
             if (!labelsByCase.containsKey(row.Case__c)) {
                 labelsByCase.put(row.Case__c, new List<String>());
             }
             if (row.PCQT__r != null && row.PCQT__r.Name != null) {
-                labelsByCase.get(row.Case__c).add(row.PCQT__r.Name);
+                String name = row.PCQT__r.Name;
+                if (allowedValues.isEmpty() || allowedValues.contains(name)) {
+                    labelsByCase.get(row.Case__c).add(name);
+                }
             }
         }
 
@@ -156,7 +163,10 @@ public with sharing class CasePCQTSyncService {
             ));
         }
 
-        if (!toUpdate.isEmpty()) update toUpdate;
+        if (!toUpdate.isEmpty()) {
+            // Avoid hard failure if a value isn't assigned to the Case record type picklist.
+            Database.update(toUpdate, false);
+        }
 
         isSyncingFromJunction = false;
         caseIdsFromJunction.clear();
@@ -170,6 +180,17 @@ public with sharing class CasePCQTSyncService {
             if (value != '') out.add(value);
         }
         return out;
+    }
+
+    private static Set<String> getAllowedPrimaryClinicalQuestionTypes() {
+        Set<String> allowed = new Set<String>();
+        Schema.DescribeFieldResult describeResult = Case.Primary_Clinical_Question_Types__c.getDescribe();
+        for (Schema.PicklistEntry entry : describeResult.getPicklistValues()) {
+            if (entry.isActive()) {
+                allowed.add(entry.getValue());
+            }
+        }
+        return allowed;
     }
 
     // No helper needed for id -> record (using catalogById map).
