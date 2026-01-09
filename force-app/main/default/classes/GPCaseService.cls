@@ -602,7 +602,7 @@ public with sharing class GPCaseService {
         Id parentCaseId = resolveCaseId(caseId);
         Case caseRecord = [
             SELECT Id, Subject, Priority, Description,
-                   Primary_Clinical_Question_Types__c, Impaired_Domains__c, Symptom_Onset_Date__c,
+                   Impaired_Domains__c, Symptom_Onset_Date__c,
                    Impairment_Level__c, Course__c, Abrupt_Change__c, Other_Symptoms__c,
                    Top_Symptoms__c,
                    Psych_Hospitalizations__c, ED_Visits_Count__c,
@@ -627,7 +627,6 @@ public with sharing class GPCaseService {
             'Subject', 'Priority', 'Description'
         }));
         payload.put('presenting', mapCaseFields(caseRecord, new List<String>{
-            'Primary_Clinical_Question_Types__c',
             'Impaired_Domains__c',
             'Symptom_Onset_Date__c',
             'Impairment_Level__c',
@@ -701,7 +700,7 @@ public with sharing class GPCaseService {
     }
 
     @AuraEnabled(cacheable=true)
-    public static List<Map<String, Object>> getPatientSupports(Id caseId) {
+    public static List<Map<String, Object>> getPatientSupports(Id caseId, String cacheKey) {
         Id parentCaseId = resolveCaseId(caseId);
         return loadPatientSupportsForCase(parentCaseId);
     }

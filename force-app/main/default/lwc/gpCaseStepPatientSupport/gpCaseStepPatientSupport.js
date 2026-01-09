@@ -7,6 +7,7 @@ import { getRecord, getRecordNotifyChange } from 'lightning/uiRecordApi';
 import { refreshApex } from '@salesforce/apex';
 import CASE_RECORDTYPE_DEVNAME from '@salesforce/schema/Case.RecordType.DeveloperName';
 import CASE_TYPE_FIELD from '@salesforce/schema/Case.Case_Type__c';
+import CASE_SERVICE_FIELD from '@salesforce/schema/Case.Service__c';
 
 const cloneList = (list = []) => JSON.parse(JSON.stringify(list || []));
 const STEP_NUMBER = 16;
@@ -43,7 +44,9 @@ export default class GpCaseStepPatientSupport extends LightningElement {
 
     recordTypeDeveloperName;
     caseTypeFromRecord;
+    serviceFromRecord;
     wiredSupportsResult;
+    supportsCacheKey = Date.now().toString();
 
     @api
     get layoutContext() {
@@ -87,7 +90,8 @@ export default class GpCaseStepPatientSupport extends LightningElement {
     }
 
     get canEditSupports() {
-        return this.isCareNavigation;
+        return this.isCareNavigation
+            || (this.isCareNavigatorServiceCase && this.effectiveLayoutContext === 'relatedcase');
     }
 
     get isParentCaseWithControls() {
@@ -106,6 +110,14 @@ export default class GpCaseStepPatientSupport extends LightningElement {
         return caseType === 'general psychiatry' && this.effectiveLayoutContext === 'case';
     }
 
+    get isLmhpServiceCase() {
+        return (this.serviceFromRecord || '').toLowerCase() === 'lmhp';
+    }
+
+    get isCareNavigatorServiceCase() {
+        return (this.serviceFromRecord || '').toLowerCase() === 'care navigator';
+    }
+
     get hideEmptySubtitle() {
         return this.isAddictionMedicineCase || this.isGeneralPsychiatryCase;
     }
@@ -119,6 +131,7 @@ export default class GpCaseStepPatientSupport extends LightningElement {
 
     get shouldRender() {
         return this.isCareNavigation
+            || this.effectiveLayoutContext === 'relatedcase'
             || this.supports.length > 0
             || this.isAddictionMedicineCase
             || this.isGeneralPsychiatryCase;
@@ -280,7 +293,18 @@ export default class GpCaseStepPatientSupport extends LightningElement {
         }
     }
 
-    @wire(getPatientSupports, { caseId: '$effectiveCaseId' })
+    @wire(getRecord, { recordId: '$surfaceRecordId', fields: [CASE_SERVICE_FIELD] })
+    wiredCaseService({ data, error }) {
+        if (data) {
+            this.serviceFromRecord = data.fields.Service__c?.value || null;
+        }
+        if (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error loading case service', error);
+        }
+    }
+
+    @wire(getPatientSupports, { caseId: '$effectiveCaseId', cacheKey: '$supportsCacheKey' })
     wiredSupports(result) {
         this.wiredSupportsResult = result;
         const { data, error } = result || {};
@@ -634,9 +658,7 @@ export default class GpCaseStepPatientSupport extends LightningElement {
             const message = this.pendingSuccessMessage || 'Patient Support saved.';
             this.pendingSuccessMessage = null;
             this.showToast('Success', message, 'success');
-            if (!this.showNavigation) {
-                this.refreshPageLayout();
-            }
+            this.refreshPageLayout();
         } catch (err) {
             const message = err?.body?.message || err?.message || 'Unexpected error saving patient support';
             this.showToast('Error', message, 'error');
@@ -651,6 +673,7 @@ export default class GpCaseStepPatientSupport extends LightningElement {
         } catch (e) {
             // ignore notify issues
         }
+        this.supportsCacheKey = Date.now().toString();
         if (this.wiredSupportsResult) {
             refreshApex(this.wiredSupportsResult);
         }
