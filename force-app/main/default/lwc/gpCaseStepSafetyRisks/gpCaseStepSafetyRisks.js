@@ -11,9 +11,9 @@ import { RefreshEvent } from 'lightning/refresh';
 
 const cloneList = (list = []) => JSON.parse(JSON.stringify(list || []));
 const SOURCE_LABELS = {
-    Step4_AccessToMeans: 'Step4_AccessToMeans',
-    Step8_PsychologicalStressors: 'Step8_PsychologicalStressors',
-    Manual: 'Manual',
+    Step4_AccessToMeans: 'Added at Suicide Risk',
+    Step8_PsychologicalStressors: 'Added at Home Safety',
+    Manual: 'Added manually',
     'Migration/Import': 'Migration/Import',
     Other: 'Other'
 };
