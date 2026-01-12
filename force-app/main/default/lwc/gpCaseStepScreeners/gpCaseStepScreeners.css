@@ -120,13 +120,15 @@
 	gap: 0.5rem;
 	justify-content: flex-end;
 	align-items: center;
-	flex-wrap: nowrap;
+	flex-wrap: wrap;
 }
 
 .grid-actions .ghost-button,
 .grid-actions .primary-button {
-	min-width: 170px;
+	min-width: 140px;
+	max-width: 100%;
 	justify-content: center;
+	flex: 1 1 140px;
 }
 
 .btn-back {
@@ -662,6 +664,13 @@
 
 	.detail-grid {
 		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 1200px) {
+	.grid-actions {
+		grid-column: 1 / -1;
+		justify-content: flex-start;
 	}
 }
 
