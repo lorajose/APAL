@@ -2,13 +2,13 @@ import { LightningElement, api } from 'lwc';
 
 const FALLBACK = '—';
 const SOURCE_LABELS = {
-    Step2_TopSymptoms: 'Step2_TopSymptoms',
-    Step3_PriorDiagnosis: 'Step3_PriorDiagnosis',
-    Step6_PsychosisMania: 'Step6_PsychosisMania',
-    Step6_MedicalRedFlags: 'Step6_MedicalRedFlags',
-    Step7_FamilyHistory: 'Step7_FamilyHistory',
-    Step8_PsychologicalStressors: 'Step8_PsychologicalStressors',
-    Manual: 'Manual'
+    Step2_TopSymptoms: 'Added at Presenting',
+    Step3_PriorDiagnosis: 'Added at Prior Dx',
+    Step6_PsychosisMania: 'Added at Psychosis/Mania',
+    Step6_MedicalRedFlags: 'Added at Psychosis/Mania',
+    Step7_FamilyHistory: 'Added at Family/Trauma',
+    Step8_PsychologicalStressors: 'Added at Home Safety',
+    Manual: 'Added manually'
 };
 const SOURCE_ALIASES = {
     presenting: 'Step2_TopSymptoms',
@@ -302,7 +302,7 @@ export default class GpCaseStepReviewSave extends LightningElement {
 
     get presentingSummary() {
         return [
-            { label: 'Primary Clinical Questions', value: this.formatList(this.presenting.Primary_Clinical_Question_Types__c) },
+            { label: 'Primary Clinical Questions', value: this.formatList(this.presenting.primaryClinicalQuestionTypesLabels) },
             { label: 'Impaired Domains', value: this.formatList(this.presenting.Impaired_Domains__c) },
             { label: 'Symptom Onset Date', value: this.formatValue(this.presenting.Symptom_Onset_Date__c) },
             { label: 'Impairment Level', value: this.formatValue(this.presenting.Impairment_Level__c) },
