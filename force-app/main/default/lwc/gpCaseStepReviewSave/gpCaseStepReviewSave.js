@@ -167,6 +167,7 @@ export default class GpCaseStepReviewSave extends LightningElement {
     @api form = {};
     @api showSummary = false;
     @api isUpdateMode = false;
+    hasSubmitted = false;
 
     get basics() {
         return this.form.basics || {};
@@ -448,8 +449,16 @@ export default class GpCaseStepReviewSave extends LightningElement {
     }
 
     handleFinish() {
+        if (this.hasSubmitted) {
+            return;
+        }
+        this.hasSubmitted = true;
         const eventName = this.showSummary ? 'finalize' : 'finish';
         this.dispatchEvent(new CustomEvent(eventName));
+    }
+
+    get finishDisabled() {
+        return this.hasSubmitted;
     }
 
     handleEditStep(event) {
