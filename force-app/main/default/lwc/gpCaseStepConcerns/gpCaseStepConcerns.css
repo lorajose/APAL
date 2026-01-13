@@ -155,9 +155,16 @@
 	color: #111827;
 }
 
+.concern-card-meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.35rem;
+	min-height: 1.6rem;
+}
+
 .concern-category-pill {
 	display: inline-block;
-	margin-top: 4px;
 	padding: 2px 8px;
 	border-radius: 12px;
 	font-size: 0.8rem;
@@ -168,8 +175,6 @@
 }
 
 .source-pill {
-	margin-left: 6px;
-	margin-top: 4px;
 	display: inline-block;
 	border-radius: 999px;
 	padding: 0.15rem 0.6rem;
