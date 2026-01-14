@@ -2200,7 +2200,7 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>relatedListApiName</name>
-                    <value>AttachedContentDocuments</value>
+                    <value>CombinedAttachments</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>relatedListComponentOverride</name>
@@ -2215,14 +2215,7 @@
                     <value>true</value>
                 </componentInstanceProperties>
                 <componentName>force:relatedListSingleContainer</componentName>
-                <identifier>force_relatedListSingleContainer19</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.Case_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>General Psychiatry</rightValue>
-                    </criteria>
-                </visibilityRule>
+                <identifier>force_relatedListSingleContainer2</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>

@@ -8,13 +8,13 @@ import { refreshApex } from '@salesforce/apex';
 import CASE_TYPE_FIELD from '@salesforce/schema/Case.Case_Type__c';
 
 const SOURCE_LABELS = {
-    Step2_TopSymptoms: 'Step2_TopSymptoms',
-    Step3_PriorDiagnosis: 'Step3_PriorDiagnosis',
-    Step6_PsychosisMania: 'Step6_PsychosisMania',
-    Step6_MedicalRedFlags: 'Step6_MedicalRedFlags',
-    Step7_FamilyHistory: 'Step7_FamilyHistory',
-    Step8_PsychologicalStressors: 'Step8_PsychologicalStressors',
-    Manual: 'Manual'
+    Step2_TopSymptoms: 'Added at Presenting',
+    Step3_PriorDiagnosis: 'Added at Prior Dx',
+    Step6_PsychosisMania: 'Added at Psychosis/Mania',
+    Step6_MedicalRedFlags: 'Added at Psychosis/Mania',
+    Step7_FamilyHistory: 'Added at Family/Trauma',
+    Step8_PsychologicalStressors: 'Added at Home Safety',
+    Manual: 'Added manually'
 };
 const SOURCE_ALIASES = {
     presenting: 'Step2_TopSymptoms',
