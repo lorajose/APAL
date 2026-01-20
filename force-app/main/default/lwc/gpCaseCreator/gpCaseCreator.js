@@ -19,6 +19,7 @@ import saveSafetyRisks from '@salesforce/apex/GPCaseService.saveSafetyRisks';
 import getCaseFullData from '@salesforce/apex/GPCaseService.getCaseFullData';
 import getCaseFullDataFresh from '@salesforce/apex/GPCaseService.getCaseFullDataFresh';
 import getPcqtSelections from '@salesforce/apex/PCQTSelectorController.getPcqtSelections';
+import getPcqtCatalog from '@salesforce/apex/PCQTSelectorController.getPcqtCatalog';
 import savePcqtSelections from '@salesforce/apex/PCQTSelectorController.savePcqtSelections';
 import { MEDICATION_INDEX, SUBSTANCE_INDEX, SCREENER_INDEX, SAFETY_RISK_INDEX } from 'c/gpCaseCatalogs';
 import {
@@ -760,6 +761,17 @@ get stepsFormatted() {
                     if (Array.isArray(pcqtIds) && pcqtIds.length) {
                         const presenting = { ...(this.form.presenting || {}) };
                         presenting.primaryClinicalQuestionTypesDraft = [...pcqtIds];
+                        if (!Array.isArray(presenting.primaryClinicalQuestionTypesLabels) || !presenting.primaryClinicalQuestionTypesLabels.length) {
+                            try {
+                                const catalog = await getPcqtCatalog({ caseType: this.caseType });
+                                const labelMap = new Map((catalog || []).map(item => [item.id, item.label]));
+                                presenting.primaryClinicalQuestionTypesLabels = pcqtIds
+                                    .map(id => labelMap.get(id))
+                                    .filter(Boolean);
+                            } catch (labelErr) {
+                                console.warn('Failed to load PCQT labels', labelErr);
+                            }
+                        }
                         this.form.presenting = presenting;
                     }
                 } catch (pcqtErr) {
@@ -1439,7 +1451,14 @@ async handleDataUpdated(event) {
             return stepData;
         }
         const sanitized = { ...stepData };
-        delete sanitized.Primary_Clinical_Question_Types__c;
+        const pcqtLabels = Array.isArray(stepData.primaryClinicalQuestionTypesLabels)
+            ? stepData.primaryClinicalQuestionTypesLabels.filter(Boolean)
+            : [];
+        if (pcqtLabels.length) {
+            sanitized.Primary_Clinical_Question_Types__c = pcqtLabels.join(';');
+        } else {
+            delete sanitized.Primary_Clinical_Question_Types__c;
+        }
         return sanitized;
     }
 
