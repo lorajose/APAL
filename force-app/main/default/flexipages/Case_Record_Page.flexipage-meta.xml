@@ -447,6 +447,16 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.Primary_Clinical_Question_Types__c</fieldItem>
+                <identifier>RecordPrimary_Clinical_Question_Types_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Symptom_Onset_Date__c</fieldItem>
                 <identifier>RecordSymptom_Onset_Date_cField</identifier>
             </fieldInstance>
