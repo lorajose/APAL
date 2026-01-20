@@ -161,6 +161,10 @@ export default class GpCaseStepSubstances extends LightningElement {
         return this.isGridView;
     }
 
+    get showFilters() {
+        return !this.isStandaloneLayout;
+    }
+
     get readOnlyNotes() {
         return this.isGridView;
     }

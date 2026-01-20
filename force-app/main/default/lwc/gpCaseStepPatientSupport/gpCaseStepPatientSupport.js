@@ -176,6 +176,10 @@ export default class GpCaseStepPatientSupport extends LightningElement {
         return this.isGridView && this.hasSupports;
     }
 
+    get showFilters() {
+        return !this.isStandaloneLayout;
+    }
+
     get visibleSupports() {
         const list = this.supports.map(item => ({
             ...item,

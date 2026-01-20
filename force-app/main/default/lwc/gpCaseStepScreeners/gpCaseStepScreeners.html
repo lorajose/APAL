@@ -30,18 +30,20 @@
             <template if:true={hasScreeners}>
                 <section class="card grid-controls">
                     <div class="grid-header-row">
-                        <div class="control-group">
-                            <label class="input-label" for="grid-filter">Filter by</label>
-                            <select id="grid-filter" class="text-input" value={filterBy} onchange={handleFilterChange}>
-                                <template for:each={filterOptions} for:item="option">
-                                    <option key={option.value} value={option.value}>{option.label}</option>
-                                </template>
-                            </select>
-                        </div>
-                        <div class="control-group">
-                            <label class="input-label" for="grid-search">Search</label>
-                            <input id="grid-search" class="text-input" type="search" placeholder="Filter by name..." value={searchValue} oninput={handleSearchChange} />
-                        </div>
+                        <template if:true={showFilters}>
+                            <div class="control-group">
+                                <label class="input-label" for="grid-filter">Filter by</label>
+                                <select id="grid-filter" class="text-input" value={filterBy} onchange={handleFilterChange}>
+                                    <template for:each={filterOptions} for:item="option">
+                                        <option key={option.value} value={option.value}>{option.label}</option>
+                                    </template>
+                                </select>
+                            </div>
+                            <div class="control-group">
+                                <label class="input-label" for="grid-search">Search</label>
+                                <input id="grid-search" class="text-input" type="search" placeholder="Filter by name..." value={searchValue} oninput={handleSearchChange} />
+                            </div>
+                        </template>
                         <div class="grid-actions">
                         <button class="ghost-button" type="button" onclick={toggleShowNotes}>
                             <template if:true={showAllNotes}>Hide notes</template>
