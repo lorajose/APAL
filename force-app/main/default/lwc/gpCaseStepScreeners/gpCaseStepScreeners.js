@@ -218,6 +218,10 @@ export default class GpCaseStepScreeners extends LightningElement {
         return this.isGridView;
     }
 
+    get showFilters() {
+        return !this.isStandaloneLayout;
+    }
+
     get hasScreeners() {
         return this.screeners.length > 0;
     }

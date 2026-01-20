@@ -141,6 +141,10 @@ export default class GpCaseStepConcerns extends LightningElement {
         return true;
     }
 
+    get showFilters() {
+        return !this.isStandaloneLayout;
+    }
+
     get concernsCount() {
         return this.concerns.length;
     }
