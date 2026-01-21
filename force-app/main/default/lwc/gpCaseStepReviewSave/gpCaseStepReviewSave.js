@@ -356,7 +356,7 @@ export default class GpCaseStepReviewSave extends LightningElement {
             { label: 'Recent Trauma', value: this.familyTrauma.Recent_Trauma__c ? 'Yes' : 'No' },
             { label: 'Child/Elder Safety Concern', value: this.familyTrauma.Dependent_Safety_Concern__c ? 'Yes' : 'No' },
             { label: 'IPV Concern', value: this.familyTrauma.IPV_Concern__c ? 'Yes' : 'No' },
-            { label: 'Family History Notes', value: this.formatValue(this.familyTrauma.Family_History_Notes__c) }
+            { label: 'Family History and Trauma Notes', value: this.formatValue(this.familyTrauma.Family_History_Notes__c) }
         ];
     }
 
