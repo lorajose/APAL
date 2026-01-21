@@ -887,6 +887,16 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.Family_History_Notes__c</fieldItem>
+                <identifier>RecordFamily_History_Notes_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.IPV_Concern__c</fieldItem>
                 <identifier>RecordIPV_Concern_cField</identifier>
             </fieldInstance>
