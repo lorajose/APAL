@@ -1,6 +1,6 @@
 public with sharing class CasePCQTSyncService {
     // Keep the wizard/source of truth on Case_PCQT__c. Disable picklist writes.
-    private static final Boolean ENABLE_PICKLIST_SYNC = false;
+    private static final Boolean ENABLE_PICKLIST_SYNC = true;
     private static Boolean isSyncingFromCase = false;
     private static Boolean isSyncingFromJunction = false;
     private static Set<Id> caseIdsFromCase = new Set<Id>();
