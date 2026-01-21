@@ -445,7 +445,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>none</value>
+                    <value>required</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Primary_Clinical_Question_Types__c</fieldItem>
                 <identifier>RecordPrimary_Clinical_Question_Types_cField</identifier>
