@@ -20,19 +20,6 @@
             </label>
         </section>
 
-        <section class="card">
-            <div class="field field-full">
-                <label class="input-label" for="family-notes">Family History Notes</label>
-                <textarea
-                    id="family-notes"
-                    class="textarea"
-                    placeholder="Add context, protective relatives, or patterns."
-                    oninput={handleNotesChange}
-                >{familyHistoryNotes}</textarea>
-                <p class="helper-text">Add context, protective relatives, or patterns.</p>
-            </div>
-        </section>
-
         <section class="card family-history-section">
             <header class="card-header">
                 <div>
@@ -80,6 +67,19 @@
                         <p class="empty-state">Nothing selected.</p>
                     </template>
                 </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="field field-full">
+                <label class="input-label" for="family-notes">Family History and Trauma Notes</label>
+                <textarea
+                    id="family-notes"
+                    class="textarea"
+                    placeholder="Add context, protective relatives, or patterns."
+                    oninput={handleNotesChange}
+                >{familyHistoryNotes}</textarea>
+                <p class="helper-text">Add context, protective relatives, or patterns.</p>
             </div>
         </section>
 

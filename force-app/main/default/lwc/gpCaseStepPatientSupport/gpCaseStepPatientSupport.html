@@ -3,10 +3,12 @@
         <div class="step-section">
             <div class="section-header">
                 <div class="section-heading">
-                    <h2>
-                        <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
-                        {headerTitle}
-                    </h2>
+                    <template if:true={showFilters}>
+                        <h2>
+                            <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
+                            {headerTitle}
+                        </h2>
+                    </template>
                 </div>
                 <template if:true={isReadOnlySurface}>
                     <template if:true={showShowMoreToggle}>
@@ -70,6 +72,12 @@
                     <template if:true={showGridControls}>
                         <section class="card grid-controls">
                             <div class="grid-header-row">
+                                <template if:false={showFilters}>
+                                    <div class="grid-title">
+                                        <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
+                                        <span class="grid-title-text">{headerTitle}</span>
+                                    </div>
+                                </template>
                                 <template if:true={showFilters}>
                                     <div class="control-group">
                                         <label class="input-label" for="grid-filter">Filter by</label>

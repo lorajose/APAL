@@ -129,6 +129,19 @@
 	justify-content: center;
 }
 
+.grid-title {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	font-size: 1.05rem;
+	font-weight: 700;
+	color: #032d60;
+}
+
+.grid-title-text {
+	display: inline-block;
+}
+
 .btn-back {
 	background-color: #f3f4f6;
 	color: #4b5563;

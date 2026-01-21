@@ -101,20 +101,6 @@
         </section>
 
         <section class="card">
-            <div class="field field-full">
-                <label class="input-label" for="other-symptoms">Other Symptoms</label>
-                <textarea
-                    id="other-symptoms"
-                    class="textarea"
-                    placeholder="Only fill this out if a symptom is missing."
-                    data-field="Other_Symptoms__c"
-                    oninput={handleInputChange}
-                >{otherSymptoms}</textarea>
-                <p class="helper-text">Only fill this out if a symptom is missing.</p>
-            </div>
-        </section>
-
-        <section class="card">
             <div class="top-symptoms-header">
                 <div>
                     <p class="card-title">Top Symptoms / Concerns</p>
@@ -164,6 +150,20 @@
                         <p class="empty-state">Select symptoms to capture notes.</p>
                     </template>
                 </div>
+            </div>
+        </section>
+
+           <section class="card">
+            <div class="field field-full">
+                <label class="input-label" for="other-symptoms">Other Symptoms</label>
+                <textarea
+                    id="other-symptoms"
+                    class="textarea"
+                    placeholder="Only fill this out if a symptom is missing."
+                    data-field="Other_Symptoms__c"
+                    oninput={handleInputChange}
+                >{otherSymptoms}</textarea>
+                <p class="helper-text">Only fill this out if a symptom is missing.</p>
             </div>
         </section>
 
