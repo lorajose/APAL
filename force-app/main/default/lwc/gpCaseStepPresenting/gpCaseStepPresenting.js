@@ -282,11 +282,7 @@ export default class GpCaseStepPresenting extends LightningElement {
 
     get pcqtFilteredOptions() {
         const term = (this.pcqtSearch || '').toLowerCase();
-        const selected = new Set([
-            ...(this.pcqtSelected || []),
-            ...(this.pcqtSelectedLabels || []),
-            ...(this.pcqtSelectedIds || [])
-        ]);
+        const selected = new Set(this.pcqtSelectedIds || []);
         return this.pcqtOptions
             .filter(opt => opt.label.toLowerCase().includes(term))
             .map(opt => ({
@@ -318,8 +314,7 @@ export default class GpCaseStepPresenting extends LightningElement {
     }
 
     get pcqtCountLabel() {
-        const merged = new Set([...(this.pcqtSelected || []), ...(this.pcqtSelectedLabels || []), ...(this.pcqtSelectedIds || [])]);
-        const count = merged.size;
+        const count = Array.isArray(this.pcqtSelectedIds) ? this.pcqtSelectedIds.length : 0;
         return `${count} selected`;
     }
 
@@ -349,13 +344,7 @@ export default class GpCaseStepPresenting extends LightningElement {
     }
 
     get pcqtSelectorValue() {
-        // Enviamos ids y, si faltan, también las labels para que el selector las resuelva contra el catálogo
-        const merged = new Set([
-            ...(this.pcqtSelectedIds || []),
-            ...(this.pcqtSelected || []),
-            ...(this.pcqtSelectedLabels || [])
-        ]);
-        return Array.from(merged);
+        return Array.isArray(this.pcqtSelectedIds) ? [...this.pcqtSelectedIds] : [];
     }
 
     get impairedCountLabel() {
@@ -412,21 +401,12 @@ export default class GpCaseStepPresenting extends LightningElement {
         if (!value) return;
         const pcqtDraft = Array.isArray(value.primaryClinicalQuestionTypesDraft) ?
             [...value.primaryClinicalQuestionTypesDraft] :
-            normalizeMultiSelect(value.Primary_Clinical_Question_Types__c);
-        const idsOnly = (pcqtDraft || []).filter(looksLikePcqtId);
-        const labelsOnly = (pcqtDraft || []).filter(v => !looksLikePcqtId(v));
-        const picklistLabels = normalizeMultiSelect(value.Primary_Clinical_Question_Types__c);
-        this.pcqtSelectedIds = idsOnly;
-        if (labelsOnly.length) {
-            this.pcqtSelected = labelsOnly;
-            this.pcqtSelectedLabels = labelsOnly;
-        } else if (picklistLabels && picklistLabels.length) {
-            this.pcqtSelected = picklistLabels;
-            this.pcqtSelectedLabels = picklistLabels;
-        } else {
-            this.pcqtSelected = [];
-            this.pcqtSelectedLabels = [];
-        }
+            [];
+        this.pcqtSelectedIds = pcqtDraft.filter(looksLikePcqtId);
+        this.pcqtSelectedLabels = Array.isArray(value.primaryClinicalQuestionTypesLabels) ?
+            [...value.primaryClinicalQuestionTypesLabels] :
+            [];
+        this.pcqtSelected = [...this.pcqtSelectedLabels];
 
         const impairedDraft = Array.isArray(value.impairedDomainsDraft) ?
             [...value.impairedDomainsDraft] :
@@ -497,25 +477,16 @@ export default class GpCaseStepPresenting extends LightningElement {
         const value = event.currentTarget?.dataset?.id || event.currentTarget?.dataset?.value;
         if (!value) return;
         // Toggle chip list
-        const arr = Array.isArray(this.pcqtSelected) ? this.pcqtSelected : [];
+        const arr = Array.isArray(this.pcqtSelectedIds) ? this.pcqtSelectedIds : [];
         const exists = arr.includes(value);
-        if (exists) {
-            this.pcqtSelected = arr.filter(v => v !== value);
-            this.pcqtSelectedIds = (this.pcqtSelectedIds || []).filter(v => v !== value);
-            this.pcqtSelectedLabels = (this.pcqtSelectedLabels || []).filter(v => v !== value);
-        } else {
-            this.pcqtSelected = [...arr, value];
-        }
+        this.pcqtSelectedIds = exists ? arr.filter(v => v !== value) : [...arr, value];
+        this.syncPcqtLabelsFromIds();
 
         // Emit combined change (chips + selector ids)
         this.dispatchEvent(new CustomEvent('wizardchange', {
             detail: {
                 path: 'primaryClinicalQuestionTypes',
-                value: Array.from(new Set([
-                    ...(this.pcqtSelected || []),
-                    ...(this.pcqtSelectedLabels || []),
-                    ...(this.pcqtSelectedIds || [])
-                ]))
+                value: [...(this.pcqtSelectedIds || [])]
             }
         }));
         this.emitDraftChange();
@@ -618,7 +589,7 @@ export default class GpCaseStepPresenting extends LightningElement {
             this.dispatchEvent(new CustomEvent('wizardchange', {
                 detail: {
                     path: 'primaryClinicalQuestionTypes',
-                    value: Array.from(new Set([...(this.pcqtSelected || []), ...(this.pcqtSelectedIds || [])]))
+                    value: [...(this.pcqtSelectedIds || [])]
                 }
             }));
         }
@@ -628,18 +599,22 @@ export default class GpCaseStepPresenting extends LightningElement {
         const selectedIds = event?.detail?.selectedIds || [];
         const selectedLabels = event?.detail?.selectedLabels || [];
         this.pcqtSelectedIds = selectedIds.filter(looksLikePcqtId);
-        this.pcqtSelectedLabels = selectedLabels;
-        // Sincroniza chips con las etiquetas actuales del selector (si no hay, vacía)
-        this.pcqtSelected = [...selectedLabels];
+        if (selectedLabels.length) {
+            this.pcqtSelectedLabels = selectedLabels;
+        } else if (this.pcqtOptions && this.pcqtOptions.length) {
+            const labelMap = new Map(this.pcqtOptions.map(opt => [opt.value, opt.label]));
+            this.pcqtSelectedLabels = this.pcqtSelectedIds
+                .map(id => labelMap.get(id))
+                .filter(Boolean);
+        } else {
+            this.pcqtSelectedLabels = [];
+        }
+        this.pcqtSelected = [...this.pcqtSelectedLabels];
         this.emitDraftChange();
         this.dispatchEvent(new CustomEvent('wizardchange', {
             detail: {
                 path: 'primaryClinicalQuestionTypes',
-                value: Array.from(new Set([
-                    ...(this.pcqtSelected || []),
-                    ...(this.pcqtSelectedLabels || []),
-                    ...this.pcqtSelectedIds
-                ]))
+                value: [...this.pcqtSelectedIds]
             }
         }));
     }
@@ -649,6 +624,19 @@ export default class GpCaseStepPresenting extends LightningElement {
         this.dispatchEvent(new CustomEvent('dataupdated', {
             detail: payload
         }));
+    }
+
+    syncPcqtLabelsFromIds() {
+        if (!Array.isArray(this.pcqtSelectedIds)) {
+            this.pcqtSelectedLabels = [];
+            this.pcqtSelected = [];
+            return;
+        }
+        const labelMap = new Map(this.pcqtOptions.map(opt => [opt.value, opt.label]));
+        this.pcqtSelectedLabels = this.pcqtSelectedIds
+            .map(id => labelMap.get(id))
+            .filter(Boolean);
+        this.pcqtSelected = [...this.pcqtSelectedLabels];
     }
 
     buildPayload() {
@@ -663,16 +651,17 @@ export default class GpCaseStepPresenting extends LightningElement {
             topSymptomNotesDraft[item.value] = item.note || '';
         });
 
-        // Separar IDs (selector) de etiquetas (píldoras) para no romper el picklist restringido
-        const labelValues = Array.from(new Set([
-            ...(this.pcqtSelected || []).filter(Boolean),
-            ...(this.pcqtSelectedLabels || []).filter(Boolean)
-        ]));
-        const picklistValue = serializeMultiSelect(labelValues);
+        const selectedPcqtLabels = Array.isArray(this.pcqtSelectedLabels) && this.pcqtSelectedLabels.length
+            ? this.pcqtSelectedLabels
+            : (Array.isArray(this.pcqtSelectedIds) && this.pcqtSelectedIds.length
+                ? this.pcqtSelectedIds
+                    .map(id => (this.pcqtOptions || []).find(opt => opt.value === id)?.label)
+                    .filter(Boolean)
+                : []);
 
         return {
-            Primary_Clinical_Question_Types__c: picklistValue,
-            primaryClinicalQuestionTypesDraft: Array.from(new Set([...this.pcqtSelectedIds, ...labelValues])),
+            primaryClinicalQuestionTypesDraft: [...(this.pcqtSelectedIds || [])],
+            primaryClinicalQuestionTypesLabels: [...selectedPcqtLabels],
             Impaired_Domains__c: serializeMultiSelect(this.impairedDomains),
             impairedDomainsDraft: [...this.impairedDomains],
             Symptom_Onset_Date__c: formattedOnsetDate,
