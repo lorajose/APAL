@@ -9,6 +9,18 @@
                             {headerTitle}
                         </h2>
                     </template>
+                    <template if:true={isWizardView}>
+                    <div class="wizard-heading">
+                        <h3>Supports</h3>
+                       <!-- <p class="wizard-subcopy">Compact. Step 1: choose. Step 2: enter details. Step 3: review.</p>
+                        <div class="wizard-inline-progress">
+                            <span class={wizardInlineDotPick}></span>
+                            <span class={wizardInlineDotDetails}></span>
+                            <span class={wizardInlineDotReview}></span>
+                            <span class="wizard-inline-label">Pick → Details → Review</span>
+                        </div> -->
+                    </div>
+                </template>
                 </div>
                 <template if:true={isReadOnlySurface}>
                     <template if:true={showShowMoreToggle}>
