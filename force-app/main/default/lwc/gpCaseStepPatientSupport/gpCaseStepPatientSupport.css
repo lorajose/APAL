@@ -141,6 +141,10 @@
 	display: inline-block;
 }
 
+.grid-controls .scr-grid {
+	margin-top: 0.75rem;
+}
+
 .btn-back {
 	background-color: #f3f4f6;
 	color: #4b5563;

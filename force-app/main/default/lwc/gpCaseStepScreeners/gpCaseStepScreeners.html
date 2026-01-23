@@ -65,77 +65,75 @@
                             </template>
                         </div>
                     </div>
-                </section>
-            </template>
-            <template if:true={hasScreeners}>
-                <div class="scr-grid">
-                    <template for:each={filteredScreeners} for:item="scr">
-                        <article key={scr.id} class={scr.cardClass}>
-                            <header class="scr-card-header">
-                                <div>
-                                    <h3>{scr.meta.name}</h3>
-                                    <span class="scr-category-pill">{scr.meta.type}</span>
-                                </div>
-                            </header>
-                            <div class="pill-row">
-                                <span class="summary-pill">{scr.meta.type}</span>
-                                <template if:true={scr.date}>
-                                    <span class="summary-pill">{scr.date}</span>
-                                </template>
-                                <template if:true={scr.score}>
-                                    <span class="summary-pill">{scr.score}</span>
-                                </template>
-                                <template if:true={scr.positive}>
-                                    <span class="summary-pill positive">Positive</span>
-                                </template>
-                                <template if:true={isRelatedCase}>
-                                    <template if:true={scr.recordName}>
-                                        <span class="summary-pill link-pill">
-                                            Screener Reference Number:
-                                            <template if:true={scr.recordLink}>
-                                                <a href={scr.recordLink} target="_blank">{scr.recordName}</a>
-                                            </template>
-                                            <template if:false={scr.recordLink}>
-                                                {scr.recordName}
-                                            </template>
-                                        </span>
-                                    </template>
-                                </template>
-                            </div>
-                            <template if:true={showAllNotes}>
-                                <div class="field field-full">
-                                    <label class="input-label">Notes</label>
-                                    <textarea class="textarea" data-id={scr.id} data-field="notes" oninput={handleCardNoteChange} disabled={readOnlyNotes}>{scr.notes}</textarea>
-                                </div>
-                            </template>
-                            <template if:false={showAllNotes}>
-                                <p class="scr-notes">
-                                    <template if:true={scr.notes}>
-                                        {scr.previewNotes}
-                                    </template>
-                                    <template if:false={scr.notes}>
-                                        —
-                                    </template>
-                                </p>
-                            </template>
-                            <div class="card-actions">
-                                <template if:true={showNavigation}>
-                                 <!--   <button class="pill-button" data-id={scr.id} onclick={handleEditScreener}>Edit</button> -->
-                                </template>
-                                <button class="pill-button danger" data-id={scr.id} onclick={handleRemoveScreener}>Remove</button>
-                            </div>
-                            <template if:true={scr.showConfirm}>
-                                <div class="remove-confirm">
-                                    <p>Remove this screener?</p>
-                                    <div class="remove-actions">
-                                        <button class="pill-button danger" data-id={scr.id} onclick={confirmRemove}>Confirm Remove</button>
-                                        <button class="pill-button secondary" onclick={cancelRemove}>Cancel</button>
+                    <div class="scr-grid">
+                        <template for:each={filteredScreeners} for:item="scr">
+                            <article key={scr.id} class={scr.cardClass}>
+                                <header class="scr-card-header">
+                                    <div>
+                                        <h3>{scr.meta.name}</h3>
+                                        <span class="scr-category-pill">{scr.meta.type}</span>
                                     </div>
+                                </header>
+                                <div class="pill-row">
+                                    <span class="summary-pill">{scr.meta.type}</span>
+                                    <template if:true={scr.date}>
+                                        <span class="summary-pill">{scr.date}</span>
+                                    </template>
+                                    <template if:true={scr.score}>
+                                        <span class="summary-pill">{scr.score}</span>
+                                    </template>
+                                    <template if:true={scr.positive}>
+                                        <span class="summary-pill positive">Positive</span>
+                                    </template>
+                                    <template if:true={isRelatedCase}>
+                                        <template if:true={scr.recordName}>
+                                            <span class="summary-pill link-pill">
+                                                Screener Reference Number:
+                                                <template if:true={scr.recordLink}>
+                                                    <a href={scr.recordLink} target="_blank">{scr.recordName}</a>
+                                                </template>
+                                                <template if:false={scr.recordLink}>
+                                                    {scr.recordName}
+                                                </template>
+                                            </span>
+                                        </template>
+                                    </template>
                                 </div>
-                            </template>
-                        </article>
-                    </template>
-                </div>
+                                <template if:true={showAllNotes}>
+                                    <div class="field field-full">
+                                        <label class="input-label">Notes</label>
+                                        <textarea class="textarea" data-id={scr.id} data-field="notes" oninput={handleCardNoteChange} disabled={readOnlyNotes}>{scr.notes}</textarea>
+                                    </div>
+                                </template>
+                                <template if:false={showAllNotes}>
+                                    <p class="scr-notes">
+                                        <template if:true={scr.notes}>
+                                            {scr.previewNotes}
+                                        </template>
+                                        <template if:false={scr.notes}>
+                                            —
+                                        </template>
+                                    </p>
+                                </template>
+                                <div class="card-actions">
+                                    <template if:true={showNavigation}>
+                                     <!--   <button class="pill-button" data-id={scr.id} onclick={handleEditScreener}>Edit</button> -->
+                                    </template>
+                                    <button class="pill-button danger" data-id={scr.id} onclick={handleRemoveScreener}>Remove</button>
+                                </div>
+                                <template if:true={scr.showConfirm}>
+                                    <div class="remove-confirm">
+                                        <p>Remove this screener?</p>
+                                        <div class="remove-actions">
+                                            <button class="pill-button danger" data-id={scr.id} onclick={confirmRemove}>Confirm Remove</button>
+                                            <button class="pill-button secondary" onclick={cancelRemove}>Cancel</button>
+                                        </div>
+                                    </div>
+                                </template>
+                            </article>
+                        </template>
+                    </div>
+                </section>
             </template>
             <template if:false={hasScreeners}>
                 <section class="card empty-state-card">
@@ -145,10 +143,10 @@
                             <span class="grid-title-text">{headerTitle}</span>
                         </div>
                     </template>
-                    <div>
+                    <!--<div>
                         <p class="empty-title">No screeners captured yet</p>
                         <p class="empty-subtitle">Use the button to add items manually.</p>
-                    </div>
+                    </div> -->
                     <button class="primary-button" onclick={handleAddScreeners}>Add Screeners</button>
                 </section>
             </template>

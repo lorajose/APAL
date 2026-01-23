@@ -45,18 +45,7 @@
                         <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
                     </template>
                 </select>
-            </div>
-            <div class="field field-full">
-                <label class="input-label" for="other-dx">Other Prior Diagnosis</label>
-                <textarea
-                    id="other-dx"
-                    class="textarea"
-                    placeholder="Only fill this out if a diagnosis is missing below."
-                    data-field="Other_Prior_Diagnosis__c"
-                    oninput={handleInputChange}
-                >{otherPriorDiagnosis}</textarea>
-                <p class="helper-text">Only fill this out if a diagnosis is missing below.</p>
-            </div>
+            </div>         
         </section>
 
         <section class="card">
@@ -120,6 +109,18 @@
                 </div>
             </div>
         </section>
+        
+           <div class="field field-full">
+                <label class="input-label" for="other-dx">Other Prior Diagnosis</label>
+                <textarea
+                    id="other-dx"
+                    class="textarea"
+                    placeholder="Only fill this out if a diagnosis is missing below."
+                    data-field="Other_Prior_Diagnosis__c"
+                    oninput={handleInputChange}
+                >{otherPriorDiagnosis}</textarea>
+                <p class="helper-text">Only fill this out if a diagnosis is missing below.</p>
+            </div>
 
         <div class="slds-grid slds-grid_align-spread slds-var-m-top_large">
             <button class="slds-button btn-back" type="button" onclick={handleBack}>Back</button>

@@ -65,74 +65,72 @@
                             </template>
                         </div>
                     </div>
-                </section>
-            </template>
-            <template if:true={hasSubstances}>
-                <div class="sub-grid">
-                    <template for:each={filteredSubstances} for:item="sub">
-                        <article key={sub.id} class={sub.cardClass}>
-                            <header class="sub-card-header">
-                                <div>
-                                    <h3>{sub.meta.name}</h3>
-                                    <span class="sub-category-pill">{sub.meta.category}</span>
-                                    <template if:true={showSubstanceName}>
-                                        <p class="sub-name">Substance Id:
-                                            <template if:true={sub.recordLink}>
-                                                <a href={sub.recordLink} target="_blank">{sub.recordName}</a>
-                                            </template>
-                                            <template if:false={sub.recordLink}>
-                                                {sub.recordName}
-                                            </template>
-                                        </p>
-                                    </template>
-                                </div>
-                            </header>
-                            <div class="pill-row">
-                                <template if:true={sub.frequency}>
-                                    <span class="summary-pill">{sub.frequency}</span>
-                                </template>
-                                <span class="summary-pill">{sub.meta.category}</span>
-                                <template if:true={sub.current}>
-                                    <span class="summary-pill positive">Current</span>
-                                </template>
-                                <template if:true={sub.meta.description}>
-                                    <span class="summary-pill muted">Info</span>
-                                </template>
-                            </div>
-                            <template if:true={showAllNotes}>
-                                <div class="field field-full">
-                                    <label class="input-label">Notes</label>
-                                    <textarea class="textarea" data-id={sub.id} data-field="notes" oninput={handleCardNoteChange} disabled={readOnlyNotes}>{sub.notes}</textarea>
-                                </div>
-                            </template>
-                            <template if:false={showAllNotes}>
-                                <p class="sub-notes">
-                                    <template if:true={sub.notes}>
-                                        {sub.previewNotes}
-                                    </template>
-                                    <template if:false={sub.notes}>
-                                        —
-                                    </template>
-                                </p>
-                            </template>
-                            <div class="card-actions">
-                                <template if:true={showNavigation}>
-                                 <!--   <button class="pill-button" data-id={sub.id} onclick={handleEditSubstance}>Edit</button> -->
-                                </template>
-                                <button class="pill-button danger" data-id={sub.id} onclick={handleRemoveSubstance}>Remove</button>
-                            </div>
-                            <template if:true={sub.showConfirm}>
-                                <div class="remove-confirm">
-                                    <p>Remove this substance?</p>
-                                    <div class="remove-actions">
-                                        <button class="pill-button danger" data-id={sub.id} onclick={confirmRemove}>Confirm Remove</button>
-                                        <button class="pill-button secondary" onclick={cancelRemove}>Cancel</button>
+                    <div class="sub-grid">
+                        <template for:each={filteredSubstances} for:item="sub">
+                            <article key={sub.id} class={sub.cardClass}>
+                                <header class="sub-card-header">
+                                    <div>
+                                        <h3>{sub.meta.name}</h3>
+                                        <span class="sub-category-pill">{sub.meta.category}</span>
+                                        <template if:true={showSubstanceName}>
+                                            <p class="sub-name">Substance Id:
+                                                <template if:true={sub.recordLink}>
+                                                    <a href={sub.recordLink} target="_blank">{sub.recordName}</a>
+                                                </template>
+                                                <template if:false={sub.recordLink}>
+                                                    {sub.recordName}
+                                                </template>
+                                            </p>
+                                        </template>
                                     </div>
+                                </header>
+                                <div class="pill-row">
+                                    <template if:true={sub.frequency}>
+                                        <span class="summary-pill">{sub.frequency}</span>
+                                    </template>
+                                    <span class="summary-pill">{sub.meta.category}</span>
+                                    <template if:true={sub.current}>
+                                        <span class="summary-pill positive">Current</span>
+                                    </template>
+                                    <template if:true={sub.meta.description}>
+                                        <span class="summary-pill muted">Info</span>
+                                    </template>
                                 </div>
-                            </template>
-                        </article>
-                    </template>
-                </div>
+                                <template if:true={showAllNotes}>
+                                    <div class="field field-full">
+                                        <label class="input-label">Notes</label>
+                                        <textarea class="textarea" data-id={sub.id} data-field="notes" oninput={handleCardNoteChange} disabled={readOnlyNotes}>{sub.notes}</textarea>
+                                    </div>
+                                </template>
+                                <template if:false={showAllNotes}>
+                                    <p class="sub-notes">
+                                        <template if:true={sub.notes}>
+                                            {sub.previewNotes}
+                                        </template>
+                                        <template if:false={sub.notes}>
+                                            —
+                                        </template>
+                                    </p>
+                                </template>
+                                <div class="card-actions">
+                                    <template if:true={showNavigation}>
+                                     <!--   <button class="pill-button" data-id={sub.id} onclick={handleEditSubstance}>Edit</button> -->
+                                    </template>
+                                    <button class="pill-button danger" data-id={sub.id} onclick={handleRemoveSubstance}>Remove</button>
+                                </div>
+                                <template if:true={sub.showConfirm}>
+                                    <div class="remove-confirm">
+                                        <p>Remove this substance?</p>
+                                        <div class="remove-actions">
+                                            <button class="pill-button danger" data-id={sub.id} onclick={confirmRemove}>Confirm Remove</button>
+                                            <button class="pill-button secondary" onclick={cancelRemove}>Cancel</button>
+                                        </div>
+                                    </div>
+                                </template>
+                            </article>
+                        </template>
+                    </div>
+                </section>
             </template>
             <template if:false={hasSubstances}>
                 <section class="card empty-state-card">
@@ -142,10 +140,10 @@
                             <span class="grid-title-text">{headerTitle}</span>
                         </div>
                     </template>
-                    <div>
+                    <!--<div>
                         <p class="empty-title">No substances captured yet</p>
                         <p class="empty-subtitle">Use the button to add items manually.</p>
-                    </div>
+                    </div> -->
                     <button class="primary-button" onclick={handleAddSubstances}>Add Substances</button>
                 </section>
             </template>

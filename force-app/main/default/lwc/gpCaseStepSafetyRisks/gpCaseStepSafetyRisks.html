@@ -65,83 +65,80 @@
                             </template>
                         </div>
                     </div>
+                    <div class="risk-grid">
+                        <template for:each={filteredRisks} for:item="risk">
+                            <article key={risk.id} class="risk-card">
+                                <header class="risk-card-header">
+                                    <div>
+                                        <h3>{risk.meta.name}</h3>
+                                        <div class="risk-card-meta">
+                                            <span class="risk-category-pill">{risk.meta.category}</span>
+                                            <span class="source-pill">{risk.sourceLabel}</span>
+                                        </div>
+                                    </div>
+                                </header>
+                                <p class="risk-description">{risk.meta.description}</p>
+                                <template if:true={isRelatedCase}>
+                                    <p class="risk-id">
+                                        Risk Id:
+                                        <template if:true={risk.recordLink}>
+                                            <a href={risk.recordLink} target="_blank">{risk.recordName}</a>
+                                        </template>
+                                        <template if:false={risk.recordLink}>
+                                            {risk.recordName}
+                                        </template>
+                                    </p>
+                                </template>
+                                <div class="flag-row">
+                                    <label class="checkbox-field">
+                                        <input type="checkbox" data-id={risk.id} data-field="recent" checked={risk.recent} onchange={handleFlagToggle} disabled={readOnlyFields} />
+                                        <span>Recent</span>
+                                    </label>
+                                    <label class="checkbox-field">
+                                        <input type="checkbox" data-id={risk.id} data-field="historical" checked={risk.historical} onchange={handleFlagToggle} disabled={readOnlyFields} />
+                                        <span>Historical</span>
+                                    </label>
+                                    <template if:true={risk.flagError}>
+                                        <p class="error-inline">Select Recent and/or Historical</p>
+                                    </template>
+                                </div>
+                                <template if:true={showAllNotes}>
+                                    <div class="field field-full">
+                                        <label class="input-label">Notes</label>
+                                        <textarea class="textarea" data-id={risk.id} oninput={handleNoteChange} disabled={readOnlyNotes}>{risk.notes}</textarea>
+                                    </div>
+                                </template>
+                                <template if:false={showAllNotes}>
+                                    <p class="risk-notes">
+                                        <span>
+                                            <template if:true={risk.notes}>
+                                                {risk.previewNotes}
+                                            </template>
+                                            <template if:false={risk.notes}>
+                                                —
+                                            </template>
+                                        </span>
+                                    </p>
+                                </template>
+                                <div class="card-actions">
+                                    <template if:true={showNavigation}>
+                                      <!--  <button class="pill-button" data-id={risk.id} onclick={handleEditRisk}>Edit</button> -->
+                                    </template>
+                                    <button class="pill-button danger" data-id={risk.id} onclick={handleRemoveRisk}>Remove</button>
+                                </div>
+                                <template if:true={risk.showConfirm}>
+                                    <div class="remove-confirm">
+                                        <p>Remove this safety risk?</p>
+                                        <div class="remove-actions">
+                                            <button class="pill-button danger" data-id={risk.id} onclick={confirmRemove}>Confirm Remove</button>
+                                            <button class="pill-button secondary" onclick={cancelRemove}>Cancel</button>
+                                        </div>
+                                    </div>
+                                </template>
+                            </article>
+                        </template>
+                    </div>
                 </section>
-            </template>
-
-            <template if:true={hasRisks}>
-                <div class="risk-grid">
-                    <template for:each={filteredRisks} for:item="risk">
-                        <article key={risk.id} class="risk-card">
-                            <header class="risk-card-header">
-                                <div>
-                                    <h3>{risk.meta.name}</h3>
-                                    <div class="risk-card-meta">
-                                        <span class="risk-category-pill">{risk.meta.category}</span>
-                                        <span class="source-pill">{risk.sourceLabel}</span>
-                                    </div>
-                                </div>
-                            </header>
-                            <p class="risk-description">{risk.meta.description}</p>
-                            <template if:true={isRelatedCase}>
-                                <p class="risk-id">
-                                    Risk Id:
-                                    <template if:true={risk.recordLink}>
-                                        <a href={risk.recordLink} target="_blank">{risk.recordName}</a>
-                                    </template>
-                                    <template if:false={risk.recordLink}>
-                                        {risk.recordName}
-                                    </template>
-                                </p>
-                            </template>
-                            <div class="flag-row">
-                                <label class="checkbox-field">
-                                    <input type="checkbox" data-id={risk.id} data-field="recent" checked={risk.recent} onchange={handleFlagToggle} disabled={readOnlyFields} />
-                                    <span>Recent</span>
-                                </label>
-                                <label class="checkbox-field">
-                                    <input type="checkbox" data-id={risk.id} data-field="historical" checked={risk.historical} onchange={handleFlagToggle} disabled={readOnlyFields} />
-                                    <span>Historical</span>
-                                </label>
-                                <template if:true={risk.flagError}>
-                                    <p class="error-inline">Select Recent and/or Historical</p>
-                                </template>
-                            </div>
-                            <template if:true={showAllNotes}>
-                                <div class="field field-full">
-                                    <label class="input-label">Notes</label>
-                                    <textarea class="textarea" data-id={risk.id} oninput={handleNoteChange} disabled={readOnlyNotes}>{risk.notes}</textarea>
-                                </div>
-                            </template>
-                            <template if:false={showAllNotes}>
-                                <p class="risk-notes">
-                                    <span>
-                                        <template if:true={risk.notes}>
-                                            {risk.previewNotes}
-                                        </template>
-                                        <template if:false={risk.notes}>
-                                            —
-                                        </template>
-                                    </span>
-                                </p>
-                            </template>
-                            <div class="card-actions">
-                                <template if:true={showNavigation}>
-                                  <!--  <button class="pill-button" data-id={risk.id} onclick={handleEditRisk}>Edit</button> -->
-                                </template>
-                                <button class="pill-button danger" data-id={risk.id} onclick={handleRemoveRisk}>Remove</button>
-                            </div>
-                            <template if:true={risk.showConfirm}>
-                                <div class="remove-confirm">
-                                    <p>Remove this safety risk?</p>
-                                    <div class="remove-actions">
-                                        <button class="pill-button danger" data-id={risk.id} onclick={confirmRemove}>Confirm Remove</button>
-                                        <button class="pill-button secondary" onclick={cancelRemove}>Cancel</button>
-                                    </div>
-                                </div>
-                            </template>
-                        </article>
-                    </template>
-                </div>
             </template>
             <template if:false={hasRisks}>
                 <template if:true={showEmptyState}>
@@ -152,10 +149,10 @@
                             <span class="grid-title-text">{headerTitle}</span>
                         </div>
                     </template>
-                    <div>
+                   <!-- <div>
                         <p class="empty-title">No safety risks captured yet</p>
                         <p class="empty-subtitle">Use the button to add items manually.</p>
-                    </div>
+                    </div> -->
                     <template if:true={showAddButton}>
                         <button class="primary-button" onclick={handleAddRisks}>Add Safety Risks</button>
                     </template>
