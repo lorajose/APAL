@@ -928,6 +928,16 @@
     <flexiPageRegions>
         <itemInstances>
             <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Family_History_Notes__c</fieldItem>
+                <identifier>RecordFamily_History_Notes_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
                 <fieldItem>Record.Parent.IPV_Concern__c</fieldItem>
                 <identifier>RecordParentIPV_Concern_cField</identifier>
             </fieldInstance>

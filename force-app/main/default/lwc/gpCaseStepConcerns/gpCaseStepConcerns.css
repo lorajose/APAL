@@ -119,6 +119,10 @@
 	align-items: end;
 }
 
+.grid-controls .concern-grid {
+	margin-top: 0.75rem;
+}
+
 .grid-actions {
 	display: flex;
 	gap: 0.5rem;
