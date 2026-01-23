@@ -142,6 +142,12 @@
             </template>
             <template if:false={hasMedications}>
                 <section class="card empty-state-card">
+                    <template if:false={showFilters}>
+                        <div class="grid-title">
+                            <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
+                            <span class="grid-title-text">{headerTitle}</span>
+                        </div>
+                    </template>
                     <div>
                         <p class="empty-title">No medications captured yet</p>
                         <p class="empty-subtitle">Use the button to add items manually.</p>

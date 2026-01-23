@@ -201,6 +201,12 @@
                     </template>
                     <template if:false={hasSupports}>
                         <section class="card empty-state-card">
+                            <template if:false={showFilters}>
+                                <div class="grid-title">
+                                    <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
+                                    <span class="grid-title-text">{headerTitle}</span>
+                                </div>
+                            </template>
                             <div>
                                 <p class="empty-title">No supports captured yet</p>
                                 <template if:false={hideEmptySubtitle}>
