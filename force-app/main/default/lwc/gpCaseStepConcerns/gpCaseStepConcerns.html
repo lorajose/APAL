@@ -3,10 +3,12 @@
         <div class="section-header">
             <div class="section-heading">
                 <template if:true={isListMode}>
-                    <h2>
-                        <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
-                        {headerTitle}
-                    </h2>
+                    <template if:true={showFilters}>
+                        <h2>
+                            <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
+                            {headerTitle}
+                        </h2>
+                    </template>
                 </template>
                 <template if:true={isWizardMode}>
                     <div class="wizard-heading">
@@ -30,6 +32,12 @@
             <template if:true={hasConcerns}>
                 <section class="card grid-controls">
                     <div class="grid-header-row">
+                        <template if:false={showFilters}>
+                            <div class="grid-title">
+                                <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
+                                <span class="grid-title-text">{headerTitle}</span>
+                            </div>
+                        </template>
                         <template if:true={showFilters}>
                             <div class="control-group">
                                 <label class="input-label" for="category-filter">Filter by category</label>
@@ -57,63 +65,67 @@
                             </template>
                         </div>
                     </div>
+                    <div class="concern-grid">
+                        <template for:each={filteredConcerns} for:item="concern">
+                            <article key={concern.id} class="concern-card">
+                                <header class="concern-card-header">
+                                    <div>
+                                        <h3>{concern.label}</h3>
+                                        <div class="concern-card-meta">
+                                            <span class="concern-category-pill">{concern.category}</span>
+                                            <span class="source-pill">{concern.sourceLabel}</span>
+                                        </div>
+                                    </div>
+                                </header>
+                                <template if:true={showAllNotes}>
+                                    <div class="field field-full">
+                                        <label class="input-label">Notes</label>
+                                        <textarea class="textarea" data-id={concern.id} oninput={handleNoteChange} disabled={readOnlyNotes}>{concern.notes}</textarea>
+                                    </div>
+                                </template>
+                                <template if:false={showAllNotes}>
+                                    <p class="concern-notes">
+                                        <span>
+                                            <template if:true={concern.notes}>
+                                                {concern.previewNotes}
+                                            </template>
+                                            <template if:false={concern.notes}>
+                                                —
+                                            </template>
+                                        </span>
+                                    </p>
+                                </template>
+                                <div class="card-actions">
+                                    <button class="pill-button danger" type="button" data-id={concern.id} data-label={concern.label} data-category={concern.category} onclick={handleRemoveConcern}>Remove</button>
+                                </div>
+                                <template if:true={concern.showConfirm}>
+                                    <div class="remove-confirm">
+                                        <p>Remove this concern?</p>
+                                        <div class="remove-actions">
+                                            <button class="pill-button danger" type="button" data-id={concern.id} data-label={concern.label} data-category={concern.category} onclick={confirmRemove}>Confirm Remove</button>
+                                            <button class="pill-button secondary" type="button" onclick={cancelRemove}>Cancel</button>
+                                        </div>
+                                    </div>
+                                </template>
+                            </article>
+                        </template>
+                    </div>
                 </section>
             </template>
 
-            <template if:true={hasConcerns}>
-                <div class="concern-grid">
-                    <template for:each={filteredConcerns} for:item="concern">
-                        <article key={concern.id} class="concern-card">
-                            <header class="concern-card-header">
-                                <div>
-                                    <h3>{concern.label}</h3>
-                                    <div class="concern-card-meta">
-                                        <span class="concern-category-pill">{concern.category}</span>
-                                        <span class="source-pill">{concern.sourceLabel}</span>
-                                    </div>
-                                </div>
-                            </header>
-                            <template if:true={showAllNotes}>
-                                <div class="field field-full">
-                                    <label class="input-label">Notes</label>
-                                    <textarea class="textarea" data-id={concern.id} oninput={handleNoteChange} disabled={readOnlyNotes}>{concern.notes}</textarea>
-                                </div>
-                            </template>
-                            <template if:false={showAllNotes}>
-                                <p class="concern-notes">
-                                    <span>
-                                        <template if:true={concern.notes}>
-                                            {concern.previewNotes}
-                                        </template>
-                                        <template if:false={concern.notes}>
-                                            —
-                                        </template>
-                                    </span>
-                                </p>
-                            </template>
-                            <div class="card-actions">
-                                <button class="pill-button danger" type="button" data-id={concern.id} data-label={concern.label} data-category={concern.category} onclick={handleRemoveConcern}>Remove</button>
-                            </div>
-                            <template if:true={concern.showConfirm}>
-                                <div class="remove-confirm">
-                                    <p>Remove this concern?</p>
-                                    <div class="remove-actions">
-                                        <button class="pill-button danger" type="button" data-id={concern.id} data-label={concern.label} data-category={concern.category} onclick={confirmRemove}>Confirm Remove</button>
-                                        <button class="pill-button secondary" type="button" onclick={cancelRemove}>Cancel</button>
-                                    </div>
-                                </div>
-                            </template>
-                        </article>
-                    </template>
-                </div>
-            </template>
             <template if:false={hasConcerns}>
                 <template if:true={showEmptyState}>
                 <section class="card empty-state-card">
-                    <div>
+                    <template if:false={showFilters}>
+                        <div class="grid-title">
+                            <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
+                            <span class="grid-title-text">{headerTitle}</span>
+                        </div>
+                    </template>
+                   <!-- <div>
                         <p class="empty-title">No concerns captured yet</p>
                         <p class="empty-subtitle">Use the button to add items manually.</p>
-                    </div>
+                    </div> -->
                     <template if:true={showAddButton}>
                         <button class="primary-button" onclick={openWizard}>Add Concerns</button>
                     </template>

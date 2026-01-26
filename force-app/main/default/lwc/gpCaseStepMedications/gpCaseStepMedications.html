@@ -3,10 +3,12 @@
         <div class="section-header">
             <div class="section-heading">
                 <template if:true={isGridView}>
-                    <h2>
-                        <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
-                        {headerTitle}
-                    </h2>
+                    <template if:true={showFilters}>
+                        <h2>
+                            <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
+                            {headerTitle}
+                        </h2>
+                    </template>
                 </template>
                 <template if:true={isWizardView}>
                     <div class="wizard-heading">
@@ -31,6 +33,12 @@
             <template if:true={hasMedications}>
                 <section class="card grid-controls">
                     <div class="grid-header-row">
+                        <template if:false={showFilters}>
+                            <div class="grid-title">
+                                <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
+                                <span class="grid-title-text">{headerTitle}</span>
+                            </div>
+                        </template>
                         <template if:true={showFilters}>
                             <div class="control-group">
                                 <label class="input-label" for="grid-filter">Filter by</label>
@@ -58,86 +66,90 @@
                             </template>
                         </div>
                     </div>
-                </section>
-            </template>
-            <template if:true={hasMedications}>
-                <div class="med-grid">
-                    <template for:each={filteredMedications} for:item="med">
-                        <article key={med.id} class={med.cardClass}>
-                            <header class="med-card-header">
-                                <div>
-                                    <h3>{med.meta.title}</h3>
-                                    <p>{med.meta.brand}</p>
-                                </div>
-                            </header>
-                            <template if:true={isRelatedCase}>
-                                <p class="med-record">
-                                    Medication Id:
-                                    <template if:true={med.recordLink}>
-                                        <a href={med.recordLink} target="_blank">{med.recordName}</a>
-                                    </template>
-                                    <template if:false={med.recordLink}>
-                                        {med.recordName}
-                                    </template>
-                                </p>
-                            </template>
-                            <div class="pill-row">
-                                <span class="summary-pill">{med.action}</span>
-                                <template if:true={med.frequency}>
-                                    <span class="summary-pill">{med.frequency}</span>
-                                </template>
-                                <template if:true={med.amount}>
-                                    <span class="summary-pill">{med.amount} {med.unit}</span>
-                                </template>
-                                <span class="med-category-pill">{med.meta.category}</span>
-                                <template if:true={med.current}>
-                                    <span class="summary-pill positive">Current</span>
-                                </template>
-                                <template if:true={med.allergy}>
-                                    <span class="summary-pill warning">Allergy</span>
-                                </template>
-                            </div>
-                            <template if:true={showAllNotes}>
-                                <div class="field field-full">
-                                    <label class="input-label">Notes</label>
-                                    <textarea class="textarea" data-id={med.id} data-field="notes" oninput={handleCardNoteChange} disabled={readOnlyNotes}>{med.notes}</textarea>
-                                </div>
-                            </template>
-                            <template if:false={showAllNotes}>
-                                <p class="med-notes">
-                                    <template if:true={med.notes}>
-                                        {med.previewNotes}
-                                    </template>
-                                    <template if:false={med.notes}>
-                                        —
-                                    </template>
-                                </p>
-                            </template>
-                            <div class="card-actions">
-                                <template if:true={showNavigation}>
-                                  <!--  <button class="pill-button" data-id={med.id} onclick={handleEditMedication}>Edit</button> -->
-                                </template>
-                                <button class="pill-button danger" data-id={med.id} onclick={handleRemoveMedication}>Remove</button>
-                            </div>
-                            <template if:true={med.showConfirm}>
-                                <div class="remove-confirm">
-                                    <p>Remove this medication?</p>
-                                    <div class="remove-actions">
-                                        <button class="pill-button danger" data-id={med.id} onclick={confirmRemove}>Confirm Remove</button>
-                                        <button class="pill-button secondary" onclick={cancelRemove}>Cancel</button>
+                    <div class="med-grid">
+                        <template for:each={filteredMedications} for:item="med">
+                            <article key={med.id} class={med.cardClass}>
+                                <header class="med-card-header">
+                                    <div>
+                                        <h3>{med.meta.title}</h3>
+                                        <p>{med.meta.brand}</p>
                                     </div>
+                                </header>
+                                <template if:true={isRelatedCase}>
+                                    <p class="med-record">
+                                        Medication Id:
+                                        <template if:true={med.recordLink}>
+                                            <a href={med.recordLink} target="_blank">{med.recordName}</a>
+                                        </template>
+                                        <template if:false={med.recordLink}>
+                                            {med.recordName}
+                                        </template>
+                                    </p>
+                                </template>
+                                <div class="pill-row">
+                                    <span class="summary-pill">{med.action}</span>
+                                    <template if:true={med.frequency}>
+                                        <span class="summary-pill">{med.frequency}</span>
+                                    </template>
+                                    <template if:true={med.amount}>
+                                        <span class="summary-pill">{med.amount} {med.unit}</span>
+                                    </template>
+                                    <span class="med-category-pill">{med.meta.category}</span>
+                                    <template if:true={med.current}>
+                                        <span class="summary-pill positive">Current</span>
+                                    </template>
+                                    <template if:true={med.allergy}>
+                                        <span class="summary-pill warning">Allergy</span>
+                                    </template>
                                 </div>
-                            </template>
-                        </article>
-                    </template>
-                </div>
+                                <template if:true={showAllNotes}>
+                                    <div class="field field-full">
+                                        <label class="input-label">Notes</label>
+                                        <textarea class="textarea" data-id={med.id} data-field="notes" oninput={handleCardNoteChange} disabled={readOnlyNotes}>{med.notes}</textarea>
+                                    </div>
+                                </template>
+                                <template if:false={showAllNotes}>
+                                    <p class="med-notes">
+                                        <template if:true={med.notes}>
+                                            {med.previewNotes}
+                                        </template>
+                                        <template if:false={med.notes}>
+                                            —
+                                        </template>
+                                    </p>
+                                </template>
+                                <div class="card-actions">
+                                    <template if:true={showNavigation}>
+                                      <!--  <button class="pill-button" data-id={med.id} onclick={handleEditMedication}>Edit</button> -->
+                                    </template>
+                                    <button class="pill-button danger" data-id={med.id} onclick={handleRemoveMedication}>Remove</button>
+                                </div>
+                                <template if:true={med.showConfirm}>
+                                    <div class="remove-confirm">
+                                        <p>Remove this medication?</p>
+                                        <div class="remove-actions">
+                                            <button class="pill-button danger" data-id={med.id} onclick={confirmRemove}>Confirm Remove</button>
+                                            <button class="pill-button secondary" onclick={cancelRemove}>Cancel</button>
+                                        </div>
+                                    </div>
+                                </template>
+                            </article>
+                        </template>
+                    </div>
+                </section>
             </template>
             <template if:false={hasMedications}>
                 <section class="card empty-state-card">
-                    <div>
+                    <template if:false={showFilters}>
+                        <div class="grid-title">
+                            <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
+                            <span class="grid-title-text">{headerTitle}</span>
+                        </div>
+                    </template>
+                  <!-- <div>
                         <p class="empty-title">No medications captured yet</p>
                         <p class="empty-subtitle">Use the button to add items manually.</p>
-                    </div>
+                    </div> -->
                     <button class="primary-button" onclick={handleAddMedications}>Add Medications</button>
                 </section>
             </template>

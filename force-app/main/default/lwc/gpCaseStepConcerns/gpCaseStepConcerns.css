@@ -119,6 +119,10 @@
 	align-items: end;
 }
 
+.grid-controls .concern-grid {
+	margin-top: 0.75rem;
+}
+
 .grid-actions {
 	display: flex;
 	gap: 0.5rem;
@@ -130,6 +134,19 @@
 .grid-actions .primary-button {
 	min-width: 150px;
 	justify-content: center;
+}
+
+.grid-title {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	font-size: 1.05rem;
+	font-weight: 700;
+	color: #032d60;
+}
+
+.grid-title-text {
+	display: inline-block;
 }
 
 .concern-grid {

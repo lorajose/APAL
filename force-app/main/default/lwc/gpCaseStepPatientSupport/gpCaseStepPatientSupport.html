@@ -3,10 +3,24 @@
         <div class="step-section">
             <div class="section-header">
                 <div class="section-heading">
-                    <h2>
-                        <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
-                        {headerTitle}
-                    </h2>
+                    <template if:true={showFilters}>
+                        <h2>
+                            <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
+                            {headerTitle}
+                        </h2>
+                    </template>
+                    <template if:true={isWizardView}>
+                    <div class="wizard-heading">
+                        <h3>Supports</h3>
+                       <!-- <p class="wizard-subcopy">Compact. Step 1: choose. Step 2: enter details. Step 3: review.</p>
+                        <div class="wizard-inline-progress">
+                            <span class={wizardInlineDotPick}></span>
+                            <span class={wizardInlineDotDetails}></span>
+                            <span class={wizardInlineDotReview}></span>
+                            <span class="wizard-inline-label">Pick → Details → Review</span>
+                        </div> -->
+                    </div>
+                </template>
                 </div>
                 <template if:true={isReadOnlySurface}>
                     <template if:true={showShowMoreToggle}>
@@ -70,6 +84,12 @@
                     <template if:true={showGridControls}>
                         <section class="card grid-controls">
                             <div class="grid-header-row">
+                                <template if:false={showFilters}>
+                                    <div class="grid-title">
+                                        <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
+                                        <span class="grid-title-text">{headerTitle}</span>
+                                    </div>
+                                </template>
                                 <template if:true={showFilters}>
                                     <div class="control-group">
                                         <label class="input-label" for="grid-filter">Filter by</label>
@@ -97,108 +117,112 @@
                                     </template>
                                 </div>
                             </div>
-                        </section>
-                    </template>
-                    <template if:true={hasSupports}>
-                        <div class="scr-grid">
-                            <template for:each={filteredSupports} for:item="sup">
-                                <article key={sup.id} class="scr-card">
-                                    <header class="scr-card-header">
-                                        <div>
-                                            <h3>{sup.supportName}</h3>
-                                        </div>
-                                    </header>
-                                    <div class="pill-row">
-                                        <template if:true={sup.scheduled}>
-                                            <span class="summary-pill">Scheduled</span>
-                                        </template>
-                                        <template if:true={sup.going}>
-                                            <span class="summary-pill">Going</span>
-                                        </template>
-                                        <template if:true={sup.appointmentCompleted}>
-                                            <span class="summary-pill">Appt Completed</span>
-                                        </template>
-                                        <template if:true={sup.appointmentCompletedIneffective}>
-                                            <span class="summary-pill">Completed (Ineffective)</span>
-                                        </template>
-                                        <template if:true={sup.suspended}>
-                                            <span class="summary-pill">Suspended</span>
-                                        </template>
-                                        <template if:true={sup.careNotApplicable}>
-                                            <span class="summary-pill">Care Not Applicable</span>
-                                        </template>
-                                    </div>
-                                    <template if:true={showAllNotes}>
-                                        <div class="field field-full">
-                                            <label class="input-label">Notes</label>
-                                            <textarea class="textarea" data-id={sup.id} data-field="notes" oninput={handleCardNoteChange} disabled={isStandaloneLayout} readonly={isStandaloneLayout}>{sup.notes}</textarea>
-                                        </div>
-                                    </template>
-                                    <template if:false={showAllNotes}>
-                                        <p class="scr-notes">
-                                            <template if:true={sup.notes}>
-                                                {sup.previewNotes}
+                            <div class="scr-grid">
+                                <template for:each={filteredSupports} for:item="sup">
+                                    <article key={sup.id} class="scr-card">
+                                        <header class="scr-card-header">
+                                            <div>
+                                                <h3>{sup.supportName}</h3>
+                                            </div>
+                                        </header>
+                                        <div class="pill-row">
+                                            <template if:true={sup.scheduled}>
+                                                <span class="summary-pill">Scheduled</span>
                                             </template>
-                                            <template if:false={sup.notes}>
-                                                —
+                                            <template if:true={sup.going}>
+                                                <span class="summary-pill">Going</span>
                                             </template>
-                                        </p>
-                                    </template>
-                                    <div class="support-flags">
-                                        <label class="flag-item">
-                                            <input type="checkbox" data-id={sup.id} data-field="scheduled" checked={sup.scheduled} disabled />
-                                            <span>Scheduled</span>
-                                        </label>
-                                        <label class="flag-item">
-                                            <input type="checkbox" data-id={sup.id} data-field="going" checked={sup.going} disabled />
-                                            <span>Going</span>
-                                        </label>
-                                        <label class="flag-item">
-                                            <input type="checkbox" data-id={sup.id} data-field="appointmentCompleted" checked={sup.appointmentCompleted} disabled />
-                                            <span>Appointment Completed</span>
-                                        </label>
-                                        <label class="flag-item">
-                                            <input type="checkbox" data-id={sup.id} data-field="appointmentCompletedIneffective" checked={sup.appointmentCompletedIneffective} disabled />
-                                            <span>Completed (Ineffective)</span>
-                                        </label>
-                                        <label class="flag-item">
-                                            <input type="checkbox" data-id={sup.id} data-field="suspended" checked={sup.suspended} disabled />
-                                            <span>Suspended</span>
-                                        </label>
-                                        <label class="flag-item">
-                                            <input type="checkbox" data-id={sup.id} data-field="careNotApplicable" checked={sup.careNotApplicable} disabled />
-                                            <span>Care Not Applicable</span>
-                                        </label>
-                                    </div>
-                                    <template if:true={canEditSupports}>
-                                        <div class="card-actions">
-                                            <template if:true={showNavigation}>
-                                              <!--  <button class="pill-button" data-id={sup.id} onclick={handleEditSupport}>Edit</button> -->
+                                            <template if:true={sup.appointmentCompleted}>
+                                                <span class="summary-pill">Appt Completed</span>
                                             </template>
-                                            <button class="pill-button danger" data-id={sup.id} onclick={handleRemoveSupport}>Remove</button>
+                                            <template if:true={sup.appointmentCompletedIneffective}>
+                                                <span class="summary-pill">Completed (Ineffective)</span>
+                                            </template>
+                                            <template if:true={sup.suspended}>
+                                                <span class="summary-pill">Suspended</span>
+                                            </template>
+                                            <template if:true={sup.careNotApplicable}>
+                                                <span class="summary-pill">Care Not Applicable</span>
+                                            </template>
                                         </div>
-                                        <template if:true={sup.showConfirm}>
-                                            <div class="remove-confirm">
-                                                <p>Remove this support?</p>
-                                                <div class="remove-actions">
-                                                    <button class="pill-button danger" data-id={sup.id} onclick={confirmRemove}>Confirm Remove</button>
-                                                    <button class="pill-button secondary" onclick={cancelRemove}>Cancel</button>
-                                                </div>
+                                        <template if:true={showAllNotes}>
+                                            <div class="field field-full">
+                                                <label class="input-label">Notes</label>
+                                                <textarea class="textarea" data-id={sup.id} data-field="notes" oninput={handleCardNoteChange} disabled={isStandaloneLayout} readonly={isStandaloneLayout}>{sup.notes}</textarea>
                                             </div>
                                         </template>
-                                    </template>
-                                </article>
-                            </template>
-                        </div>
+                                        <template if:false={showAllNotes}>
+                                            <p class="scr-notes">
+                                                <template if:true={sup.notes}>
+                                                    {sup.previewNotes}
+                                                </template>
+                                                <template if:false={sup.notes}>
+                                                    —
+                                                </template>
+                                            </p>
+                                        </template>
+                                        <div class="support-flags">
+                                            <label class="flag-item">
+                                                <input type="checkbox" data-id={sup.id} data-field="scheduled" checked={sup.scheduled} disabled />
+                                                <span>Scheduled</span>
+                                            </label>
+                                            <label class="flag-item">
+                                                <input type="checkbox" data-id={sup.id} data-field="going" checked={sup.going} disabled />
+                                                <span>Going</span>
+                                            </label>
+                                            <label class="flag-item">
+                                                <input type="checkbox" data-id={sup.id} data-field="appointmentCompleted" checked={sup.appointmentCompleted} disabled />
+                                                <span>Appointment Completed</span>
+                                            </label>
+                                            <label class="flag-item">
+                                                <input type="checkbox" data-id={sup.id} data-field="appointmentCompletedIneffective" checked={sup.appointmentCompletedIneffective} disabled />
+                                                <span>Completed (Ineffective)</span>
+                                            </label>
+                                            <label class="flag-item">
+                                                <input type="checkbox" data-id={sup.id} data-field="suspended" checked={sup.suspended} disabled />
+                                                <span>Suspended</span>
+                                            </label>
+                                            <label class="flag-item">
+                                                <input type="checkbox" data-id={sup.id} data-field="careNotApplicable" checked={sup.careNotApplicable} disabled />
+                                                <span>Care Not Applicable</span>
+                                            </label>
+                                        </div>
+                                        <template if:true={canEditSupports}>
+                                            <div class="card-actions">
+                                                <template if:true={showNavigation}>
+                                                  <!--  <button class="pill-button" data-id={sup.id} onclick={handleEditSupport}>Edit</button> -->
+                                                </template>
+                                                <button class="pill-button danger" data-id={sup.id} onclick={handleRemoveSupport}>Remove</button>
+                                            </div>
+                                            <template if:true={sup.showConfirm}>
+                                                <div class="remove-confirm">
+                                                    <p>Remove this support?</p>
+                                                    <div class="remove-actions">
+                                                        <button class="pill-button danger" data-id={sup.id} onclick={confirmRemove}>Confirm Remove</button>
+                                                        <button class="pill-button secondary" onclick={cancelRemove}>Cancel</button>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </template>
+                                    </article>
+                                </template>
+                            </div>
+                        </section>
                     </template>
                     <template if:false={hasSupports}>
                         <section class="card empty-state-card">
-                            <div>
+                            <template if:false={showFilters}>
+                                <div class="grid-title">
+                                    <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
+                                    <span class="grid-title-text">{headerTitle}</span>
+                                </div>
+                            </template>
+                            <!--<div>
                                 <p class="empty-title">No supports captured yet</p>
                                 <template if:false={hideEmptySubtitle}>
                                     <p class="empty-subtitle">Use the button to add items manually.</p>
                                 </template>
-                            </div>
+                            </div> -->
                             <template if:true={showAddButton}>
                                 <button class="primary-button" onclick={handleAddSupport}>Add Supports</button>
                             </template>

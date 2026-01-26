@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Require_Practice_Locality</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+  ISBLANK(TEXT(Practice_Locality__c)),
+  NOT($Permission.Bypass_Practice_Locality_Validation)
+)</errorConditionFormula>
+    <errorDisplayField>Practice_Locality__c</errorDisplayField>
+    <errorMessage>Practice Locality is required</errorMessage>
+</ValidationRule>
