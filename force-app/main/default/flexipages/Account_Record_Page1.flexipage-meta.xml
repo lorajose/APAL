@@ -112,6 +112,9 @@
                         <valueListItems>
                             <value>Contact.NAME</value>
                         </valueListItems>
+                        <valueListItems>
+                            <value>CREATED_DATE</value>
+                        </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
