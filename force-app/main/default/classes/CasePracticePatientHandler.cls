@@ -1,4 +1,4 @@
-public with sharing class CasePracticePatientHandler {
+public without sharing class CasePracticePatientHandler {
     public static void handle(
         List<Case> newList,
         Map<Id, Case> oldMap,
