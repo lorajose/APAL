@@ -312,8 +312,12 @@
     <flexiPageRegions>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Parent.ParentId</fieldItem>
-                <identifier>RecordParentParentIdField</identifier>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>readonly</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.ParentId</fieldItem>
+                <identifier>RecordParentIdField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
