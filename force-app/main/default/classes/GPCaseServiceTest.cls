@@ -5,7 +5,7 @@ private class GPCaseServiceTest {
         Account practice = new Account(Name = 'Practice');
         insert practice;
 
-        Contact patient = new Contact(LastName = 'Patient');
+        Contact patient = new Contact(FirstName = 'Test', LastName = 'Patient');
         insert patient;
 
         insert new PCQT__c(Name = 'PCQT General', General_Psychiatry__c = true);

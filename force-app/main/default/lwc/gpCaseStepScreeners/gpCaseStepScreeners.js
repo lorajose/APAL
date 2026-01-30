@@ -489,7 +489,9 @@ export default class GpCaseStepScreeners extends LightningElement {
 
     wizardNext() {
         if (this.wizardStep === 0) {
-            const draftById = new Map(this.wizardDraft.map(item => [item.id, item]));
+            const draftById = new Map(
+                this.wizardDraft.map(item => [item.catalogId || item.id, item])
+            );
             const scrById = new Map((this.screeners || []).map(item => {
                 const key = item.catalogId || item.id;
                 return [key, item];
@@ -603,6 +605,7 @@ export default class GpCaseStepScreeners extends LightningElement {
     handleReviewChangeSelection() {
         this.wizardMode = 'add';
         this.wizardStep = 0;
+        this.wizardSelection = this.wizardDraft.map(item => item.catalogId || item.id);
     }
 
     handleBack() {
