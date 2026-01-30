@@ -753,7 +753,7 @@ public with sharing class GPCaseService {
             record.Frequency__c = item.frequency;
             record.Dosing_Unit__c = item.unit;
             record.Current_Medication__c = item.current;
-            record.Allergy__c = item.allergy;
+            setBooleanFieldSafely(record, 'Allergy__c', item.allergy);
             record.Notes__c = item.notes;
             if (!String.isBlank(item.amount)) {
                 try {
@@ -911,12 +911,12 @@ public with sharing class GPCaseService {
             if (fields.containsKey('Notes_new__c')) {
                 record.put('Notes_new__c', item.notes);
             }
-            setBooleanFieldIfExists(record, fields, 'Scheduled__c', item.scheduled);
-            setBooleanFieldIfExists(record, fields, 'Going__c', item.going);
-            setBooleanFieldIfExists(record, fields, 'Appointment_Completed__c', item.appointmentCompleted);
-            setBooleanFieldIfExists(record, fields, 'Appointment_Completed_Ineffective__c', item.appointmentCompletedIneffective);
-            setBooleanFieldIfExists(record, fields, 'Suspended__c', item.suspended);
-            setBooleanFieldIfExists(record, fields, 'Care_Not_Applicable__c', item.careNotApplicable);
+            setBooleanFieldSafely(record, 'Scheduled__c', item.scheduled);
+            setBooleanFieldSafely(record, 'Going__c', item.going);
+            setBooleanFieldSafely(record, 'Appointment_Completed__c', item.appointmentCompleted);
+            setBooleanFieldSafely(record, 'Appointment_Completed_Ineffective__c', item.appointmentCompletedIneffective);
+            setBooleanFieldSafely(record, 'Suspended__c', item.suspended);
+            setBooleanFieldSafely(record, 'Care_Not_Applicable__c', item.careNotApplicable);
 
             if (isNew) {
                 toInsert.add(record);
@@ -1735,7 +1735,9 @@ public with sharing class GPCaseService {
     }
 
     private static void setBooleanFieldIfExists(SObject record, Map<String, Schema.SObjectField> fields, String fieldName, Boolean value) {
-        if (fields == null || !fields.containsKey(fieldName)) return;
+        if (record == null || fields == null || !fields.containsKey(fieldName)) return;
+        Schema.DescribeFieldResult d = fields.get(fieldName).getDescribe();
+        if (d == null || d.getType() != Schema.DisplayType.Boolean) return;
         record.put(fieldName, value);
     }
 
