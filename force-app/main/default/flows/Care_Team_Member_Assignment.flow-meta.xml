@@ -1034,6 +1034,11 @@
         <dataType>String</dataType>
         <expression> LEFT({!Service_GP} &amp; &quot;: &quot; &amp; {!Notes_GPUsers}, 255)</expression>
     </formulas>
+    <formulas>
+        <name>SubjectTextGP_Other</name>
+        <dataType>String</dataType>
+        <expression> LEFT({!Service_GP} &amp; &quot;: &quot; &amp; {!Notes_GP}, 255)</expression>
+    </formulas>
     <interviewLabel>Care Team Member Assignment {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Care Team Member Assignment</label>
     <processMetadataValues>
@@ -1321,7 +1326,7 @@
         <inputAssignments>
             <field>Notes_new__c</field>
             <value>
-                <elementReference>Call_Back_and_Communication_Preference2_GP</elementReference>
+                <elementReference>Notes_GP</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -1357,7 +1362,7 @@
         <inputAssignments>
             <field>Subject</field>
             <value>
-                <elementReference>SubjectTextGP</elementReference>
+                <elementReference>SubjectTextGP_Other</elementReference>
             </value>
         </inputAssignments>
         <object>Case</object>
@@ -1665,7 +1670,7 @@
         <inputAssignments>
             <field>Subject</field>
             <value>
-                <elementReference>SubjectTextGP</elementReference>
+                <elementReference>SubjectTextGP_Other</elementReference>
             </value>
         </inputAssignments>
         <object>Case</object>
