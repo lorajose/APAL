@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
-    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
+    <excludeButtons>DataDotComAccountInsights</excludeButtons>
+    <excludeButtons>DataDotComClean</excludeButtons>
+    <excludeButtons>DataDotComCompanyHierarchy</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>true</customLabel>
@@ -387,6 +389,8 @@
         <relatedList>RelatedFileList</relatedList>
     </relatedLists>
     <relatedLists>
+        <customButtons>New_Patient_Case_acount</customButtons>
+        <excludeButtons>NewCase</excludeButtons>
         <fields>CASES.CASE_NUMBER</fields>
         <fields>NAME</fields>
         <fields>CASES.SUBJECT</fields>

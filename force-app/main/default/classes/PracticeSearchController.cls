@@ -34,11 +34,11 @@ public with sharing class PracticeSearchController {
         return recs.isEmpty() ? null : recs[0];
     }
 @AuraEnabled(cacheable=true)
-public static Account getPracticeById(Id practiceId) {
-    if (practiceId == null) {
-        System.debug('⚠️ getPracticeById recibió un Id nulo.');
-        return null;
-    }
+    public static Account getPracticeById(Id practiceId) {
+        if (practiceId == null) {
+            System.debug('⚠️ getPracticeById recibió un Id nulo.');
+            return null;
+        }
 
     List<Account> results = [
         SELECT Id, Name, RecordTypeId, CreatedDate
@@ -55,6 +55,25 @@ public static Account getPracticeById(Id practiceId) {
     System.debug('✅ Practice encontrado: ' + results[0].Name);
     return results[0];
 }
+
+    // ⚙️ Obtener práctica por Case (AccountId)
+    @AuraEnabled(cacheable=true)
+    public static Account getPracticeByCaseId(Id caseId) {
+        if (caseId == null) return null;
+        Case c = [
+            SELECT AccountId
+            FROM Case
+            WHERE Id = :caseId
+            LIMIT 1
+        ];
+        if (c.AccountId == null) return null;
+        return [
+            SELECT Id, Name, RecordTypeId, CreatedDate
+            FROM Account
+            WHERE Id = :c.AccountId
+            LIMIT 1
+        ];
+    }
 
 
 }
