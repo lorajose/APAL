@@ -1,10 +1,55 @@
 import { LightningElement, api } from 'lwc';
 import getPracticeById from '@salesforce/apex/PracticeSearchController.getPracticeById';
+import getPracticeByCaseId from '@salesforce/apex/PracticeSearchController.getPracticeByCaseId';
 
 export default class PracticeInCaseFlow extends LightningElement {
-@api practiceRecord;
-@api isFromFlow;
-@api practiceId;
+    @api isFromFlow;
+
+    @api
+    get practiceId() {
+        return this._practiceId;
+    }
+    set practiceId(value) {
+        this._practiceId = value;
+        this._maybeInitFromPracticeId();
+    }
+
+    @api
+    get practiceRecord() {
+        return this._practiceRecord;
+    }
+    set practiceRecord(value) {
+        this._practiceRecord = value;
+        if (value && value.Id) {
+            this._maybeInitFromPracticeRecord(value);
+        }
+    }
+
+    @api
+    get recordId() {
+        return this._recordId;
+    }
+    set recordId(value) {
+        this._recordId = value;
+        this._maybeInitFromRecordId();
+    }
+
+    @api
+    get objectApiName() {
+        return this._objectApiName;
+    }
+    set objectApiName(value) {
+        this._objectApiName = value;
+        this._maybeInitFromRecordId();
+    }
+
+    _practiceId;
+    _practiceRecord;
+    _recordId;
+    _objectApiName;
+    _initializedFromRecordId = false;
+    _initializedFromPracticeId = false;
+    _initializedFromPracticeRecord = false;
 
 connectedCallback() {
     window.addEventListener('practiceselected', this.handlePracticeSelected.bind(this));
@@ -27,21 +72,18 @@ handlePracticeSelected(event) {
 }
 
     handleValueChange(event) {
-        this.practiceId = event.detail.practiceId;
-        this.practiceRecord = event.detail.practiceRecord;
+        this._practiceId = event.detail.practiceId;
+        this._practiceRecord = event.detail.practiceRecord;
     }
     // 🧹 Limpieza manual
 handleClearSelection() {
-this.practiceId = null;
-this.practiceRecord = null;
+this._practiceId = null;
+this._practiceRecord = null;
 }
 
   handleInitialPopulate() {
-        if (this.practiceId) {
-            const searchInput = this.template.querySelector('c-practice-search-input');
-            if (searchInput && typeof searchInput.setPreSelectedPatient === 'function') {
-                searchInput.setPreSelectedPatient(this.practiceId);
-            }
+        if (this._practiceId) {
+            this._maybeInitFromPracticeId();
         } else {
             this.handleClearSelection();
         }
@@ -118,9 +160,9 @@ finishAction = async ({ outputVariables }) => {
     console.log(`✨ Practice autocompletado: ${practice.Name}`);
 } */
 
-  _applyNewPractice(practice, searchInput) {
-    this.practiceRecord = practice;
-    this.practiceId = practice.Id;
+    _applyNewPractice(practice, searchInput) {
+    this._practiceRecord = practice;
+    this._practiceId = practice.Id;
 
     // Esperar al DOM antes de autocompletar
     setTimeout(() => {
@@ -139,8 +181,11 @@ finishAction = async ({ outputVariables }) => {
             }));
 
             // 📩 Notificar al Flow padre
-      this.dispatchEvent(new FlowAttributeChangeEvent('practiceRecord', this.practiceRecord));
-      this.dispatchEvent(new FlowAttributeChangeEvent('practiceId', this.practiceId));
+      // eslint-disable-next-line no-undef
+      if (typeof FlowAttributeChangeEvent !== 'undefined') {
+          this.dispatchEvent(new FlowAttributeChangeEvent('practiceRecord', this._practiceRecord));
+          this.dispatchEvent(new FlowAttributeChangeEvent('practiceId', this._practiceId));
+      }
 
       console.log('📩 Flow principal actualizado con nuevo Practice.');
 
@@ -150,5 +195,130 @@ finishAction = async ({ outputVariables }) => {
         }
     }, 400); // pequeño delay para asegurar que el Flow modal cerró
 }
+
+    renderedCallback() {
+        this._maybeInitFromRecordId();
+    }
+
+    _isAccountContext() {
+        if (this._objectApiName) {
+            return this._objectApiName === 'Account';
+        }
+        return typeof this._recordId === 'string' && this._recordId.startsWith('001');
+    }
+
+    _isCaseContext() {
+        if (this._objectApiName) {
+            return this._objectApiName === 'Case';
+        }
+        return typeof this._recordId === 'string' && this._recordId.startsWith('500');
+    }
+
+    async _populateFromRecordId(recordId) {
+        const searchInput = this.template.querySelector('c-practice-search-input');
+        try {
+            const practice = await getPracticeById({ practiceId: recordId });
+            if (practice) {
+                this._applyNewPractice(practice, searchInput);
+            }
+        } catch (error) {
+            console.error('❌ Error al obtener Practice por Id:', error);
+        }
+    }
+
+    async _populateFromCaseId(recordId) {
+        const searchInput = this.template.querySelector('c-practice-search-input');
+        try {
+            const practice = await getPracticeByCaseId({ caseId: recordId });
+            if (practice) {
+                this._applyNewPractice(practice, searchInput);
+            }
+        } catch (error) {
+            console.error('❌ Error al obtener Practice por Case Id:', error);
+        }
+    }
+
+    _maybeInitFromRecordId() {
+        if (this._initializedFromRecordId) return;
+        if (this._practiceId) return;
+        if (!this._recordId) {
+            const inferredId = this._getAccountIdFromUrl();
+            if (inferredId) {
+                this._recordId = inferredId;
+            } else {
+                return;
+            }
+        }
+        this._initializedFromRecordId = true;
+        if (this._isAccountContext()) {
+            this._populateFromRecordId(this._recordId);
+        } else if (this._isCaseContext()) {
+            this._populateFromCaseId(this._recordId);
+        }
+    }
+
+    _maybeInitFromPracticeId() {
+        if (this._initializedFromPracticeId) return;
+        if (!this._practiceId) return;
+        if (this._practiceRecord && this._practiceRecord.Id) {
+            this._maybeInitFromPracticeRecord(this._practiceRecord);
+            return;
+        }
+        this._initializedFromPracticeId = true;
+        if (typeof this._practiceId === 'string' && this._practiceId.startsWith('500')) {
+            this._populateFromCaseId(this._practiceId);
+        } else {
+            this._populateFromRecordId(this._practiceId);
+        }
+    }
+
+    _maybeInitFromPracticeRecord(record) {
+        if (this._initializedFromPracticeRecord) return;
+        if (!record || !record.Id) return;
+        this._initializedFromPracticeRecord = true;
+        const searchInput = this.template.querySelector('c-practice-search-input');
+        this._applyNewPractice(record, searchInput);
+    }
+
+    _getAccountIdFromUrl() {
+        try {
+            const href = window.location.href;
+            const directMatch = href.match(/\/Account\/([a-zA-Z0-9]{15,18})/);
+            if (directMatch) {
+                return directMatch[1];
+            }
+            const params = new URL(href).searchParams;
+            const candidates = [
+                params.get('recordId'),
+                params.get('c__recordId'),
+                params.get('c__contextId'),
+                params.get('c__accountId')
+            ].filter((val) => val);
+            for (const val of candidates) {
+                if (typeof val === 'string' && val.startsWith('001')) {
+                    return val;
+                }
+            }
+            const hashIndex = href.indexOf('#');
+            if (hashIndex !== -1) {
+                const hash = href.slice(hashIndex + 1);
+                const hashParams = new URLSearchParams(hash.includes('?') ? hash.split('?')[1] : hash);
+                const hashCandidates = [
+                    hashParams.get('recordId'),
+                    hashParams.get('c__recordId'),
+                    hashParams.get('c__contextId'),
+                    hashParams.get('c__accountId')
+                ].filter((val) => val);
+                for (const val of hashCandidates) {
+                    if (typeof val === 'string' && val.startsWith('001')) {
+                        return val;
+                    }
+                }
+            }
+            return null;
+        } catch (error) {
+            return null;
+        }
+    }
   
 }

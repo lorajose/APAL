@@ -31,6 +31,16 @@
                 name="patientRecord"
                 label="Patient Record"
                 type="@salesforce/schema/Contact" />
+
+            <property
+                name="recordId"
+                label="Record Id"
+                type="String" />
+
+            <property
+                name="objectApiName"
+                label="Object API Name"
+                type="String" />
         </targetConfig>
 
         <!-- Configuración para páginas de registro (opcional, igual que Provider) -->
@@ -41,6 +51,7 @@
             </supportedFormFactors>
             <objects>
                 <object>Case</object>
+                <object>Contact</object>
             </objects>
         </targetConfig>
     </targetConfigs>
