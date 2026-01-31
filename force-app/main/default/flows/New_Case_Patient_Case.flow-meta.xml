@@ -1222,7 +1222,7 @@
                     <inputParameters>
                         <name>practiceId</name>
                         <value>
-                            <elementReference>practiceRecord.Id</elementReference>
+                            <elementReference>recordId</elementReference>
                         </value>
                     </inputParameters>
                     <inputParameters>
@@ -1233,10 +1233,6 @@
                     </inputParameters>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
-                    <outputParameters>
-                        <assignToReference>practiceRecord.Id</assignToReference>
-                        <name>practiceId</name>
-                    </outputParameters>
                     <outputParameters>
                         <assignToReference>practiceRecord</assignToReference>
                         <name>practiceRecord</name>
@@ -1267,7 +1263,7 @@
                     <inputParameters>
                         <name>patientId</name>
                         <value>
-                            <elementReference>patientRecord.Id</elementReference>
+                            <elementReference>recordId</elementReference>
                         </value>
                     </inputParameters>
                     <inputParameters>
@@ -1284,10 +1280,6 @@
                     </inputParameters>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>true</isRequired>
-                    <outputParameters>
-                        <assignToReference>patientRecord.Id</assignToReference>
-                        <name>patientId</name>
-                    </outputParameters>
                     <outputParameters>
                         <assignToReference>patientRecord</assignToReference>
                         <name>patientRecord</name>
@@ -1410,7 +1402,7 @@
                     <inputParameters>
                         <name>practiceId</name>
                         <value>
-                            <elementReference>practiceRecord.Id</elementReference>
+                            <elementReference>recordId</elementReference>
                         </value>
                     </inputParameters>
                     <inputParameters>
@@ -1430,10 +1422,6 @@
                     <outputParameters>
                         <assignToReference>practiceRecord</assignToReference>
                         <name>practiceRecord</name>
-                    </outputParameters>
-                    <outputParameters>
-                        <assignToReference>practiceRecord.Id</assignToReference>
-                        <name>practiceId</name>
                     </outputParameters>
                 </fields>
                 <inputParameters>
@@ -1465,15 +1453,15 @@
                         </value>
                     </inputParameters>
                     <inputParameters>
-                        <name>patientId</name>
-                        <value>
-                            <elementReference>patientRecord.Id</elementReference>
-                        </value>
-                    </inputParameters>
-                    <inputParameters>
                         <name>patientRecord</name>
                         <value>
                             <elementReference>patientRecord</elementReference>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>patientId</name>
+                        <value>
+                            <elementReference>recordId</elementReference>
                         </value>
                     </inputParameters>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
@@ -1481,10 +1469,6 @@
                     <outputParameters>
                         <assignToReference>patientRecord</assignToReference>
                         <name>patientRecord</name>
-                    </outputParameters>
-                    <outputParameters>
-                        <assignToReference>patientRecord.Id</assignToReference>
-                        <name>patientId</name>
                     </outputParameters>
                 </fields>
                 <inputParameters>
@@ -1497,23 +1481,6 @@
             </fields>
             <isRequired>false</isRequired>
             <regionContainerType>SectionWithHeader</regionContainerType>
-        </fields>
-        <fields>
-            <name>New_Case_Patient_Case_Psychiatry_Section4</name>
-            <fieldType>RegionContainer</fieldType>
-            <fields>
-                <name>New_Case_Patient_Case_Psychiatry_Section4_Column1</name>
-                <fieldType>Region</fieldType>
-                <inputParameters>
-                    <name>width</name>
-                    <value>
-                        <stringValue>12</stringValue>
-                    </value>
-                </inputParameters>
-                <isRequired>false</isRequired>
-            </fields>
-            <isRequired>false</isRequired>
-            <regionContainerType>SectionWithoutHeader</regionContainerType>
         </fields>
         <nextOrFinishButtonLabel>Continue to Wizard</nextOrFinishButtonLabel>
         <showFooter>true</showFooter>
@@ -1663,6 +1630,13 @@
         <objectType>Case</objectType>
     </variables>
     <variables>
+        <name>objectApiName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
         <name>patientCase</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
@@ -1704,6 +1678,13 @@
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>

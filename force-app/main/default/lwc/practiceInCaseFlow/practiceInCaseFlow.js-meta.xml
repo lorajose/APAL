@@ -31,6 +31,16 @@
                 name="practiceRecord"
                 label="Practice Record"
                 type="@salesforce/schema/Account" />
+
+            <property
+                name="recordId"
+                label="Record Id"
+                type="String" />
+
+            <property
+                name="objectApiName"
+                label="Object API Name"
+                type="String" />
         </targetConfig>
 
         <!-- Configuración para páginas de registro (opcional, igual que Provider) -->
