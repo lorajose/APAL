@@ -203,6 +203,24 @@
                 <identifier>RecordProvider_Registration_Status__cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Name_of_School__c</fieldItem>
+                <identifier>RecordName_of_School__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Approximate_Age_of_Patients__c</fieldItem>
+                <identifier>RecordApproximate_Age_of_Patients__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Practice_Locality__c</fieldItem>
+                <identifier>RecordPractice_Locality__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-3a876747-4900-4f8d-99fc-70a7884c1daa</name>
         <type>Facet</type>
     </flexiPageRegions>
