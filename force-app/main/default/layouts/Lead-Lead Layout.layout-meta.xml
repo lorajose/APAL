@@ -45,6 +45,14 @@
                 <behavior>Edit</behavior>
                 <field>pcpothersta_desc__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Name_of_School__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Practice_Locality__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -254,6 +262,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Matching_Provider__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Approximate_Age_of_Patients__c</field>
             </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>
