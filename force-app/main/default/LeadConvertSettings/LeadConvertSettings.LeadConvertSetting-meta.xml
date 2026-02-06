@@ -12,6 +12,10 @@
             <outputField>DirectContactWithVMAPstaff__c</outputField>
         </mappingFields>
         <mappingFields>
+            <inputField>Approximate_Age_of_Patients__c</inputField>
+            <outputField>Approximate_Age_of_Patients__c</outputField>
+        </mappingFields>
+        <mappingFields>
             <inputField>trainenddate__c</inputField>
             <outputField>trainenddate__c</outputField>
         </mappingFields>
@@ -42,6 +46,10 @@
         <mappingFields>
             <inputField>My_Medical_or_Specialty_Association__c</inputField>
             <outputField>MyMedicalOrSpecialtyAssociation__c</outputField>
+        </mappingFields>
+        <mappingFields>
+            <inputField>Name_of_School__c</inputField>
+            <outputField>Name_of_School__c</outputField>
         </mappingFields>
         <mappingFields>
             <inputField>News_Story__c</inputField>
@@ -82,6 +90,14 @@
         <mappingFields>
             <inputField>Phone_Type__c</inputField>
             <outputField>pcpphonedesc__c</outputField>
+        </mappingFields>
+        <mappingFields>
+            <inputField>Practice__c</inputField>
+            <outputField>Practice_Name__c</outputField>
+        </mappingFields>
+        <mappingFields>
+            <inputField>Practice_Locality__c</inputField>
+            <outputField>PracticeLocality__c</outputField>
         </mappingFields>
         <mappingFields>
             <inputField>Conference_presentation_or_exhibit__c</inputField>

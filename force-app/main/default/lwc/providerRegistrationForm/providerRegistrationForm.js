@@ -514,10 +514,38 @@ setupLeadSource() {
     handleToggleFields() {
         const get = (prefix) => this.getByIdPrefix(prefix);
 
+        // ---- NPI Yes/No ----
+        const npiHaveSelect = get('Does_the_provider_have_NPI__c');
+        const npiLabel = get('provider-npi-label');
+        const npiInput = this.template.querySelector('input[id^="provider-npi"]');
+
+        if (npiHaveSelect && npiHaveSelect.value === 'Yes') {
+            if (npiLabel) npiLabel.classList.remove('hidden');
+            if (npiInput) {
+                npiInput.classList.remove('hidden');
+                npiInput.required = true;
+            }
+        } else {
+            if (npiLabel) npiLabel.classList.add('hidden');
+            if (npiInput) {
+                npiInput.classList.add('hidden');
+                npiInput.required = false;
+                npiInput.value = '';
+            }
+        }
+
         // Trainee
         const traineeSelect = get('The_provider_is_a_Trainee__c');
         const traineeType = get('Trainee_Type__c');
         const traineeLabel = get('Trainee_Type_Label');
+        const schoolLabel =
+            this.template.querySelector('label[for^="Name_of_School__c"]') ||
+            this.template.querySelector('[data-id="Name_of_School__c-label"]') ||
+            get('Name_of_School__c-label');
+        const schoolInput =
+            this.template.querySelector('input[name="Name_of_School__c"]') ||
+            this.template.querySelector('[data-id="Name_of_School__c"]') ||
+            this.template.querySelector('input[id^="Name_of_School__c"]');
 
         const otherTraineeInput = get('Other_Medical_Trainee_Description__c');
         const otherTraineeLabel = get('otherMedicalTraineeDescriptionid');
@@ -534,12 +562,23 @@ setupLeadSource() {
                 traineeType.classList.remove('hidden');
                 traineeType.required = true;
             }
+            if (schoolLabel) schoolLabel.classList.remove('hidden');
+            if (schoolInput) {
+                schoolInput.classList.remove('hidden');
+                schoolInput.required = true;
+            }
         } else {
             if (traineeLabel) traineeLabel.classList.add('hidden');
             if (traineeType) {
                 traineeType.classList.add('hidden');
                 traineeType.required = false;
                 traineeType.value = '';
+            }
+            if (schoolLabel) schoolLabel.classList.add('hidden');
+            if (schoolInput) {
+                schoolInput.classList.add('hidden');
+                schoolInput.required = false;
+                schoolInput.value = '';
             }
             if (otherTraineeLabel) otherTraineeLabel.classList.add('hidden');
             if (otherTraineeInput) {
