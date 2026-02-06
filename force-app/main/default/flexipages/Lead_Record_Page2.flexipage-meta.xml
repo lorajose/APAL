@@ -183,6 +183,38 @@
                 <identifier>RecordMatching_Provider_rpcpphoneext_cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Name_of_School__c</fieldItem>
+                <identifier>RecordName_of_School__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Matching_Provider__r.Name_of_School__c</fieldItem>
+                <identifier>RecordMatching_Provider_rName_of_School_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Approximate_Age_of_Patients__c</fieldItem>
+                <identifier>RecordApproximate_Age_of_Patients__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Matching_Provider__r.Approximate_Age_of_Patients__c</fieldItem>
+                <identifier>RecordMatching_Provider_rApproximate_Age_of_Patients_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-c3287956-09d4-43c1-a87f-e2c88452faa4</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -243,6 +275,38 @@
             <fieldInstance>
                 <fieldItem>Record.Matching_Provider__r.PersonEmail</fieldItem>
                 <identifier>RecordMatching_Provider_rPersonEmailField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Practice__c</fieldItem>
+                <identifier>RecordPractice_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Matching_Provider__r.Practice_Name__c</fieldItem>
+                <identifier>RecordMatching_Provider_rPractice_Name_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Practice_Locality__c</fieldItem>
+                <identifier>RecordPractice_Locality__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Matching_Provider__r.PracticeLocality__c</fieldItem>
+                <identifier>RecordMatching_Provider_rPracticeLocality_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-c28adddb-b903-4621-b896-efa9b6a41753</name>
