@@ -592,17 +592,47 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Approximate_Age_of_Patients__c</field>
+            <field>pcppatientage__c</field>
             <table>Account</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Practice_Name__c</field>
+            <field>Name_of_Practice__c</field>
             <table>Account</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>PracticeLocality__c</field>
+            <field>Location_of_Practice__c</field>
+            <table>Account</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>pcppatientage612__c</field>
+            <table>Account</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>pcppatientage23more__c</field>
+            <table>Account</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>pcppatientage1922__c</field>
+            <table>Account</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>pcppatientage1318__c</field>
+            <table>Account</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>pcppatientage05__c</field>
+            <table>Account</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Ages_of_Patients_Seen__c</field>
             <table>Account</table>
         </columns>
         <masterLabel>Accounts</masterLabel>
