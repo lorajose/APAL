@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>pcppatientage__c</fullName>
+    <label>Ages of Patients Seen</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>0-5</fullName>
+                <default>false</default>
+                <label>0-5</label>
+            </value>
+            <value>
+                <fullName>6-12</fullName>
+                <default>false</default>
+                <label>6-12</label>
+            </value>
+            <value>
+                <fullName>13-18</fullName>
+                <default>false</default>
+                <label>13-18</label>
+            </value>
+            <value>
+                <fullName>19-22</fullName>
+                <default>false</default>
+                <label>19-22</label>
+            </value>
+            <value>
+                <fullName>23+</fullName>
+                <default>false</default>
+                <label>23+</label>
+            </value>
+            <value>
+                <fullName>Senior Population (65+)</fullName>
+                <default>false</default>
+                <label>Senior Population (65+)</label>
+            </value>
+            <value>
+                <fullName>I don’t see patients</fullName>
+                <default>false</default>
+                <label>I don’t see patients</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>
