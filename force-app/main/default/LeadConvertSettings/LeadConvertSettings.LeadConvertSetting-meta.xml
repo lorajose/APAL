@@ -4,16 +4,16 @@
     <objectMapping>
         <inputObject>Lead</inputObject>
         <mappingFields>
+            <inputField>pcppatientage__c</inputField>
+            <outputField>pcppatientage__c</outputField>
+        </mappingFields>
+        <mappingFields>
             <inputField>Health_Haven_Enrolled_Provider__c</inputField>
             <outputField>VMAPEnrolledProvider__c</outputField>
         </mappingFields>
         <mappingFields>
             <inputField>Health_Haven_staff__c</inputField>
             <outputField>DirectContactWithVMAPstaff__c</outputField>
-        </mappingFields>
-        <mappingFields>
-            <inputField>Approximate_Age_of_Patients__c</inputField>
-            <outputField>Approximate_Age_of_Patients__c</outputField>
         </mappingFields>
         <mappingFields>
             <inputField>trainenddate__c</inputField>
@@ -44,8 +44,16 @@
             <outputField>provider_racee__c</outputField>
         </mappingFields>
         <mappingFields>
+            <inputField>Location_of_Practice__c</inputField>
+            <outputField>Location_of_Practice__c</outputField>
+        </mappingFields>
+        <mappingFields>
             <inputField>My_Medical_or_Specialty_Association__c</inputField>
             <outputField>MyMedicalOrSpecialtyAssociation__c</outputField>
+        </mappingFields>
+        <mappingFields>
+            <inputField>Name_of_Practice__c</inputField>
+            <outputField>Name_of_Practice__c</outputField>
         </mappingFields>
         <mappingFields>
             <inputField>Name_of_School__c</inputField>
@@ -84,20 +92,32 @@
             <outputField>pcpmdtypedesc__c</outputField>
         </mappingFields>
         <mappingFields>
+            <inputField>pcppatientage05__c</inputField>
+            <outputField>pcppatientage05__c</outputField>
+        </mappingFields>
+        <mappingFields>
+            <inputField>pcppatientage1318__c</inputField>
+            <outputField>pcppatientage1318__c</outputField>
+        </mappingFields>
+        <mappingFields>
+            <inputField>pcppatientage1922__c</inputField>
+            <outputField>pcppatientage1922__c</outputField>
+        </mappingFields>
+        <mappingFields>
+            <inputField>pcppatientage23more__c</inputField>
+            <outputField>pcppatientage23more__c</outputField>
+        </mappingFields>
+        <mappingFields>
+            <inputField>pcppatientage612__c</inputField>
+            <outputField>pcppatientage612__c</outputField>
+        </mappingFields>
+        <mappingFields>
             <inputField>Phone_Extension__c</inputField>
             <outputField>pcpphoneext__c</outputField>
         </mappingFields>
         <mappingFields>
             <inputField>Phone_Type__c</inputField>
             <outputField>pcpphonedesc__c</outputField>
-        </mappingFields>
-        <mappingFields>
-            <inputField>Practice__c</inputField>
-            <outputField>Practice_Name__c</outputField>
-        </mappingFields>
-        <mappingFields>
-            <inputField>Practice_Locality__c</inputField>
-            <outputField>PracticeLocality__c</outputField>
         </mappingFields>
         <mappingFields>
             <inputField>Conference_presentation_or_exhibit__c</inputField>

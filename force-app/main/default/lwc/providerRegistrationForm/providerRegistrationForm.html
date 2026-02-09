@@ -19,11 +19,11 @@
 
             <!-- FORM -->
 
-             <!--  <form id="multi-step-form" action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00Dcn00000462T3" method="POST"
+              <!-- <form id="multi-step-form" action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00Dcn00000462T3" method="POST"
                      onsubmit={handleSubmit}>  Dev -->
 
                <form id="multi-step-form"  action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00Dcn00000462Uf" method="POST"
-                    onsubmit={handleSubmit}><!--  QA-->
+                    onsubmit={handleSubmit}> <!--  QA-->
 
             <!--   <form id="multi-step-form"  action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00Dcn00000462ZV" method="POST"
                     onsubmit={handleSubmit}>  UAT -->
@@ -33,7 +33,7 @@
 
                 <!-- Salesforce Hidden Fields -->
                 <!-- <input type=hidden name="oid" value="00Dcn00000462T3" /> Dev--> 
-                <input type=hidden name="oid" value="00Dcn00000462Uf" /><!--  QA-->
+                <input type=hidden name="oid" value="00Dcn00000462Uf" /> <!-- QA-->
                 <!--  <input type=hidden name="oid" value="00Dcn00000462ZV" /> UAT -->
                  <!--<input type="hidden" name="oid" value="00D820000008huw" /> PROD-->
                 
@@ -120,30 +120,23 @@
                     </select>
 
                     <!-- Practice Name -->
-                    <label for="Practice__c">Practice Name <span style="color:red">*</span></label>
-                    <input type="text" id="Practice__c" name="Practice__c" required placeholder="Practice name"
+                    <label for="Name_of_Practice__c">Practice Name <span style="color:red">*</span></label>
+                    <input type="text" id="Name_of_Practice__c" name="Name_of_Practice__c" required placeholder="Practice name"
                         oninput={handleFieldInput} />
 
                     <!-- Practice Locality -->
-                    <label for="Practice_Locality__c">Practice Locality <span style="color:red">*</span></label>
-                    <input type="text" id="Practice_Locality__c" name="Practice_Locality__c" required
+                    <label for="Location_of_Practice__c">Practice Locality <span style="color:red">*</span></label>
+                    <input type="text" id="Location_of_Practice__c" name="Location_of_Practice__c" required
                         placeholder="City, ST" oninput={handleFieldInput} />
                     <small class="field-hint">Please include city and state (abbreviated)</small>
 
-                    <!-- Approximate Age of Patients -->
-                    <label for="Approximate_Age_of_Patients__c">
-                        Approximate Age of Patients <span style="color:red">*</span>
-                    </label>
-                    <select id="Approximate_Age_of_Patients__c" name="Approximate_Age_of_Patients__c" multiple required
-                        onchange={handleFieldInput}>
-                        <option value="0-5">0-5</option>
-                        <option value="6-12">6-12</option>
-                        <option value="13-18">13-18</option>
-                        <option value="19-22">19-22</option>
-                        <option value="23+">23+</option>
-                        <option value="Senior Population (65+)">Senior Population (65+)</option>
-                        <option value="I don’t see patients">I don’t see patients</option>
-                    </select>
+                    <!-- Approximate Age of Patients Seen -->
+                    <h4>Approximate Age of Patients Seen</h4>
+                    <label><input type="checkbox" id="pcppatientage05__c" name="pcppatientage05__c" value="true" /> 0-5</label>
+                    <label><input type="checkbox" id="pcppatientage612__c" name="pcppatientage612__c" value="true" /> 6-12</label>
+                    <label><input type="checkbox" id="pcppatientage1318__c" name="pcppatientage1318__c" value="true" /> 13-18</label>
+                    <label><input type="checkbox" id="pcppatientage1922__c" name="pcppatientage1922__c" value="true" /> 19-22</label>
+                    <label><input type="checkbox" id="pcppatientage23more__c" name="pcppatientage23more__c" value="true" /> 23+</label>
 
                     <!-- Specialty Other -->
                     <label id="Other-specialty-id" for="other-specialty-desc" class="hidden">
