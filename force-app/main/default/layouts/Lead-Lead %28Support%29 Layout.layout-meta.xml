@@ -161,7 +161,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Practice_Locality__c</field>
+                <field>Location_of_Practice__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -264,7 +264,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Approximate_Age_of_Patients__c</field>
+                <field>pcppatientage__c</field>
             </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>

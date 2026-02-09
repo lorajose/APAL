@@ -38,37 +38,6 @@
         </values>
     </picklistValues>
     <picklistValues>
-        <picklist>Approximate_Age_of_Patients__c</picklist>
-        <values>
-            <fullName>0-5</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>13-18</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>19-22</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>23%2B</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>6-12</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>I don%E2%80%99t see patients</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Senior Population %2865%2B%29</fullName>
-            <default>false</default>
-        </values>
-    </picklistValues>
-    <picklistValues>
         <picklist>CustomerPriority__c</picklist>
         <values>
             <fullName>High</fullName>
@@ -931,6 +900,37 @@
         </values>
         <values>
             <fullName>Yes</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>pcppatientage__c</picklist>
+        <values>
+            <fullName>0-5</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>13-18</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>19-22</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>23%2B</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>6-12</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>I don%E2%80%99t see patients</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Senior Population %2865%2B%29</fullName>
             <default>false</default>
         </values>
     </picklistValues>

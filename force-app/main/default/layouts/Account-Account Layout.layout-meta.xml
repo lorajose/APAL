@@ -40,6 +40,14 @@
                 <behavior>Edit</behavior>
                 <field>InsAcceptedUninsured__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>pcppatientage1318__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Ages_of_Patients_Seen__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

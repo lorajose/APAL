@@ -205,13 +205,13 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Approximate_Age_of_Patients__c</fieldItem>
+                <fieldItem>Record.pcppatientage__c</fieldItem>
                 <identifier>RecordApproximate_Age_of_Patients__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.Approximate_Age_of_Patients__c</fieldItem>
+                <fieldItem>Record.Matching_Provider__r.pcppatientage__c</fieldItem>
                 <identifier>RecordMatching_Provider_rApproximate_Age_of_Patients_cField</identifier>
             </fieldInstance>
         </itemInstances>
@@ -279,33 +279,29 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Practice__c</fieldItem>
-                <identifier>RecordPractice_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.Practice_Name__c</fieldItem>
+                <fieldItem>Record.Matching_Provider__r.Name_of_Practice__c</fieldItem>
                 <identifier>RecordMatching_Provider_rPractice_Name_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
+                <fieldItem>Record.Matching_Provider__r.Name_of_Practice__c</fieldItem>
+                <identifier>RecordMatching_Provider_rName_of_Practice_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Practice_Locality__c</fieldItem>
+                <fieldItem>Record.Location_of_Practice__c</fieldItem>
                 <identifier>RecordPractice_Locality__cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.PracticeLocality__c</fieldItem>
+                <fieldItem>Record.Matching_Provider__r.Location_of_Practice__c</fieldItem>
                 <identifier>RecordMatching_Provider_rPracticeLocality_cField</identifier>
             </fieldInstance>
         </itemInstances>
@@ -334,6 +330,88 @@
             </componentInstance>
         </itemInstances>
         <name>Facet-b28c0c23-78c6-4b2f-81e8-b3dca6f8d705</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.pcppatientage05__c</fieldItem>
+                <identifier>Recordpcppatientage05_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.pcppatientage612__c</fieldItem>
+                <identifier>Recordpcppatientage612_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.pcppatientage1318__c</fieldItem>
+                <identifier>Recordpcppatientage1318_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-8436ec3e-0516-4a63-9b34-48e5195cc1e5</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.pcppatientage1922__c</fieldItem>
+                <identifier>Recordpcppatientage1922_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.pcppatientage23more__c</fieldItem>
+                <identifier>Recordpcppatientage23more_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <name>Facet-7da1532b-d134-4a5c-b7c3-a9bbbd141a60</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-8436ec3e-0516-4a63-9b34-48e5195cc1e5</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column14</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-7da1532b-d134-4a5c-b7c3-a9bbbd141a60</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:column</componentName>
+                <identifier>flexipage_column15</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-2ae6481f-99f1-4952-832a-74adf986dcc9</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -1037,6 +1115,24 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>columns</name>
+                    <value>Facet-2ae6481f-99f1-4952-832a-74adf986dcc9</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>horizontalAlignment</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>label</name>
+                    <value>Approximate Age of Patients Seen</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:fieldSection</componentName>
+                <identifier>flexipage_fieldSection8</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
