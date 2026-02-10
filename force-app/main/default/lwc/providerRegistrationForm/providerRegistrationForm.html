@@ -119,6 +119,13 @@
                         <option value="Other">Other</option>
                     </select>
 
+                      <!-- Specialty Other -->
+                    <label id="Other-specialty-id" for="other-specialty-desc" class="hidden">
+                        Other Specialty <span style="color:red">*</span>
+                    </label>
+                    <input type="text" id="other-specialty-desc" name="Other_Specialty_Description__c" class="hidden"
+                        placeholder="Describe specialty" oninput={handleFieldInput} />
+
                     <!-- Practice Name -->
                     <label for="Name_of_Practice__c">Practice Name <span style="color:red">*</span></label>
                     <input type="text" id="Name_of_Practice__c" name="Name_of_Practice__c" required placeholder="Practice name"
@@ -143,14 +150,7 @@
                         <label><input type="checkbox" class="age-checkbox" id="pcppatientage65plus__c" name="pcppatientage65plus__c" value="true" /> Senior Population (65+)</label>
                         <label><input type="checkbox" class="age-checkbox" id="I_Do_Not_See_Patients__c" name="I_Do_Not_See_Patients__c" value="true" /> I don’t see patients</label>
                     </div>
-
-                    <!-- Specialty Other -->
-                    <label id="Other-specialty-id" for="other-specialty-desc" class="hidden">
-                        Other Specialty <span style="color:red">*</span>
-                    </label>
-                    <input type="text" id="other-specialty-desc" name="Other_Specialty_Description__c" class="hidden"
-                        placeholder="Describe specialty" oninput={handleFieldInput} />
-
+                  
                     <!-- Years in Practice -->
                     <label for="Number_of_Years_In_Practice__c">Number of Years in Practice <span
                             style="color:red">*</span></label>
