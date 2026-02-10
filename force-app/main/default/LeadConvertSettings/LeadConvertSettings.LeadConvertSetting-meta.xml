@@ -44,6 +44,10 @@
             <outputField>provider_racee__c</outputField>
         </mappingFields>
         <mappingFields>
+            <inputField>I_Do_Not_See_Patients__c</inputField>
+            <outputField>I_Do_Not_See_Patients__c</outputField>
+        </mappingFields>
+        <mappingFields>
             <inputField>Location_of_Practice__c</inputField>
             <outputField>Location_of_Practice__c</outputField>
         </mappingFields>
@@ -150,6 +154,10 @@
         <mappingFields>
             <inputField>Search_Engine__c</inputField>
             <outputField>SearchEngine__c</outputField>
+        </mappingFields>
+        <mappingFields>
+            <inputField>pcppatientage65plus__c</inputField>
+            <outputField>pcppatientage65plus__c</outputField>
         </mappingFields>
         <mappingFields>
             <inputField>Social_Media__c</inputField>

@@ -189,22 +189,6 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Name_of_School__c</fieldItem>
-                <identifier>RecordName_of_School__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.Name_of_School__c</fieldItem>
-                <identifier>RecordMatching_Provider_rName_of_School_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.pcppatientage__c</fieldItem>
                 <identifier>RecordApproximate_Age_of_Patients__cField</identifier>
             </fieldInstance>
@@ -279,8 +263,22 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.Name_of_Practice__c</fieldItem>
-                <identifier>RecordMatching_Provider_rPractice_Name_cField</identifier>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Practice__c</fieldItem>
+                <identifier>RecordPractice_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Name_of_Practice__c</fieldItem>
+                <identifier>RecordName_of_Practice_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
@@ -385,6 +383,26 @@
                 </fieldInstanceProperties>
                 <fieldItem>Record.pcppatientage23more__c</fieldItem>
                 <identifier>Recordpcppatientage23more_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.pcppatientage65plus__c</fieldItem>
+                <identifier>Recordpcppatientage65plus_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.I_Do_Not_See_Patients__c</fieldItem>
+                <identifier>RecordI_Do_Not_See_Patients_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-7da1532b-d134-4a5c-b7c3-a9bbbd141a60</name>
@@ -717,6 +735,22 @@
             <fieldInstance>
                 <fieldItem>Record.Matching_Provider__r.pcptrainee__c</fieldItem>
                 <identifier>RecordMatching_Provider_rpcptrainee_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
+                <fieldItem>Record.Name_of_School__c</fieldItem>
+                <identifier>RecordName_of_School__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Matching_Provider__r.Name_of_School__c</fieldItem>
+                <identifier>RecordMatching_Provider_rName_of_School_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
