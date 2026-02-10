@@ -199,9 +199,21 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>I_Do_Not_See_Patients__c</field>
+            <value>
+                <elementReference>I_Do_Not_See_Patients</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>LastName</field>
             <value>
                 <elementReference>Last_Name</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Location_of_Practice__c</field>
+            <value>
+                <elementReference>Location_of_Practice</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -214,6 +226,18 @@
             <field>MyMedicalOrSpecialtyAssociation__c</field>
             <value>
                 <elementReference>My_Medical_or_Specialty_Association</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Name_of_Practice__c</field>
+            <value>
+                <elementReference>Name_of_Practice</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Name_of_School__c</field>
+            <value>
+                <elementReference>Name_of_School</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -370,6 +394,42 @@
             <field>pcpothersta_desc__c</field>
             <value>
                 <elementReference>Other_Provider_Type</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>pcppatientage05__c</field>
+            <value>
+                <elementReference>Patient_Ages_0_5</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>pcppatientage1318__c</field>
+            <value>
+                <elementReference>Patient_Ages_13_18</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>pcppatientage1922__c</field>
+            <value>
+                <elementReference>Patient_Ages_19_22</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>pcppatientage23more__c</field>
+            <value>
+                <elementReference>Patient_Ages_23</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>pcppatientage612__c</field>
+            <value>
+                <elementReference>Patient_Ages_6_12</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>pcppatientage65plus__c</field>
+            <value>
+                <elementReference>Senior_Population_65</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -675,6 +735,22 @@
                         <name>practiceRecord</name>
                     </outputParameters>
                 </fields>
+                <fields>
+                    <name>Name_of_Practice</name>
+                    <dataType>String</dataType>
+                    <fieldText>Name of Practice</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                </fields>
+                <fields>
+                    <name>Location_of_Practice</name>
+                    <dataType>String</dataType>
+                    <fieldText>Location of Practice</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                </fields>
                 <inputParameters>
                     <name>width</name>
                     <value>
@@ -790,6 +866,91 @@
                     <name>width</name>
                     <value>
                         <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+        </fields>
+        <fields>
+            <name>Approximate_Age_of_Patients_Seen</name>
+            <fieldText>Approximate Age of Patients Seen</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Approximate_Age_of_Patients_Seen_Column1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Patient_Ages_0_5</name>
+                    <dataType>Boolean</dataType>
+                    <fieldText>Patient Ages 0-5</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                </fields>
+                <fields>
+                    <name>Patient_Ages_6_12</name>
+                    <dataType>Boolean</dataType>
+                    <fieldText>Patient Ages 6-12</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                </fields>
+                <fields>
+                    <name>Patient_Ages_13_18</name>
+                    <dataType>Boolean</dataType>
+                    <fieldText>Patient Ages 13-18</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                </fields>
+                <fields>
+                    <name>Patient_Ages_19_22</name>
+                    <dataType>Boolean</dataType>
+                    <fieldText>Patient Ages 19-22</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>Approximate_Age_of_Patients_Seen_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Patient_Ages_23</name>
+                    <dataType>Boolean</dataType>
+                    <fieldText>Patient Ages 23+</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                </fields>
+                <fields>
+                    <name>Senior_Population_65</name>
+                    <dataType>Boolean</dataType>
+                    <fieldText>Senior Population (65+)</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                </fields>
+                <fields>
+                    <name>I_Do_Not_See_Patients</name>
+                    <dataType>Boolean</dataType>
+                    <fieldText>I Do Not See Patients</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
                     </value>
                 </inputParameters>
                 <isRequired>false</isRequired>
@@ -1057,6 +1218,24 @@
                     <fieldType>DropdownBox</fieldType>
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
+                </fields>
+                <fields>
+                    <name>Name_of_School</name>
+                    <dataType>String</dataType>
+                    <fieldText>Name of School</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>The_provider_is_a_Trainee</leftValueReference>
+                            <operator>EqualTo</operator>
+                            <rightValue>
+                                <stringValue>Yes</stringValue>
+                            </rightValue>
+                        </conditions>
+                    </visibilityRule>
                 </fields>
                 <fields>
                     <name>Trainee_Type</name>

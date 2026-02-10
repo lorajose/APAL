@@ -23,7 +23,7 @@
                      onsubmit={handleSubmit}>  Dev -->
 
                <form id="multi-step-form"  action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00Dcn00000462Uf" method="POST"
-                    onsubmit={handleSubmit}> <!--  QA-->
+                    onsubmit={handleSubmit}> <!-- QA-->
 
             <!--   <form id="multi-step-form"  action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00Dcn00000462ZV" method="POST"
                     onsubmit={handleSubmit}>  UAT -->
@@ -32,8 +32,8 @@
                 method="POST" id="multi-step-form"> PROD-->
 
                 <!-- Salesforce Hidden Fields -->
-                <!-- <input type=hidden name="oid" value="00Dcn00000462T3" /> Dev--> 
-                <input type=hidden name="oid" value="00Dcn00000462Uf" /> <!-- QA-->
+              <!--   <input type=hidden name="oid" value="00Dcn00000462T3" /> Dev--> 
+                <input type=hidden name="oid" value="00Dcn00000462Uf" /><!--  QA-->
                 <!--  <input type=hidden name="oid" value="00Dcn00000462ZV" /> UAT -->
                  <!--<input type="hidden" name="oid" value="00D820000008huw" /> PROD-->
                 
@@ -125,18 +125,24 @@
                         oninput={handleFieldInput} />
 
                     <!-- Practice Locality -->
-                    <label for="Location_of_Practice__c">Practice Locality <span style="color:red">*</span></label>
+                    <label for="Location_of_Practice__c">
+                        Practice Locality <span style="color:red">*</span>
+                        <small class="field-hint">Please include city and state (abbreviated)</small>
+                    </label>
                     <input type="text" id="Location_of_Practice__c" name="Location_of_Practice__c" required
                         placeholder="City, ST" oninput={handleFieldInput} />
-                    <small class="field-hint">Please include city and state (abbreviated)</small>
 
                     <!-- Approximate Age of Patients Seen -->
-                    <h4>Approximate Age of Patients Seen</h4>
-                    <label><input type="checkbox" id="pcppatientage05__c" name="pcppatientage05__c" value="true" /> 0-5</label>
-                    <label><input type="checkbox" id="pcppatientage612__c" name="pcppatientage612__c" value="true" /> 6-12</label>
-                    <label><input type="checkbox" id="pcppatientage1318__c" name="pcppatientage1318__c" value="true" /> 13-18</label>
-                    <label><input type="checkbox" id="pcppatientage1922__c" name="pcppatientage1922__c" value="true" /> 19-22</label>
-                    <label><input type="checkbox" id="pcppatientage23more__c" name="pcppatientage23more__c" value="true" /> 23+</label>
+                    <div id="age-group" class="age-group">
+                        <h4>Approximate Age of Patients Seen</h4>
+                        <label><input type="checkbox" class="age-checkbox" id="pcppatientage05__c" name="pcppatientage05__c" value="true" /> 0-5</label>
+                        <label><input type="checkbox" class="age-checkbox" id="pcppatientage612__c" name="pcppatientage612__c" value="true" /> 6-12</label>
+                        <label><input type="checkbox" class="age-checkbox" id="pcppatientage1318__c" name="pcppatientage1318__c" value="true" /> 13-18</label>
+                        <label><input type="checkbox" class="age-checkbox" id="pcppatientage1922__c" name="pcppatientage1922__c" value="true" /> 19-22</label>
+                        <label><input type="checkbox" class="age-checkbox" id="pcppatientage23more__c" name="pcppatientage23more__c" value="true" /> 23+</label>
+                        <label><input type="checkbox" class="age-checkbox" id="pcppatientage65plus__c" name="pcppatientage65plus__c" value="true" /> Senior Population (65+)</label>
+                        <label><input type="checkbox" class="age-checkbox" id="I_Do_Not_See_Patients__c" name="I_Do_Not_See_Patients__c" value="true" /> I don’t see patients</label>
+                    </div>
 
                     <!-- Specialty Other -->
                     <label id="Other-specialty-id" for="other-specialty-desc" class="hidden">
@@ -163,11 +169,13 @@
                     </select> 
 
                     <!-- Name of School -->
-                    <label id="Name_of_School__c-label" data-id="Name_of_School__c-label" for="Name_of_School__c" class="hidden">
-                        Name of School <span style="color:red">*</span>
-                    </label>
-                    <input type="text" id="Name_of_School__c" data-id="Name_of_School__c" name="Name_of_School__c" class="hidden"
-                        placeholder="School name" oninput={handleFieldInput} />
+                    <div id="school-container" class="hidden">
+                        <label id="Name_of_School__c-label" data-id="Name_of_School__c-label" for="Name_of_School__c">
+                            Name of School <span style="color:red">*</span>
+                        </label>
+                        <input type="text" id="Name_of_School__c" data-id="Name_of_School__c" name="Name_of_School__c"
+                            class="hidden" required placeholder="School name" oninput={handleFieldInput} />
+                    </div>
 
                     <!-- Trainee Type -->
                     <label id="Trainee_Type_Label" for="Trainee_Type__c" class="hidden">
