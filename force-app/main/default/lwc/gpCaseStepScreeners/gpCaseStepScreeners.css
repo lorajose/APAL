@@ -228,6 +228,15 @@
 	font-weight: 600;
 }
 
+.scr-label {
+	white-space: nowrap;
+	margin-right: 0.25rem;
+}
+
+.scr-id-value {
+	margin-left: 0.05rem;
+}
+
 .wizard-cancel {
 	background: #ffffff !important;
 	color: #111827 !important;

@@ -88,12 +88,12 @@
                                     <template if:true={isRelatedCase}>
                                         <template if:true={scr.recordName}>
                                             <span class="summary-pill link-pill">
-                                                Screener Reference Number:
+                                                <span class="scr-label">Screener Reference Number:</span>
                                                 <template if:true={scr.recordLink}>
-                                                    <a href={scr.recordLink} target="_blank">{scr.recordName}</a>
+                                                    <a class="scr-id-value" href={scr.recordLink} target="_blank">{scr.recordName}</a>
                                                 </template>
                                                 <template if:false={scr.recordLink}>
-                                                    {scr.recordName}
+                                                    <span class="scr-id-value">{scr.recordName}</span>
                                                 </template>
                                             </span>
                                         </template>

@@ -77,12 +77,12 @@
                                 </header>
                                 <template if:true={isRelatedCase}>
                                     <p class="med-record">
-                                        Medication Id:
+                                        <span class="med-label">Medication Id:</span>
                                         <template if:true={med.recordLink}>
-                                            <a href={med.recordLink} target="_blank">{med.recordName}</a>
+                                            <a class="med-id-value" href={med.recordLink} target="_blank">{med.recordName}</a>
                                         </template>
                                         <template if:false={med.recordLink}>
-                                            {med.recordName}
+                                            <span class="med-id-value">{med.recordName}</span>
                                         </template>
                                     </p>
                                 </template>
