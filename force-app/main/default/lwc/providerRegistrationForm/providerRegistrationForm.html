@@ -19,30 +19,28 @@
 
             <!-- FORM -->
 
-               <!-- <form id="multi-step-form" action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00Dcn00000462T3" method="POST"
-                     onsubmit={handleSubmit}> Dev -->
+              <!-- <form id="multi-step-form" action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00Dcn00000462T3" method="POST"
+                     onsubmit={handleSubmit}>  Dev -->
 
-              <!--  <form id="multi-step-form"  action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00Dcn00000462Uf" method="POST"
-                    onsubmit={handleSubmit}> QA-->
+              <!-- <form id="multi-step-form"  action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00Dcn00000462Uf" method="POST"
+                    onsubmit={handleSubmit}>  QA-->
 
-               <form id="multi-step-form"  action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00Dcn00000462ZV" method="POST"
-                    onsubmit={handleSubmit}> <!-- UAT -->
+              <form id="multi-step-form"  action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00Dcn00000462ZV" method="POST"
+                    onsubmit={handleSubmit}>  <!-- UAT -->
 
                       <!-- <form action="https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00D820000008huw"
                 method="POST" id="multi-step-form"> PROD-->
 
                 <!-- Salesforce Hidden Fields -->
-                <!-- <input type=hidden name="oid" value="00Dcn00000462T3" /> Dev--> 
-                <!-- <input type=hidden name="oid" value="00Dcn00000462Uf" /> QA-->
-                 <input type=hidden name="oid" value="00Dcn00000462ZV" /> <!-- UAT -->
+              <!--   <input type=hidden name="oid" value="00Dcn00000462T3" /> Dev--> 
+              <!--  <input type=hidden name="oid" value="00Dcn00000462Uf" />  QA-->
+                  <input type=hidden name="oid" value="00Dcn00000462ZV" /> <!-- UAT -->
                  <!--<input type="hidden" name="oid" value="00D820000008huw" /> PROD-->
                 
                 <input type="hidden" name="debugEmail" value="jose.loravargas@customertimes.com" />
                 <input type="hidden" name="retURL" value="https://www.msv.org/programs/apal/" />
                 <input type="hidden" id="lead_source" name="lead_source" value="Web" />
-                <input type="hidden" id="npi" name="Does_the_provider_have_NPI__c" value="Yes" />
                <!-- <input type="hidden" name="recaptcha_response" id="recaptchaResponse" /> -->
-
                <input type="hidden" name="recaptcha_response" id="recaptchaResponse" />
 
                 <!-- STEP 1 -->
@@ -59,10 +57,21 @@
                     <input type="text" id="last_name" name="last_name" required placeholder="Last Name"
                         oninput={handleFieldInput} />
 
+                   <!-- NPI Picklist -->
+                   <label for="Does_the_provider_have_NPI__c">Do you have an NPI #?</label>
+                     <select id="Does_the_provider_have_NPI__c" name="Does_the_provider_have_NPI__c"
+                       onchange={handleToggleFields}>
+                       <option value="">--Select--</option>
+                       <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                     </select>    
+
                     <!-- NPI -->
-                    <label for="provider-npi">Provider NPI # <span style="color:red">*</span></label>
-                    <input type="text" id="provider-npi" name="pcpnpi__c" maxlength="10" minlength="10" required
-                        pattern="\d{10}" placeholder="10-digit NPI" oninput={handleFieldInput} />
+                    <label id="provider-npi-label" for="provider-npi" class="hidden">
+                        Provider NPI # <span style="color:red">*</span>
+                    </label>
+                    <input type="text" id="provider-npi" name="pcpnpi__c" maxlength="10" minlength="10"
+                        pattern="\d{10}" placeholder="10-digit NPI" oninput={handleFieldInput} class="hidden" />
 
                     <!-- Email -->
                     <label for="email">Email <span style="color:red">*</span></label>
@@ -110,13 +119,38 @@
                         <option value="Other">Other</option>
                     </select>
 
-                    <!-- Specialty Other -->
+                      <!-- Specialty Other -->
                     <label id="Other-specialty-id" for="other-specialty-desc" class="hidden">
                         Other Specialty <span style="color:red">*</span>
                     </label>
                     <input type="text" id="other-specialty-desc" name="Other_Specialty_Description__c" class="hidden"
                         placeholder="Describe specialty" oninput={handleFieldInput} />
 
+                    <!-- Practice Name -->
+                    <label for="Name_of_Practice__c">Practice Name <span style="color:red">*</span></label>
+                    <input type="text" id="Name_of_Practice__c" name="Name_of_Practice__c" required placeholder="Practice name"
+                        oninput={handleFieldInput} />
+
+                    <!-- Practice Locality -->
+                    <label for="Location_of_Practice__c">
+                        Practice Locality <span style="color:red">*</span>
+                        <small class="field-hint">Please include city and state (abbreviated)</small>
+                    </label>
+                    <input type="text" id="Location_of_Practice__c" name="Location_of_Practice__c" required
+                        placeholder="City, ST" oninput={handleFieldInput} />
+
+                    <!-- Approximate Age of Patients Seen -->
+                    <div id="age-group" class="age-group">
+                        <h4>Approximate Age of Patients Seen</h4>
+                        <label><input type="checkbox" class="age-checkbox" id="pcppatientage05__c" name="pcppatientage05__c" value="true" /> 0-5</label>
+                        <label><input type="checkbox" class="age-checkbox" id="pcppatientage612__c" name="pcppatientage612__c" value="true" /> 6-12</label>
+                        <label><input type="checkbox" class="age-checkbox" id="pcppatientage1318__c" name="pcppatientage1318__c" value="true" /> 13-18</label>
+                        <label><input type="checkbox" class="age-checkbox" id="pcppatientage1922__c" name="pcppatientage1922__c" value="true" /> 19-22</label>
+                        <label><input type="checkbox" class="age-checkbox" id="pcppatientage23more__c" name="pcppatientage23more__c" value="true" /> 23+</label>
+                        <label><input type="checkbox" class="age-checkbox" id="pcppatientage65plus__c" name="pcppatientage65plus__c" value="true" /> Senior Population (65+)</label>
+                        <label><input type="checkbox" class="age-checkbox" id="I_Do_Not_See_Patients__c" name="I_Do_Not_See_Patients__c" value="true" /> I don’t see patients</label>
+                    </div>
+                  
                     <!-- Years in Practice -->
                     <label for="Number_of_Years_In_Practice__c">Number of Years in Practice <span
                             style="color:red">*</span></label>
@@ -132,7 +166,16 @@
                         <option value="">--None--</option>
                         <option value="Yes">Yes</option>
                         <option value="No">No</option>
-                    </select>
+                    </select> 
+
+                    <!-- Name of School -->
+                    <div id="school-container" class="hidden">
+                        <label id="Name_of_School__c-label" data-id="Name_of_School__c-label" for="Name_of_School__c">
+                            Name of School <span style="color:red">*</span>
+                        </label>
+                        <input type="text" id="Name_of_School__c" data-id="Name_of_School__c" name="Name_of_School__c"
+                            class="hidden" required placeholder="School name" oninput={handleFieldInput} />
+                    </div>
 
                     <!-- Trainee Type -->
                     <label id="Trainee_Type_Label" for="Trainee_Type__c" class="hidden">
@@ -146,7 +189,7 @@
                         <option value="Resident (or equivalent within other medical fields)">Resident</option>
                         <option value="Fellow (or equivalent within other medical fields)">Fellow</option>
                         <option value="Other medical trainee">Other medical trainee</option>
-                    </select>
+                    </select> 
 
                     <!-- Other Trainee -->
                     <label id="otherMedicalTraineeDescriptionid" for="Other_Medical_Trainee_Description__c"
@@ -313,6 +356,9 @@
 
                     <label for="opt_out">Opt-out</label>
                     <input type="checkbox" id="opt_out" name="Opt_out__c" value="true" />
+                    <small class="field-hint">
+                        Opt out means you will not receive marketing communications. This does not affect required program or account communications.
+                    </small>
 
                    <!-- <div class="g-recaptcha" data-sitekey="6LerTNcqAAAAAI5br6iw0fBj7PeJjSbw_LkEOa6F"
                         data-callback="providerRecaptchaCallbackLwc"></div> -->
@@ -331,7 +377,6 @@
 
             </form>
         </div>
-
 
         <div id="thank-you-modal" class="thank-you-modal">
             <div id="modal-content" class="modal-content">

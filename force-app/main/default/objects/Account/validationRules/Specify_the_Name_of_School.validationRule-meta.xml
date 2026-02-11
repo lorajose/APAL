@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Specify_the_Name_of_School</fullName>
+    <active>true</active>
+    <description>If the provider is a trainee, the Name of School must be specified.
+This validation fires only if the current time is greater than or equal to Bypass_Validations_Timeout__c.</description>
+    <errorConditionFormula>AND(
+OR(Bypass_Validations_Timeout__c &lt;= NOW(),
+isBlank(Bypass_Validations_Timeout__c)
+),
+ISPICKVAL(pcptrainee__c, &apos;Yes&apos;),
+ISBLANK(Name_of_School__c),
+RecordType.DeveloperName = &apos;Provider&apos;
+)</errorConditionFormula>
+    <errorMessage>Please specify the Name of School if the provider is marked as a Trainee.</errorMessage>
+</ValidationRule>

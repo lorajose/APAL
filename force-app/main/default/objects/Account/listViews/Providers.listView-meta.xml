@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Providers</fullName>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>pcpmdtype__c</columns>
+    <columns>PC_EMAIL</columns>
+    <columns>pcpphonedesc__c</columns>
+    <columns>ACCOUNT.PHONE1</columns>
+    <columns>pcpnpi__c</columns>
+    <columns>famaddroth_v2__pc</columns>
+    <columns>Practice_VMAP_Region__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>ACCOUNT.CREATED_DATE</field>
+        <operation>equals</operation>
+        <value>TODAY</value>
+    </filters>
+    <label>Providers</label>
+</ListView>
