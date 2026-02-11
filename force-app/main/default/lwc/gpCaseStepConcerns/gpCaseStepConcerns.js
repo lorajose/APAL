@@ -673,7 +673,7 @@ export default class GpCaseStepConcerns extends LightningElement {
     decorateConcerns(list) {
         return (list || []).map(item => {
             const copy = { ...item };
-            const primaryId = copy.id || copy.recordId;
+            const primaryId = copy.recordId || copy.id;
             const idLike = looksLikeId(primaryId);
             if (!copy.recordLink && idLike) {
                 copy.recordLink = `/${primaryId}`;
