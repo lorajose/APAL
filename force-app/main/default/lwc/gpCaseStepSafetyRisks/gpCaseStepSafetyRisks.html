@@ -80,12 +80,12 @@
                                 <p class="risk-description">{risk.meta.description}</p>
                                 <template if:true={isRelatedCase}>
                                     <p class="risk-id">
-                                        Risk Id:
+                                        <span class="risk-label">Risk Id:</span>
                                         <template if:true={risk.recordLink}>
-                                            <a href={risk.recordLink} target="_blank">{risk.recordName}</a>
+                                            <a class="risk-id-value" href={risk.recordLink} target="_blank">{risk.recordName}</a>
                                         </template>
                                         <template if:false={risk.recordLink}>
-                                            {risk.recordName}
+                                            <span class="risk-id-value">{risk.recordName}</span>
                                         </template>
                                     </p>
                                 </template>

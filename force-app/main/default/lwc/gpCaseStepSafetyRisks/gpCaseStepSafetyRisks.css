@@ -235,6 +235,9 @@
 	margin: 0.15rem 0;
 	font-size: 0.85rem;
 	color: #374151;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
 }
 
 .heading-icon {
@@ -245,6 +248,14 @@
 .risk-id a {
 	color: #0f2d52;
 	font-weight: 600;
+}
+
+.risk-label {
+	white-space: nowrap;
+}
+
+.risk-id-value {
+	margin-left: 0.05rem;
 }
 
 .wizard-cancel {

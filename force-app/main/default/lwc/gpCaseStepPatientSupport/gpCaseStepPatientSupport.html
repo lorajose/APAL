@@ -123,6 +123,17 @@
                                         <header class="scr-card-header">
                                             <div>
                                                 <h3>{sup.supportName}</h3>
+                                                <template if:true={isRelatedCase}>
+                                                    <p class="support-id">
+                                                        <span class="support-label">Support Id:</span>
+                                                        <template if:true={sup.recordLink}>
+                                                            <a class="support-id-value" href={sup.recordLink} target="_blank">{sup.recordName}</a>
+                                                        </template>
+                                                        <template if:false={sup.recordLink}>
+                                                            <span class="support-id-value">{sup.recordName}</span>
+                                                        </template>
+                                                    </p>
+                                                </template>
                                             </div>
                                         </header>
                                         <div class="pill-row">

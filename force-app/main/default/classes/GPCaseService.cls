@@ -1428,7 +1428,7 @@ public with sharing class GPCaseService {
             return results;
         }
         List<Patient_Concern__c> concerns = [
-            SELECT Id, Concern__c, Concern__r.Name, Concern__r.Category__c, Notes_new__c, Seed_Source__c
+            SELECT Id, Name, Concern__c, Concern__r.Name, Concern__r.Category__c, Notes_new__c, Seed_Source__c
             FROM Patient_Concern__c
             WHERE Case__c = :caseId
             ORDER BY CreatedDate ASC
@@ -1436,6 +1436,8 @@ public with sharing class GPCaseService {
         for (Patient_Concern__c concern : concerns) {
             Map<String, Object> entry = new Map<String, Object>();
             entry.put('id', concern.Concern__c);
+            entry.put('recordId', concern.Id);
+            entry.put('recordName', concern.Name);
             entry.put('label', concern.Concern__r != null ? concern.Concern__r.Name : null);
             entry.put('category', concern.Concern__r != null ? (String)concern.Concern__r.get('Category__c') : null);
             entry.put('notes', concern.Notes_new__c);

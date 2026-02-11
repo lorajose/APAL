@@ -83,7 +83,7 @@ export default class GpCaseStepConcerns extends LightningElement {
     @api
     set data(value) {
         if (Array.isArray(value)) {
-            this.concerns = cloneList(value);
+            this.concerns = this.decorateConcerns(cloneList(value));
         } else {
             this.concerns = [];
         }
@@ -155,6 +155,10 @@ export default class GpCaseStepConcerns extends LightningElement {
             return this.concernsCount > 10 ? '10+' : this.concernsCount;
         }
         return this.concernsCount;
+    }
+
+    get isRelatedCase() {
+        return this.effectiveLayoutContext === 'relatedcase';
     }
 
     @api
@@ -364,14 +368,14 @@ export default class GpCaseStepConcerns extends LightningElement {
         const { data, error } = result || {};
         if (data && this.isStandaloneLayout) {
             const cons = Array.isArray(data.concerns) ? data.concerns : [];
-            this.concerns = cloneList(cons);
+            this.concerns = this.decorateConcerns(cloneList(cons));
             this.hydratedFromServer = true;
             this.hasLoadedInitialData = true;
             // eslint-disable-next-line no-console
             console.error(`[gpCaseStepConcerns] refreshed via wire len=${this.concerns.length}`);
         } else if (data && !this.hydratedFromServer && !this.concerns.length) {
             const cons = Array.isArray(data.concerns) ? data.concerns : [];
-            this.concerns = cloneList(cons);
+            this.concerns = this.decorateConcerns(cloneList(cons));
             this.hydratedFromServer = true;
             this.hasLoadedInitialData = true;
             // eslint-disable-next-line no-console
@@ -660,6 +664,21 @@ export default class GpCaseStepConcerns extends LightningElement {
             }
         });
         return Array.from(byKey.values());
+    }
+
+    decorateConcerns(list) {
+        return (list || []).map(item => {
+            const copy = { ...item };
+            const primaryId = copy.id || copy.recordId;
+            const idLike = looksLikeId(primaryId);
+            if (!copy.recordLink && idLike) {
+                copy.recordLink = `/${primaryId}`;
+            }
+            if (!copy.recordName) {
+                copy.recordName = primaryId || copy.label;
+            }
+            return copy;
+        });
     }
 
     showToast(title, message, variant) {
