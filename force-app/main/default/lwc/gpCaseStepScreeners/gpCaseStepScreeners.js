@@ -214,6 +214,10 @@ export default class GpCaseStepScreeners extends LightningElement {
         return this.effectiveLayoutContext === 'relatedcase';
     }
 
+    get showScreenerId() {
+        return this.effectiveLayoutContext === 'relatedcase' || this.effectiveLayoutContext === 'case';
+    }
+
     get showAddButton() {
         return this.isGridView;
     }

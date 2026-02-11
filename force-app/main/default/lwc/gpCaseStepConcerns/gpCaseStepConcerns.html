@@ -75,7 +75,7 @@
                                             <span class="concern-category-pill">{concern.category}</span>
                                             <span class="source-pill">{concern.sourceLabel}</span>
                                         </div>
-                                        <template if:true={isRelatedCase}>
+                                        <template if:true={showConcernId}>
                                             <p class="concern-id">
                                                 <span class="concern-label">Concern Id:</span>
                                                 <template if:true={concern.recordLink}>

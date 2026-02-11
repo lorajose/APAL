@@ -78,7 +78,7 @@
                                     </div>
                                 </header>
                                 <p class="risk-description">{risk.meta.description}</p>
-                                <template if:true={isRelatedCase}>
+                                <template if:true={showRiskId}>
                                     <p class="risk-id">
                                         <span class="risk-label">Risk Id:</span>
                                         <template if:true={risk.recordLink}>
