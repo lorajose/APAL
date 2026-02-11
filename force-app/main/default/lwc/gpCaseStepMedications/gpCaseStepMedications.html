@@ -75,7 +75,7 @@
                                         <p>{med.meta.brand}</p>
                                     </div>
                                 </header>
-                                <template if:true={isRelatedCase}>
+                                <template if:true={showMedicationId}>
                                     <p class="med-record">
                                         <span class="med-label">Medication Id:</span>
                                         <template if:true={med.recordLink}>

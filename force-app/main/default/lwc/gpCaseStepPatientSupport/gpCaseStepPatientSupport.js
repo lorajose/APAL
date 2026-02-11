@@ -120,6 +120,10 @@ export default class GpCaseStepPatientSupport extends LightningElement {
         return this.effectiveLayoutContext === 'relatedcase';
     }
 
+    get showSupportId() {
+        return this.effectiveLayoutContext === 'relatedcase' || this.effectiveLayoutContext === 'case';
+    }
+
     get isLmhpServiceCase() {
         return (this.serviceFromRecord || '').toLowerCase() === 'lmhp';
     }

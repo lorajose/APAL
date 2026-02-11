@@ -161,6 +161,10 @@ export default class GpCaseStepConcerns extends LightningElement {
         return this.effectiveLayoutContext === 'relatedcase';
     }
 
+    get showConcernId() {
+        return this.effectiveLayoutContext === 'relatedcase' || this.effectiveLayoutContext === 'case';
+    }
+
     @api
     get layoutContext() {
         return this._layoutContext;

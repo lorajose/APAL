@@ -273,6 +273,10 @@ export default class GpCaseStepMedications extends LightningElement {
         return this.effectiveLayoutContext === 'relatedcase';
     }
 
+    get showMedicationId() {
+        return this.effectiveLayoutContext === 'relatedcase' || this.effectiveLayoutContext === 'case';
+    }
+
     get hasMedications() {
         return this.medications.length > 0;
     }

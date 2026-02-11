@@ -248,6 +248,10 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
         return this.effectiveLayoutContext === 'relatedcase';
     }
 
+    get showRiskId() {
+        return this.effectiveLayoutContext === 'relatedcase' || this.effectiveLayoutContext === 'case';
+    }
+
     get hasRisks() {
         return this.risks.length > 0;
     }
