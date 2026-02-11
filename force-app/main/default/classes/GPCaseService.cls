@@ -890,6 +890,26 @@ public with sharing class GPCaseService {
         }
 
         Map<String, Schema.SObjectField> fields = Patient_Support__c.SObjectType.getDescribe().fields.getMap();
+
+        // Re-sync Patient__c on all existing supports for this Case in case the patient changed.
+        if (patientId != null && fields.containsKey('Patient__c')) {
+            List<Patient_Support__c> existingSupports = [
+                SELECT Id, Patient__c
+                FROM Patient_Support__c
+                WHERE Case__c = :parentCaseId
+            ];
+            List<Patient_Support__c> needPatientUpdate = new List<Patient_Support__c>();
+            for (Patient_Support__c ps : existingSupports) {
+                if (ps.Patient__c != patientId) {
+                    ps.put('Patient__c', patientId);
+                    needPatientUpdate.add(ps);
+                }
+            }
+            if (!needPatientUpdate.isEmpty()) {
+                update needPatientUpdate;
+            }
+        }
+
         List<Patient_Support__c> toInsert = new List<Patient_Support__c>();
         List<Patient_Support__c> toUpdate = new List<Patient_Support__c>();
         Set<Id> desiredSupportIds = new Set<Id>();
@@ -906,6 +926,9 @@ public with sharing class GPCaseService {
                 record.Support__c = supportId;
                 setPatientIfPossible(record, patientId);
                 isNew = true;
+            } else {
+                // Ensure Patient__c stays in sync if Case patient changes
+                setPatientIfPossible(record, patientId);
             }
 
             if (fields.containsKey('Notes_new__c')) {
