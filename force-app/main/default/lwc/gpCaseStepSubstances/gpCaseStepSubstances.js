@@ -120,7 +120,7 @@ export default class GpCaseStepSubstances extends LightningElement {
     }
 
     get showSubstanceName() {
-        return this.effectiveLayoutContext === 'relatedcase';
+        return this.effectiveLayoutContext === 'relatedcase' || this.effectiveLayoutContext === 'case';
     }
 
     buildCatalogLink(catalogId) {
