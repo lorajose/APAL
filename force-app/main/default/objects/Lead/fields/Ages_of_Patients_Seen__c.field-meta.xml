@@ -6,7 +6,9 @@
 if (pcppatientage612__c , &apos;6-12 years; &apos;, &apos;&apos;) &amp;
 if (pcppatientage1318__c , &apos;13-18 years; &apos;, &apos;&apos;) &amp;
 if (pcppatientage1922__c , &apos;19-22 years; &apos;, &apos;&apos;) &amp;
-if (pcppatientage23more__c , &apos;23 years+; &apos;, &apos;&apos;)</formula>
+if (pcppatientage23more__c , &apos;23 years+; &apos;, &apos;&apos;) &amp;
+if (pcppatientage65plus__c , &apos;Senior Population (65+); &apos;, &apos;&apos;) &amp;
+if (I_Do_Not_See_Patients__c , &apos;I don’t see patients; &apos;, &apos;&apos;)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Ages of Patients Seen</label>
     <required>false</required>
