@@ -189,8 +189,8 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.pcppatientage__c</fieldItem>
-                <identifier>RecordApproximate_Age_of_Patients__cField</identifier>
+                <fieldItem>Record.Ages_of_Patients_Seen__c</fieldItem>
+                <identifier>RecordAges_of_Patients_Seen_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
