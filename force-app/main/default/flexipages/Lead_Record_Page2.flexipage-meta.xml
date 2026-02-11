@@ -195,8 +195,8 @@
         </itemInstances>
         <itemInstances>
             <fieldInstance>
-                <fieldItem>Record.Matching_Provider__r.pcppatientage__c</fieldItem>
-                <identifier>RecordMatching_Provider_rApproximate_Age_of_Patients_cField</identifier>
+                <fieldItem>Record.Matching_Provider__r.Ages_of_Patients_Seen__c</fieldItem>
+                <identifier>RecordMatching_Provider_rAges_of_Patients_Seen_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-c3287956-09d4-43c1-a87f-e2c88452faa4</name>
