@@ -107,10 +107,7 @@
                             <value>NAME</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>Contact.CNTC_FIRST_NAME</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Contact.NAME</value>
+                            <value>PatientName__c</value>
                         </valueListItems>
                         <valueListItems>
                             <value>CREATED_DATE</value>
