@@ -185,6 +185,23 @@
 	color: #111827;
 }
 
+.support-id {
+	margin: 0.25rem 0 0;
+	font-size: 0.85rem;
+	color: #374151;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+}
+
+.support-label {
+	white-space: nowrap;
+}
+
+.support-id-value {
+	margin-left: 0.05rem;
+}
+
 .scr-category-pill {
 	display: inline-block;
 	margin-top: 4px;

@@ -75,6 +75,17 @@
                                             <span class="concern-category-pill">{concern.category}</span>
                                             <span class="source-pill">{concern.sourceLabel}</span>
                                         </div>
+                                        <template if:true={isRelatedCase}>
+                                            <p class="concern-id">
+                                                <span class="concern-label">Concern Id:</span>
+                                                <template if:true={concern.recordLink}>
+                                                    <a class="concern-id-value" href={concern.recordLink} target="_blank">{concern.recordName}</a>
+                                                </template>
+                                                <template if:false={concern.recordLink}>
+                                                    <span class="concern-id-value">{concern.recordName}</span>
+                                                </template>
+                                            </p>
+                                        </template>
                                     </div>
                                 </header>
                                 <template if:true={showAllNotes}>

@@ -10,6 +10,12 @@ import CASE_TYPE_FIELD from '@salesforce/schema/Case.Case_Type__c';
 import CASE_SERVICE_FIELD from '@salesforce/schema/Case.Service__c';
 
 const cloneList = (list = []) => JSON.parse(JSON.stringify(list || []));
+const looksLikeId = (value) => {
+    if (!value || typeof value !== 'string') return false;
+    const trimmed = value.trim();
+    if (trimmed.length !== 15 && trimmed.length !== 18) return false;
+    return /^[a-zA-Z0-9]+$/.test(trimmed);
+};
 const STEP_NUMBER = 16;
 const READ_ONLY_LIMIT = 3;
 
@@ -108,6 +114,10 @@ export default class GpCaseStepPatientSupport extends LightningElement {
     get isGeneralPsychiatryCase() {
         const caseType = (this.caseTypeFromRecord || this.caseType || '').toLowerCase();
         return caseType === 'general psychiatry' && this.effectiveLayoutContext === 'case';
+    }
+
+    get isRelatedCase() {
+        return this.effectiveLayoutContext === 'relatedcase';
     }
 
     get isLmhpServiceCase() {
@@ -313,7 +323,7 @@ export default class GpCaseStepPatientSupport extends LightningElement {
         this.wiredSupportsResult = result;
         const { data, error } = result || {};
         if (data) {
-            this.supports = Array.isArray(data) ? cloneList(data) : [];
+            this.supports = Array.isArray(data) ? this.decorateSupports(cloneList(data)) : [];
             if (this.supports.length) {
                 this.hasLoadedInitialData = true;
             }
@@ -724,6 +734,20 @@ export default class GpCaseStepPatientSupport extends LightningElement {
                 };
             })
             .filter(Boolean);
+    }
+
+    decorateSupports(list) {
+        return (list || []).map(item => {
+            const copy = { ...item };
+            const primaryId = copy.recordId || copy.id;
+            if (primaryId && looksLikeId(primaryId) && !copy.recordLink) {
+                copy.recordLink = `/${primaryId}`;
+            }
+            if (!copy.recordName) {
+                copy.recordName = copy.catalogName || copy.supportName || primaryId;
+            }
+            return copy;
+        });
     }
 
     showToast(title, message, variant) {
