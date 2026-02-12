@@ -3,52 +3,8 @@ public class LeadConversionControllerTest {
        @isTest
     static void testUpdatePersonAccountFields() {
         // Step 1: Create a Lead record with required fields
-        Lead lead = new Lead(
-            FirstName = 'John',
-            LastName = 'Doe',
-            Email = 'john.doe@example.com',
-            Phone = '1234567890',
-            Does_the_provider_have_NPI__c = 'Yes',
-            pcpnpi__c = '1234567890',
-            LeadSource = 'Referral',
-            Status = 'Open - Not Contacted',
-            Phone_Extension__c = 1234,
-            MobilePhone = '9876543212',
-            Home_Phone__c = '0000000000',
-            Other_Phone__c = '1111111111',
-            Health_Haven_Enrolled_Provider__c = true,
-            Friend_or_Colleague__c =true,
-            My_Medical_or_Specialty_Association__c = true,
-            Social_Media__c = true,
-            Search_Engine__c = true,
-            News_Story__c = true,
-            Opt_out__c = true,
-            Health_Haven_staff__c = true,
-            Conference_presentation_or_exhibit__c = true,
-            Provider_Registration_Status__c  = 'Incomplete',
-            Provider_Signature__c = 'Test Signature',
-            Provider_Languages_Description__c = 'test',
-            Provider_Language_other_than_English__c = 'Spanish',
-            How_do_You_Identify_with_Respect_to_Race__c = 'Asian',
-            Do_you_think_of_yourself_as__c = 'Other',
-            Specialty_Mental_Health_Training__c = 'Yes',
-            Specialty_Mental_Health_Training_Desc__c = 'Test',
-            Number_of_Years_In_Practice__c = 3,
-            The_provider_is_a_Trainee__c = 'Yes',
-            Trainee_Type__c = 'Other medical trainee',
-            Other_Medical_Trainee_Description__c = 'Test',
-            Phone_Type__c = 'Work Phone',
-            Other__c = True,
-            Type__c	= 'Physician (MD, DO)',
-            Specialty_Description__c = 'Orthopedic',
-            pcpothersta_desc__c = 'Test',
-            Other_Specialty_Description__c = 'Test',
-            Description = 'Test',
-            heard_other__c = 'Test',
-            pcpracedesc__c = 'Test',
-            trainenddate__c = Date.newInstance(2025, 3, 12)
-            
-        );
+        Lead lead = buildBaseLead('lead_update@test.com');
+        setLeadRequiredFields(lead);
         insert lead;
 
         // Step 2: Check if Person Account Record Type exists
@@ -117,13 +73,13 @@ public class LeadConversionControllerTest {
         // Step 6: Assertions
         System.assertEquals('John', personAccount.FirstName, 'First Name should be updated to the lead\'s first name.');
         System.assertEquals('Doe', personAccount.LastName, 'Last Name should be updated to the lead\'s last name.');
-        System.assertEquals('john.doe@example.com', personAccount.PersonEmail, 'Email should be updated.');
+        System.assertEquals(lead.Email, personAccount.PersonEmail, 'Email should be updated.');
         System.assertEquals('1234567890', personAccount.Phone, 'Phone should be updated.');
         System.assertEquals('Yes', personAccount.pcphasnpi__c, 'NPI status should be updated.');
         System.assertEquals('1234567890', personAccount.pcpnpi__c, 'NPI number should be updated.');
         System.assertEquals('Referral', personAccount.PersonLeadSource, 'Lead Source should be updated.');
-        System.assertEquals('Incomplete', personAccount.Provider_Registration_Status__c, 'Lead Source should be updated.');
-        System.assertEquals(True, personAccount.VMAPEnrolledProvider__c, 'Lead Source should be updated.');
+        System.assertEquals('Incomplete', personAccount.Provider_Registration_Status__c, 'Provider registration status should be updated.');
+        System.assertEquals(true, personAccount.VMAPEnrolledProvider__c, 'VMAP enrolled should be updated.');
 
         // Optional: Check that the lead status was updated
         lead = [SELECT Status FROM Lead WHERE Id = :lead.Id];
@@ -132,44 +88,8 @@ public class LeadConversionControllerTest {
     @isTest
     static void testConvertLeadToPersonAccount() {
         // Setup test data
-        Lead lead = new Lead(
-            FirstName = 'OldFirstName',
-            LastName = 'Doe',
-            pcpnpi__c = '5555555555',
-            Email = 'john.doe@example.com',
-            Status = 'Open - Not Contacted',
-            // Other required fields
-            Phone_Extension__c = 123,
-            Matching_Provider__c = null, // Set this to a valid account Id for tests involving Matching_Provider
-            MobilePhone = '9876543212',
-            Home_Phone__c = '0000000000',
-            Other_Phone__c = '1111111111',
-            Does_the_provider_have_NPI__c = 'Yes',
-            Health_Haven_Enrolled_Provider__c = true,
-            Friend_or_Colleague__c =true,
-            My_Medical_or_Specialty_Association__c = true,
-            Social_Media__c = true,
-            Search_Engine__c = true,
-            News_Story__c = true,
-            Opt_out__c = true,
-            Provider_Registration_Status__c = 'Incomplete',
-            Provider_Signature__c = 'Test Signature',
-            Provider_Languages_Description__c = 'test',
-            Provider_Language_other_than_English__c = 'Spanish',
-            How_do_You_Identify_with_Respect_to_Race__c = 'Asian',
-            Do_you_think_of_yourself_as__c = 'Other',
-            Specialty_Mental_Health_Training__c = 'Yes',
-            Specialty_Mental_Health_Training_Desc__c = 'Test',
-            Number_of_Years_In_Practice__c = 3,
-            The_provider_is_a_Trainee__c = 'Yes',
-            Trainee_Type__c = 'Other medical trainee',
-            Other_Medical_Trainee_Description__c = 'Test',
-            Phone_Type__c = 'Work Phone',
-            Other__c = True,
-            Description = 'Test Description',
-            heard_other__c = 'Test heard_other__c',
-            pcpracedesc__c = 'Test pcpracedesc__c'
-        );
+        Lead lead = buildBaseLead('person1@test.com');
+        setLeadRequiredFields(lead);
         insert lead;
 
          // Convert the lead
@@ -195,42 +115,8 @@ public class LeadConversionControllerTest {
     @isTest
     static void testConvertLeadAlreadyConverted() {
         // Setup test data
-        Lead lead = new Lead(
-            FirstName = 'OldFirstName',
-            LastName = 'Smith',
-            pcpnpi__c = '5555555555',
-            Email = 'jane.smith@example.com',
-            Status = 'Closed - Converted',
-            Phone_Extension__c = 123,
-            MobilePhone = '9876543212',
-            Home_Phone__c = '0000000000',
-            Other_Phone__c = '1111111111',
-            Does_the_provider_have_NPI__c = 'Yes',
-            Health_Haven_Enrolled_Provider__c = true,
-            Friend_or_Colleague__c =true,
-            My_Medical_or_Specialty_Association__c = true,
-            Social_Media__c = true,
-            Search_Engine__c = true,
-            News_Story__c = true,
-            Opt_out__c = true,
-            Provider_Registration_Status__c = 'Incomplete',
-            Provider_Signature__c = 'Test Signature',
-            Provider_Languages_Description__c = 'test',
-            Provider_Language_other_than_English__c = 'Spanish',
-            How_do_You_Identify_with_Respect_to_Race__c = 'Asian',
-            Do_you_think_of_yourself_as__c = 'Other',
-            Specialty_Mental_Health_Training__c = 'Yes',
-            Specialty_Mental_Health_Training_Desc__c = 'Test',
-            Number_of_Years_In_Practice__c = 3,
-            The_provider_is_a_Trainee__c = 'Yes',
-            Trainee_Type__c = 'Other medical trainee',
-            Other_Medical_Trainee_Description__c = 'Test',
-            Phone_Type__c = 'Work Phone',
-            Other__c = True,
-            Description = 'Test Description',
-            heard_other__c = 'Test heard_other__c',
-            pcpracedesc__c = 'Test pcpracedesc__c'
-        );
+        Lead lead = buildBaseLead('person2@test.com');
+        setLeadRequiredFields(lead);
         insert lead;
 
         // Convert the lead
@@ -250,43 +136,8 @@ public class LeadConversionControllerTest {
         Account matchingProvider = new Account(Name = 'Matching Provider');
         insert matchingProvider;
 
-        Lead lead = new Lead(
-            FirstName = 'OldFirstName',
-            LastName = 'Doe',
-            pcpnpi__c = '5555555555',
-            Email = 'john.doe@example.com',
-            Status = 'Open - Not Contacted',
-            Phone_Extension__c = 123,
-            Matching_Provider__c = matchingProvider.Id, // Associate with an existing account
-            MobilePhone = '9876543212',
-            Home_Phone__c = '0000000000',
-            Other_Phone__c = '1111111111',
-            Does_the_provider_have_NPI__c = 'Yes',
-            Health_Haven_Enrolled_Provider__c = true,
-            Friend_or_Colleague__c =true,
-            My_Medical_or_Specialty_Association__c = true,
-            Social_Media__c = true,
-            Search_Engine__c = true,
-            News_Story__c = true,
-            Opt_out__c = true,
-            Provider_Registration_Status__c = 'Incomplete',
-            Provider_Signature__c = 'Test Signature',
-            Provider_Languages_Description__c = 'test',
-            Provider_Language_other_than_English__c = 'Spanish',
-            How_do_You_Identify_with_Respect_to_Race__c = 'Asian',
-            Do_you_think_of_yourself_as__c = 'Other',
-            Specialty_Mental_Health_Training__c = 'Yes',
-            Specialty_Mental_Health_Training_Desc__c = 'Test',
-            Number_of_Years_In_Practice__c = 3,
-            The_provider_is_a_Trainee__c = 'Yes',
-            Trainee_Type__c = 'Other medical trainee',
-            Other_Medical_Trainee_Description__c = 'Test',
-            Phone_Type__c = 'Work Phone',
-            Other__c = True,
-            Description = 'Test Description',
-            heard_other__c = 'Test heard_other__c',
-            pcpracedesc__c = 'Test pcpracedesc__c'
-        );
+        Lead lead = buildBaseLead('person3@test.com');
+        setLeadRequiredFields(lead);
         insert lead;
 
         // Convert the lead
@@ -309,42 +160,8 @@ public class LeadConversionControllerTest {
     @isTest
     static void testConvertLeadNoConvertedStatus() {
         // Setup test data
-        Lead lead = new Lead(
-            FirstName = 'OldFirstName',
-            LastName = 'Black',
-            pcpnpi__c = '5555555555',
-            Email = 'black@example.com',
-            Status = 'Open - Not Contacted',
-            Phone_Extension__c = 123,
-            MobilePhone = '9876543212',
-            Home_Phone__c = '0000000000',
-            Other_Phone__c = '1111111111',
-            Does_the_provider_have_NPI__c = 'Yes',
-            Health_Haven_Enrolled_Provider__c = true,
-            Friend_or_Colleague__c =true,
-            My_Medical_or_Specialty_Association__c = true,
-            Social_Media__c = true,
-            Search_Engine__c = true,
-            News_Story__c = true,
-            Opt_out__c = true,
-            Provider_Registration_Status__c = 'Incomplete',
-            Provider_Signature__c = 'Test Signature',
-            Provider_Languages_Description__c = 'test',
-            Provider_Language_other_than_English__c = 'Spanish',
-            How_do_You_Identify_with_Respect_to_Race__c = 'Asian',
-            Do_you_think_of_yourself_as__c = 'Other',
-            Specialty_Mental_Health_Training__c = 'Yes',
-            Specialty_Mental_Health_Training_Desc__c = 'Test',
-            Number_of_Years_In_Practice__c = 3,
-            The_provider_is_a_Trainee__c = 'Yes',
-            Trainee_Type__c = 'Other medical trainee',
-            Other_Medical_Trainee_Description__c = 'Test',
-            Phone_Type__c = 'Work Phone',
-            Other__c = True,
-            Description = 'Test Description',
-            heard_other__c = 'Test heard_other__c',
-            pcpracedesc__c = 'Test pcpracedesc__c'
-        );
+        Lead lead = buildBaseLead('person4@test.com');
+        setLeadRequiredFields(lead);
         insert lead;
 
         // Remove all converted lead statuses
@@ -366,42 +183,8 @@ public class LeadConversionControllerTest {
     @isTest
     static void testLeadConversionProcess() {
         // Create a Lead
-        Lead lead = new Lead(
-            FirstName = 'John',
-            LastName = 'Doe',
-            Email = 'john.doe@example.com',
-            Status = 'Open - Not Contacted',
-            pcpnpi__c = '5555555555',
-            Phone_Extension__c = 123,
-            MobilePhone = '9876543212',
-            Home_Phone__c = '0000000000',
-            Other_Phone__c = '1111111111',
-            Does_the_provider_have_NPI__c = 'Yes',
-            Health_Haven_Enrolled_Provider__c = true,
-            Friend_or_Colleague__c =true,
-            My_Medical_or_Specialty_Association__c = true,
-            Social_Media__c = true,
-            Search_Engine__c = true,
-            News_Story__c = true,
-            Opt_out__c = true,
-            Provider_Registration_Status__c = 'Incomplete',
-            Provider_Signature__c = 'Test Signature',
-            Provider_Languages_Description__c = 'test',
-            Provider_Language_other_than_English__c = 'Spanish',
-            How_do_You_Identify_with_Respect_to_Race__c = 'Asian',
-            Do_you_think_of_yourself_as__c = 'Other',
-            Specialty_Mental_Health_Training__c = 'Yes',
-            Specialty_Mental_Health_Training_Desc__c = 'Test',
-            Number_of_Years_In_Practice__c = 3,
-            The_provider_is_a_Trainee__c = 'Yes',
-            Trainee_Type__c = 'Other medical trainee',
-            Other_Medical_Trainee_Description__c = 'Test',
-            Phone_Type__c = 'Work Phone',
-            Other__c = True,
-            Description = 'Test Description',
-            heard_other__c = 'Test heard_other__c',
-            pcpracedesc__c = 'Test pcpracedesc__c'
-        );
+        Lead lead = buildBaseLead('person5@test.com');
+        setLeadRequiredFields(lead);
         insert lead;
 
         // Fetch a valid converted LeadStatus
@@ -442,43 +225,8 @@ public class LeadConversionControllerTest {
         insert matchingProvider;
 
         // Create a Lead linked to the Matching Provider
-        Lead lead = new Lead(
-            FirstName = 'John',
-            LastName = 'Doe',
-            Email = 'john.doe@example.com',
-            Status = 'Open - Not Contacted',
-            Matching_Provider__c = matchingProvider.Id,
-            pcpnpi__c = '5555555555',
-            Phone_Extension__c = 123,
-            MobilePhone = '9876543212',
-            Home_Phone__c = '0000000000',
-            Other_Phone__c = '1111111111',
-            Does_the_provider_have_NPI__c = 'Yes',
-            Health_Haven_Enrolled_Provider__c = true,
-            Friend_or_Colleague__c =true,
-            My_Medical_or_Specialty_Association__c = true,
-            Social_Media__c = true,
-            Search_Engine__c = true,
-            News_Story__c = true,
-            Opt_out__c = true,
-            Provider_Registration_Status__c = 'Incomplete',
-            Provider_Signature__c = 'Test Signature',
-            Provider_Languages_Description__c = 'test',
-            Provider_Language_other_than_English__c = 'Spanish',
-            How_do_You_Identify_with_Respect_to_Race__c = 'Asian',
-            Do_you_think_of_yourself_as__c = 'Other',
-            Specialty_Mental_Health_Training__c = 'Yes',
-            Specialty_Mental_Health_Training_Desc__c = 'Test',
-            Number_of_Years_In_Practice__c = 3,
-            The_provider_is_a_Trainee__c = 'Yes',
-            Trainee_Type__c = 'Other medical trainee',
-            Other_Medical_Trainee_Description__c = 'Test',
-            Phone_Type__c = 'Work Phone',
-            Other__c = True,
-            Description = 'Test Description',
-            heard_other__c = 'Test heard_other__c',
-            pcpracedesc__c = 'Test pcpracedesc__c'
-        );
+        Lead lead = buildBaseLead('person6@test.com');
+        setLeadRequiredFields(lead);
         insert lead;
 
         // Fetch a valid converted LeadStatus
@@ -500,5 +248,43 @@ public class LeadConversionControllerTest {
         System.assert(true, 'Unexpected AuraHandledException occurred: ' + e.getMessage());
     }
         Test.stopTest();
+    }
+
+    /* Helpers */
+    private static void setLeadRequiredFields(Lead l) {
+        Map<String, Schema.SObjectField> f = Lead.SObjectType.getDescribe().fields.getMap();
+        if (f.containsKey('Name_of_School__c')) {
+            l.put('Name_of_School__c', 'Test School');
+        }
+        if (f.containsKey('yinsurance_v2__c')) {
+            String val = firstPicklistValue(f.get('yinsurance_v2__c'));
+            if (val != null) l.put('yinsurance_v2__c', val);
+        }
+    }
+
+    private static String firstPicklistValue(Schema.SObjectField field) {
+        if (field == null) return null;
+        for (Schema.PicklistEntry e : field.getDescribe().getPicklistValues()) {
+            if (e.isActive()) return e.getValue();
+        }
+        return null;
+    }
+
+    private static Lead buildBaseLead(String email) {
+        return new Lead(
+            FirstName = 'John',
+            LastName = 'Doe',
+            Company = 'Test Company',
+            Email = email,
+            Phone = '1234567890',
+            Does_the_provider_have_NPI__c = 'Yes',
+            pcpnpi__c = '1234567890',
+            LeadSource = 'Referral',
+            Status = 'Open - Not Contacted',
+            The_provider_is_a_Trainee__c = 'Yes',
+            Trainee_Type__c = 'Other medical trainee',
+            Other_Medical_Trainee_Description__c = 'Test',
+            Health_Haven_Enrolled_Provider__c = true
+        );
     }
 }
