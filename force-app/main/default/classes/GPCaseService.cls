@@ -796,12 +796,18 @@ public with sharing class GPCaseService {
 
         // Delete records not present in payload
         List<Patient_Medication__c> toDelete = new List<Patient_Medication__c>();
-        for (Patient_Medication__c existing : existingById.values()) {
+        Set<Id> deleteSeen = new Set<Id>();
+        List<Patient_Medication__c> existingForDelete = new List<Patient_Medication__c>();
+        existingForDelete.addAll(existingById.values());
+        existingForDelete.addAll(existingByName.values());
+        for (Patient_Medication__c existing : existingForDelete) {
+            if (deleteSeen.contains(existing.Id)) continue;
             String key = existing.Medication_List__c != null
                 ? String.valueOf(existing.Medication_List__c)
                 : (existing.Medication_List__r != null ? existing.Medication_List__r.Name.toLowerCase() : null);
             if (key == null || !payloadKeys.contains(key)) {
                 toDelete.add(new Patient_Medication__c(Id = existing.Id));
+                deleteSeen.add(existing.Id);
             }
         }
 
@@ -876,12 +882,18 @@ public with sharing class GPCaseService {
 
         // Delete records not present in payload
         List<Patient_Substance__c> toDelete = new List<Patient_Substance__c>();
-        for (Patient_Substance__c existing : existingById.values()) {
+        Set<Id> deleteSeen = new Set<Id>();
+        List<Patient_Substance__c> existingForDelete = new List<Patient_Substance__c>();
+        existingForDelete.addAll(existingById.values());
+        existingForDelete.addAll(existingByName.values());
+        for (Patient_Substance__c existing : existingForDelete) {
+            if (deleteSeen.contains(existing.Id)) continue;
             String key = existing.Substance_Listing__c != null
                 ? String.valueOf(existing.Substance_Listing__c)
                 : (existing.Substance_Listing__r != null ? existing.Substance_Listing__r.Name.toLowerCase() : null);
             if (key == null || !payloadKeys.contains(key)) {
                 toDelete.add(new Patient_Substance__c(Id = existing.Id));
+                deleteSeen.add(existing.Id);
             }
         }
 
@@ -961,14 +973,20 @@ public with sharing class GPCaseService {
             toUpsert.add(record);
         }
 
-        // Delete only records not present in payload
+        // Delete only records not present in payload (cover id and name cases)
         List<Patient_Screener__c> toDelete = new List<Patient_Screener__c>();
-        for (Patient_Screener__c existing : existingById.values()) {
+        Set<Id> deleteSeen = new Set<Id>();
+        List<Patient_Screener__c> existingForDelete = new List<Patient_Screener__c>();
+        existingForDelete.addAll(existingById.values());
+        existingForDelete.addAll(existingByName.values());
+        for (Patient_Screener__c existing : existingForDelete) {
+            if (deleteSeen.contains(existing.Id)) continue;
             String key = existing.Screener__c != null
                 ? String.valueOf(existing.Screener__c)
                 : (existing.Screener__r != null ? existing.Screener__r.Name.toLowerCase() : null);
             if (key == null || !payloadKeys.contains(key)) {
                 toDelete.add(new Patient_Screener__c(Id = existing.Id));
+                deleteSeen.add(existing.Id);
             }
         }
 
