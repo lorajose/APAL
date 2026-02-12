@@ -21,6 +21,7 @@ public with sharing  class LeadConversionController {
                              Specialty_Description__c, Specialty_Mental_Health_Training_Desc__c, 
                              Specialty_Mental_Health_Training__c, The_provider_is_a_Trainee__c, 
                              Trainee_Type__c, IsConverted, Type__c, pcpothersta_desc__c,heard_other__c,pcpracedesc__c,trainenddate__c,Provider_Registration_Status__c FROM Lead WHERE Id = :leadId LIMIT 1];
+
             
                if (lead.IsConverted) {
                 throw new AuraHandledException('Lead is already converted.');
@@ -95,6 +96,7 @@ public with sharing  class LeadConversionController {
             {personAccount.PersonLeadSource = lead.LeadSource;}
             if (lead.Provider_Registration_Status__c  != null && lead.Provider_Registration_Status__c  != personAccount.Provider_Registration_Status__c )
             {personAccount.Provider_Registration_Status__c  = lead.Provider_Registration_Status__c ;}
+
             if (lead.Email != null && lead.Email != personAccount.PersonEmail)
             {personAccount.PersonEmail = lead.Email;}
             if (lead.Phone != null && lead.Phone != personAccount.Phone)
@@ -186,6 +188,7 @@ public with sharing  class LeadConversionController {
             {personAccount.pcpracedesc__c = lead.pcpracedesc__c;}
             if (lead.trainenddate__c != null && lead.trainenddate__c != personAccount.trainenddate__c)
             {personAccount.trainenddate__c = lead.trainenddate__c;}
+
 
             //if (lead.Status != null && lead.Status != personAccount.Record_Status__pc )
             //    personAccount.Record_Status__pc  = 'Complete'; //lead.Status;
