@@ -284,7 +284,15 @@ export default class GpCaseStepMedications extends LightningElement {
     get filteredMedications() {
         const term = (this.searchValue || '').toLowerCase();
         return this.medications
-            .map(item => ({
+            .map(item => {
+                const isAllergy = item.allergy;
+                const isCurrent = item.current;
+                const flags = [];
+                if (isAllergy) flags.push('allergy');
+                if (isCurrent) flags.push('current');
+                const cardClass = flags.length ? `med-card ${flags.join(' ')}` : 'med-card';
+
+                return {
                 ...item,
                 meta: this.catalogIndex[item.id] || {
                     title: item.catalogName || item.meta?.title || item.id,
@@ -292,10 +300,11 @@ export default class GpCaseStepMedications extends LightningElement {
                 },
                 recordName: item.recordName || item.name || null,
                 recordLink: this.buildPatientMedicationLink(item.recordId),
-                cardClass: item.allergy ? 'med-card allergy' : 'med-card',
+                cardClass,
                 showConfirm: this.confirmRemoveId === item.id,
                 previewNotes: this.notePreview(item.notes)
-            }))
+                };
+            })
             .filter(item => {
                 if (!term) return true;
                 const filterField = this.filterBy;

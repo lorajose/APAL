@@ -67,7 +67,7 @@
                     </div>
                     <div class="risk-grid">
                         <template for:each={filteredRisks} for:item="risk">
-                            <article key={risk.id} class="risk-card">
+                            <article key={risk.id} class={risk.cardClass}>
                                 <header class="risk-card-header">
                                     <div>
                                         <h3>{risk.meta.name}</h3>
