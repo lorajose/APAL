@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Family_History_Notes_Required</fullName>
+    <active>false</active>
+    <errorConditionFormula>ISBLANK(Family_History_Notes__c) &amp;&amp; NOT(ISBLANK(Family_History__c))</errorConditionFormula>
+    <errorDisplayField>Family_History_Notes__c</errorDisplayField>
+    <errorMessage>Family History Notes are Required</errorMessage>
+</ValidationRule>

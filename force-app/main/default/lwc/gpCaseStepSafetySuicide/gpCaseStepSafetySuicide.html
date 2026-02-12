@@ -1,0 +1,114 @@
+<template>
+    <div class="step-section">
+       <!-- <div class="section-header">
+            <h2>Step 4 — Safety: Suicide Risk</h2>
+            <p>Capture ideation, protective factors, and access to means.</p>
+        </div> -->
+
+        <section class="card">
+            <label class="input-label" for="ideation"><span class="required">*</span>Suicidal Ideation</label>
+            <select
+                id="ideation"
+                class="text-input"
+                onchange={handleIdeationChange}
+            >
+                <option value="">—</option>
+                <template for:each={ideationOptions} for:item="option">
+                    <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
+                </template>
+            </select>
+            <template if:true={ideationError}>
+                <p class="error-text">{ideationError}</p>
+            </template>
+        </section>
+
+        <section class="card">
+            <label class="input-label" for="last-attempt">Last Attempt Date</label>
+            <input
+                id="last-attempt"
+                type="date"
+                class="text-input"
+                value={lastAttemptDate}
+                data-field="Last_Attempt_Date__c"
+                oninput={handleInputChange}
+            />
+        </section>
+
+        <template if:true={showRiskDetail}>
+            <section class="card">
+                <label class="input-label" for="protective-factors"><span class="required">*</span>Protective Factors</label>
+                <textarea
+                    id="protective-factors"
+                    class="textarea"
+                    placeholder="List buffers, supports, responsibilities, etc."
+                    data-field="Protective_Factors__c"
+                    oninput={handleInputChange}
+                >{protectiveFactors}</textarea>
+                <template if:true={protectiveFactorsError}>
+                    <p class="error-text">{protectiveFactorsError}</p>
+                </template>
+            </section>
+
+            <section class="card field-stack">
+                <div class="field">
+                    <label class="input-label">Suicidal Intent?</label>
+                    <label class="checkbox-field">
+                        <input
+                            type="checkbox"
+                            checked={suicidalIntent}
+                            data-field="Suicidal_Intent__c"
+                            onchange={handleCheckboxChange}
+                        />
+                        <span>Present</span>
+                    </label>
+                </div>
+
+                <div class="field">
+                    <label class="input-label" for="past-attempts"><span class="required">*</span>Past Suicide Attempts (#)</label>
+                    <input
+                        id="past-attempts"
+                        type="number"
+                        min="0"
+                        class="text-input"
+                        value={pastAttempts}
+                        data-field="Past_Suicide_Attempts__c"
+                        oninput={handleInputChange}
+                    />
+                    <template if:true={pastAttemptsError}>
+                        <p class="error-text">{pastAttemptsError}</p>
+                    </template>
+                </div>
+            </section>
+
+            <section class="card">
+                <div class="top-section-header">
+                    <div>
+                        <p class="card-title"><span class="required">*</span>Access to Means</p>
+                        <p class="card-subtitle">Select all means currently available.</p>
+                    </div>
+                </div>
+                <div class="checkbox-list">
+                    <template for:each={meansOptions} for:item="option">
+                        <label key={option.value} class="checkbox-row">
+                            <input
+                                type="checkbox"
+                                data-value={option.value}
+                                checked={option.checked}
+                                onchange={handleMeansToggle}
+                            />
+                            <span>{option.label}</span>
+                        </label>
+                    </template>
+                </div>
+                <template if:true={accessMeansError}>
+                    <p class="error-text">{accessMeansError}</p>
+                </template>
+            </section>
+        </template>
+
+        <div class="slds-grid slds-grid_align-spread slds-var-m-top_large">
+            <button class="slds-button btn-back" type="button" onclick={handleBack}>Back</button>
+            <button class="slds-button btn-next" type="button" onclick={handleNext}>Next</button>
+        </div>
+    </div>
+</template>

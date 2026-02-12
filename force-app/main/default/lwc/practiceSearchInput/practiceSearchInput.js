@@ -186,7 +186,7 @@ export default class PracticeSearchInput extends NavigationMixin(LightningElemen
     this.dispatchEvent(
       new ShowToastEvent({
         title: 'Practice Selected',
-        message: `"${name}" seleccionado.`,
+        message: `"${name}" selected.`,
         variant: 'success'
       })
     );
@@ -253,10 +253,10 @@ export default class PracticeSearchInput extends NavigationMixin(LightningElemen
     this.dispatchEvent(
         new ShowToastEvent({
             title: 'Practice Selected',
-            message: `"${newPractice.Name}" creada y seleccionada.`,
+            message: `"${newPractice.Name}" created y selected.`,
             variant: 'success'
         })
     );
-    console.log('🆕 Practice creada y seleccionada:', newPractice.Name);
+    console.log('🆕 Practice created y selected:', newPractice.Name);
   }
 }

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Category__c</fullName>
+    <label>Category</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Substance Use Risks</fullName>
+                <default>false</default>
+                <label>Substance Use Risks</label>
+            </value>
+            <value>
+                <fullName>Medical/Health Complications</fullName>
+                <default>false</default>
+                <label>Medical/Health Complications</label>
+            </value>
+            <value>
+                <fullName>Mental Health Concerns</fullName>
+                <default>false</default>
+                <label>Mental Health Concerns</label>
+            </value>
+            <value>
+                <fullName>Behavioral Concerns</fullName>
+                <default>false</default>
+                <label>Behavioral Concerns</label>
+            </value>
+            <value>
+                <fullName>Environmental/Social Risks</fullName>
+                <default>false</default>
+                <label>Environmental/Social Risks</label>
+            </value>
+            <value>
+                <fullName>Socioeconomic Concerns</fullName>
+                <default>false</default>
+                <label>Socioeconomic Concerns</label>
+            </value>
+            <value>
+                <fullName>Access Risk</fullName>
+                <default>false</default>
+                <label>Access Risk</label>
+            </value>
+            <value>
+                <fullName>Health Risk</fullName>
+                <default>false</default>
+                <label>Health Risk</label>
+            </value>
+            <value>
+                <fullName>Compliance Risk</fullName>
+                <default>false</default>
+                <label>Compliance Risk</label>
+            </value>
+            <value>
+                <fullName>Self-Harm Risk</fullName>
+                <default>false</default>
+                <label>Self-Harm Risk</label>
+            </value>
+            <value>
+                <fullName>Mental Health Risk</fullName>
+                <default>false</default>
+                <label>Mental Health Risk</label>
+            </value>
+            <value>
+                <fullName>Violence Risk</fullName>
+                <default>false</default>
+                <label>Violence Risk</label>
+            </value>
+            <value>
+                <fullName>Environmental Risk</fullName>
+                <default>false</default>
+                <label>Environmental Risk</label>
+            </value>
+            <value>
+                <fullName>Socioeconomic Risk</fullName>
+                <default>false</default>
+                <label>Socioeconomic Risk</label>
+            </value>
+            <value>
+                <fullName>Cognitive Risk</fullName>
+                <default>false</default>
+                <label>Cognitive Risk</label>
+            </value>
+            <value>
+                <fullName>Abuse Risk</fullName>
+                <default>false</default>
+                <label>Abuse Risk</label>
+            </value>
+            <value>
+                <fullName>Psychological Stressors</fullName>
+                <default>false</default>
+                <label>Psychological Stressors</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

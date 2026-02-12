@@ -1,0 +1,215 @@
+.provider-info-form {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+.provider-info-form .form-container {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.provider-info-form h1,
+.provider-info-form h3 {
+    text-align: center;
+    color: #00204e;
+    margin-top: 0;
+}
+
+.provider-info-form h4 {
+    color: #5a7e92;
+    margin: 15px 0 5px;
+    font-weight: 600;
+}
+
+.provider-info-form label {
+    color: #5a7e92;
+    margin-top: 10px;
+    display: block;
+}
+
+.provider-info-form input,
+.provider-info-form select {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 10px 0;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.provider-info-form input[type='checkbox'] {
+    width: auto;
+    margin-right: 5px;
+}
+
+/* Progress bar */
+.provider-info-form .progressbar {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.provider-info-form .progressbar li {
+    flex: 1;
+    text-align: center;
+    color: #b0b0b0;
+}
+
+.provider-info-form .progressbar li.active {
+    color: #67c07b;
+}
+
+/* Steps */
+.form-step {
+    display: none;
+}
+
+.form-step.active {
+    display: block;
+}
+
+/* Buttons */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.provider-info-form button,
+.provider-info-form .submit-btn {
+    background-color: #67c07b;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.provider-info-form button:disabled,
+.provider-info-form .submit-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Error box */
+.form-error {
+    color: red;
+    font-weight: bold;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #ffeeee;
+    border: 1px solid #ffcccc;
+    border-radius: 4px;
+}
+
+.hidden {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    max-height: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    position: absolute !important;
+}
+
+.forceCommunityThemeLayout .hidden {
+    display: none !important;
+}
+
+.age-group.invalid-group {
+    border: 2px solid red;
+    background-color: #fff0f0;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+
+
+/* Modal (convertimos #id a clases) */
+.thank-you-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    position: relative;
+    min-width: 300px;
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .provider-info-form .form-container {
+        padding: 15px;
+        border: 1px solid #ddd;
+    }
+
+    .provider-info-form .progressbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .provider-info-form .progressbar li {
+        margin: 5px 0;
+    }
+
+    .provider-info-form button,
+    .provider-info-form .submit-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .provider-info-form {
+        padding: 10px;
+    }
+
+    .provider-info-form .form-container {
+        padding: 10px;
+    }
+
+    .provider-info-form button,
+    .provider-info-form .submit-btn {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    .provider-info-form input,
+    .provider-info-form select {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .provider-info-form h1,
+    .provider-info-form h3 {
+        font-size: 18px;
+    }
+}

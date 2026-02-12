@@ -36,4 +36,28 @@ public with sharing class PatientSearchController {
             LIMIT 1
         ];
     }
+
+    // ⚙️ Obtener paciente por Case (ContactId o Patient__c si existe)
+    @AuraEnabled(cacheable=true)
+    public static Contact getPatientByCaseId(Id caseId) {
+        if (caseId == null) return null;
+        Map<String, Schema.SObjectField> fields = Case.SObjectType.getDescribe().fields.getMap();
+        Boolean hasPatient = fields.containsKey('Patient__c');
+        String query = 'SELECT Id, ContactId' + (hasPatient ? ', Patient__c' : '') + ' FROM Case WHERE Id = :caseId LIMIT 1';
+        Case c = (Case)Database.query(query);
+        Id patientId = c.ContactId;
+        if (hasPatient) {
+            Id p = (Id)c.get('Patient__c');
+            if (p != null) {
+                patientId = p;
+            }
+        }
+        if (patientId == null) return null;
+        return [
+            SELECT Id, Name, Email, Phone, CreatedDate
+            FROM Contact
+            WHERE Id = :patientId
+            LIMIT 1
+        ];
+    }
 }

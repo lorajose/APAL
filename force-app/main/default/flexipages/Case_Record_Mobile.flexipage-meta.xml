@@ -65,36 +65,6 @@
                 </visibilityRule>
             </fieldInstance>
         </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Notes_new__c</fieldItem>
-                <identifier>RecordNotes__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Other_Symptoms__c</fieldItem>
-                <identifier>RecordOther_Symptoms__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Other_Prior_Diagnosis__c</fieldItem>
-                <identifier>RecordOther_Prior_Diagnosis__cField</identifier>
-            </fieldInstance>
-        </itemInstances>
         <name>Facet-04c66fad-4808-414b-9a49-11ba43614c13</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -409,16 +379,6 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Top_Symptoms__c</fieldItem>
-                <identifier>RecordTop_Symptoms_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.Symptom_Onset_Date__c</fieldItem>
                 <identifier>RecordSymptom_Onset_Date_cField</identifier>
             </fieldInstance>
@@ -529,16 +489,6 @@
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Self_Harm_History__c</fieldItem>
-                <identifier>RecordSelf_Harm_History_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
@@ -835,172 +785,6 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Psychosis_Symptoms__c</fieldItem>
-                <identifier>RecordPsychosis_Symptoms_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-8b6a6b27-f952-45a4-b49a-bf6a9668e8c6</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Psychosis_Notes__c</fieldItem>
-                <identifier>RecordPsychosis_Notes_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-af6d883a-ba12-458e-9430-82e5dfb844b9</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-8b6a6b27-f952-45a4-b49a-bf6a9668e8c6</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column28</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-af6d883a-ba12-458e-9430-82e5dfb844b9</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column29</identifier>
-            </componentInstance>
-        </itemInstances>
-        <name>Facet-7e1f8624-6159-4c29-95fc-d810800dbbbf</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Mania_Symptoms__c</fieldItem>
-                <identifier>RecordMania_Symptoms_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-07f6b05b-0416-431a-8663-af665134e1d0</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Mania_Notes__c</fieldItem>
-                <identifier>RecordMania_Notes_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-546e7233-591d-40a2-89d1-d2573b22ed37</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-07f6b05b-0416-431a-8663-af665134e1d0</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column26</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-546e7233-591d-40a2-89d1-d2573b22ed37</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column27</identifier>
-            </componentInstance>
-        </itemInstances>
-        <name>Facet-44168b63-ff0e-4d5a-b13c-137d611b0252</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Medical_Red_Flags__c</fieldItem>
-                <identifier>RecordMedical_Red_Flags_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-a7aa541b-6820-4498-8710-7cd09ff21500</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Medical_Notes__c</fieldItem>
-                <identifier>RecordMedical_Notes_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <name>Facet-ad6dbdcf-aa5e-4409-bcf5-2121394726d2</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-a7aa541b-6820-4498-8710-7cd09ff21500</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column20</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-ad6dbdcf-aa5e-4409-bcf5-2121394726d2</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column21</identifier>
-            </componentInstance>
-        </itemInstances>
-        <name>Facet-19a28262-62b0-46e4-acb8-9417784072ea</name>
-        <type>Facet</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Family_History__c</fieldItem>
-                <identifier>RecordFamily_History_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.Recent_Trauma__c</fieldItem>
                 <identifier>RecordRecent_Trauma_cField</identifier>
             </fieldInstance>
@@ -1224,16 +1008,6 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.Psychosocial_Stressors__c</fieldItem>
-                <identifier>RecordPsychosocial_Stressors_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
                 <fieldItem>Record.Reliable_Supports__c</fieldItem>
                 <identifier>RecordReliable_Supports_cField</identifier>
             </fieldInstance>
@@ -1324,6 +1098,34 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
                 <identifier>flexipage_fieldSection2</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>layoutContext</name>
+                    <value>case</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>layoutMode</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentName>gpCaseStepConcerns</componentName>
+                <identifier>c_gpCaseStepConcerns</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>layoutContext</name>
+                    <value>case</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>layoutMode</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentName>gpCaseStepSafetyRisks</componentName>
+                <identifier>c_gpCaseStepSafetyRisks</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -1480,81 +1282,6 @@
             <componentInstance>
                 <componentInstanceProperties>
                     <name>columns</name>
-                    <value>Facet-7e1f8624-6159-4c29-95fc-d810800dbbbf</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>horizontalAlignment</name>
-                    <value>false</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>label</name>
-                    <value>Psychosis</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:fieldSection</componentName>
-                <identifier>flexipage_fieldSection15</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.Case_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>General Psychiatry</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>columns</name>
-                    <value>Facet-44168b63-ff0e-4d5a-b13c-137d611b0252</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>horizontalAlignment</name>
-                    <value>false</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>label</name>
-                    <value>Mania / Hypomania</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:fieldSection</componentName>
-                <identifier>flexipage_fieldSection14</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.Case_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>General Psychiatry</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>columns</name>
-                    <value>Facet-19a28262-62b0-46e4-acb8-9417784072ea</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>horizontalAlignment</name>
-                    <value>false</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>label</name>
-                    <value>Medical Contributors / Red Flags</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:fieldSection</componentName>
-                <identifier>flexipage_fieldSection11</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.Case_Type__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>General Psychiatry</rightValue>
-                    </criteria>
-                </visibilityRule>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>columns</name>
                     <value>Facet-a4x7r55d5lj</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
@@ -1653,15 +1380,44 @@
         </itemInstances>
         <itemInstances>
             <componentInstance>
-                <componentName>flowLauncher</componentName>
-                <identifier>c_flowLauncher</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.Unrelated_Call__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>false</rightValue>
-                    </criteria>
-                </visibilityRule>
+                <componentInstanceProperties>
+                    <name>layoutContext</name>
+                    <value>case</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>layoutMode</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentName>gpCaseStepSubstances</componentName>
+                <identifier>c_gpCaseStepSubstances</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>layoutContext</name>
+                    <value>case</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>layoutMode</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentName>gpCaseStepMedications</componentName>
+                <identifier>c_gpCaseStepMedications</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>layoutContext</name>
+                    <value>case</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>layoutMode</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentName>gpCaseStepScreeners</componentName>
+                <identifier>c_gpCaseStepScreeners</identifier>
             </componentInstance>
         </itemInstances>
         <name>Facet-21c57c39-be82-4cf2-b457-4da839767f6c</name>
@@ -2022,6 +1778,9 @@
                     <name>actionNames</name>
                     <valueList>
                         <valueListItems>
+                            <value>Case.Edit_via_Wizard_mobile</value>
+                        </valueListItems>
+                        <valueListItems>
                             <value>Case.New_CareRequest</value>
                             <visibilityRule>
                                 <criteria>
@@ -2042,6 +1801,15 @@
                             </visibilityRule>
                         </valueListItems>
                         <valueListItems>
+                            <value>Edit</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Case.Update_Provider</value>
+                        </valueListItems>
+                        <valueListItems>
+                            <value>Case.Update_Provider_Mobile</value>
+                        </valueListItems>
+                        <valueListItems>
                             <value>Case.New_Provider</value>
                         </valueListItems>
                         <valueListItems>
@@ -2051,16 +1819,7 @@
                             <value>Case.New_Practice</value>
                         </valueListItems>
                         <valueListItems>
-                            <value>Case.Update_Provider</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Edit</value>
-                        </valueListItems>
-                        <valueListItems>
                             <value>ChangeOwnerOne</value>
-                        </valueListItems>
-                        <valueListItems>
-                            <value>Case.Update_Provider_Mobile</value>
                         </valueListItems>
                     </valueList>
                 </componentInstanceProperties>
@@ -2105,24 +1864,27 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
-                    <name>tabs</name>
-                    <value>Facet-36db270d-70e0-48bd-91d3-578697b0bf97</value>
+                    <name>parentFieldApiName</name>
+                    <value>Case.Id</value>
                 </componentInstanceProperties>
-                <componentName>flexipage:tabset</componentName>
-                <identifier>flexipage_tabset3</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentName>flowLauncher</componentName>
-                <identifier>c_flowLauncher2</identifier>
-                <visibilityRule>
-                    <criteria>
-                        <leftValue>{!Record.Unrelated_Call__c}</leftValue>
-                        <operator>EQUAL</operator>
-                        <rightValue>false</rightValue>
-                    </criteria>
-                </visibilityRule>
+                <componentInstanceProperties>
+                    <name>relatedListApiName</name>
+                    <value>TeamMembers</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>relatedListComponentOverride</name>
+                    <value>NONE</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>rowsToDisplay</name>
+                    <value>10</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showActionBar</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentName>force:relatedListSingleContainer</componentName>
+                <identifier>force_relatedListSingleContainer5</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -2180,27 +1942,130 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
-                    <name>parentFieldApiName</name>
-                    <value>Case.Id</value>
+                    <name>tabs</name>
+                    <value>Facet-36db270d-70e0-48bd-91d3-578697b0bf97</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:tabset</componentName>
+                <identifier>flexipage_tabset3</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>layoutContext</name>
+                    <value>case</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>relatedListApiName</name>
-                    <value>TeamMembers</value>
+                    <name>layoutMode</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentName>gpCaseStepConcerns</componentName>
+                <identifier>c_gpCaseStepConcerns2</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Unrelated_Call__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>layoutContext</name>
+                    <value>case</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>relatedListComponentOverride</name>
-                    <value>NONE</value>
+                    <name>layoutMode</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentName>gpCaseStepSubstances</componentName>
+                <identifier>c_gpCaseStepSubstances2</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Unrelated_Call__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>layoutContext</name>
+                    <value>case</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>rowsToDisplay</name>
-                    <value>10</value>
+                    <name>layoutMode</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentName>gpCaseStepMedications</componentName>
+                <identifier>c_gpCaseStepMedications2</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Unrelated_Call__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>layoutContext</name>
+                    <value>case</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
-                    <name>showActionBar</name>
-                    <value>true</value>
+                    <name>layoutMode</name>
+                    <value>false</value>
                 </componentInstanceProperties>
-                <componentName>force:relatedListSingleContainer</componentName>
-                <identifier>force_relatedListSingleContainer5</identifier>
+                <componentName>gpCaseStepScreeners</componentName>
+                <identifier>c_gpCaseStepScreeners2</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Unrelated_Call__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>layoutContext</name>
+                    <value>case</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>layoutMode</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentName>gpCaseStepSafetyRisks</componentName>
+                <identifier>c_gpCaseStepSafetyRisks2</identifier>
+                <visibilityRule>
+                    <criteria>
+                        <leftValue>{!Record.Unrelated_Call__c}</leftValue>
+                        <operator>EQUAL</operator>
+                        <rightValue>false</rightValue>
+                    </criteria>
+                </visibilityRule>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>layoutContext</name>
+                    <value>case</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>layoutMode</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentName>gpCaseStepPatientSupport</componentName>
+                <identifier>c_gpCaseStepPatientSupport</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>

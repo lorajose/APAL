@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customPermissions>
+        <enabled>true</enabled>
+        <name>Bypass_Practice_Locality_Validation</name>
+    </customPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Account.Practice_Locality__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>PS - Bypass Practice Locality Validation</label>
+    <recordTypeVisibilities>
+        <recordType>Account.Practice</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <recordType>PersonAccount.Provider</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+</PermissionSet>

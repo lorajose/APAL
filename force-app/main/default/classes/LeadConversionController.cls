@@ -157,6 +157,9 @@ public with sharing  class LeadConversionController {
             {personAccount.pcptraintype__c  = lead.Trainee_Type__c;}
             if (lead.Other_Medical_Trainee_Description__c != null && lead.Other_Medical_Trainee_Description__c != personAccount.pcptraintypedescrmd__c )
             {personAccount.pcptraintypedescrmd__c  = lead.Other_Medical_Trainee_Description__c;}
+            if (lead.Name_of_School__c != null && personAccount.get('Name_of_School__c') != lead.Name_of_School__c) {
+                personAccount.put('Name_of_School__c', lead.Name_of_School__c);
+            }
             if (lead.Specialty_Mental_Health_Training_Desc__c != null && lead.Specialty_Mental_Health_Training_Desc__c != personAccount.pcpmhtraindesc__c )
             {personAccount.pcpmhtraindesc__c  = lead.Specialty_Mental_Health_Training_Desc__c;}
             if (lead.Specialty_Mental_Health_Training__c != null && lead.Specialty_Mental_Health_Training__c != personAccount.pcpmhtrain__c )
@@ -182,6 +185,9 @@ public with sharing  class LeadConversionController {
             if (lead.Description != null && lead.Description != personAccount.Description)
                 personAccount.Description = lead.Description;
             //Last Add
+            if (lead.Health_Haven_Enrolled_Provider__c != null && personAccount.get('VMAPEnrolledProvider__c') != lead.Health_Haven_Enrolled_Provider__c) {
+                personAccount.put('VMAPEnrolledProvider__c', lead.Health_Haven_Enrolled_Provider__c);
+            }
             if (lead.heard_other__c != null && lead.heard_other__c != personAccount.heard_other__c)
             {personAccount.heard_other__c = lead.heard_other__c;}
             if (lead.pcpracedesc__c != null && lead.pcpracedesc__c != personAccount.pcpracedesc__c)

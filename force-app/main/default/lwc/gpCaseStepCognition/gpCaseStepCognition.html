@@ -1,0 +1,48 @@
+<template>
+    <div class="step-section">
+       <!-- <div class="section-header">
+            <h2>Step 9 — Orientation &amp; Cognition</h2>
+            <p>Capture orientation status and cognition notes when needed.</p>
+        </div> -->
+
+        <section class="card">
+            <label class="input-label" for="orientation">Orientation<span class="required">*</span></label>
+            <select
+                id="orientation"
+                class="text-input"
+                onchange={handleOrientationChange}
+            >
+                <option value="">—</option>
+                <template for:each={orientationOptions} for:item="option">
+                    <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
+                </template>
+            </select>
+            <template if:true={orientationError}>
+                <p class="error-text">{orientationError}</p>
+            </template>
+        </section>
+
+        <template if:true={showCognitionNotes}>
+            <section class="card">
+                <div class="field field-full">
+                    <label class="input-label" for="cognition-notes">Cognition Notes<span class="required">*</span></label>
+                    <textarea
+                        id="cognition-notes"
+                        class="textarea"
+                        placeholder="Describe memory, processing, reorientation cues..."
+                        oninput={handleNotesChange}
+                    >{cognitionNotes}</textarea>
+                    <p class="helper-text">Describe memory, processing, reorientation cues...</p>
+                </div>
+                <template if:true={cognitionNotesError}>
+                    <p class="error-text">{cognitionNotesError}</p>
+                </template>
+            </section>
+        </template>
+
+        <div class="slds-grid slds-grid_align-spread slds-var-m-top_large">
+            <button class="slds-button btn-back" type="button" onclick={handleBack}>Back</button>
+            <button class="slds-button btn-next" type="button" onclick={handleNext}>Next</button>
+        </div>
+    </div>
+</template>

@@ -1,13 +1,16 @@
 /*import { LightningElement, api, track } from 'lwc';
 import { FlowAttributeChangeEvent } from 'lightning/flowSupport';
 import searchPatients from '@salesforce/apex/PatientSearchController.searchPatients';
+import getLastCreatedPatient from '@salesforce/apex/PatientSearchController.getLastCreatedPatient';
+import { FlowAttributeChangeEvent } from 'lightning/flowSupport';
+import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
-export default class PatientSearchInput extends LightningElement {
+export default class PatientSearchInput extends NavigationMixin(LightningElement) {
   // ⚙️ Variables públicas
   @api selectedPatientId;
   @api selectedPatientOutput;
-  @api patientId;
+  @api patientId; // Flujo Output variable
 
   // 🧠 Estado interno
   @track searchKey = '';
@@ -17,25 +20,29 @@ export default class PatientSearchInput extends LightningElement {
   isServiceConsole = false;
   saveListenerAttached = false;
 
+  // 🎨 CSS dinámico para el combobox
   get comboboxClass() {
-    return `slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click ${this.isDropdownOpen ? 'slds-is-open' : ''}`;
+    return `slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click ${
+      this.isDropdownOpen ? 'slds-is-open' : ''
+    }`;
   }
 
   get isInputFilled() {
     return this.searchKey && this.searchKey.trim() !== '';
   }
-  
+
   get isButtonDisabled() {
     return !this.isInputFilled;
   }
 
-  // 🔑 Clave única por tab y registro
+  // 🔑 Clave única por tab y registro (para persistencia)
   get storageKey() {
     const tabKey = window.name || 'mainTab';
     const recordKey = this.patientId || 'newCase';
     return `patient_${tabKey}_${recordKey}`;
   }
 
+  // 🧩 Inicialización
   connectedCallback() {
     console.log('🧩 patientSearchInput conectado con persistencia robusta');
 
@@ -43,36 +50,27 @@ export default class PatientSearchInput extends LightningElement {
     const isNewCase =
       url.includes('/new') || url.includes('/newcase') || url.includes('/case/create');
 
-    const pendingSave = localStorage.getItem('pendingSave');
-    const lastAttempt = localStorage.getItem('lastSaveAttempt');
+    // --- Claves específicas (para evitar conflicto entre componentes) ---
+    const pendingSave = localStorage.getItem(this.storageKey + '_pendingSave');
+    const lastAttempt = localStorage.getItem(this.storageKey + '_lastSaveAttempt');
 
-    // ⏱️ Solo consideramos intentos dentro de los últimos 10 segundos
     const validAttempt =
       pendingSave && lastAttempt && Date.now() - parseInt(lastAttempt, 10) < 10000;
 
     const saved = localStorage.getItem(this.storageKey);
 
-    // ♻️ Caso 1: intento previo detectado
+    // ♻️ Caso 1: intento previo de guardado
     if (validAttempt && saved) {
-        const parsed = JSON.parse(saved);
-        
-        // Asumimos que hubo un error (ya que estamos aquí después de un "Save" reciente)
-        // y restauramos el valor SIN intentar detectar errores en el DOM.
-        this.selectedPatientId = parsed.id;
-        this.searchKey = parsed.name;
-        console.log('⚠️ Intento de guardado detectado → se conserva Patient:', parsed.name);
-
-        // Eliminamos las banderas inmediatamente después de restaurar.
-        localStorage.removeItem('pendingSave');
-        localStorage.removeItem('lastSaveAttempt');
-        
-        // SI EL CAMPO DEBE LIMPIARSE TRAS UN GUARDADO EXITOSO, 
-        // NECESITAS OTRA FORMA DE SABER SI EL GUARDADO FUE EXITOSO (e.g., parámetro de URL de éxito).
-        // Por ahora, siempre restaurará si se hizo clic en guardar recientemente.
-        return; 
+      const parsed = JSON.parse(saved);
+      this.selectedPatientId = parsed.id;
+      this.searchKey = parsed.name;
+      console.log('⚠️ Intento de guardado detectado → se conserva Patient:', parsed.name);
+      localStorage.removeItem(this.storageKey + '_pendingSave');
+      localStorage.removeItem(this.storageKey + '_lastSaveAttempt');
+      return;
     }
-    
-    // ♻️ Caso 2: recarga normal o error previo persistente
+
+    // ♻️ Caso 2: restaurar valor persistente previo
     if (saved && !validAttempt) {
       const parsed = JSON.parse(saved);
       this.selectedPatientId = parsed.id;
@@ -86,55 +84,55 @@ export default class PatientSearchInput extends LightningElement {
       console.log('🆕 Nuevo Case → limpio inicial');
     }
 
-    // 💾 Detectar intento de guardado (Save / Guardar)
+    // 💾 Detectar intento de guardado
     if (!this.saveListenerAttached) {
-        document.addEventListener('click', (e) => {
-            const label = (e.target.innerText || '').toLowerCase();
-            if (label.includes('save') || label.includes('guardar')) {
-                console.log('💾 Intento de guardar detectado');
-                // Guardamos el estado ANTES del intento de guardado
-                if (this.searchKey && this.selectedPatientId) {
-                   localStorage.setItem(
-                        this.storageKey,
-                        JSON.stringify({ id: this.selectedPatientId, name: this.searchKey })
-                    );
-                    localStorage.setItem('pendingSave', 'true');
-                    localStorage.setItem('lastSaveAttempt', Date.now().toString());
-                    console.log('📦 Guardado temporal de Patient antes del intento:', this.searchKey);
-                } else {
-                    // Si no hay nada seleccionado, no hay nada que persistir en caso de error
-                    localStorage.removeItem(this.storageKey); 
-                }
-            }
-        });
-        this.saveListenerAttached = true;
+      document.addEventListener('click', (e) => {
+        const label = (e.target.innerText || '').toLowerCase();
+        if (label.includes('save') || label.includes('guardar')) {
+          console.log('💾 Intento de guardar detectado');
+          if (this.searchKey && this.selectedPatientId) {
+            localStorage.setItem(
+              this.storageKey,
+              JSON.stringify({ id: this.selectedPatientId, name: this.searchKey })
+            );
+            localStorage.setItem(this.storageKey + '_pendingSave', 'true');
+            localStorage.setItem(this.storageKey + '_lastSaveAttempt', Date.now().toString());
+            console.log('📦 Guardado temporal de Patient antes del intento:', this.searchKey);
+          } else {
+            localStorage.removeItem(this.storageKey);
+          }
+        }
+      });
+      this.saveListenerAttached = true;
     }
 
-    // 🚫 No limpiar al cambiar de tab en Service Console
+    // 🚫 No limpiar en Service Console
     this.isServiceConsole = window.location.href.includes('console');
     if (!this.isServiceConsole) {
       window.addEventListener('beforeunload', () => {
         console.log('🔁 Cierre completo → limpieza');
         localStorage.removeItem(this.storageKey);
+        localStorage.removeItem(this.storageKey + '_pendingSave');
+        localStorage.removeItem(this.storageKey + '_lastSaveAttempt');
       });
     }
   }
 
-  // Métodos handleFocus, handleBlur, handleSearchChange, handleSelect, clearSelection y getters permanecen iguales.
-  // ... (copia los métodos de la respuesta anterior aquí) ...
-  
+  // 🧭 Métodos del lookup
+
   handleFocus() {
     if (this.patients.length > 0 || this.searchKey.length >= 2) {
-        this.isDropdownOpen = true;
+      this.isDropdownOpen = true;
     }
   }
 
   handleBlur() {
     setTimeout(() => {
-        this.isDropdownOpen = false;
+      this.isDropdownOpen = false;
     }, 300);
   }
 
+  // 🔍 Buscar pacientes
   handleSearchChange(event) {
     this.searchKey = event.target.value;
     if (this.searchKey.length >= 2) {
@@ -151,6 +149,7 @@ export default class PatientSearchInput extends LightningElement {
     }
   }
 
+  // 🖱️ Seleccionar paciente
   handleSelect(event) {
     const id = event.currentTarget.dataset.id;
     const name = event.currentTarget.dataset.name;
@@ -170,12 +169,13 @@ export default class PatientSearchInput extends LightningElement {
     this.dispatchEvent(
       new ShowToastEvent({
         title: 'Patient Selected',
-        message: `"${name}" seleccionado.`,
+        message: `"${name}" selected.`,
         variant: 'success'
       })
     );
   }
 
+  // ❌ Limpieza completa
   clearSelection() {
     this.selectedPatientId = null;
     this.selectedPatientOutput = null;
@@ -183,6 +183,8 @@ export default class PatientSearchInput extends LightningElement {
     this.patients = [];
     this.isDropdownOpen = false;
     localStorage.removeItem(this.storageKey);
+    localStorage.removeItem(this.storageKey + '_pendingSave');
+    localStorage.removeItem(this.storageKey + '_lastSaveAttempt');
     console.log(`🧹 Limpieza ejecutada (${this.storageKey})`);
   }
 } */

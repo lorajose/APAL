@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Category__c</fullName>
+    <label>Category</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Medication-Assisted Treatment (MAT)</fullName>
+                <default>false</default>
+                <label>Medication-Assisted Treatment (MAT)</label>
+            </value>
+            <value>
+                <fullName>Antidepressant-SSRI</fullName>
+                <default>false</default>
+                <label>Antidepressant-SSRI</label>
+            </value>
+            <value>
+                <fullName>Antidepressant-SNRI</fullName>
+                <default>false</default>
+                <label>Antidepressant-SNRI</label>
+            </value>
+            <value>
+                <fullName>Antidepressant-TCA</fullName>
+                <default>false</default>
+                <label>Antidepressant-TCA</label>
+            </value>
+            <value>
+                <fullName>Antipsychotic-Atypical</fullName>
+                <default>false</default>
+                <label>Antipsychotic-Atypical</label>
+            </value>
+            <value>
+                <fullName>Anxiolytic-Non-benzodiazepine</fullName>
+                <default>false</default>
+                <label>Anxiolytic-Non-benzodiazepine</label>
+            </value>
+            <value>
+                <fullName>Anxiolytic-Benzodiazepine</fullName>
+                <default>false</default>
+                <label>Anxiolytic-Benzodiazepine</label>
+            </value>
+            <value>
+                <fullName>Mood Stabilizer-Anticonvulsant</fullName>
+                <default>false</default>
+                <label>Mood Stabilizer-Anticonvulsant</label>
+            </value>
+            <value>
+                <fullName>Mood Stabilizer-Lithium</fullName>
+                <default>false</default>
+                <label>Mood Stabilizer-Lithium</label>
+            </value>
+            <value>
+                <fullName>Meds for Insomnia</fullName>
+                <default>false</default>
+                <label>Meds for Insomnia</label>
+            </value>
+            <value>
+                <fullName>ADHD (non-stimulant)</fullName>
+                <default>false</default>
+                <label>ADHD (non-stimulant)</label>
+            </value>
+            <value>
+                <fullName>Other Medication</fullName>
+                <default>false</default>
+                <label>Other Medication</label>
+            </value>
+            <value>
+                <fullName>Mood Stabilizer/Anticonvulsant</fullName>
+                <default>false</default>
+                <label>Mood Stabilizer/Anticonvulsant</label>
+            </value>
+            <value>
+                <fullName>Atypical Antipsychotic</fullName>
+                <default>false</default>
+                <label>Atypical Antipsychotic</label>
+            </value>
+            <value>
+                <fullName>Typical Antipsychotic</fullName>
+                <default>false</default>
+                <label>Typical Antipsychotic</label>
+            </value>
+            <value>
+                <fullName>Acetylcholinesterase Inhibitor</fullName>
+                <default>false</default>
+                <label>Acetylcholinesterase Inhibitor</label>
+            </value>
+            <value>
+                <fullName>NMDA Receptor Antagonist</fullName>
+                <default>false</default>
+                <label>NMDA Receptor Antagonist</label>
+            </value>
+            <value>
+                <fullName>Atypical Antidepressant</fullName>
+                <default>false</default>
+                <label>Atypical Antidepressant</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

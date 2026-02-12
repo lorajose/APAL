@@ -1,0 +1,41 @@
+<template>
+    <section class={cardClass}>
+        <header class="card-header">
+            <div>
+                <p class="card-title"><template if:true={required}><span class="required">*</span></template>Primary Clinical Questions</p>
+                <p class="card-subtitle">Select every reason this case is landing on your desk.</p>
+            </div>
+            <span class="selected-counter">{selectedCountLabel}</span>
+        </header>
+
+        <template if:true={isLoading}>
+            <div class="spinner-wrap">
+                <lightning-spinner alternative-text="Loading"></lightning-spinner>
+            </div>
+        </template>
+
+        <template if:true={loadError}>
+            <div class="slds-text-color_error slds-m-bottom_small">
+                {loadError}
+            </div>
+        </template>
+
+        <div class="input-row">
+            <label class="input-label" for="pcqt-search">Search</label>
+            <input id="pcqt-search" type="search" class="pill-search" placeholder="Filter options..."
+                value={pcqtSearch} oninput={handleSearch} aria-label="Filter by name">
+        </div>
+
+        <div class="chip-grid">
+            <template for:each={filteredOptions} for:item="option">
+                <button key={option.value} type="button" class={option.chipClass} data-id={option.value}
+                    onclick={handleToggle} aria-pressed={option.isSelected}>
+                    {option.label}
+                </button>
+            </template>
+        </div>
+        <template if:true={showError}>
+            <p class="error-text">The Primary Clinical Questions field is required.</p>
+        </template>
+    </section>
+</template>
