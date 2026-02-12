@@ -241,18 +241,21 @@ export default class GpCaseStepScreeners extends LightningElement {
     get filteredScreeners() {
         const term = (this.searchValue || '').toLowerCase();
         return this.screeners
-            .map(item => ({
-                ...item,
-                meta: this.catalogIndex[item.catalogId || item.id] || {
-                    name: item.catalogName || item.meta?.name || item.id,
-                    type: item.catalogType || item.meta?.type || ''
-                },
-                recordName: item.recordName || item.name || null,
-                recordLink: this.buildPatientScreenerLink(item.recordId),
-                cardClass: item.positive ? 'scr-card positive-flag' : 'scr-card',
-                showConfirm: this.confirmRemoveId === item.id,
-                previewNotes: this.notePreview(item.notes)
-            }))
+            .map(item => {
+                const cardClass = item.positive ? 'scr-card positive-flag' : 'scr-card';
+                return {
+                    ...item,
+                    meta: this.catalogIndex[item.catalogId || item.id] || {
+                        name: item.catalogName || item.meta?.name || item.id,
+                        type: item.catalogType || item.meta?.type || ''
+                    },
+                    recordName: item.recordName || item.name || null,
+                    recordLink: this.buildPatientScreenerLink(item.recordId),
+                    cardClass,
+                    showConfirm: this.confirmRemoveId === item.id,
+                    previewNotes: this.notePreview(item.notes)
+                };
+            })
             .filter(item => {
                 if (!term) return true;
                 if (this.filterBy === 'type') {
