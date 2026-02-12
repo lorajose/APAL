@@ -6,8 +6,8 @@ private class CasePracticePatientHandlerTest {
         Account a2 = new Account(Name = 'Practice B');
         insert new List<Account>{ a1, a2 };
 
-        Contact c1 = new Contact(LastName = 'Patient One');
-        Contact c2 = new Contact(LastName = 'Patient Two');
+        Contact c1 = buildContact('Patient One');
+        Contact c2 = buildContact('Patient Two');
         insert new List<Contact>{ c1, c2 };
     }
 
@@ -131,5 +131,29 @@ private class CasePracticePatientHandlerTest {
         System.assertEquals(0, [
             SELECT count() FROM Practice_Patient__c
         ]);
+    }
+
+    /* Helpers */
+    private static Contact buildContact(String last) {
+        Contact c = new Contact(FirstName = 'Test', LastName = last);
+        Map<String, Schema.SObjectField> fields = Contact.SObjectType.getDescribe().fields.getMap();
+        if (fields.containsKey('yinsurance_v2__c')) {
+            String val = firstPicklistValue(fields.get('yinsurance_v2__c'));
+            if (val != null) c.put('yinsurance_v2__c', val);
+        }
+        if (fields.containsKey('API_Key__c')) {
+            c.put('API_Key__c', 'TEST-KEY-' + last.replace(' ', '-'));
+        }
+        return c;
+    }
+
+    private static String firstPicklistValue(Schema.SObjectField field) {
+        if (field == null) return null;
+        Schema.DescribeFieldResult d = field.getDescribe();
+        if (d == null) return null;
+        for (Schema.PicklistEntry e : d.getPicklistValues()) {
+            if (e.isActive()) return e.getValue();
+        }
+        return null;
     }
 }
