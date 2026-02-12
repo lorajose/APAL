@@ -725,7 +725,13 @@ public with sharing class GPCaseService {
         }
         System.debug(LoggingLevel.INFO, 'saveMedications => items: ' + JSON.serialize(items));
         if (items == null || items.isEmpty()) {
-            System.debug(LoggingLevel.ERROR, 'saveMedications error: payload is null or empty.');
+            System.debug(LoggingLevel.ERROR, 'saveMedications empty payload -> deleting all patient medications for case.');
+            List<Patient_Medication__c> existingAll = [
+                SELECT Id FROM Patient_Medication__c WHERE Case__c = :parentCaseId
+            ];
+            if (!existingAll.isEmpty()) {
+                delete existingAll;
+            }
             return;
         }
 
@@ -796,12 +802,18 @@ public with sharing class GPCaseService {
 
         // Delete records not present in payload
         List<Patient_Medication__c> toDelete = new List<Patient_Medication__c>();
-        for (Patient_Medication__c existing : existingById.values()) {
+        Set<Id> deleteSeen = new Set<Id>();
+        List<Patient_Medication__c> existingForDelete = new List<Patient_Medication__c>();
+        existingForDelete.addAll(existingById.values());
+        existingForDelete.addAll(existingByName.values());
+        for (Patient_Medication__c existing : existingForDelete) {
+            if (deleteSeen.contains(existing.Id)) continue;
             String key = existing.Medication_List__c != null
                 ? String.valueOf(existing.Medication_List__c)
                 : (existing.Medication_List__r != null ? existing.Medication_List__r.Name.toLowerCase() : null);
             if (key == null || !payloadKeys.contains(key)) {
                 toDelete.add(new Patient_Medication__c(Id = existing.Id));
+                deleteSeen.add(existing.Id);
             }
         }
 
@@ -819,6 +831,12 @@ public with sharing class GPCaseService {
         Id patientId = fetchCasePatient(parentCaseId);
         System.debug(LoggingLevel.INFO, 'saveSubstances => items: ' + JSON.serialize(items));
         if (items == null || items.isEmpty()) {
+            List<Patient_Substance__c> existingAll = [
+                SELECT Id FROM Patient_Substance__c WHERE Case__c = :parentCaseId
+            ];
+            if (!existingAll.isEmpty()) {
+                delete existingAll;
+            }
             return;
         }
         Map<String, Id> subs = fetchCatalogIds('Substance_List__c', collectNamesFromSubstances(items));
@@ -876,12 +894,18 @@ public with sharing class GPCaseService {
 
         // Delete records not present in payload
         List<Patient_Substance__c> toDelete = new List<Patient_Substance__c>();
-        for (Patient_Substance__c existing : existingById.values()) {
+        Set<Id> deleteSeen = new Set<Id>();
+        List<Patient_Substance__c> existingForDelete = new List<Patient_Substance__c>();
+        existingForDelete.addAll(existingById.values());
+        existingForDelete.addAll(existingByName.values());
+        for (Patient_Substance__c existing : existingForDelete) {
+            if (deleteSeen.contains(existing.Id)) continue;
             String key = existing.Substance_Listing__c != null
                 ? String.valueOf(existing.Substance_Listing__c)
                 : (existing.Substance_Listing__r != null ? existing.Substance_Listing__r.Name.toLowerCase() : null);
             if (key == null || !payloadKeys.contains(key)) {
                 toDelete.add(new Patient_Substance__c(Id = existing.Id));
+                deleteSeen.add(existing.Id);
             }
         }
 
@@ -899,6 +923,12 @@ public with sharing class GPCaseService {
         Id patientId = fetchCasePatient(parentCaseId);
         System.debug(LoggingLevel.INFO, 'saveScreeners => items: ' + JSON.serialize(items));
         if (items == null || items.isEmpty()) {
+            List<Patient_Screener__c> existingAll = [
+                SELECT Id FROM Patient_Screener__c WHERE Case__c = :parentCaseId
+            ];
+            if (!existingAll.isEmpty()) {
+                delete existingAll;
+            }
             return;
         }
 
@@ -961,14 +991,20 @@ public with sharing class GPCaseService {
             toUpsert.add(record);
         }
 
-        // Delete only records not present in payload
+        // Delete only records not present in payload (cover id and name cases)
         List<Patient_Screener__c> toDelete = new List<Patient_Screener__c>();
-        for (Patient_Screener__c existing : existingById.values()) {
+        Set<Id> deleteSeen = new Set<Id>();
+        List<Patient_Screener__c> existingForDelete = new List<Patient_Screener__c>();
+        existingForDelete.addAll(existingById.values());
+        existingForDelete.addAll(existingByName.values());
+        for (Patient_Screener__c existing : existingForDelete) {
+            if (deleteSeen.contains(existing.Id)) continue;
             String key = existing.Screener__c != null
                 ? String.valueOf(existing.Screener__c)
                 : (existing.Screener__r != null ? existing.Screener__r.Name.toLowerCase() : null);
             if (key == null || !payloadKeys.contains(key)) {
                 toDelete.add(new Patient_Screener__c(Id = existing.Id));
+                deleteSeen.add(existing.Id);
             }
         }
 
