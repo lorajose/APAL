@@ -725,7 +725,13 @@ public with sharing class GPCaseService {
         }
         System.debug(LoggingLevel.INFO, 'saveMedications => items: ' + JSON.serialize(items));
         if (items == null || items.isEmpty()) {
-            System.debug(LoggingLevel.ERROR, 'saveMedications error: payload is null or empty.');
+            System.debug(LoggingLevel.ERROR, 'saveMedications empty payload -> deleting all patient medications for case.');
+            List<Patient_Medication__c> existingAll = [
+                SELECT Id FROM Patient_Medication__c WHERE Case__c = :parentCaseId
+            ];
+            if (!existingAll.isEmpty()) {
+                delete existingAll;
+            }
             return;
         }
 
@@ -825,6 +831,12 @@ public with sharing class GPCaseService {
         Id patientId = fetchCasePatient(parentCaseId);
         System.debug(LoggingLevel.INFO, 'saveSubstances => items: ' + JSON.serialize(items));
         if (items == null || items.isEmpty()) {
+            List<Patient_Substance__c> existingAll = [
+                SELECT Id FROM Patient_Substance__c WHERE Case__c = :parentCaseId
+            ];
+            if (!existingAll.isEmpty()) {
+                delete existingAll;
+            }
             return;
         }
         Map<String, Id> subs = fetchCatalogIds('Substance_List__c', collectNamesFromSubstances(items));
@@ -911,6 +923,12 @@ public with sharing class GPCaseService {
         Id patientId = fetchCasePatient(parentCaseId);
         System.debug(LoggingLevel.INFO, 'saveScreeners => items: ' + JSON.serialize(items));
         if (items == null || items.isEmpty()) {
+            List<Patient_Screener__c> existingAll = [
+                SELECT Id FROM Patient_Screener__c WHERE Case__c = :parentCaseId
+            ];
+            if (!existingAll.isEmpty()) {
+                delete existingAll;
+            }
             return;
         }
 
