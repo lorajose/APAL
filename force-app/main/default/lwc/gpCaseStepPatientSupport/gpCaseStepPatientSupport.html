@@ -119,7 +119,7 @@
                             </div>
                             <div class="scr-grid">
                                 <template for:each={filteredSupports} for:item="sup">
-                                    <article key={sup.id} class="scr-card">
+                                    <article key={sup.id} class={sup.cardClass}>
                                         <header class="scr-card-header">
                                             <div>
                                                 <h3>{sup.supportName}</h3>
