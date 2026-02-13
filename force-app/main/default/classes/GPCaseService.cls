@@ -1256,8 +1256,6 @@ public with sharing class GPCaseService {
             if (record.Id == null) {
                 record.Case__c = parentCaseId;
                 record.Concern__c = concernId;
-            } else if (concernId != null && existing.Concern__c != concernId) {
-                record.Concern__c = concernId;
             }
             setPatientIfPossible(record, patientId);
             record.Notes_new__c = item.notes;
