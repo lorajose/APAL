@@ -121,17 +121,6 @@ const FAMILY_HISTORY_ITEMS = new Set([
     'none',
     'unknown'
 ]);
-const TOP_SYMPTOMS_ITEMS = new Set([
-    'depressed mood',
-    'anhedonia',
-    'anxiety',
-    'panic',
-    'insomnia',
-    'hypersomnia',
-    'appetite change',
-    'low energy',
-    'poor concentration'
-]);
 const PSYCHOSIS_ITEMS = new Set([
     'auditory hallucinations',
     'visual hallucinations',
@@ -1676,7 +1665,7 @@ async handleDataUpdated(event) {
         const mappedLabels = new Set(newTop.map(entry => (entry.label || '').toLowerCase()).filter(Boolean));
         const nonSeeded = existing.filter(item => {
             const category = (item.category || '').toLowerCase();
-            if (category !== 'top symptoms') {
+            if (!category.includes('top symptom')) {
                 return true;
             }
             if ((item.source || '').toLowerCase() === 'presenting') {
@@ -2022,13 +2011,10 @@ async handleDataUpdated(event) {
         });
 
         const mapped = (concerns || [])
-            .filter(item => (item.category || '').toLowerCase() === 'top symptoms')
+            .filter(item => (item.category || '').toLowerCase().includes('top symptom'))
             .map(item => {
                 const label = (item.label || item.name || item.catalogName || '').toString();
                 const key = label.toLowerCase();
-                if (!TOP_SYMPTOMS_ITEMS.has(key)) {
-                    return null;
-                }
                 const existingItem = existingByLabel.get(key);
                 return {
                     value: label || existingItem?.value,
