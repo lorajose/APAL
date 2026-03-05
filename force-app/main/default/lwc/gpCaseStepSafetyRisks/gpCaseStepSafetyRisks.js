@@ -269,6 +269,10 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
         return this.risks
             .map(item => {
                 const normalizedSource = normalizeSourceKey(item.source);
+                const flags = [];
+                if (item.recent) flags.push('recent');
+                if (item.historical) flags.push('historical');
+                const cardClass = flags.length ? `risk-card ${flags.join(' ')}` : 'risk-card';
                 return {
                 ...item,
                 meta: (() => {
@@ -287,6 +291,7 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
                 })(),
                 recordName: item.recordName || item.name || null,
                 recordLink: this.buildPatientSafetyRiskLink(item.recordId),
+                cardClass,
                 showConfirm: this.confirmRemoveId === item.id,
                 sourceLabel: SOURCE_LABELS[normalizedSource] || normalizedSource || 'Manual',
                 previewNotes: this.notePreview(item.notes)

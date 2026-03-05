@@ -179,6 +179,11 @@
 	gap: 0.6rem;
 }
 
+.scr-card.positive-flag {
+	border-color: #10b981;
+	box-shadow: inset 0 0 0 1px #10b981;
+}
+
 .scr-card-header h3 {
 	margin: 0;
 	font-size: 1rem;
