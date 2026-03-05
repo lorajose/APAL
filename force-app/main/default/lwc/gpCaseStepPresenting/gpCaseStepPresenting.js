@@ -1,5 +1,6 @@
 import { LightningElement, api, track } from 'lwc';
 import getPcqtOptions from '@salesforce/apex/GPCaseService.getPcqtOptions';
+import getConcernCatalog from '@salesforce/apex/GPCaseService.getConcernCatalog';
 
 const PCQT_OPTIONS = [{
         label: 'Diagnosis clarification',
@@ -109,43 +110,8 @@ const IMPAIRED_DOMAIN_OPTIONS = [{
     }
 ];
 
-const TOP_SYMPTOMS = [{
-        label: 'Depressed mood',
-        value: 'Depressed mood'
-    },
-    {
-        label: 'Anhedonia',
-        value: 'Anhedonia'
-    },
-    {
-        label: 'Anxiety',
-        value: 'Anxiety'
-    },
-    {
-        label: 'Panic',
-        value: 'Panic'
-    },
-    {
-        label: 'Insomnia',
-        value: 'Insomnia'
-    },
-    {
-        label: 'Hypersomnia',
-        value: 'Hypersomnia'
-    },
-    {
-        label: 'Appetite change',
-        value: 'Appetite change'
-    },
-    {
-        label: 'Low energy',
-        value: 'Low energy'
-    },
-    {
-        label: 'Poor concentration',
-        value: 'Poor concentration'
-    }
-];
+const TOP_SYMPTOM_CATEGORY = 'Top Symptoms';
+const TOP_SYMPTOM_CASE_TYPE = 'General_Psychiatry';
 
 const IMPAIRMENT_LEVEL_OPTIONS = [{
         label: '—',
@@ -236,6 +202,7 @@ export default class GpCaseStepPresenting extends LightningElement {
     @track pcqtSelectedLabels = []; // labels coming from selector
     @track impairedDomains = [];
     @track selectedTopSymptoms = [];
+    @track topSymptomOptions = [];
 
     @track pcqtSearch = '';
     @track domainsSearch = '';
@@ -253,6 +220,7 @@ export default class GpCaseStepPresenting extends LightningElement {
         if (!this._caseType) {
             this._caseType = 'General_Psychiatry';
             this.loadPcqtOptions();
+            this.loadTopSymptomOptions();
         }
     }
 
@@ -264,6 +232,7 @@ export default class GpCaseStepPresenting extends LightningElement {
         if (this._caseType === value) return;
         this._caseType = value;
         this.loadPcqtOptions();
+        this.loadTopSymptomOptions();
     }
 
     get impairmentLevelOptions() {
@@ -305,7 +274,7 @@ export default class GpCaseStepPresenting extends LightningElement {
     get filteredTopSymptoms() {
         const term = (this.symptomSearch || '').toLowerCase();
         const selected = new Set(this.selectedTopSymptoms.map(item => item.value));
-        return TOP_SYMPTOMS
+        return this.topSymptomOptions
             .filter(opt => opt.label.toLowerCase().includes(term))
             .map(opt => ({
                 ...opt,
@@ -378,6 +347,27 @@ export default class GpCaseStepPresenting extends LightningElement {
         }
         this.pcqtOptions = [...PCQT_OPTIONS];
         this.syncPcqtSelectionWithOptions();
+    }
+
+    async loadTopSymptomOptions() {
+        try {
+            const data = await getConcernCatalog({
+                caseType: TOP_SYMPTOM_CASE_TYPE
+            });
+            if (Array.isArray(data)) {
+                this.topSymptomOptions = data
+                    .filter(item => ((item && item.category) || '').toLowerCase() === TOP_SYMPTOM_CATEGORY.toLowerCase())
+                    .map(item => ({
+                        label: item.label,
+                        value: item.label
+                    }))
+                    .filter(item => !!item.value);
+                return;
+            }
+        } catch (error) {
+            console.warn('Failed to load Top Symptoms catalog', error);
+        }
+        this.topSymptomOptions = [];
     }
 
     syncPcqtSelectionWithOptions() {
@@ -508,7 +498,7 @@ export default class GpCaseStepPresenting extends LightningElement {
                 ...this.selectedTopSymptoms.slice(index + 1)
             ];
         } else {
-            const option = TOP_SYMPTOMS.find(opt => opt.value === value);
+            const option = this.topSymptomOptions.find(opt => opt.value === value);
             if (option) {
                 this.selectedTopSymptoms = [
                     ...this.selectedTopSymptoms,
