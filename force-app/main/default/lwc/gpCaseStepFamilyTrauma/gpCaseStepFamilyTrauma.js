@@ -1,26 +1,8 @@
-import { LightningElement, api, track, wire } from 'lwc';
-import { getObjectInfo, getPicklistValues } from 'lightning/uiObjectInfoApi';
-import CASE_OBJECT from '@salesforce/schema/Case';
-import FAMILY_HISTORY_FIELD from '@salesforce/schema/Case.Family_History__c';
+import { LightningElement, api, track } from 'lwc';
+import getConcernCatalog from '@salesforce/apex/GPCaseService.getConcernCatalog';
 
-const FAMILY_HISTORY_OPTIONS = [
-    { label: 'Bipolar', value: 'Bipolar' },
-    { label: 'Psychosis/Schizophrenia', value: 'Psychosis/Schizophrenia' },
-    { label: 'Suicide', value: 'Suicide' },
-    { label: 'SUD', value: 'SUD' },
-    { label: 'Depression/Anxiety', value: 'Depression/Anxiety' },
-    { label: 'None', value: 'None' },
-    { label: 'Unknown', value: 'Unknown' }
-];
-
-function normalizeMultiValue(value) {
-    if (!value) return [];
-    if (Array.isArray(value)) return value.filter(Boolean);
-    return value
-        .split(';')
-        .map((v) => v.trim())
-        .filter(Boolean);
-}
+const FAMILY_HISTORY_CATEGORY = 'Family History';
+const FAMILY_HISTORY_CASE_TYPE = 'General_Psychiatry';
 
 export default class GpCaseStepFamilyTrauma extends LightningElement {
     @api errors = {};
@@ -33,28 +15,34 @@ export default class GpCaseStepFamilyTrauma extends LightningElement {
 
     @track familyHistory = [];
     @track familySearch = '';
-    @track familyHistoryOptions = [...FAMILY_HISTORY_OPTIONS];
+    @track familyHistoryOptions = [];
 
-    @wire(getObjectInfo, { objectApiName: CASE_OBJECT })
-    caseInfo;
-
-    get caseRecordTypeId() {
-        return this.caseInfo?.data?.defaultRecordTypeId;
+    connectedCallback() {
+        this.loadFamilyHistoryOptions();
     }
 
-    @wire(getPicklistValues, { recordTypeId: '$caseRecordTypeId', fieldApiName: FAMILY_HISTORY_FIELD })
-    wiredFamilyHistoryPicklist({ data, error }) {
-        if (data?.values?.length) {
-            this.familyHistoryOptions = data.values.map((entry) => ({
-                label: entry.label,
-                value: entry.value
-            }));
-            this.mergeSelectedFamilyIntoOptions();
-        } else if (error) {
-            this.familyHistoryOptions = [...FAMILY_HISTORY_OPTIONS];
+    async loadFamilyHistoryOptions() {
+        try {
+            const data = await getConcernCatalog({
+                caseType: FAMILY_HISTORY_CASE_TYPE
+            });
+            if (Array.isArray(data)) {
+                this.familyHistoryOptions = data
+                    .filter((item) => ((item && item.category) || '').toLowerCase() === FAMILY_HISTORY_CATEGORY.toLowerCase())
+                    .map((item) => ({
+                        label: item.label,
+                        value: item.label
+                    }))
+                    .filter((item) => !!item.value);
+                this.mergeSelectedFamilyIntoOptions();
+                return;
+            }
+        } catch (error) {
             // eslint-disable-next-line no-console
-            console.warn('Failed to load Family_History__c picklist', error);
+            console.warn('Failed to load Family History catalog', error);
         }
+        this.familyHistoryOptions = [];
+        this.mergeSelectedFamilyIntoOptions();
     }
 
     get filteredFamilyOptions() {
@@ -118,24 +106,8 @@ export default class GpCaseStepFamilyTrauma extends LightningElement {
                 label: item.label || item.value,
                 note: item.note ?? item.notes ?? item.Notes_new__c ?? item.Notes__c ?? ''
             }));
-            const parsed = normalizeMultiValue(value.Family_History__c);
-            const existing = new Set(this.familyHistory.map(item => item.value));
-            parsed.forEach(label => {
-                if (!existing.has(label)) {
-                    this.familyHistory = [
-                        ...this.familyHistory,
-                        { value: label, label, note: '' }
-                    ];
-                    existing.add(label);
-                }
-            });
         } else {
-            const parsed = normalizeMultiValue(value.Family_History__c);
-            this.familyHistory = parsed.map(label => ({
-                value: label,
-                label,
-                note: ''
-            }));
+            this.familyHistory = [];
         }
         this.mergeSelectedFamilyIntoOptions();
     }
@@ -264,7 +236,6 @@ export default class GpCaseStepFamilyTrauma extends LightningElement {
             Dependent_Safety_Concern__c: this.dependentSafetyConcern,
             IPV_Concern__c: this.ipvConcern,
             Family_History_Notes__c: this.familyHistoryNotes || null,
-            Family_History__c: historyDraft.length ? historyDraft.map(item => item.value).join(';') : null,
             familyHistoryDraft: historyDraft
         };
     }
