@@ -1440,6 +1440,9 @@ async handleDataUpdated(event) {
             return stepData;
         }
         const sanitized = { ...stepData };
+        // Step 2 persists Top Symptoms through Patient_Concern__c, not Case.Top_Symptoms__c.
+        delete sanitized.Top_Symptoms__c;
+        delete sanitized.Top_Symptom_Count__c;
         const pcqtLabels = Array.isArray(stepData.primaryClinicalQuestionTypesLabels)
             ? stepData.primaryClinicalQuestionTypesLabels.filter(Boolean)
             : [];
