@@ -549,10 +549,12 @@ public with sharing class GPCaseService {
                 } else {
                     c.put(key, Boolean.valueOf(String.valueOf(value)));
                 }
+            } else if (describe.getType() == Schema.DisplayType.Picklist ||
+                       describe.getType() == Schema.DisplayType.MultiPicklist) {
+                String sanitizedValue = sanitizeRestrictedPicklistValue(describe, String.valueOf(value));
+                c.put(key, sanitizedValue);
             } else if (describe.getType() == Schema.DisplayType.String ||
                        describe.getType() == Schema.DisplayType.TextArea ||
-                       describe.getType() == Schema.DisplayType.Picklist ||
-                       describe.getType() == Schema.DisplayType.MultiPicklist ||
                        describe.getType() == Schema.DisplayType.Phone ||
                        describe.getType() == Schema.DisplayType.Email ||
                        describe.getType() == Schema.DisplayType.Url) {
@@ -566,6 +568,45 @@ public with sharing class GPCaseService {
             }
         }
         update c;
+    }
+
+    private static String sanitizeRestrictedPicklistValue(Schema.DescribeFieldResult describe, String rawValue) {
+        if (describe == null || rawValue == null) {
+            return rawValue;
+        }
+
+        Schema.DisplayType fieldType = describe.getType();
+        if (fieldType != Schema.DisplayType.Picklist && fieldType != Schema.DisplayType.MultiPicklist) {
+            return rawValue;
+        }
+
+        if (!describe.isRestrictedPicklist()) {
+            return rawValue;
+        }
+
+        Set<String> allowedValues = new Set<String>();
+        for (Schema.PicklistEntry entry : describe.getPicklistValues()) {
+            if (entry.isActive()) {
+                allowedValues.add(entry.getValue());
+            }
+        }
+
+        if (fieldType == Schema.DisplayType.MultiPicklist) {
+            List<String> filteredValues = new List<String>();
+            Set<String> seenValues = new Set<String>();
+            for (String token : rawValue.split(';')) {
+                String candidate = token == null ? null : token.trim();
+                if (String.isBlank(candidate) || !allowedValues.contains(candidate) || seenValues.contains(candidate)) {
+                    continue;
+                }
+                filteredValues.add(candidate);
+                seenValues.add(candidate);
+            }
+            return filteredValues.isEmpty() ? null : String.join(filteredValues, ';');
+        }
+
+        String trimmedValue = rawValue.trim();
+        return allowedValues.contains(trimmedValue) ? trimmedValue : null;
     }
 
 
@@ -604,7 +645,6 @@ public with sharing class GPCaseService {
             SELECT Id, Subject, Priority, Description,
                    Impaired_Domains__c, Symptom_Onset_Date__c,
                    Impairment_Level__c, Course__c, Abrupt_Change__c, Other_Symptoms__c,
-                   Top_Symptoms__c,
                    Psych_Hospitalizations__c, ED_Visits_Count__c,
                    Self_Harm_History__c, Other_Prior_Diagnosis__c, Prior_Diagnoses__c,
                    Suicidal_Ideation__c, Last_Attempt_Date__c, Protective_Factors__c,
@@ -632,8 +672,7 @@ public with sharing class GPCaseService {
             'Impairment_Level__c',
             'Course__c',
             'Abrupt_Change__c',
-            'Other_Symptoms__c',
-            'Top_Symptoms__c'
+            'Other_Symptoms__c'
         }));
         payload.put('priorDx', mapCaseFields(caseRecord, new List<String>{
             'Psych_Hospitalizations__c',

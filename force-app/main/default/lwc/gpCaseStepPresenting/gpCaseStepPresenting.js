@@ -417,38 +417,12 @@ export default class GpCaseStepPresenting extends LightningElement {
                 note: item.note || ''
             }));
         } else {
-            this.selectedTopSymptoms = this.parseTopSymptomPayload(value.Top_Symptoms__c);
+            this.selectedTopSymptoms = [];
         }
     }
 
     get data() {
         return this.buildPayload();
-    }
-
-    parseTopSymptomPayload(rawValue) {
-        if (!rawValue) {
-            return [];
-        }
-        if (Array.isArray(rawValue)) {
-            return rawValue.map(item => ({
-                value: item.value,
-                label: item.label || item.value,
-                note: item.note || ''
-            }));
-        }
-        try {
-            const parsed = JSON.parse(rawValue);
-            if (Array.isArray(parsed)) {
-                return parsed.map(item => ({
-                    value: item.value,
-                    label: item.label || item.value,
-                    note: item.note || ''
-                }));
-            }
-        } catch (e) {
-            console.warn('Unable to parse Top Symptoms payload', e);
-        }
-        return [];
     }
 
     handlePcqtSearch(event) {
@@ -659,20 +633,9 @@ export default class GpCaseStepPresenting extends LightningElement {
             Abrupt_Change__c: this.abruptChange,
             Course__c: this.course || null,
             Other_Symptoms__c: this.otherSymptoms || null,
-            Top_Symptoms__c: this.serializeTopSymptoms(),
-            Top_Symptom_Count__c: this.selectedTopSymptoms.length,
             topSymptomsDraft,
             topSymptomNotesDraft
         };
-    }
-
-    serializeTopSymptoms() {
-        if (!this.selectedTopSymptoms.length) {
-            return null;
-        }
-        return this.selectedTopSymptoms
-            .map(item => item.value)
-            .join(';');
     }
 
     formatDateForInput(value) {
