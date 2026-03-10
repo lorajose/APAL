@@ -34,18 +34,16 @@
         </section> -->
 
         <!-- PCQT Selector (wizard-controlled) en card independiente -->
-        <section class="card">
-            <c-pcqt-selector
-                case-type={caseType}
-                value={pcqtSelectorValue}
-                required={pcqtRequired}
-                errors={errors}
-                record-id={caseId}
-                wizard-mode={pcqtWizardMode}
-                show-save-buttons="false"
-                onchange={handlePcqtChange}>
-            </c-pcqt-selector>
-        </section>
+        <c-pcqt-selector
+            case-type={caseType}
+            value={pcqtSelectorValue}
+            required={pcqtRequired}
+            errors={errors}
+            record-id={caseId}
+            wizard-mode={pcqtWizardMode}
+            show-save-buttons="false"
+            onchange={handlePcqtChange}>
+        </c-pcqt-selector>
 
         <section class="card">
             <header class="card-header">

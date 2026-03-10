@@ -326,6 +326,12 @@ private class GPCaseServiceTest {
         System.assert(((List<Object>)payload.get('safetyRisks')).size() > 0);
         System.assert(((Map<String, Object>)payload.get('presenting')).containsKey('Impairment_Level__c'));
         System.assertEquals(false, ((Map<String, Object>)payload.get('presenting')).containsKey('Top_Symptoms__c'));
+        System.assertEquals(false, ((Map<String, Object>)payload.get('priorDx')).containsKey('Prior_Diagnoses__c'));
+        System.assertEquals(false, ((Map<String, Object>)payload.get('psychosisMania')).containsKey('Psychosis_Symptoms__c'));
+        System.assertEquals(false, ((Map<String, Object>)payload.get('psychosisMania')).containsKey('Mania_Symptoms__c'));
+        System.assertEquals(false, ((Map<String, Object>)payload.get('psychosisMania')).containsKey('Medical_Red_Flags__c'));
+        System.assertEquals(false, ((Map<String, Object>)payload.get('familyTrauma')).containsKey('Family_History__c'));
+        System.assertEquals(false, ((Map<String, Object>)payload.get('homeSafety')).containsKey('Psychosocial_Stressors__c'));
     }
 
     @IsTest

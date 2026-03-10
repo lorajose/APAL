@@ -646,17 +646,16 @@ public with sharing class GPCaseService {
                    Impaired_Domains__c, Symptom_Onset_Date__c,
                    Impairment_Level__c, Course__c, Abrupt_Change__c, Other_Symptoms__c,
                    Psych_Hospitalizations__c, ED_Visits_Count__c,
-                   Self_Harm_History__c, Other_Prior_Diagnosis__c, Prior_Diagnoses__c,
+                   Self_Harm_History__c, Other_Prior_Diagnosis__c,
                    Suicidal_Ideation__c, Last_Attempt_Date__c, Protective_Factors__c,
                    Suicidal_Intent__c, Past_Suicide_Attempts__c, Access_to_Means__c,
                    Homicidal_Ideation__c, Violence_Recent__c, Weapons_Access__c, Violence_Details__c,
-                   Psychosis_Symptoms__c, Mania_Symptoms__c, Medical_Red_Flags__c,
                    Psychosis_Notes__c, Medical_Notes__c,
                    Recent_Trauma__c, Dependent_Safety_Concern__c, IPV_Concern__c,
-                   Family_History_Notes__c, Family_History__c,
+                   Family_History_Notes__c,
                    Home_Safety__c, Lethal_Means_Access__c, Means_Safety_Plan__c,
                    Safety_Notes__c, Reliable_Supports__c, Cost_Coverage_Issues__c,
-                   Supports_Notes__c, Psychosocial_Stressors__c,
+                   Supports_Notes__c,
                    Orientation__c, Cognition_Notes__c
             FROM Case
             WHERE Id = :parentCaseId
@@ -678,8 +677,7 @@ public with sharing class GPCaseService {
             'Psych_Hospitalizations__c',
             'ED_Visits_Count__c',
             'Self_Harm_History__c',
-            'Other_Prior_Diagnosis__c',
-            'Prior_Diagnoses__c'
+            'Other_Prior_Diagnosis__c'
         }));
         payload.put('suicide', mapCaseFields(caseRecord, new List<String>{
             'Suicidal_Ideation__c',
@@ -696,9 +694,6 @@ public with sharing class GPCaseService {
             'Violence_Details__c'
         }));
         payload.put('psychosisMania', mapCaseFields(caseRecord, new List<String>{
-            'Psychosis_Symptoms__c',
-            'Mania_Symptoms__c',
-            'Medical_Red_Flags__c',
             'Psychosis_Notes__c',
             'Medical_Notes__c'
         }));
@@ -706,8 +701,7 @@ public with sharing class GPCaseService {
             'Recent_Trauma__c',
             'Dependent_Safety_Concern__c',
             'IPV_Concern__c',
-            'Family_History_Notes__c',
-            'Family_History__c'
+            'Family_History_Notes__c'
         }));
         payload.put('homeSafety', mapCaseFields(caseRecord, new List<String>{
             'Home_Safety__c',
@@ -716,8 +710,7 @@ public with sharing class GPCaseService {
             'Safety_Notes__c',
             'Reliable_Supports__c',
             'Cost_Coverage_Issues__c',
-            'Supports_Notes__c',
-            'Psychosocial_Stressors__c'
+            'Supports_Notes__c'
         }));
         payload.put('cognition', mapCaseFields(caseRecord, new List<String>{
             'Orientation__c',
@@ -1887,63 +1880,6 @@ public with sharing class GPCaseService {
         return names;
     }
 
-    // Build concerns from Case fields (psychosis/mania shared note + red flags shared note).
-    private static List<ConcernInput> buildCaseDrivenConcerns(Id caseId) {
-        List<ConcernInput> results = new List<ConcernInput>();
-        if (caseId == null) return results;
-
-        Case c = [
-            SELECT Psychosis_Symptoms__c, Mania_Symptoms__c, Medical_Red_Flags__c,
-                   Psychosis_Notes__c, Medical_Notes__c
-            FROM Case
-            WHERE Id = :caseId
-            LIMIT 1
-        ];
-
-        String sharedPsychosisNote = c.Psychosis_Notes__c;
-        String sharedRedFlagNote = c.Medical_Notes__c;
-
-        // Psychosis symptoms
-        for (String val : parseMultiValue(c.Psychosis_Symptoms__c)) {
-            ConcernInput ci = new ConcernInput();
-            ci.label = val;
-            ci.category = 'Psychosis Symptoms';
-            ci.notes = sharedPsychosisNote;
-            ci.source = 'Step6_PsychosisMania';
-            results.add(ci);
-        }
-        // Mania / Hypomania symptoms
-        for (String val : parseMultiValue(c.Mania_Symptoms__c)) {
-            ConcernInput ci = new ConcernInput();
-            ci.label = val;
-            ci.category = 'Mania/Hypomania Symptoms';
-            ci.notes = sharedPsychosisNote;
-            ci.source = 'Step6_PsychosisMania';
-            results.add(ci);
-        }
-        // Medical red flags
-        for (String val : parseMultiValue(c.Medical_Red_Flags__c)) {
-            ConcernInput ci = new ConcernInput();
-            ci.label = val;
-            ci.category = 'Medical Red Flags';
-            ci.notes = sharedRedFlagNote;
-            ci.source = 'Step6_MedicalRedFlags';
-            results.add(ci);
-        }
-        return results;
-    }
-
-    private static List<String> parseMultiValue(String raw) {
-        List<String> values = new List<String>();
-        if (String.isBlank(raw)) return values;
-        for (String v : raw.split(';')) {
-            if (!String.isBlank(v)) {
-                values.add(v.trim());
-            }
-        }
-        return values;
-    }
-
     private static Set<String> collectNamesFromSafetyRisks(List<SafetyRiskInput> items) {
         Set<String> names = new Set<String>();
         if (items == null) return names;
@@ -2071,10 +2007,16 @@ public with sharing class GPCaseService {
         if (lower == 'stressors' || lower == 'psychological stressors') {
             return 'Step8_PsychologicalStressors';
         }
+        if (lower == 'psychosocial stressors') {
+            return 'Step8_PsychologicalStressors';
+        }
         if (lower == 'manual') {
             return 'Manual';
         }
-        if (!String.isBlank(category) && category.toLowerCase().contains('psychological')) {
+        if (!String.isBlank(category) && (
+            category.toLowerCase().contains('psychological')
+            || category.toLowerCase().contains('psychosocial')
+        )) {
             return 'Step8_PsychologicalStressors';
         }
         return null;
