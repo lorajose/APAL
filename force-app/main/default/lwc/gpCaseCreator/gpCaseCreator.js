@@ -41,9 +41,6 @@ const createEmptyForm = () => ({
     suicide: {},
     violence: {},
     psychosisMania: {
-        Psychosis_Symptoms__c: null,
-        Mania_Symptoms__c: null,
-        Medical_Red_Flags__c: null,
         Psychosis_Notes__c: '',
         Red_Flag_Notes__c: '',
         Medical_Notes__c: null,
@@ -102,68 +99,6 @@ const MEDICATION_NAME_TO_ID = buildNameIndex(MEDICATION_INDEX, 'title');
 const SUBSTANCE_NAME_TO_ID = buildNameIndex(SUBSTANCE_INDEX, 'name');
 const SCREENER_NAME_TO_ID = buildNameIndex(SCREENER_INDEX, 'name');
 const SAFETY_RISK_NAME_TO_ID = buildNameIndex(SAFETY_RISK_INDEX, 'name');
-const PSYCHOSOCIAL_STRESSORS = new Set([
-    'housing insecurity',
-    'food insecurity',
-    'caregiver burden',
-    'legal issues',
-    'job/school risk',
-    'relationship conflict',
-    'limited supports',
-    'financial stress'
-]);
-const FAMILY_HISTORY_ITEMS = new Set([
-    'bipolar',
-    'psychosis/schizophrenia',
-    'suicide',
-    'sud',
-    'depression/anxiety',
-    'none',
-    'unknown'
-]);
-const TOP_SYMPTOMS_ITEMS = new Set([
-    'depressed mood',
-    'anhedonia',
-    'anxiety',
-    'panic',
-    'insomnia',
-    'hypersomnia',
-    'appetite change',
-    'low energy',
-    'poor concentration'
-]);
-const PSYCHOSIS_ITEMS = new Set([
-    'auditory hallucinations',
-    'visual hallucinations',
-    'tactile/other hallucinations',
-    'persecutory delusions',
-    'ideas of reference',
-    'grandiosity',
-    'thought disorganization',
-    'bizarre behavior',
-    'catatonia'
-]);
-const MANIA_ITEMS = new Set([
-    'decreased need for sleep',
-    'pressured speech',
-    'racing thoughts',
-    'grandiosity',
-    'risky spending/sex/driving',
-    'increased goal-directed activity',
-    'irritability',
-    'distractibility'
-]);
-const RED_FLAG_ITEMS = new Set([
-    'fever/infection',
-    'head injury',
-    'seizure',
-    'thyroid/endocrine',
-    'pain/untreated',
-    'steroid or stimulant use',
-    'medication started/stopped',
-    'delirium suspected',
-    'sleep apnea'
-]);
 // Importa el nuevo servicio de validación
 import {
     validateStep,
@@ -1451,6 +1386,21 @@ async handleDataUpdated(event) {
             return stepData;
         }
         const sanitized = { ...stepData };
+        // Step 2 persists Top Symptoms through Patient_Concern__c, not Case.Top_Symptoms__c.
+        delete sanitized.Top_Symptoms__c;
+        delete sanitized.Top_Symptom_Count__c;
+        // Step 3 persists Prior Diagnoses through Patient_Concern__c, not Case.Prior_Diagnoses__c.
+        delete sanitized.Prior_Diagnoses__c;
+        // Step 6 persists Psychosis Symptoms through Patient_Concern__c, not Case.Psychosis_Symptoms__c.
+        delete sanitized.Psychosis_Symptoms__c;
+        // Step 6 persists Mania/Hypomania Symptoms through Patient_Concern__c, not Case.Mania_Symptoms__c.
+        delete sanitized.Mania_Symptoms__c;
+        // Step 6 persists Medical Red Flags through Patient_Concern__c, not Case.Medical_Red_Flags__c.
+        delete sanitized.Medical_Red_Flags__c;
+        // Step 7 persists Family History through Patient_Concern__c, not Case.Family_History__c.
+        delete sanitized.Family_History__c;
+        // Step 8 persists Psychosocial Stressors through Patient_Safety_Risk__c, not Case.Psychosocial_Stressors__c.
+        delete sanitized.Psychosocial_Stressors__c;
         const pcqtLabels = Array.isArray(stepData.primaryClinicalQuestionTypesLabels)
             ? stepData.primaryClinicalQuestionTypesLabels.filter(Boolean)
             : [];
@@ -1676,7 +1626,7 @@ async handleDataUpdated(event) {
         const mappedLabels = new Set(newTop.map(entry => (entry.label || '').toLowerCase()).filter(Boolean));
         const nonSeeded = existing.filter(item => {
             const category = (item.category || '').toLowerCase();
-            if (category !== 'top symptoms') {
+            if (!category.includes('top symptom')) {
                 return true;
             }
             if ((item.source || '').toLowerCase() === 'presenting') {
@@ -1712,12 +1662,20 @@ async handleDataUpdated(event) {
         }
         return changed;
     }
-    // Sync Psychological Stressors (Step 8) into Safety Risks (category: Psychological stressors)
+    // Sync Psychosocial Stressors (Step 8) into Safety Risks.
     syncStressorsToSafetyRisks(stressorsDraft = []) {
         const existing = Array.isArray(this.form.safetyRisks) ? this.form.safetyRisks : [];
-        const nonSeeded = existing.filter(item => {
+        const isStep8Stressor = (item = {}) => {
             const category = (item.catalogCategory || item.category || item.meta?.category || '').toLowerCase();
-            return category !== 'psychological stressors';
+            const source = (item.source || '').toLowerCase();
+            return category.includes('psychosocial stressor')
+                || category.includes('psychological stressor')
+                || source === 'stressors'
+                || source === 'step8_psychologicalstressors'
+                || source === 'step8_psychosocialstressors';
+        };
+        const nonSeeded = existing.filter(item => {
+            return !isStep8Stressor(item);
         });
 
         const mapped = (stressorsDraft || [])
@@ -1728,7 +1686,7 @@ async handleDataUpdated(event) {
                 return {
                     id: catalogId || item.value || this.slugify(label),
                     catalogName: label,
-                    catalogCategory: 'Psychological stressors',
+                    catalogCategory: 'Psychosocial Stressors',
                     recent: item.recent === undefined ? null : !!item.recent,
                     historical: item.historical === undefined ? null : !!item.historical,
                     notes: item.note || '',
@@ -1821,17 +1779,11 @@ async handleDataUpdated(event) {
                     || localMeta.category
                     || '').toLowerCase();
                 const source = (item.source || item.Seed_Source__c || '').toString().toLowerCase();
-                const name = (item.catalogName
-                    || item.meta?.name
-                    || item.recordName
-                    || item.name
-                    || localMeta.name
-                    || item.label
-                    || '').toString().toLowerCase();
-                return category === 'psychological stressors'
+                return category.includes('psychosocial stressor')
+                    || category.includes('psychological stressor')
                     || source === 'stressors'
                     || source === 'step8_psychologicalstressors'
-                    || PSYCHOSOCIAL_STRESSORS.has(name);
+                    || source === 'step8_psychosocialstressors';
             })
             .map(item => {
                 const idCandidate = item.catalogId || item.id;
@@ -2022,13 +1974,10 @@ async handleDataUpdated(event) {
         });
 
         const mapped = (concerns || [])
-            .filter(item => (item.category || '').toLowerCase() === 'top symptoms')
+            .filter(item => (item.category || '').toLowerCase().includes('top symptom'))
             .map(item => {
                 const label = (item.label || item.name || item.catalogName || '').toString();
                 const key = label.toLowerCase();
-                if (!TOP_SYMPTOMS_ITEMS.has(key)) {
-                    return null;
-                }
                 const existingItem = existingByLabel.get(key);
                 return {
                     value: label || existingItem?.value,
@@ -2064,7 +2013,7 @@ async handleDataUpdated(event) {
             const category = (item.category || '').toString().trim().toLowerCase();
             const label = (item.label || item.name || item.catalogName || '').toString().trim();
             const key = label.toLowerCase();
-            if (category === 'psychosis symptoms' && PSYCHOSIS_ITEMS.has(key)) {
+            if (category === 'psychosis symptoms') {
                 psychosis.push(label);
                 psychosisFound = true;
                 if (!psychosisNoteFound && item.notes !== undefined && item.notes !== null) {
@@ -2074,7 +2023,7 @@ async handleDataUpdated(event) {
                         psychosisNoteFound = true;
                     }
                 }
-            } else if (category === 'mania/hypomania symptoms' && MANIA_ITEMS.has(key)) {
+            } else if (category === 'mania/hypomania symptoms') {
                 mania.push(label);
                 maniaFound = true;
                 if (!psychosisNoteFound && item.notes !== undefined && item.notes !== null) {
@@ -2085,10 +2034,8 @@ async handleDataUpdated(event) {
                     }
                 }
             } else if (category === 'medical red flags') {
-                if (RED_FLAG_ITEMS.has(key)) {
-                    redFlags.push(label);
-                    redFlagsFound = true;
-                }
+                redFlags.push(label);
+                redFlagsFound = true;
                 if (!redFlagNoteFound && item.notes !== undefined && item.notes !== null) {
                     const noteText = String(item.notes).trim();
                     if (noteText) {
@@ -2102,13 +2049,13 @@ async handleDataUpdated(event) {
         const existing = this.form?.psychosisMania || {};
         const existingPsychosis = Array.isArray(existing.psychosisSymptomsDraft)
             ? existing.psychosisSymptomsDraft
-            : normalizeMultiValue(existing.Psychosis_Symptoms__c);
+            : [];
         const existingMania = Array.isArray(existing.maniaSymptomsDraft)
             ? existing.maniaSymptomsDraft
-            : normalizeMultiValue(existing.Mania_Symptoms__c);
+            : [];
         const existingRedFlags = Array.isArray(existing.medicalRedFlagsDraft)
             ? existing.medicalRedFlagsDraft
-            : normalizeMultiValue(existing.Medical_Red_Flags__c);
+            : [];
         const next = {
             ...(existing || {}),
             psychosisSymptomsDraft: psychosisFound ? psychosis : existingPsychosis,
@@ -2800,13 +2747,13 @@ async handleDataUpdated(event) {
     mapRiskSeedSource(item = {}) {
         const src = (item.source || '').trim();
         if (src) {
-            if (src === 'stressors' || src === 'Step8_PsychologicalStressors') {
+            if (src === 'stressors' || src === 'Step8_PsychologicalStressors' || src === 'Step8_PsychosocialStressors') {
                 return 'Step8_PsychologicalStressors';
             }
             if (src.startsWith('Step')) return src;
         }
         const category = (item.catalogCategory || '').toLowerCase();
-        if (category.includes('psychological')) {
+        if (category.includes('psychological') || category.includes('psychosocial')) {
             return 'Step8_PsychologicalStressors';
         }
         return 'Manual';

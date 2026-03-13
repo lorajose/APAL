@@ -1,7 +1,8 @@
-import { LightningElement, api, track, wire } from 'lwc';
-import { getObjectInfo, getPicklistValues } from 'lightning/uiObjectInfoApi';
-import CASE_OBJECT from '@salesforce/schema/Case';
-import PRIOR_DIAGNOSES_FIELD from '@salesforce/schema/Case.Prior_Diagnoses__c';
+import { LightningElement, api, track } from 'lwc';
+import getConcernCatalog from '@salesforce/apex/GPCaseService.getConcernCatalog';
+
+const PRIOR_DIAGNOSES_CATEGORY = 'Prior Diagnoses';
+const PRIOR_DIAGNOSES_CASE_TYPE = 'General_Psychiatry';
 
 const SELF_HARM_OPTIONS = [
     { label: 'None', value: 'None' },
@@ -10,15 +11,6 @@ const SELF_HARM_OPTIONS = [
     { label: 'Both', value: 'Both' },
     { label: 'Unknown', value: 'Unknown' }
 ];
-
-function normalizeMultiValue(value) {
-    if (!value) return [];
-    if (Array.isArray(value)) return value.filter(Boolean);
-    return value
-        .split(';')
-        .map((v) => v.trim())
-        .filter(Boolean);
-}
 
 export default class GpCaseStepPriorDx extends LightningElement {
     @api errors = {};
@@ -33,30 +25,32 @@ export default class GpCaseStepPriorDx extends LightningElement {
 
     @track selectedDiagnoses = [];
     @track diagnosisSearch = '';
-    caseObjectInfo;
 
-    @wire(getObjectInfo, { objectApiName: CASE_OBJECT })
-    wiredCaseObjectInfo(result) {
-        this.caseObjectInfo = result;
+    connectedCallback() {
+        this.loadPriorDiagnosisOptions();
     }
 
-    get caseRecordTypeId() {
-        return this.caseObjectInfo?.data?.defaultRecordTypeId;
-    }
-
-    @wire(getPicklistValues, { recordTypeId: '$caseRecordTypeId', fieldApiName: PRIOR_DIAGNOSES_FIELD })
-    wiredPriorDiagnoses({ data, error }) {
-        if (data && Array.isArray(data.values)) {
-            this.priorDiagnosisOptions = data.values.map((item) => ({
-                label: item.label,
-                value: item.value
-            }));
-            this.mergeSelectedDiagnosesIntoOptions();
-        }
-        if (error) {
+    async loadPriorDiagnosisOptions() {
+        try {
+            const data = await getConcernCatalog({
+                caseType: PRIOR_DIAGNOSES_CASE_TYPE
+            });
+            if (Array.isArray(data)) {
+                this.priorDiagnosisOptions = data
+                    .filter((item) => ((item && item.category) || '').toLowerCase() === PRIOR_DIAGNOSES_CATEGORY.toLowerCase())
+                    .map((item) => ({
+                        label: item.label,
+                        value: item.label
+                    }))
+                    .filter((item) => !!item.value);
+                this.mergeSelectedDiagnosesIntoOptions();
+                return;
+            }
+        } catch (error) {
             // eslint-disable-next-line no-console
-            console.error('Error loading Prior Diagnoses picklist', error);
+            console.error('Error loading Prior Diagnoses catalog', error);
         }
+        this.priorDiagnosisOptions = [];
     }
 
     get selfHarmOptions() {
@@ -97,24 +91,8 @@ export default class GpCaseStepPriorDx extends LightningElement {
                 label: item.label || item.value,
                 note: item.note || ''
             }));
-            const parsed = normalizeMultiValue(value.Prior_Diagnoses__c);
-            const existing = new Set(this.selectedDiagnoses.map(item => item.value));
-            parsed.forEach(label => {
-                if (!existing.has(label)) {
-                    this.selectedDiagnoses = [
-                        ...this.selectedDiagnoses,
-                        { value: label, label, note: '' }
-                    ];
-                    existing.add(label);
-                }
-            });
         } else {
-            const parsed = normalizeMultiValue(value.Prior_Diagnoses__c);
-            this.selectedDiagnoses = parsed.map(label => ({
-                value: label,
-                label,
-                note: ''
-            }));
+            this.selectedDiagnoses = [];
         }
         this.mergeSelectedDiagnosesIntoOptions();
     }
@@ -220,7 +198,6 @@ export default class GpCaseStepPriorDx extends LightningElement {
     }
 
     buildPayload() {
-        const diagnosisValues = this.selectedDiagnoses.map((item) => item.value);
         const draft = this.selectedDiagnoses.map((item) => ({
             value: item.value,
             label: item.label,
@@ -236,7 +213,6 @@ export default class GpCaseStepPriorDx extends LightningElement {
             ED_Visits_Count__c: this.getNumberOrNull(this.edVisits),
             Self_Harm_History__c: this.selfHarmHistory || null,
             Other_Prior_Diagnosis__c: this.otherPriorDiagnosis || null,
-            Prior_Diagnoses__c: diagnosisValues.length ? diagnosisValues.join(';') : null,
             priorDiagnosesDraft: draft,
             priorDiagnosesNotesDraft: notesMap
         };

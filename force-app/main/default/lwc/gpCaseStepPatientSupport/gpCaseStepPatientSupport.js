@@ -210,12 +210,24 @@ export default class GpCaseStepPatientSupport extends LightningElement {
     get filteredSupports() {
         const term = (this.searchValue || '').toLowerCase();
         return this.supports
-            .map(item => ({
-                ...item,
-                supportName: item.catalogName || item.name || item.id,
-                previewNotes: this.notePreview(item.notes),
-                showConfirm: this.confirmRemoveId === item.id
-            }))
+            .map(item => {
+                const flags = [];
+                if (item.scheduled) flags.push('scheduled');
+                if (item.going) flags.push('going');
+                if (item.appointmentCompleted) flags.push('completed');
+                if (item.appointmentCompletedIneffective) flags.push('ineffective');
+                if (item.suspended) flags.push('suspended');
+                if (item.careNotApplicable) flags.push('cna');
+                const cardClass = flags.length ? `scr-card ${flags.join(' ')}` : 'scr-card';
+
+                return {
+                    ...item,
+                    supportName: item.catalogName || item.name || item.id,
+                    previewNotes: this.notePreview(item.notes),
+                    showConfirm: this.confirmRemoveId === item.id,
+                    cardClass
+                };
+            })
             .filter(item => {
                 if (!term) return true;
                 return (item.supportName || '').toLowerCase().includes(term);
@@ -750,6 +762,14 @@ export default class GpCaseStepPatientSupport extends LightningElement {
             if (!copy.recordName) {
                 copy.recordName = copy.catalogName || copy.supportName || primaryId;
             }
+            const flags = [];
+            if (copy.scheduled) flags.push('scheduled');
+            if (copy.going) flags.push('going');
+            if (copy.appointmentCompleted) flags.push('completed');
+            if (copy.appointmentCompletedIneffective) flags.push('ineffective');
+            if (copy.suspended) flags.push('suspended');
+            if (copy.careNotApplicable) flags.push('cna');
+            copy.cardClass = flags.length ? `scr-card ${flags.join(' ')}` : 'scr-card';
             return copy;
         });
     }
