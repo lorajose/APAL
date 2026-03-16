@@ -2,7 +2,7 @@ import { LightningElement, api, track, wire } from 'lwc';
 import { getObjectInfo, getPicklistValues } from 'lightning/uiObjectInfoApi';
 import CASE_OBJECT from '@salesforce/schema/Case';
 import LETHAL_MEANS_FIELD from '@salesforce/schema/Case.Lethal_Means_Access__c';
-import STRESSORS_FIELD from '@salesforce/schema/Case.Psychosocial_Stressors__c';
+import getSafetyRiskCatalog from '@salesforce/apex/GPCaseService.getSafetyRiskCatalog';
 
 const HOME_SAFETY_OPTIONS = [
     { label: 'Safe', value: 'Safe' },
@@ -25,16 +25,16 @@ const RELIABLE_SUPPORT_OPTIONS = [
     { label: 'Unknown', value: 'Unknown' }
 ];
 
-const STRESSOR_OPTIONS = [
-    { label: 'Housing insecurity', value: 'Housing insecurity' },
-    { label: 'Food insecurity', value: 'Food insecurity' },
-    { label: 'Caregiver burden', value: 'Caregiver burden' },
-    { label: 'Legal issues', value: 'Legal issues' },
-    { label: 'Job/school risk', value: 'Job/school risk' },
-    { label: 'Relationship conflict', value: 'Relationship conflict' },
-    { label: 'Limited supports', value: 'Limited supports' },
-    { label: 'Financial stress', value: 'Financial stress' }
+const STRESSOR_CASE_TYPE = 'General_Psychiatry';
+const STRESSOR_CATEGORY_MATCHERS = [
+    'psychosocial stressor',
+    'psychological stressor'
 ];
+
+function isPsychosocialStressorCategory(value) {
+    const category = ((value || '').toString().toLowerCase()).replace(/\s+/g, ' ').trim();
+    return STRESSOR_CATEGORY_MATCHERS.some((matcher) => category.includes(matcher));
+}
 
 function normalizeMultiValue(value) {
     if (!value) return [];
@@ -57,13 +57,17 @@ export default class GpCaseStepHomeSafety extends LightningElement {
     costCoverageIssues = false;
     supportsNotes = '';
     @track lethalMeansOptionsCatalog = [...LETHAL_MEANS_OPTIONS];
-    @track stressorOptionsCatalog = [...STRESSOR_OPTIONS];
+    @track stressorOptionsCatalog = [];
 
     @wire(getObjectInfo, { objectApiName: CASE_OBJECT })
     caseInfo;
 
     get caseRecordTypeId() {
         return this.caseInfo?.data?.defaultRecordTypeId;
+    }
+
+    connectedCallback() {
+        this.loadStressorCatalog();
     }
 
     @wire(getPicklistValues, { recordTypeId: '$caseRecordTypeId', fieldApiName: LETHAL_MEANS_FIELD })
@@ -80,18 +84,28 @@ export default class GpCaseStepHomeSafety extends LightningElement {
         }
     }
 
-    @wire(getPicklistValues, { recordTypeId: '$caseRecordTypeId', fieldApiName: STRESSORS_FIELD })
-    wiredPsychosocialStressors({ data, error }) {
-        if (data?.values?.length) {
-            this.stressorOptionsCatalog = data.values.map((entry) => ({
-                label: entry.label,
-                value: entry.value
-            }));
-        } else if (error) {
-            this.stressorOptionsCatalog = [...STRESSOR_OPTIONS];
+    async loadStressorCatalog() {
+        try {
+            const data = await getSafetyRiskCatalog({
+                caseType: STRESSOR_CASE_TYPE
+            });
+            if (Array.isArray(data)) {
+                this.stressorOptionsCatalog = data
+                    .filter((item) => isPsychosocialStressorCategory(item && item.category))
+                    .map((item) => ({
+                        label: item.name,
+                        value: item.name
+                    }))
+                    .filter((item) => !!item.value);
+                this.mergeSelectedStressorsIntoOptions();
+                return;
+            }
+        } catch (error) {
             // eslint-disable-next-line no-console
-            console.warn('Failed to load Psychosocial_Stressors__c picklist', error);
+            console.warn('Failed to load Psychosocial Stressors catalog', error);
         }
+        this.stressorOptionsCatalog = [];
+        this.mergeSelectedStressorsIntoOptions();
     }
 
     get homeSafetyOptionsComputed() {
@@ -168,7 +182,6 @@ export default class GpCaseStepHomeSafety extends LightningElement {
         const draftStressors = Array.isArray(value.psychosocialStressorsDraft)
             ? value.psychosocialStressorsDraft
             : null;
-        const caseStressors = normalizeMultiValue(value.Psychosocial_Stressors__c);
 
         if (draftStressors) {
             this.stressors = draftStressors.map(item => ({
@@ -178,21 +191,11 @@ export default class GpCaseStepHomeSafety extends LightningElement {
                 recent: !!item.recent,
                 historical: !!item.historical
             }));
-        } else if (caseStressors.length) {
-            this.stressors = caseStressors.map((entry) => {
-                const match = this.stressorOptionsCatalog.find(option => option.value === entry);
-                return {
-                    value: entry,
-                    label: match ? match.label : entry,
-                    note: '',
-                    recent: false,
-                    historical: false
-                };
-            });
         } else {
             this.stressors = [];
         }
 
+        this.mergeSelectedStressorsIntoOptions();
         this.reliableSupports = value.Reliable_Supports__c || '';
         this.costCoverageIssues = Boolean(value.Cost_Coverage_Issues__c);
         this.supportsNotes = value.Supports_Notes__c || '';
@@ -337,6 +340,24 @@ export default class GpCaseStepHomeSafety extends LightningElement {
         }));
     }
 
+    mergeSelectedStressorsIntoOptions() {
+        if (!Array.isArray(this.stressors) || this.stressors.length === 0) {
+            return;
+        }
+        const existingValues = new Set(
+            (this.stressorOptionsCatalog || [])
+                .map((option) => (option?.value || '').toString().trim())
+                .filter(Boolean)
+        );
+        const extras = this.stressors
+            .map((item) => (item?.value || item?.label || '').toString().trim())
+            .filter((value) => value && !existingValues.has(value))
+            .map((value) => ({ label: value, value }));
+        if (extras.length) {
+            this.stressorOptionsCatalog = [...(this.stressorOptionsCatalog || []), ...extras];
+        }
+    }
+
     buildPayload() {
         const lethalDraft = [...this.lethalMeans];
         const stressorDraft = this.stressors.map(item => ({
@@ -346,10 +367,6 @@ export default class GpCaseStepHomeSafety extends LightningElement {
             recent: !!item.recent,
             historical: !!item.historical
         }));
-        const stressorValues = stressorDraft
-            .map(item => item.value)
-            .filter(Boolean);
-
         return {
             Home_Safety__c: this.homeSafetyStatus || null,
             Lethal_Means_Access__c: this.showLethalMeans && lethalDraft.length ? lethalDraft.join(';') : null,
@@ -359,8 +376,7 @@ export default class GpCaseStepHomeSafety extends LightningElement {
             Cost_Coverage_Issues__c: this.costCoverageIssues,
             Supports_Notes__c: this.supportsNotes || null,
             lethalMeansDraft: this.showLethalMeans ? lethalDraft : [],
-            psychosocialStressorsDraft: stressorDraft,
-            Psychosocial_Stressors__c: stressorValues.length ? stressorValues.join(';') : null
+            psychosocialStressorsDraft: stressorDraft
         };
     }
 }
