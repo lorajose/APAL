@@ -2003,67 +2003,44 @@ async handleDataUpdated(event) {
         const redFlags = [];
         let psychosisNotes = '';
         let redFlagNotes = '';
-        let psychosisNoteFound = false;
-        let redFlagNoteFound = false;
-        let psychosisFound = false;
-        let maniaFound = false;
-        let redFlagsFound = false;
+        const appendUnique = (list, value) => {
+            if (value && !list.includes(value)) {
+                list.push(value);
+            }
+        };
+        const updateSharedNote = (current, item) => {
+            if (item.notes === undefined || item.notes === null) {
+                return current;
+            }
+            return String(item.notes).trim();
+        };
 
         (concerns || []).forEach(item => {
             const category = (item.category || '').toString().trim().toLowerCase();
             const label = (item.label || item.name || item.catalogName || '').toString().trim();
-            const key = label.toLowerCase();
             if (category === 'psychosis symptoms') {
-                psychosis.push(label);
-                psychosisFound = true;
-                if (!psychosisNoteFound && item.notes !== undefined && item.notes !== null) {
-                    const noteText = String(item.notes).trim();
-                    if (noteText) {
-                        psychosisNotes = noteText;
-                        psychosisNoteFound = true;
-                    }
-                }
+                appendUnique(psychosis, label);
+                psychosisNotes = updateSharedNote(psychosisNotes, item);
             } else if (category === 'mania/hypomania symptoms') {
-                mania.push(label);
-                maniaFound = true;
-                if (!psychosisNoteFound && item.notes !== undefined && item.notes !== null) {
-                    const noteText = String(item.notes).trim();
-                    if (noteText) {
-                        psychosisNotes = noteText;
-                        psychosisNoteFound = true;
-                    }
-                }
+                appendUnique(mania, label);
+                psychosisNotes = updateSharedNote(psychosisNotes, item);
             } else if (category === 'medical red flags') {
-                redFlags.push(label);
-                redFlagsFound = true;
-                if (!redFlagNoteFound && item.notes !== undefined && item.notes !== null) {
-                    const noteText = String(item.notes).trim();
-                    if (noteText) {
-                        redFlagNotes = noteText;
-                        redFlagNoteFound = true;
-                    }
-                }
+                appendUnique(redFlags, label);
+                redFlagNotes = updateSharedNote(redFlagNotes, item);
             }
         });
 
         const existing = this.form?.psychosisMania || {};
-        const existingPsychosis = Array.isArray(existing.psychosisSymptomsDraft)
-            ? existing.psychosisSymptomsDraft
-            : [];
-        const existingMania = Array.isArray(existing.maniaSymptomsDraft)
-            ? existing.maniaSymptomsDraft
-            : [];
-        const existingRedFlags = Array.isArray(existing.medicalRedFlagsDraft)
-            ? existing.medicalRedFlagsDraft
-            : [];
         const next = {
             ...(existing || {}),
-            psychosisSymptomsDraft: psychosisFound ? psychosis : existingPsychosis,
-            maniaSymptomsDraft: maniaFound ? mania : existingMania,
-            medicalRedFlagsDraft: redFlagsFound ? redFlags : existingRedFlags,
-            Psychosis_Notes__c: psychosisNoteFound ? psychosisNotes : (existing.Psychosis_Notes__c || ''),
-            Red_Flag_Notes__c: redFlagNoteFound ? redFlagNotes : (existing.Red_Flag_Notes__c || ''),
-            Medical_Notes__c: redFlagNoteFound ? redFlagNotes : (existing.Medical_Notes__c || '')
+            psychosisSymptomsDraft: psychosis,
+            maniaSymptomsDraft: mania,
+            medicalRedFlagsDraft: redFlags,
+            Psychosis_Notes__c: psychosisNotes,
+            Red_Flag_Notes__c: redFlagNotes,
+            Medical_Notes__c: redFlagNotes,
+            psychosisNotesDraft: psychosisNotes,
+            redFlagNotesDraft: redFlagNotes
         };
 
         const changed = JSON.stringify(next) !== JSON.stringify(existing);
