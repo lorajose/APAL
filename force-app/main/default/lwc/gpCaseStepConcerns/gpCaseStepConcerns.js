@@ -49,6 +49,17 @@ const normalizeSourceKey = (value) => {
     const compact = raw.toLowerCase().replace(/[^a-z0-9]/g, '');
     return SOURCE_ALIASES[compact] || raw;
 };
+const normalizeConcernCategory = (value) => (value || '').toString().trim().toLowerCase();
+const getSharedNoteGroup = (category) => {
+    const normalized = normalizeConcernCategory(category);
+    if (normalized === 'psychosis symptoms' || normalized === 'mania/hypomania symptoms') {
+        return 'psychosisMania';
+    }
+    if (normalized === 'medical red flags') {
+        return 'medicalRedFlags';
+    }
+    return null;
+};
 
 export default class GpCaseStepConcerns extends LightningElement {
     @api caseId;
@@ -246,7 +257,14 @@ export default class GpCaseStepConcerns extends LightningElement {
     handleNoteChange(event) {
         const id = event.target.dataset.id;
         const value = event.target.value;
-        this.concerns = this.concerns.map(item => item.id === id ? { ...item, notes: value } : item);
+        const target = this.concerns.find(item => item.id === id);
+        const sharedNoteGroup = getSharedNoteGroup(target?.category);
+        this.concerns = this.concerns.map(item => {
+            if (sharedNoteGroup && getSharedNoteGroup(item.category) === sharedNoteGroup) {
+                return { ...item, notes: value };
+            }
+            return item.id === id ? { ...item, notes: value } : item;
+        });
         this.emitDraftChange();
     }
 
@@ -548,7 +566,18 @@ export default class GpCaseStepConcerns extends LightningElement {
         if (!id) return;
         const field = event.target.dataset.field;
         const value = event.target.value;
-        this.wizardDraft = this.wizardDraft.map(item => item.id === id ? { ...item, [field]: value } : item);
+        if (field !== 'notes') {
+            this.wizardDraft = this.wizardDraft.map(item => item.id === id ? { ...item, [field]: value } : item);
+            return;
+        }
+        const target = this.wizardDraft.find(item => item.id === id);
+        const sharedNoteGroup = getSharedNoteGroup(target?.meta?.category);
+        this.wizardDraft = this.wizardDraft.map(item => {
+            if (sharedNoteGroup && getSharedNoteGroup(item?.meta?.category) === sharedNoteGroup) {
+                return { ...item, notes: value };
+            }
+            return item.id === id ? { ...item, notes: value } : item;
+        });
     }
 
     handleWizardRemoveDraft(event) {
