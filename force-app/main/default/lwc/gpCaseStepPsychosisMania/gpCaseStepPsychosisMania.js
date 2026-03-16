@@ -277,11 +277,13 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
             ? [...value.medicalRedFlagsDraft]
             : [];
         const hasPsychosisDraft = Object.prototype.hasOwnProperty.call(value, 'psychosisNotesDraft');
+        const hasPsychosisRecordProp = Object.prototype.hasOwnProperty.call(value, 'Psychosis_Notes__c');
         const draftPsychosisNotes = hasPsychosisDraft ? (value.psychosisNotesDraft || '') : '';
-        const recordPsychosisNotes = value.Psychosis_Notes__c || '';
-        if (draftPsychosisNotes) {
+        const recordPsychosisNotes = hasPsychosisRecordProp ? (value.Psychosis_Notes__c || '') : '';
+        const parentControlsPsychosisNotes = hasPsychosisDraft || hasPsychosisRecordProp;
+        if (hasPsychosisDraft) {
             this.psychosisNotes = draftPsychosisNotes;
-        } else if (recordPsychosisNotes) {
+        } else if (hasPsychosisRecordProp) {
             this.psychosisNotes = recordPsychosisNotes;
         } else if (this.psychosisNotesDirty && this.psychosisNotes) {
             // Keep local draft when parent sends an empty draft on step change.
@@ -289,7 +291,19 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
         } else {
             this.psychosisNotes = '';
         }
-        if (!this.psychosisNotes && this.caseId) {
+        if (this.caseId && parentControlsPsychosisNotes) {
+            try {
+                const key = getPsychosisNotesStorageKey(this.caseId);
+                if (this.psychosisNotes) {
+                    window.sessionStorage.setItem(key, this.psychosisNotes);
+                } else {
+                    window.sessionStorage.removeItem(key);
+                }
+            } catch {
+                // Ignore storage errors to avoid blocking the step.
+            }
+        }
+        if (!this.psychosisNotes && this.caseId && !parentControlsPsychosisNotes) {
             try {
                 const cached = window.sessionStorage.getItem(getPsychosisNotesStorageKey(this.caseId));
                 if (cached) {
