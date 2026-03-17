@@ -5,11 +5,11 @@
             <p>Capture orientation status and cognition notes when needed.</p>
         </div> -->
 
-        <section class="card">
-            <label class="input-label" for="orientation">Orientation<span class="required">*</span></label>
+        <section class="card wiz-field">
+            <label class="input-label wiz-field-label" for="orientation">Orientation<span class="required wiz-required">*</span></label>
             <select
                 id="orientation"
-                class="text-input"
+                class="text-input wiz-control"
                 onchange={handleOrientationChange}
             >
                 <option value="">—</option>
@@ -18,31 +18,31 @@
                 </template>
             </select>
             <template if:true={orientationError}>
-                <p class="error-text">{orientationError}</p>
+                <p class="error-text wiz-field-error wiz-inline-error">{orientationError}</p>
             </template>
         </section>
 
         <template if:true={showCognitionNotes}>
             <section class="card">
-                <div class="field field-full">
-                    <label class="input-label" for="cognition-notes">Cognition Notes<span class="required">*</span></label>
+                <div class="field field-full wiz-field">
+                    <label class="input-label wiz-field-label" for="cognition-notes">Cognition Notes<span class="required wiz-required">*</span></label>
                     <textarea
                         id="cognition-notes"
-                        class="textarea"
+                        class="textarea wiz-control"
                         placeholder="Describe memory, processing, reorientation cues..."
                         oninput={handleNotesChange}
                     >{cognitionNotes}</textarea>
-                    <p class="helper-text">Describe memory, processing, reorientation cues...</p>
+                    <p class="helper-text wiz-field-helper">Describe memory, processing, reorientation cues...</p>
                 </div>
                 <template if:true={cognitionNotesError}>
-                    <p class="error-text">{cognitionNotesError}</p>
+                    <p class="error-text wiz-field-error wiz-inline-error">{cognitionNotesError}</p>
                 </template>
             </section>
         </template>
 
-        <div class="slds-grid slds-grid_align-spread slds-var-m-top_large">
-            <button class="slds-button btn-back" type="button" onclick={handleBack}>Back</button>
-            <button class="slds-button btn-next" type="button" onclick={handleNext}>Next</button>
+        <div class="slds-grid slds-grid_align-spread slds-var-m-top_large wiz-step-footer">
+            <button class="slds-button btn-back wiz-btn wiz-btn-footer-back" type="button" onclick={handleBack}>Back</button>
+            <button class="slds-button btn-next wiz-btn wiz-btn-footer-next" type="button" onclick={handleNext}>Next</button>
         </div>
     </div>
 </template>
