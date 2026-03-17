@@ -1,0 +1,413 @@
+/*
+ * Consumable shared wizard presentation module for LWC @import usage.
+ *
+ * This currently exposes the adoption-safe heading, panel, selector, footer, and FormField slices.
+ * The broader draft remains in gpCaseCreator/wizard.css.
+ */
+
+:host {
+    --wiz-color-text-strong: #111827;
+    --wiz-color-text-default: #1f2937;
+    --wiz-color-text-muted: #4b5563;
+    --wiz-color-text-subtle: #6b7280;
+    --wiz-color-text-inverse: #ffffff;
+    --wiz-surface-panel: #ffffff;
+    --wiz-accent-brand: #032d60;
+
+    --wiz-accent-primary: #059669;
+    --wiz-accent-primary-hover: #047857;
+    --wiz-accent-secondary: #f3f4f6;
+    --wiz-accent-secondary-hover: #e5e7eb;
+
+    --wiz-border-default: #e5e7eb;
+    --wiz-border-selected: #059669;
+    --wiz-border-info: #0284c7;
+    --wiz-border-strong: #d1d5db;
+    --wiz-border-danger: #ef4444;
+    --wiz-shadow-focus: 0 0 0 3px rgba(37, 99, 235, 0.18);
+    --wiz-shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04);
+    --wiz-shadow-panel: 0 1px 2px rgba(15, 23, 42, 0.08);
+
+    --wiz-font-family: "Salesforce Sans", Arial, sans-serif;
+    --wiz-font-size-app-title: 1.75rem;
+    --wiz-font-size-step-title: 1.35rem;
+    --wiz-font-size-section-title: 1.05rem;
+    --wiz-font-size-subflow-title: 1rem;
+    --wiz-font-size-item-title: 0.95rem;
+    --wiz-font-size-label: 0.85rem;
+    --wiz-font-size-body: 0.9rem;
+    --wiz-font-size-meta: 0.85rem;
+    --wiz-font-size-helper: 0.8rem;
+    --wiz-font-size-pill: 0.75rem;
+    --wiz-font-weight-regular: 400;
+    --wiz-font-weight-medium: 500;
+    --wiz-font-weight-semibold: 600;
+    --wiz-font-weight-bold: 700;
+
+    --wiz-state-danger-text: #b91c1c;
+    --wiz-state-danger-bg: #fef2f2;
+    --wiz-state-info-text: #0369a1;
+    --wiz-state-info-bg: #e0f2fe;
+
+    --wiz-radius-control: 0.5rem;
+    --wiz-radius-card: 0.9rem;
+    --wiz-radius-panel: 1rem;
+    --wiz-radius-pill: 999px;
+
+    --wiz-space-1: 0.25rem;
+    --wiz-space-2: 0.5rem;
+    --wiz-space-3: 0.75rem;
+    --wiz-space-4: 1rem;
+    --wiz-space-6: 1.5rem;
+
+    --wiz-card-padding: 1rem;
+    --wiz-button-height: 2.5rem;
+    --wiz-button-padding-x: 1rem;
+    --wiz-footer-gap: 0.75rem;
+    --wiz-surface-panel-selected: #ecfdf5;
+}
+
+.wiz-heading-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wiz-space-1);
+}
+
+.wiz-app-title,
+.wiz-step-title,
+.wiz-section-title,
+.wiz-subflow-title,
+.wiz-item-title {
+    margin: 0;
+    color: var(--wiz-color-text-strong);
+    line-height: 1.2;
+}
+
+.wiz-app-title {
+    font-size: var(--wiz-font-size-app-title);
+    font-weight: var(--wiz-font-weight-bold);
+    color: var(--wiz-accent-brand);
+}
+
+.wiz-step-title {
+    font-size: var(--wiz-font-size-step-title);
+    font-weight: var(--wiz-font-weight-bold);
+    color: var(--wiz-accent-brand);
+}
+
+.wiz-section-title {
+    font-size: var(--wiz-font-size-section-title);
+    font-weight: var(--wiz-font-weight-bold);
+    color: var(--wiz-accent-brand);
+}
+
+.wiz-subflow-title {
+    font-size: var(--wiz-font-size-subflow-title);
+    font-weight: var(--wiz-font-weight-semibold);
+}
+
+.wiz-item-title {
+    font-size: var(--wiz-font-size-item-title);
+    font-weight: var(--wiz-font-weight-semibold);
+}
+
+.wiz-subtitle,
+.wiz-description,
+.wiz-meta-copy {
+    margin: 0;
+    color: var(--wiz-color-text-subtle);
+    font-size: var(--wiz-font-size-meta);
+    line-height: 1.4;
+}
+
+.wiz-card,
+.wiz-step-panel,
+.wiz-detail-panel,
+.wiz-review-panel,
+.wiz-empty-panel {
+    background: var(--wiz-surface-panel);
+    border: 1px solid var(--wiz-border-default);
+    border-radius: var(--wiz-radius-card);
+    padding: var(--wiz-card-padding);
+    box-shadow: var(--wiz-shadow-card);
+}
+
+.wiz-step-panel {
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    box-shadow: none;
+}
+
+.wiz-detail-panel,
+.wiz-review-panel {
+    border-color: var(--wiz-border-strong);
+    border-radius: var(--wiz-radius-panel);
+}
+
+.wiz-detail-panel {
+    box-shadow: var(--wiz-shadow-panel);
+}
+
+.wiz-review-panel {
+    box-shadow: none;
+}
+
+.wiz-empty-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--wiz-space-4);
+}
+
+.wiz-card-header,
+.wiz-panel-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--wiz-space-3);
+    flex-wrap: wrap;
+}
+
+.wiz-panel-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.wiz-counter,
+.wiz-pill {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--wiz-border-strong);
+    border-radius: var(--wiz-radius-pill);
+    padding: 0.15rem 0.6rem;
+    color: var(--wiz-color-text-muted);
+    font-size: var(--wiz-font-size-pill);
+}
+
+.wiz-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2rem;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid var(--wiz-border-strong);
+    border-radius: var(--wiz-radius-pill);
+    background: var(--wiz-surface-panel);
+    color: var(--wiz-color-text-default);
+    font: inherit;
+    font-size: var(--wiz-font-size-meta);
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.wiz-chip:hover {
+    border-color: var(--wiz-border-info);
+}
+
+.wiz-chip.is-selected {
+    background: var(--wiz-state-info-bg);
+    border-color: var(--wiz-border-info);
+    color: var(--wiz-state-info-text);
+    font-weight: var(--wiz-font-weight-semibold);
+}
+
+.wiz-chip-grid,
+.wiz-select-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--wiz-space-2);
+}
+
+.wiz-selected-list,
+.wiz-review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+.wiz-chip-grid .chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--wiz-radius-pill);
+    font: inherit;
+    font-size: var(--wiz-font-size-meta);
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.wiz-chip-grid .chip-selected {
+    font-weight: var(--wiz-font-weight-semibold);
+}
+
+.wiz-select-card,
+.wiz-selected-row {
+    border: 1px solid var(--wiz-border-default);
+    border-radius: 0.8rem;
+    background: var(--wiz-surface-panel);
+    padding: 0.75rem;
+    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.wiz-select-card.is-selected {
+    border-color: var(--wiz-border-selected);
+    background: var(--wiz-surface-panel-selected);
+}
+
+.wiz-select-card.is-disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.wiz-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--wiz-space-2);
+    min-height: var(--wiz-button-height);
+    padding: 0 var(--wiz-button-padding-x);
+    border-radius: var(--wiz-radius-pill);
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--wiz-color-text-default);
+    font: inherit;
+    font-family: var(--wiz-font-family);
+    font-size: var(--wiz-font-size-body);
+    font-weight: var(--wiz-font-weight-medium);
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.wiz-btn:focus-visible {
+    outline: none;
+    box-shadow: var(--wiz-shadow-focus);
+}
+
+.wiz-btn[disabled],
+.wiz-btn.is-disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.wiz-btn-footer-back {
+    background: var(--wiz-accent-secondary);
+    border-color: var(--wiz-border-strong);
+    border-radius: var(--wiz-radius-control);
+    color: var(--wiz-color-text-muted);
+}
+
+.wiz-btn-footer-back:hover {
+    background: var(--wiz-accent-secondary-hover);
+}
+
+.wiz-btn-footer-next {
+    background: var(--wiz-accent-primary);
+    border-color: var(--wiz-accent-primary);
+    border-radius: var(--wiz-radius-control);
+    color: var(--wiz-color-text-inverse);
+}
+
+.wiz-btn-footer-next:hover {
+    background: var(--wiz-accent-primary-hover);
+    border-color: var(--wiz-accent-primary-hover);
+}
+
+.wiz-step-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--wiz-footer-gap);
+    margin-top: var(--wiz-space-6);
+}
+
+.wiz-field,
+.field.wiz-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wiz-space-1);
+}
+
+.wiz-field-label,
+.input-label.wiz-field-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin: 0;
+    color: var(--wiz-color-text-muted);
+    font-size: var(--wiz-font-size-label);
+    font-weight: var(--wiz-font-weight-semibold);
+}
+
+.wiz-required,
+.required.wiz-required {
+    color: var(--wiz-state-danger-text);
+    font-size: var(--wiz-font-size-label);
+}
+
+.wiz-field-helper,
+.helper-text.wiz-field-helper {
+    margin: 0;
+    color: var(--wiz-color-text-subtle);
+    font-size: var(--wiz-font-size-helper);
+    line-height: 1.4;
+}
+
+.wiz-field-error,
+.wiz-inline-error,
+.error-text.wiz-inline-error {
+    margin: 0;
+    color: var(--wiz-state-danger-text);
+    font-size: var(--wiz-font-size-helper);
+    line-height: 1.35;
+}
+
+.wiz-control,
+.wiz-input,
+.wiz-select,
+.wiz-textarea,
+.text-input.wiz-control,
+.textarea.wiz-control {
+    width: 100%;
+    border: 1px solid var(--wiz-border-strong);
+    border-radius: var(--wiz-radius-control);
+    background: var(--wiz-surface-panel);
+    color: var(--wiz-color-text-default);
+    font: inherit;
+    font-family: var(--wiz-font-family);
+    font-size: var(--wiz-font-size-body);
+    padding: 0.45rem 0.6rem;
+    margin-top: 0;
+}
+
+.wiz-textarea,
+.textarea.wiz-control {
+    min-height: 4.5rem;
+    resize: vertical;
+}
+
+.wiz-control.is-error,
+.wiz-input.is-error,
+.wiz-select.is-error,
+.wiz-textarea.is-error,
+.text-input.wiz-control.is-error,
+.textarea.wiz-control.is-error {
+    border-color: var(--wiz-border-danger);
+}
+
+@media (max-width: 768px) {
+    .wiz-step-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .wiz-btn,
+    .wiz-btn-footer-back,
+    .wiz-btn-footer-next {
+        width: 100%;
+    }
+}
