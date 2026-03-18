@@ -507,6 +507,36 @@
     color: var(--wiz-state-warning-text);
 }
 
+.summary-header.wiz-panel-header {
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.summary-card.wiz-review-panel,
+.grid-card.wiz-review-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    border-color: var(--wiz-border-default);
+    border-radius: var(--wiz-radius-card);
+    box-shadow: var(--wiz-shadow-card);
+}
+
+.grid-list.wiz-review-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 0.75rem;
+    margin-top: 0;
+}
+
+.grid-item.wiz-selected-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: #f9fafb;
+    padding: 0.75rem;
+}
+
 /* ------------------------------------------------------------ */
 /* Collection Shell Foundations                                 */
 /* ------------------------------------------------------------ */
