@@ -5,26 +5,26 @@
             <p>Capture history, utilization, and diagnosis notes together.</p>
         </div> -->
 
-        <section class="card form-grid">
-            <div class="field">
-                <label class="input-label" for="psych-hosp">Psych Hospitalizations (#)</label>
+        <section class="card wiz-card form-grid">
+            <div class="field wiz-field">
+                <label class="input-label wiz-field-label" for="psych-hosp">Psych Hospitalizations (#)</label>
                 <input
                     id="psych-hosp"
                     type="number"
                     min="0"
-                    class="text-input"
+                    class="text-input wiz-control"
                     value={psychHospitalizations}
                     data-field="Psych_Hospitalizations__c"
                     oninput={handleInputChange}
                 />
             </div>
-            <div class="field">
-                <label class="input-label" for="ed-visits">ED Visits for Psych (#)</label>
+            <div class="field wiz-field">
+                <label class="input-label wiz-field-label" for="ed-visits">ED Visits for Psych (#)</label>
                 <input
                     id="ed-visits"
                     type="number"
                     min="0"
-                    class="text-input"
+                    class="text-input wiz-control"
                     value={edVisits}
                     data-field="ED_Visits_Count__c"
                     oninput={handleInputChange}
@@ -32,12 +32,12 @@
             </div>
         </section>
 
-        <section class="card form-grid">
-            <div class="field">
-                <label class="input-label" for="self-harm-history">Self-Harm History</label>
+        <section class="card wiz-card form-grid">
+            <div class="field wiz-field">
+                <label class="input-label wiz-field-label" for="self-harm-history">Self-Harm History</label>
                 <select
                     id="self-harm-history"
-                    class="text-input"
+                    class="text-input wiz-control"
                     data-field="Self_Harm_History__c"
                     onchange={handleInputChange}
                 >
@@ -48,14 +48,14 @@
             </div>         
         </section>
 
-        <section class="card">
+        <section class="card wiz-card">
             <div class="top-section-header">
-                <div>
-                    <p class="card-title">Prior Diagnoses</p>
-                    <p class="card-subtitle">Select concerns; add notes for the ones you choose.</p>
+                <div class="wiz-heading-stack">
+                    <p class="card-title wiz-item-title">Prior Diagnoses</p>
+                    <p class="card-subtitle wiz-description">Select concerns; add notes for the ones you choose.</p>
                 </div>
                 <div class="input-row condensed">
-                    <label class="input-label" for="diagnosis-search">Search</label>
+                    <label class="input-label wiz-field-label" for="diagnosis-search">Search</label>
                     <input
                         id="diagnosis-search"
                         type="search"
@@ -83,19 +83,19 @@
                         </template>
                     </div>
                 </div>
-                <div class="selected-column">
+                <div class="selected-column wiz-selected-list">
                     <p class="column-title">Selected</p>
                     <template if:true={hasSelectedDiagnoses}>
                         <template for:each={selectedDiagnoses} for:item="item">
-                            <div key={item.value} class="selected-card">
-                                <header>
+                            <div key={item.value} class="selected-card wiz-selected-row">
+                                <header class="wiz-panel-header">
                                     <span>{item.label}</span>
                                     <button class="link-button" type="button" data-value={item.value} onclick={handleDiagnosisRemove}>Remove</button>
                                 </header>
-                                <div class="field field-full">
-                                    <label class="input-label">Notes</label>
+                                <div class="field field-full wiz-field">
+                                    <label class="input-label wiz-field-label">Notes</label>
                                     <textarea
-                                        class="textarea"
+                                        class="textarea wiz-control"
                                         data-value={item.value}
                                         oninput={handleDiagnosisNoteChange}
                                     >{item.note}</textarea>
@@ -110,21 +110,21 @@
             </div>
         </section>
         
-           <div class="field field-full">
-                <label class="input-label" for="other-dx">Other Prior Diagnosis</label>
+           <div class="field field-full wiz-field">
+                <label class="input-label wiz-field-label" for="other-dx">Other Prior Diagnosis</label>
                 <textarea
                     id="other-dx"
-                    class="textarea"
+                    class="textarea wiz-control"
                     placeholder="Only fill this out if a diagnosis is missing below."
                     data-field="Other_Prior_Diagnosis__c"
                     oninput={handleInputChange}
                 >{otherPriorDiagnosis}</textarea>
-                <p class="helper-text">Only fill this out if a diagnosis is missing below.</p>
+                <p class="helper-text wiz-field-helper">Only fill this out if a diagnosis is missing below.</p>
             </div>
 
-        <div class="slds-grid slds-grid_align-spread slds-var-m-top_large">
-            <button class="slds-button btn-back" type="button" onclick={handleBack}>Back</button>
-            <button class="slds-button btn-next" type="button" onclick={handleNext}>Next</button>
+        <div class="slds-grid slds-grid_align-spread slds-var-m-top_large wiz-step-footer">
+            <button class="slds-button btn-back wiz-btn wiz-btn-footer-back" type="button" onclick={handleBack}>Back</button>
+            <button class="slds-button btn-next wiz-btn wiz-btn-footer-next" type="button" onclick={handleNext}>Next</button>
         </div>
     </div>
 </template>
