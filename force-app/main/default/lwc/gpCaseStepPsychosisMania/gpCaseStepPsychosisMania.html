@@ -19,7 +19,7 @@
                     <input id="psychosis-search" type="search" class="pill-search" placeholder="Filter options..."
                         value={psychosisSearch} oninput={handlePsychosisSearch}>
                 </div>
-                <div class="chip-grid">
+                <div class="chip-grid wiz-chip-grid">
                     <template for:each={psychosisFilteredOptions} for:item="option">
                         <button key={option.value} type="button" class={option.chipClass} data-value={option.value}
                             onclick={handlePsychosisToggle}>
@@ -42,7 +42,7 @@
                     <input id="mania-search" type="search" class="pill-search" placeholder="Filter options..."
                         value={maniaSearch} oninput={handleManiaSearch}>
                 </div>
-                <div class="chip-grid">
+                <div class="chip-grid wiz-chip-grid">
                     <template for:each={maniaFilteredOptions} for:item="option">
                         <button key={option.value} type="button" class={option.chipClass} data-value={option.value}
                             onclick={handleManiaToggle}>
@@ -80,7 +80,7 @@
                 <input id="red-flag-search" type="search" class="pill-search" placeholder="Filter options..."
                     value={redFlagSearch} oninput={handleRedFlagSearch}>
             </div>
-            <div class="chip-grid">
+            <div class="chip-grid wiz-chip-grid">
                 <template for:each={redFlagFilteredOptions} for:item="option">
                     <button key={option.value} type="button" class={option.chipClass} data-value={option.value}
                         onclick={handleRedFlagToggle}>
@@ -100,9 +100,9 @@
             </div>
         </section>
 
-        <div class="slds-grid slds-grid_align-spread slds-var-m-top_large">
-            <button class="slds-button btn-back" type="button" onclick={handleBack}>Back</button>
-            <button class="slds-button btn-next" type="button" onclick={handleNext}>Next</button>
+        <div class="slds-grid slds-grid_align-spread slds-var-m-top_large wiz-step-footer">
+            <button class="slds-button btn-back wiz-btn wiz-btn-footer-back" type="button" onclick={handleBack}>Back</button>
+            <button class="slds-button btn-next wiz-btn wiz-btn-footer-next" type="button" onclick={handleNext}>Next</button>
         </div>
     </div>
 </template>

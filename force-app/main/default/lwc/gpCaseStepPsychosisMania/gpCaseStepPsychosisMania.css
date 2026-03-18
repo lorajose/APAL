@@ -1,3 +1,5 @@
+@import 'c/gpCaseWizardStyles';
+
 :host {
 	display: block;
 }
@@ -98,19 +100,12 @@
 }
 
 .chip-grid {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.5rem;
 	margin-top: 0.5rem;
 }
 
 .chip {
 	border: 1px solid #d1d5db;
 	background: #fff;
-	border-radius: 999px;
-	padding: 0.35rem 0.85rem;
-	font-size: 0.85rem;
-	transition: all 0.15s ease;
 }
 
 .chip:hover {
@@ -121,7 +116,6 @@
 	background: #e0f2fe;
 	border-color: #0284c7;
 	color: #0369a1;
-	font-weight: 600;
 }
 
 .field {
@@ -148,23 +142,6 @@
 	min-height: 4.5rem;
 	resize: vertical;
 	margin-top: 0.4rem;
-}
-
-.btn-back {
-	background-color: #f3f4f6;
-	color: #4b5563;
-	border: 1px solid #d1d5db;
-	padding: 0.5rem 1.5rem;
-	border-radius: 0.375rem;
-}
-
-.btn-next {
-	background-color: #059669;
-	color: white;
-	border: none;
-	padding: 0.5rem 1.5rem;
-	border-radius: 0.375rem;
-	font-weight: 600;
 }
 
 @media (max-width: 768px) {
