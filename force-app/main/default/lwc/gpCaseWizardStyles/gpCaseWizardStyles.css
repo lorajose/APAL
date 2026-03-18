@@ -1,14 +1,16 @@
 /*
- * Consumable shared footer style module for LWC @import usage.
+ * Consumable shared wizard presentation module for LWC @import usage.
  *
- * This is intentionally limited to the outer step footer adoption slice.
+ * This currently exposes the adoption-safe footer and FormField slices.
  * The broader draft remains in gpCaseCreator/wizard.css.
  */
 
 :host {
     --wiz-color-text-default: #1f2937;
     --wiz-color-text-muted: #4b5563;
+    --wiz-color-text-subtle: #6b7280;
     --wiz-color-text-inverse: #ffffff;
+    --wiz-surface-panel: #ffffff;
 
     --wiz-accent-primary: #059669;
     --wiz-accent-primary-hover: #047857;
@@ -16,15 +18,23 @@
     --wiz-accent-secondary-hover: #e5e7eb;
 
     --wiz-border-strong: #d1d5db;
+    --wiz-border-danger: #ef4444;
     --wiz-shadow-focus: 0 0 0 3px rgba(37, 99, 235, 0.18);
 
     --wiz-font-family: "Salesforce Sans", Arial, sans-serif;
+    --wiz-font-size-label: 0.85rem;
     --wiz-font-size-body: 0.9rem;
+    --wiz-font-size-helper: 0.8rem;
     --wiz-font-weight-medium: 500;
+    --wiz-font-weight-semibold: 600;
+
+    --wiz-state-danger-text: #b91c1c;
+    --wiz-state-danger-bg: #fef2f2;
 
     --wiz-radius-control: 0.5rem;
     --wiz-radius-pill: 999px;
 
+    --wiz-space-1: 0.25rem;
     --wiz-space-2: 0.5rem;
     --wiz-space-6: 1.5rem;
 
@@ -93,6 +103,80 @@
     justify-content: space-between;
     gap: var(--wiz-footer-gap);
     margin-top: var(--wiz-space-6);
+}
+
+.wiz-field,
+.field.wiz-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wiz-space-1);
+}
+
+.wiz-field-label,
+.input-label.wiz-field-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin: 0;
+    color: var(--wiz-color-text-muted);
+    font-size: var(--wiz-font-size-label);
+    font-weight: var(--wiz-font-weight-semibold);
+}
+
+.wiz-required,
+.required.wiz-required {
+    color: var(--wiz-state-danger-text);
+    font-size: var(--wiz-font-size-label);
+}
+
+.wiz-field-helper,
+.helper-text.wiz-field-helper {
+    margin: 0;
+    color: var(--wiz-color-text-subtle);
+    font-size: var(--wiz-font-size-helper);
+    line-height: 1.4;
+}
+
+.wiz-field-error,
+.wiz-inline-error,
+.error-text.wiz-inline-error {
+    margin: 0;
+    color: var(--wiz-state-danger-text);
+    font-size: var(--wiz-font-size-helper);
+    line-height: 1.35;
+}
+
+.wiz-control,
+.wiz-input,
+.wiz-select,
+.wiz-textarea,
+.text-input.wiz-control,
+.textarea.wiz-control {
+    width: 100%;
+    border: 1px solid var(--wiz-border-strong);
+    border-radius: var(--wiz-radius-control);
+    background: var(--wiz-surface-panel);
+    color: var(--wiz-color-text-default);
+    font: inherit;
+    font-family: var(--wiz-font-family);
+    font-size: var(--wiz-font-size-body);
+    padding: 0.45rem 0.6rem;
+    margin-top: 0;
+}
+
+.wiz-textarea,
+.textarea.wiz-control {
+    min-height: 4.5rem;
+    resize: vertical;
+}
+
+.wiz-control.is-error,
+.wiz-input.is-error,
+.wiz-select.is-error,
+.wiz-textarea.is-error,
+.text-input.wiz-control.is-error,
+.textarea.wiz-control.is-error {
+    border-color: var(--wiz-border-danger);
 }
 
 @media (max-width: 768px) {

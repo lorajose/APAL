@@ -5,11 +5,11 @@
             <p>Confirm safety status, lethal-means access, and psychosocial stressors.</p>
         </div> -->
 
-        <section class="card">
-            <label class="input-label" for="home-safety"><span class="required">*</span>Home Safety</label>
+        <section class="card wiz-field">
+            <label class="input-label wiz-field-label" for="home-safety"><span class="required wiz-required">*</span>Home Safety</label>
             <select
                 id="home-safety"
-                class="text-input"
+                class="text-input wiz-control"
                 onchange={handleHomeSafetyChange}
             >
                 <option value="">—</option>
@@ -18,7 +18,7 @@
                 </template>
             </select>
             <template if:true={homeSafetyError}>
-                <p class="error-text">{homeSafetyError}</p>
+                <p class="error-text wiz-field-error wiz-inline-error">{homeSafetyError}</p>
             </template>
         </section>
 
@@ -50,23 +50,23 @@
                     </template>
                 </div>
                 <template if:true={lethalMeansError}>
-                    <p class="error-text">{lethalMeansError}</p>
+                    <p class="error-text wiz-field-error wiz-inline-error">{lethalMeansError}</p>
                 </template>
 
                 <label class="checkbox-field">
                     <input type="checkbox" checked={meansSafetyPlan} onchange={handleMeansPlanChange} />
-                    <span class="input-label">Means safety plan agreed?</span>
+                    <span class="input-label wiz-field-label">Means safety plan agreed?</span>
                 </label>
 
-                <div class="field field-full">
-                    <label class="input-label" for="safety-notes">Safety Notes</label>
+                <div class="field field-full wiz-field">
+                    <label class="input-label wiz-field-label" for="safety-notes">Safety Notes</label>
                     <textarea
                         id="safety-notes"
-                        class="textarea"
+                        class="textarea wiz-control"
                         placeholder="Add storage instructions, supervision plans, or contacts."
                         oninput={handleSafetyNotesChange}
                     >{safetyNotes}</textarea>
-                    <p class="helper-text">Add storage instructions, supervision plans, or contacts.</p>
+                    <p class="helper-text wiz-field-helper">Add storage instructions, supervision plans, or contacts.</p>
                 </div>
             </section>
         </template>
@@ -78,7 +78,7 @@
                     <p class="card-subtitle">Select stressors; capture notes and recent/historical flags.</p>
                 </div>
                 <div class="input-row condensed">
-                    <label class="input-label" for="stressor-search">Search</label>
+                    <label class="input-label wiz-field-label" for="stressor-search">Search</label>
                     <input id="stressor-search" type="search" class="pill-search" placeholder="Filter stressors..." value={stressorSearch} oninput={handleStressorSearch} />
                 </div>
             </header>
@@ -103,10 +103,10 @@
                                     <span>{item.label}</span>
                                     <button class="link-button" type="button" data-value={item.value} onclick={handleStressorRemove}>Remove</button>
                                 </header>
-                                <div class="field field-full">
-                                    <label class="input-label stressor-note-label">Notes</label>
+                                <div class="field field-full wiz-field">
+                                    <label class="input-label stressor-note-label wiz-field-label">Notes</label>
                                     <textarea
-                                        class="textarea"
+                                        class="textarea wiz-control"
                                         data-value={item.value}
                                         oninput={handleStressorNoteChange}
                                     >{item.note}</textarea>
@@ -133,8 +133,8 @@
 
         <section class="card">
             <div class="supports-grid">
-                <label class="input-label" for="reliable-supports">Reliable Supports</label>
-                <select id="reliable-supports" class="text-input" onchange={handleReliableSupportsChange}>
+                <label class="input-label wiz-field-label" for="reliable-supports">Reliable Supports</label>
+                <select id="reliable-supports" class="text-input wiz-control" onchange={handleReliableSupportsChange}>
                     <option value="">—</option>
                     <template for:each={reliableSupportOptionsComputed} for:item="option">
                         <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
@@ -143,18 +143,18 @@
 
                 <label class="checkbox-field">
                     <input type="checkbox" checked={costCoverageIssues} onchange={handleCostCoverageChange} />
-                    <span class="input-label">Cost/Coverage Issues?</span>
+                    <span class="input-label wiz-field-label">Cost/Coverage Issues?</span>
                 </label>
             </div>
-            <div class="field field-full">
-                <label class="input-label" for="supports-notes">Supports Notes</label>
+            <div class="field field-full wiz-field">
+                <label class="input-label wiz-field-label" for="supports-notes">Supports Notes</label>
                 <textarea
                     id="supports-notes"
-                    class="textarea"
+                    class="textarea wiz-control"
                     placeholder="Add outreach plans, key contacts, or gaps."
                     oninput={handleSupportsNotesChange}
                 >{supportsNotes}</textarea>
-                <p class="helper-text">Add outreach plans, key contacts, or gaps.</p>
+                <p class="helper-text wiz-field-helper">Add outreach plans, key contacts, or gaps.</p>
             </div>
         </section>
 
