@@ -169,26 +169,6 @@
 	font-size: 0.9rem;
 }
 
-.selected-column {
-	display: flex;
-	flex-direction: column;
-	gap: 0.65rem;
-}
-
-.selected-card {
-	border: 1px solid #e5e7eb;
-	border-radius: 0.75rem;
-	padding: 0.7rem;
-}
-
-.selected-card header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 0.4rem;
-	font-weight: 600;
-}
-
 .link-button {
 	background: none;
 	border: none;

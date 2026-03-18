@@ -395,10 +395,16 @@
 .wiz-select-card,
 .wiz-selected-row {
     border: 1px solid var(--wiz-border-default);
-    border-radius: 0.8rem;
+    border-radius: 0.75rem;
     background: var(--wiz-surface-panel);
-    padding: 0.75rem;
+    padding: 0.7rem;
     transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.wiz-selected-row > .wiz-panel-header {
+    align-items: center;
+    margin-bottom: 0.4rem;
+    font-weight: var(--wiz-font-weight-semibold);
 }
 
 .wiz-select-card.is-selected {

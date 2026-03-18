@@ -139,21 +139,6 @@
 	font-size: 0.9rem;
 }
 
-.selected-card {
-	border: 1px solid #e5e7eb;
-	border-radius: 0.75rem;
-	padding: 0.7rem;
-	background: #fff;
-}
-
-.selected-card header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 0.4rem;
-	font-weight: 600;
-}
-
 .flag-row {
 	display: flex;
 	gap: 1rem;
