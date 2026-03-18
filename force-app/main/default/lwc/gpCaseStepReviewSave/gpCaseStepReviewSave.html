@@ -152,9 +152,9 @@
                 <button class="link-button" data-step="13" onclick={handleEditStep}>Edit Concerns</button>
             </div>
             <template if:true={concerns.length}>
-                <div class="grid-list">
+                <div class="grid-list wiz-review-list">
                     <template for:each={concerns} for:item="concern">
-                        <article key={concern.id} class="grid-item">
+                        <article key={concern.id} class="grid-item wiz-selected-row">
                             <header>
                                 <h4>{concern.label}</h4>
                                 <p>{concern.category}</p>
@@ -188,9 +188,9 @@
                 <button class="link-button" data-step="10" onclick={handleEditStep}>Edit Medications</button>
             </div>
             <template if:true={medications.length}>
-                <div class="grid-list">
+                <div class="grid-list wiz-review-list">
                     <template for:each={medications} for:item="med">
-                        <article key={med.id} class="grid-item">
+                        <article key={med.id} class="grid-item wiz-selected-row">
                             <header>
                                 <h4>{med.meta.title}</h4>
                                 <p>{med.meta.brand}</p>
@@ -236,9 +236,9 @@
                 <button class="link-button" data-step="11" onclick={handleEditStep}>Edit Substances</button>
             </div>
             <template if:true={substances.length}>
-                <div class="grid-list">
+                <div class="grid-list wiz-review-list">
                     <template for:each={substances} for:item="item">
-                        <article key={item.id} class="grid-item">
+                        <article key={item.id} class="grid-item wiz-selected-row">
                             <header>
                                 <h4>{item.meta.name}</h4>
                             </header>
@@ -272,9 +272,9 @@
                 <button class="link-button" data-step="12" onclick={handleEditStep}>Edit Screeners</button>
             </div>
             <template if:true={screeners.length}>
-                <div class="grid-list">
+                <div class="grid-list wiz-review-list">
                     <template for:each={screeners} for:item="scr">
-                        <article key={scr.id} class="grid-item">
+                        <article key={scr.id} class="grid-item wiz-selected-row">
                             <header>
                                 <h4>{scr.meta.name}</h4>
                                 <p>{scr.meta.type}</p>
@@ -312,9 +312,9 @@
                 <button class="link-button" data-step="14" onclick={handleEditStep}>Edit Safety Risks</button>
             </div>
             <template if:true={safetyRisks.length}>
-                <div class="grid-list">
+                <div class="grid-list wiz-review-list">
                     <template for:each={safetyRisks} for:item="risk">
-                        <article key={risk.id} class="grid-item">
+                        <article key={risk.id} class="grid-item wiz-selected-row">
                             <header>
                                 <h4>{risk.meta.name}</h4>
                                 <p>{risk.meta.category}</p>

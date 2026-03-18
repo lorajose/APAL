@@ -214,11 +214,17 @@
 }
 
 .wiz-chip-grid,
-.wiz-select-grid,
-.wiz-selected-list {
+.wiz-select-grid {
     display: flex;
     flex-wrap: wrap;
     gap: var(--wiz-space-2);
+}
+
+.wiz-selected-list,
+.wiz-review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
 }
 
 .wiz-chip-grid .chip {

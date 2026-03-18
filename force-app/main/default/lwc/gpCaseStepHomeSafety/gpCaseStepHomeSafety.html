@@ -94,12 +94,12 @@
                         </template>
                     </div>
                 </div>
-                <div class="selected-column">
+                <div class="selected-column wiz-selected-list">
                     <p class="column-title">Selected</p>
                     <template if:true={hasStressors}>
                         <template for:each={selectedStressors} for:item="item">
-                            <div key={item.value} class="selected-card">
-                                <header>
+                            <div key={item.value} class="selected-card wiz-selected-row">
+                                <header class="wiz-panel-header">
                                     <span>{item.label}</span>
                                     <button class="link-button" type="button" data-value={item.value} onclick={handleStressorRemove}>Remove</button>
                                 </header>
