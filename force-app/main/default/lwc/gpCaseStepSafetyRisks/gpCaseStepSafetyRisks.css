@@ -124,24 +124,10 @@
 	font-size: 0.9rem;
 }
 
-.grid-header-row {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-	gap: 0.75rem;
-	align-items: end;
-}
-
 .grid-controls .input-label {
 	font-size: 0.9rem;
 	font-weight: 400;
 	color: #111827;
-}
-
-.grid-actions {
-	display: flex;
-	gap: 0.5rem;
-	justify-content: flex-end;
-	flex-wrap: wrap;
 }
 
 .grid-actions .ghost-button,
@@ -412,13 +398,6 @@
 	margin-left: 0.5rem;
 }
 
-.wizard-controls {
-	display: flex;
-	gap: 0.75rem;
-	flex-wrap: wrap;
-	align-items: end;
-}
-
 .wizard-controls .control-group {
 	display: flex;
 	flex-direction: column;
@@ -435,12 +414,6 @@
 
 .wizard-result-row .result-pill {
 	margin-right: 0.5rem;
-}
-
-.wizard-result-row .result-actions {
-	display: flex;
-	gap: 0.5rem;
-	flex-wrap: wrap;
 }
 
 .wizard-catalog {
@@ -530,12 +503,6 @@
 	font-weight: 600;
 }
 
-.review-list {
-	display: flex;
-	flex-direction: column;
-	gap: 0.85rem;
-}
-
 .review-entry {
 	border: 1px solid #e5e7eb;
 	border-radius: 0.8rem;
@@ -568,21 +535,6 @@
 	margin: 0.35rem 0 0;
 	display: flex;
 	gap: 0.35rem;
-}
-
-.wizard-footer {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	flex-wrap: wrap;
-	gap: 0.75rem;
-}
-
-.wizard-actions {
-	display: flex;
-	gap: 0.5rem;
-	margin-left: auto;
-	justify-content: flex-end;
 }
 
 .primary,

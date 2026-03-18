@@ -32,7 +32,7 @@
         <template if:true={isGridView}>
             <template if:true={hasMedications}>
                 <section class="card wiz-card grid-controls">
-                    <div class="grid-header-row">
+                    <div class="grid-header-row wiz-collection-header">
                         <template if:false={showFilters}>
                             <div class="grid-title">
                                 <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
@@ -53,7 +53,7 @@
                                 <input id="grid-search" class="text-input" type="search" placeholder="Filter by name..." value={searchValue} oninput={handleSearchChange} />
                             </div>
                         </template>
-                        <div class="grid-actions">
+                        <div class="grid-actions wiz-collection-actions">
                         <button class="ghost-button" type="button" onclick={toggleShowNotes}>
                             <template if:true={showAllNotes}>Hide notes</template>
                             <template if:false={showAllNotes}>Show notes</template>
@@ -165,7 +165,7 @@
                 </div> -->
 
                 <template if:true={wizardStepIsPick}>
-                    <div class="wizard-controls">
+                    <div class="wizard-controls wiz-collection-header">
                         <div class="control-group">
                             <label class="input-label" for="wizard-filter">Filter by</label>
                             <select id="wizard-filter" class="text-input" onchange={handleWizardFilterChange}>
@@ -181,7 +181,7 @@
                     </div>
                     <div class="wizard-result-row">
                         <span class="result-pill">{wizardResultCount} result(s)</span>
-                        <div class="result-actions">
+                        <div class="result-actions wiz-collection-actions">
                             <button class="ghost-button" onclick={handleSelectAllFiltered}>Select all (filtered)</button>
                             <button class="ghost-button" onclick={handleClearSelection}>Clear</button>
                         </div>
@@ -269,7 +269,7 @@
                 <template if:true={wizardStepIsReview}>
                     <div class="review-panel wiz-review-panel">
                         <h3 class="wiz-subflow-title">Review</h3>
-                        <div class="review-list">
+                        <div class="review-list wiz-review-list">
                             <template for:each={wizardDraft} for:item="item">
                                 <article key={item.id} class="review-entry">
                                     <div class="review-heading">
@@ -312,9 +312,9 @@
                     </div>
                 </template>
 
-                <div class="wizard-footer">
+                <div class="wizard-footer wiz-subflow-footer">
                     <!--<button class="ghost-button" onclick={wizardBack} disabled={wizardBackDisabled}>Back</button> -->
-                    <div class="wizard-actions">
+                    <div class="wizard-actions wiz-subflow-actions">
                         <template if:true={wizardStepIsReview}>
                             <button class="ghost-button" onclick={handleReviewEditDetails}>Edit Details</button>
                             <button class="ghost-button" onclick={handleReviewChangeSelection}>Change Selection</button>

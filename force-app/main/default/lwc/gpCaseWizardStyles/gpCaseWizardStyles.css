@@ -1,7 +1,7 @@
 /*
  * Consumable shared wizard presentation module for LWC @import usage.
  *
- * This currently exposes the adoption-safe heading, panel, selector, footer, and FormField slices.
+ * This currently exposes the adoption-safe heading, panel, selector, footer, collection-shell, and FormField slices.
  * The broader draft remains in gpCaseCreator/wizard.css.
  */
 
@@ -289,6 +289,43 @@
     padding: 0.75rem;
 }
 
+.wiz-collection-header {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--wiz-space-3);
+    align-items: end;
+}
+
+.wiz-collection-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--wiz-space-2);
+}
+
+.wiz-detail-stack,
+.wiz-review-list {
+    margin-top: var(--wiz-space-3);
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.wizard-controls.wiz-collection-header {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.wizard-footer.wiz-subflow-footer {
+    flex-wrap: wrap;
+    margin-top: 0;
+}
+
+.review-list.wiz-review-list {
+    margin-top: 0;
+}
+
 .wiz-select-card.is-selected {
     border-color: var(--wiz-border-selected);
     background: var(--wiz-surface-panel-selected);
@@ -353,12 +390,22 @@
     border-color: var(--wiz-accent-primary-hover);
 }
 
-.wiz-step-footer {
+.wiz-step-footer,
+.wiz-subflow-footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--wiz-footer-gap);
     margin-top: var(--wiz-space-6);
+}
+
+.wiz-subflow-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: var(--wiz-space-2);
+    margin-left: auto;
 }
 
 .wiz-field,
@@ -436,7 +483,11 @@
 }
 
 @media (max-width: 768px) {
-    .wiz-step-footer {
+    .wiz-step-footer,
+    .wiz-subflow-footer,
+    .wiz-subflow-actions,
+    .wiz-empty-panel,
+    .wiz-collection-actions {
         flex-direction: column;
         align-items: stretch;
     }
@@ -445,5 +496,9 @@
     .wiz-btn-footer-back,
     .wiz-btn-footer-next {
         width: 100%;
+    }
+
+    .wiz-collection-header {
+        grid-template-columns: 1fr;
     }
 }
