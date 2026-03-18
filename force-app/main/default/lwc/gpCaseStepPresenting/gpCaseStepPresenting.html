@@ -58,7 +58,7 @@
                 <input id="domains-search" type="search" class="pill-search" placeholder="Filter options..."
                     value={domainsSearch} oninput={handleDomainSearch}>
             </div>
-            <div class="chip-grid">
+            <div class="chip-grid wiz-chip-grid">
                 <template for:each={impairedFilteredOptions} for:item="option">
                     <button key={option.value} type="button" class={option.chipClass} data-value={option.value}
                         onclick={handleDomainToggle}>

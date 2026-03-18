@@ -1,7 +1,7 @@
 /*
  * Consumable shared wizard presentation module for LWC @import usage.
  *
- * This currently exposes the adoption-safe heading, panel, footer, and FormField slices.
+ * This currently exposes the adoption-safe heading, panel, selector, footer, and FormField slices.
  * The broader draft remains in gpCaseCreator/wizard.css.
  */
 
@@ -20,6 +20,8 @@
     --wiz-accent-secondary-hover: #e5e7eb;
 
     --wiz-border-default: #e5e7eb;
+    --wiz-border-selected: #059669;
+    --wiz-border-info: #0284c7;
     --wiz-border-strong: #d1d5db;
     --wiz-border-danger: #ef4444;
     --wiz-shadow-focus: 0 0 0 3px rgba(37, 99, 235, 0.18);
@@ -44,6 +46,8 @@
 
     --wiz-state-danger-text: #b91c1c;
     --wiz-state-danger-bg: #fef2f2;
+    --wiz-state-info-text: #0369a1;
+    --wiz-state-info-bg: #e0f2fe;
 
     --wiz-radius-control: 0.5rem;
     --wiz-radius-card: 0.9rem;
@@ -60,6 +64,7 @@
     --wiz-button-height: 2.5rem;
     --wiz-button-padding-x: 1rem;
     --wiz-footer-gap: 0.75rem;
+    --wiz-surface-panel-selected: #ecfdf5;
 }
 
 .wiz-heading-stack {
@@ -179,6 +184,77 @@
     padding: 0.15rem 0.6rem;
     color: var(--wiz-color-text-muted);
     font-size: var(--wiz-font-size-pill);
+}
+
+.wiz-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2rem;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid var(--wiz-border-strong);
+    border-radius: var(--wiz-radius-pill);
+    background: var(--wiz-surface-panel);
+    color: var(--wiz-color-text-default);
+    font: inherit;
+    font-size: var(--wiz-font-size-meta);
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.wiz-chip:hover {
+    border-color: var(--wiz-border-info);
+}
+
+.wiz-chip.is-selected {
+    background: var(--wiz-state-info-bg);
+    border-color: var(--wiz-border-info);
+    color: var(--wiz-state-info-text);
+    font-weight: var(--wiz-font-weight-semibold);
+}
+
+.wiz-chip-grid,
+.wiz-select-grid,
+.wiz-selected-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--wiz-space-2);
+}
+
+.wiz-chip-grid .chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--wiz-radius-pill);
+    font: inherit;
+    font-size: var(--wiz-font-size-meta);
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.wiz-chip-grid .chip-selected {
+    font-weight: var(--wiz-font-weight-semibold);
+}
+
+.wiz-select-card,
+.wiz-selected-row {
+    border: 1px solid var(--wiz-border-default);
+    border-radius: 0.8rem;
+    background: var(--wiz-surface-panel);
+    padding: 0.75rem;
+    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.wiz-select-card.is-selected {
+    border-color: var(--wiz-border-selected);
+    background: var(--wiz-surface-panel-selected);
+}
+
+.wiz-select-card.is-disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
 }
 
 .wiz-btn {

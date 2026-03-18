@@ -41,12 +41,6 @@
 	margin: 0.6rem 0;
 }
 
-.chip-grid {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.5rem;
-}
-
 .chip {
 	border: 1px solid #d1d5db;
 	background: #fff;
