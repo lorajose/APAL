@@ -5,7 +5,7 @@
             <p>Confirm safety status, lethal-means access, and psychosocial stressors.</p>
         </div> -->
 
-        <section class="card wiz-field">
+        <section class="card wiz-card wiz-field">
             <label class="input-label wiz-field-label" for="home-safety"><span class="required wiz-required">*</span>Home Safety</label>
             <select
                 id="home-safety"
@@ -23,8 +23,8 @@
         </section>
 
         <template if:true={showLethalMeans}>
-            <section class="card lethal-section">
-                <header class="card-header">
+            <section class="card wiz-card lethal-section">
+                <header class="card-header wiz-card-header">
                     <div class="wiz-heading-stack">
                         <p class="card-title wiz-item-title">
                             <template if:true={isLethalMeansRequired}>
@@ -34,7 +34,7 @@
                         </p>
                         <p class="card-subtitle wiz-description">Select everything currently available in the home.</p>
                     </div>
-                    <span class="selected-counter">{lethalMeansCountLabel}</span>
+                    <span class="selected-counter wiz-counter">{lethalMeansCountLabel}</span>
                 </header>
                 <div class="chip-grid">
                     <template for:each={lethalMeansOptions} for:item="option">
@@ -71,8 +71,8 @@
             </section>
         </template>
 
-        <section class="card stressor-section">
-            <header class="card-header">
+        <section class="card wiz-card stressor-section">
+            <header class="card-header wiz-card-header">
                 <div class="wiz-heading-stack">
                     <p class="card-title wiz-item-title">Psychosocial Stressors</p>
                     <p class="card-subtitle wiz-description">Select stressors; capture notes and recent/historical flags.</p>
@@ -131,7 +131,7 @@
             </div>
         </section>
 
-        <section class="card">
+        <section class="card wiz-card">
             <div class="supports-grid">
                 <label class="input-label wiz-field-label" for="reliable-supports">Reliable Supports</label>
                 <select id="reliable-supports" class="text-input wiz-control" onchange={handleReliableSupportsChange}>

@@ -5,7 +5,7 @@
             <p>Document recent trauma, safety concerns, and relevant family history.</p>
         </div> -->
 
-        <section class="card checkbox-grid">
+        <section class="card wiz-card checkbox-grid">
             <label class="checkbox-field">
                 <input type="checkbox" checked={recentTrauma} data-field="Recent_Trauma__c" onchange={handleCheckboxChange} />
                 <span class="input-label wiz-field-label">Recent trauma reported?</span>
@@ -20,8 +20,8 @@
             </label>
         </section>
 
-        <section class="card family-history-section">
-            <header class="card-header">
+        <section class="card wiz-card family-history-section">
+            <header class="card-header wiz-card-header">
                 <div class="wiz-heading-stack">
                     <p class="card-title wiz-item-title">Family History (1st-degree)</p>
                     <p class="card-subtitle wiz-description">Select concerns; add notes for the ones you choose.</p>
@@ -70,7 +70,7 @@
             </div>
         </section>
 
-        <section class="card">
+        <section class="card wiz-card">
             <div class="field field-full wiz-field">
                 <label class="input-label wiz-field-label" for="family-notes">Family History and Trauma Notes</label>
                 <textarea

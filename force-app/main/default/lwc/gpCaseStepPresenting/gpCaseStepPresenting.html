@@ -45,13 +45,13 @@
             onchange={handlePcqtChange}>
         </c-pcqt-selector>
 
-        <section class="card">
-            <header class="card-header">
+        <section class="card wiz-card">
+            <header class="card-header wiz-card-header">
                 <div class="wiz-heading-stack">
                     <p class="card-title wiz-item-title">Impaired Domains</p>
                     <p class="card-subtitle wiz-description">Highlight where functioning is taking the biggest hit.</p>
                 </div>
-                <span class="selected-counter">{impairedCountLabel}</span>
+                <span class="selected-counter wiz-counter">{impairedCountLabel}</span>
             </header>
             <div class="input-row">
                 <label class="input-label wiz-field-label" for="domains-search">Search</label>
@@ -68,7 +68,7 @@
             </div>
         </section>
 
-        <section class="card form-grid">
+        <section class="card wiz-card form-grid">
             <div class="field wiz-field">
                 <label class="input-label wiz-field-label" for="onset-date">Symptom Onset Date</label>
                 <input id="onset-date" type="date" class="text-input wiz-control" value={symptomOnsetDate}
@@ -98,7 +98,7 @@
             </div>
         </section>
 
-        <section class="card">
+        <section class="card wiz-card">
             <div class="top-symptoms-header">
                 <div class="wiz-heading-stack">
                     <p class="card-title wiz-item-title">Top Symptoms / Concerns</p>
@@ -151,7 +151,7 @@
             </div>
         </section>
 
-           <section class="card">
+           <section class="card wiz-card">
             <div class="field field-full wiz-field">
                 <label class="input-label wiz-field-label" for="other-symptoms">Other Symptoms</label>
                 <textarea

@@ -5,7 +5,7 @@
             <p>Capture orientation status and cognition notes when needed.</p>
         </div> -->
 
-        <section class="card wiz-field">
+        <section class="card wiz-card wiz-field">
             <label class="input-label wiz-field-label" for="orientation"><span class="required wiz-required">*</span>Orientation</label>
             <select
                 id="orientation"
@@ -23,7 +23,7 @@
         </section>
 
         <template if:true={showCognitionNotes}>
-            <section class="card">
+            <section class="card wiz-card">
                 <div class="field field-full wiz-field">
                     <label class="input-label wiz-field-label" for="cognition-notes"><span class="required wiz-required">*</span>Cognition Notes</label>
                     <textarea

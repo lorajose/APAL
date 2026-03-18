@@ -5,7 +5,7 @@
             <p>Track ideation and any weaponized risk details.</p>
         </div> -->
 
-        <section class="card wiz-field">
+        <section class="card wiz-card wiz-field">
             <label class="input-label wiz-field-label" for="ideation"><span class="required wiz-required">*</span>Homicidal Ideation</label>
             <select
                 id="ideation"
@@ -22,7 +22,7 @@
             </template>
         </section>
 
-        <section class="card">
+        <section class="card wiz-card">
             <label class="checkbox-field">
                 <input
                     type="checkbox"
@@ -34,7 +34,7 @@
         </section>
 
         <template if:true={showDetail}>
-            <section class="card">
+            <section class="card wiz-card">
                 <label class="checkbox-field">
                     <input
                         id="weapons-access"
@@ -47,7 +47,7 @@
                 </label>
             </section>
 
-            <section class="card wiz-field">
+            <section class="card wiz-card wiz-field">
                 <label class="input-label wiz-field-label" for="violence-details"><span class="required wiz-required">*</span>Violence / Threat Details</label>
                 <textarea
                     id="violence-details"

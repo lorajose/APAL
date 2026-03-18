@@ -30,7 +30,7 @@
 
         <template if:true={isGridView}>
             <template if:true={hasSubstances}>
-                <section class="card grid-controls">
+                <section class="card wiz-card grid-controls">
                     <div class="grid-header-row">
                         <template if:false={showFilters}>
                             <div class="grid-title">
@@ -85,7 +85,7 @@
                                     </template>
                                     </div>
                                 </header>
-                                <div class="pill-row">
+                                <div class="pill-row wiz-panel-meta">
                                     <template if:true={sub.frequency}>
                                         <span class="summary-pill">{sub.frequency}</span>
                                     </template>
@@ -134,7 +134,7 @@
                 </section>
             </template>
             <template if:false={hasSubstances}>
-                <section class="card empty-state-card">
+                <section class="card empty-state-card wiz-empty-panel">
                     <template if:false={showFilters}>
                         <div class="grid-title">
                             <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
@@ -151,7 +151,7 @@
         </template>
 
         <template if:true={isWizardView}>
-            <section class="card wizard-shell">
+            <section class="card wiz-card wizard-shell">
               <!--  <div class="wizard-progress">
                     <span class={wizardStep >= 0 ? 'dot active' : 'dot'}></span>
                     <span class={wizardStep >= 1 ? 'dot active' : 'dot'}></span>
@@ -206,8 +206,8 @@
 
                 <template if:true={wizardStepIsDetails}>
                     <template for:each={wizardDraft} for:item="item">
-                        <section key={item.id} class="detail-card">
-                            <header class="detail-header">
+                        <section key={item.id} class="detail-card wiz-detail-panel">
+                            <header class="detail-header wiz-panel-header">
                                 <div>
                                     <h3 class="wiz-item-title">{item.meta.name}</h3>
                                     <p class="detail-brand">{item.meta.category}</p>
@@ -237,7 +237,7 @@
                 </template>
 
                 <template if:true={wizardStepIsReview}>
-                    <div class="review-panel">
+                    <div class="review-panel wiz-review-panel">
                         <h3 class="wiz-subflow-title">Review</h3>
                         <div class="review-list">
                             <template for:each={wizardDraft} for:item="item">

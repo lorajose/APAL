@@ -5,7 +5,7 @@
             <p>Capture ideation, protective factors, and access to means.</p>
         </div> -->
 
-        <section class="card wiz-field">
+        <section class="card wiz-card wiz-field">
             <label class="input-label wiz-field-label" for="ideation"><span class="required wiz-required">*</span>Suicidal Ideation</label>
             <select
                 id="ideation"
@@ -22,7 +22,7 @@
             </template>
         </section>
 
-        <section class="card wiz-field">
+        <section class="card wiz-card wiz-field">
             <label class="input-label wiz-field-label" for="last-attempt">Last Attempt Date</label>
             <input
                 id="last-attempt"
@@ -35,7 +35,7 @@
         </section>
 
         <template if:true={showRiskDetail}>
-            <section class="card wiz-field">
+            <section class="card wiz-card wiz-field">
                 <label class="input-label wiz-field-label" for="protective-factors"><span class="required wiz-required">*</span>Protective Factors</label>
                 <textarea
                     id="protective-factors"
@@ -49,7 +49,7 @@
                 </template>
             </section>
 
-            <section class="card field-stack">
+            <section class="card wiz-card field-stack">
                 <div class="field wiz-field">
                     <label class="input-label wiz-field-label">Suicidal Intent?</label>
                     <label class="checkbox-field">
@@ -80,7 +80,7 @@
                 </div>
             </section>
 
-            <section class="card">
+            <section class="card wiz-card">
                 <div class="top-section-header">
                     <div class="wiz-heading-stack">
                         <p class="card-title wiz-item-title"><span class="required wiz-required">*</span>Access to Means</p>
