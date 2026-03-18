@@ -39,7 +39,7 @@
                             </div>
                         </template>
                         <template if:true={showFilters}>
-                            <div class="control-group">
+                            <div class="control-group wiz-control-group">
                                 <label class="input-label" for="grid-filter">Filter by</label>
                                 <select id="grid-filter" class="text-input" onchange={handleFilterChange}>
                                     <template for:each={filterOptionsDecorated} for:item="option">
@@ -47,7 +47,7 @@
                                     </template>
                                 </select>
                             </div>
-                            <div class="control-group">
+                            <div class="control-group wiz-control-group">
                                 <label class="input-label" for="grid-search">Search</label>
                                 <input id="grid-search" class="text-input" type="search" placeholder="Filter by name..." value={searchValue} oninput={handleSearchChange} />
                             </div>
@@ -113,7 +113,7 @@
                                         </template>
                                     </p>
                                 </template>
-                                <div class="card-actions">
+                                <div class="card-actions wiz-action-row-end">
                                     <template if:true={showNavigation}>
                                      <!--   <button class="pill-button" data-id={sub.id} onclick={handleEditSubstance}>Edit</button> -->
                                     </template>
@@ -122,7 +122,7 @@
                                 <template if:true={sub.showConfirm}>
                                     <div class="remove-confirm">
                                         <p>Remove this substance?</p>
-                                        <div class="remove-actions">
+                                        <div class="remove-actions wiz-action-row">
                                             <button class="pill-button danger" data-id={sub.id} onclick={confirmRemove}>Confirm Remove</button>
                                             <button class="pill-button secondary" onclick={cancelRemove}>Cancel</button>
                                         </div>
@@ -161,7 +161,7 @@
 
                 <template if:true={wizardStepIsPick}>
                     <div class="wizard-controls wiz-collection-header">
-                        <div class="control-group">
+                        <div class="control-group wiz-control-group">
                             <label class="input-label" for="wizard-filter">Filter by</label>
                             <select id="wizard-filter" class="text-input" onchange={handleWizardFilterChange}>
                                 <template for:each={wizardFilterOptionsDecorated} for:item="option">
@@ -169,12 +169,12 @@
                                 </template>
                             </select>
                         </div>
-                        <div class="control-group">
+                        <div class="control-group wiz-control-group">
                             <label class="input-label" for="wizard-search">Search</label>
                             <input id="wizard-search" class="text-input" type="search" placeholder="Filter by name..." value={wizardSearch} oninput={handleWizardSearchChange} />
                         </div>
                     </div>
-                    <div class="wizard-result-row">
+                    <div class="wizard-result-row wiz-result-row">
                         <span class="result-pill">{wizardResultCount} result(s)</span>
                         <div class="result-actions wiz-collection-actions">
                             <button class="ghost-button" onclick={handleSelectAllFiltered}>Select all (filtered)</button>

@@ -95,13 +95,6 @@
 	width: 100%;
 }
 
-.grid-controls .control-group {
-	display: flex;
-	flex-direction: column;
-	gap: 0.35rem;
-	width: 100%;
-}
-
 .grid-controls input[type="search"],
 .grid-controls select {
 	font-size: 0.95rem;
@@ -308,12 +301,6 @@
 	line-height: 1.2;
 }
 
-.card-actions {
-	display: flex;
-	justify-content: flex-end;
-	gap: 0.4rem;
-}
-
 .pill-button {
 	border-radius: 999px;
 	padding: 0.3rem 0.9rem;
@@ -350,12 +337,6 @@
 	font-size: 0.85rem;
 	color: #991b1b;
 	font-weight: 600;
-}
-
-.remove-actions {
-	display: flex;
-	gap: 0.5rem;
-	flex-wrap: wrap;
 }
 
 .empty-title {
@@ -396,24 +377,6 @@
 	font-size: 0.85rem;
 	color: #374151;
 	margin-left: 0.5rem;
-}
-
-.wizard-controls .control-group {
-	display: flex;
-	flex-direction: column;
-	gap: 0.5rem;
-}
-
-.wizard-result-row {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 0.75rem;
-	flex-wrap: wrap;
-}
-
-.wizard-result-row .result-pill {
-	margin-right: 0.5rem;
 }
 
 .wizard-catalog {

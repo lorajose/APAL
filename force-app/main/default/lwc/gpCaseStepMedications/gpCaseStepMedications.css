@@ -81,13 +81,6 @@
 	padding: 0.45rem 0.6rem;
 }
 
-.grid-controls .control-group {
-	display: flex;
-	flex-direction: column;
-	gap: 0.35rem;
-	width: 100%;
-}
-
 .grid-controls input[type="search"],
 .grid-controls select {
 	font-size: 0.9rem;
@@ -255,12 +248,6 @@
 	margin-left: 0.05rem;
 }
 
-.card-actions {
-	display: flex;
-	justify-content: flex-end;
-	gap: 0.4rem;
-}
-
 .pill-button {
 	border-radius: 999px;
 	padding: 0.3rem 0.9rem;
@@ -297,12 +284,6 @@
 	font-size: 0.85rem;
 	color: #991b1b;
 	font-weight: 600;
-}
-
-.remove-actions {
-	display: flex;
-	gap: 0.5rem;
-	flex-wrap: wrap;
 }
 
 .empty-title {
@@ -392,18 +373,8 @@
 	margin-left: 0.5rem;
 }
 
-.wizard-controls .control-group {
-	display: flex;
-	flex-direction: column;
-	gap: 0.5rem;
-}
-
 .wizard-result-row {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
 	gap: 1rem;
-	flex-wrap: wrap;
 }
 
 .wizard-result-row .result-pill {

@@ -479,6 +479,22 @@
     gap: 0.35rem;
 }
 
+.wiz-action-row,
+.wiz-action-row-end {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.wiz-action-row {
+    gap: 0.5rem;
+}
+
+.wiz-action-row-end {
+    justify-content: flex-end;
+    gap: 0.4rem;
+}
+
 .wiz-counter,
 .wiz-pill {
     display: inline-flex;
@@ -547,12 +563,35 @@
     align-items: end;
 }
 
+.wiz-control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    width: 100%;
+}
+
 .wiz-collection-actions {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     justify-content: flex-end;
     gap: var(--wiz-space-2);
+}
+
+.wiz-result-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.wiz-result-row > .wiz-collection-actions {
+    margin-left: auto;
+}
+
+.wiz-result-row .result-pill {
+    margin-right: 0.5rem;
 }
 
 .wiz-collection-grid,
@@ -577,6 +616,10 @@
 .wizard-controls.wiz-collection-header {
     display: flex;
     flex-wrap: wrap;
+}
+
+.wizard-controls .wiz-control-group {
+    gap: 0.5rem;
 }
 
 .wizard-footer.wiz-subflow-footer {
