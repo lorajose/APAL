@@ -4,7 +4,7 @@
             <div class="section-heading">
                 <template if:true={isGridView}>
                     <template if:true={showFilters}>
-                        <h2>
+                        <h2 class="wiz-section-title">
                             <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
                             {headerTitle}
                         </h2>
@@ -12,7 +12,7 @@
                 </template>
                 <template if:true={isWizardView}>
                     <div class="wizard-heading">
-                        <h3>Medications</h3>
+                        <h3 class="wiz-subflow-title">Medications</h3>
                       <!--  <button class="ghost-button wizard-cancel" onclick={cancelWizard}>Cancel</button> -->
                       <!--  <p class="wizard-subcopy">Compact. Step 1: choose. Step 2: enter details. Step 3: review.</p>
                         <div class="wizard-inline-progress">
@@ -36,7 +36,7 @@
                         <template if:false={showFilters}>
                             <div class="grid-title">
                                 <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
-                                <span class="grid-title-text">{headerTitle}</span>
+                                <span class="grid-title-text wiz-subflow-title">{headerTitle}</span>
                             </div>
                         </template>
                         <template if:true={showFilters}>
@@ -143,7 +143,7 @@
                     <template if:false={showFilters}>
                         <div class="grid-title">
                             <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
-                            <span class="grid-title-text">{headerTitle}</span>
+                            <span class="grid-title-text wiz-subflow-title">{headerTitle}</span>
                         </div>
                     </template>
                   <!-- <div>
@@ -212,7 +212,7 @@
                         <section key={item.id} class="detail-card">
                             <header class="detail-header">
                                 <div>
-                                    <h3>{item.meta.title}</h3>
+                                    <h3 class="wiz-item-title">{item.meta.title}</h3>
                                     <p class="detail-brand">Brand: {item.meta.brand}</p>
                                     <span class="category-pill">{item.meta.category}</span>
                                 </div>
@@ -268,7 +268,7 @@
 
                 <template if:true={wizardStepIsReview}>
                     <div class="review-panel">
-                        <h3>Review</h3>
+                        <h3 class="wiz-subflow-title">Review</h3>
                         <div class="review-list">
                             <template for:each={wizardDraft} for:item="item">
                                 <article key={item.id} class="review-entry">

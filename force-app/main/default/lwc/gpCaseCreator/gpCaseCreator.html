@@ -1,9 +1,9 @@
 <template>
-  <div class="wizard-title">
+  <div class="wizard-title wiz-app-title">
     <template if:true={isUpdateMode}>Case Editing Wizard</template>
     <template if:false={isUpdateMode}>Case Creation Wizard</template>
   </div>
-  <div class="wizard-subtitle">
+  <div class="wizard-subtitle wiz-description">
     Go through all the steps and fill in the required information → Review and edit if needed → Save
   </div>
   <template if:true={isSaving}>
@@ -42,8 +42,8 @@
       </template>
     </div>
     <div class="step-panel">
-      <h2 class="step-title">Step {currentStep} — {currentSectionName}</h2>
-      <p class="step-description">{currentDescription}</p>
+      <h2 class="step-title wiz-step-title">Step {currentStep} — {currentSectionName}</h2>
+      <p class="step-description wiz-description">{currentDescription}</p>
       <template if:true={inlineMessage}>
         <div class="inline-alert" role="alert">
           <span class="inline-alert-title">{inlineMessage.title}</span>

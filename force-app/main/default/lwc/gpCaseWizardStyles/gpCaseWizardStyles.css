@@ -1,16 +1,18 @@
 /*
  * Consumable shared wizard presentation module for LWC @import usage.
  *
- * This currently exposes the adoption-safe footer and FormField slices.
+ * This currently exposes the adoption-safe heading, footer, and FormField slices.
  * The broader draft remains in gpCaseCreator/wizard.css.
  */
 
 :host {
+    --wiz-color-text-strong: #111827;
     --wiz-color-text-default: #1f2937;
     --wiz-color-text-muted: #4b5563;
     --wiz-color-text-subtle: #6b7280;
     --wiz-color-text-inverse: #ffffff;
     --wiz-surface-panel: #ffffff;
+    --wiz-accent-brand: #032d60;
 
     --wiz-accent-primary: #059669;
     --wiz-accent-primary-hover: #047857;
@@ -22,11 +24,19 @@
     --wiz-shadow-focus: 0 0 0 3px rgba(37, 99, 235, 0.18);
 
     --wiz-font-family: "Salesforce Sans", Arial, sans-serif;
+    --wiz-font-size-app-title: 1.75rem;
+    --wiz-font-size-step-title: 1.35rem;
+    --wiz-font-size-section-title: 1.05rem;
+    --wiz-font-size-subflow-title: 1rem;
+    --wiz-font-size-item-title: 0.95rem;
     --wiz-font-size-label: 0.85rem;
     --wiz-font-size-body: 0.9rem;
+    --wiz-font-size-meta: 0.85rem;
     --wiz-font-size-helper: 0.8rem;
+    --wiz-font-weight-regular: 400;
     --wiz-font-weight-medium: 500;
     --wiz-font-weight-semibold: 600;
+    --wiz-font-weight-bold: 700;
 
     --wiz-state-danger-text: #b91c1c;
     --wiz-state-danger-bg: #fef2f2;
@@ -41,6 +51,59 @@
     --wiz-button-height: 2.5rem;
     --wiz-button-padding-x: 1rem;
     --wiz-footer-gap: 0.75rem;
+}
+
+.wiz-heading-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wiz-space-1);
+}
+
+.wiz-app-title,
+.wiz-step-title,
+.wiz-section-title,
+.wiz-subflow-title,
+.wiz-item-title {
+    margin: 0;
+    color: var(--wiz-color-text-strong);
+    line-height: 1.2;
+}
+
+.wiz-app-title {
+    font-size: var(--wiz-font-size-app-title);
+    font-weight: var(--wiz-font-weight-bold);
+    color: var(--wiz-accent-brand);
+}
+
+.wiz-step-title {
+    font-size: var(--wiz-font-size-step-title);
+    font-weight: var(--wiz-font-weight-bold);
+    color: var(--wiz-accent-brand);
+}
+
+.wiz-section-title {
+    font-size: var(--wiz-font-size-section-title);
+    font-weight: var(--wiz-font-weight-bold);
+    color: var(--wiz-accent-brand);
+}
+
+.wiz-subflow-title {
+    font-size: var(--wiz-font-size-subflow-title);
+    font-weight: var(--wiz-font-weight-semibold);
+}
+
+.wiz-item-title {
+    font-size: var(--wiz-font-size-item-title);
+    font-weight: var(--wiz-font-weight-semibold);
+}
+
+.wiz-subtitle,
+.wiz-description,
+.wiz-meta-copy {
+    margin: 0;
+    color: var(--wiz-color-text-subtle);
+    font-size: var(--wiz-font-size-meta);
+    line-height: 1.4;
 }
 
 .wiz-btn {

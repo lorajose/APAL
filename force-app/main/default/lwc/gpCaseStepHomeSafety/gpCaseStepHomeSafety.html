@@ -25,14 +25,14 @@
         <template if:true={showLethalMeans}>
             <section class="card lethal-section">
                 <header class="card-header">
-                    <div>
-                        <p class="card-title">
+                    <div class="wiz-heading-stack">
+                        <p class="card-title wiz-item-title">
                             <template if:true={isLethalMeansRequired}>
                                 <span class="required">*</span>
                             </template>
                             Lethal Means Access
                         </p>
-                        <p class="card-subtitle">Select everything currently available in the home.</p>
+                        <p class="card-subtitle wiz-description">Select everything currently available in the home.</p>
                     </div>
                     <span class="selected-counter">{lethalMeansCountLabel}</span>
                 </header>
@@ -73,9 +73,9 @@
 
         <section class="card stressor-section">
             <header class="card-header">
-                <div>
-                    <p class="card-title">Psychosocial Stressors</p>
-                    <p class="card-subtitle">Select stressors; capture notes and recent/historical flags.</p>
+                <div class="wiz-heading-stack">
+                    <p class="card-title wiz-item-title">Psychosocial Stressors</p>
+                    <p class="card-subtitle wiz-description">Select stressors; capture notes and recent/historical flags.</p>
                 </div>
                 <div class="input-row condensed">
                     <label class="input-label wiz-field-label" for="stressor-search">Search</label>
