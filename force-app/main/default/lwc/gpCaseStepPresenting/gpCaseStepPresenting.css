@@ -72,16 +72,6 @@
 	margin: 0;
 }
 
-.input-label {
-	font-size: 0.85rem;
-	color: #4b5563;
-	font-weight: 600;
-	display: flex;
-	align-items: center;
-	gap: 0.35rem;
-	margin-bottom: 0.15rem;
-}
-
 .pill-search {
 	flex: 1;
 	border: 1px solid #d1d5db;
@@ -132,25 +122,11 @@
 	width: 100%;
 }
 
-.text-input,
-.textarea {
-	border: 1px solid #d1d5db;
-	border-radius: 0.5rem;
-	padding: 0.45rem 0.6rem;
-	font-size: 0.9rem;
-	width: 100%;
-}
-
 .checkbox {
 	border: 1px solid #d1d5db;
 	border-radius: 0.5rem;
 	padding: 0.45rem 0.6rem;
 	font-size: 0.9rem;
-}
-
-.textarea {
-	min-height: 4.5rem;
-	resize: vertical;
 }
 
 .checkbox-field {
@@ -159,12 +135,6 @@
 
 .checkbox-field .checkbox {
 	width: auto;
-}
-
-.helper-text {
-	font-size: 0.8rem;
-	color: #9ca3af;
-	margin-top: 0.25rem;
 }
 
 .top-symptoms-header {
