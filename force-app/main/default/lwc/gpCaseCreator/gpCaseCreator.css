@@ -158,13 +158,6 @@
 /* ------------------------------------------------------------ */
 /* RIGHT PANEL STYLE                                            */
 /* ------------------------------------------------------------ */
-.step-panel {
-	background: white;
-	border: 1px solid #e5e7eb;
-	padding: 1.25rem;
-	border-radius: 0.75rem;
-}
-
 .step-title {
 	margin-bottom: 0.25rem;
 }

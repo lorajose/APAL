@@ -130,13 +130,21 @@
 .wiz-step-panel {
     border-radius: 0.75rem;
     padding: 1.25rem;
+    box-shadow: none;
 }
 
 .wiz-detail-panel,
 .wiz-review-panel {
     border-color: var(--wiz-border-strong);
     border-radius: var(--wiz-radius-panel);
+}
+
+.wiz-detail-panel {
     box-shadow: var(--wiz-shadow-panel);
+}
+
+.wiz-review-panel {
+    box-shadow: none;
 }
 
 .wiz-empty-panel {
