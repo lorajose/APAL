@@ -721,11 +721,37 @@
         grid-template-columns: 1fr;
     }
 
+    .grid-actions.wiz-collection-actions {
+        width: 100%;
+    }
+
+    .grid-actions.wiz-collection-actions .ghost-button,
+    .grid-actions.wiz-collection-actions .primary-button {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        flex: 1 1 100%;
+    }
+
+    .empty-state-card.wiz-empty-panel {
+        align-items: flex-start;
+    }
+
     .wiz-step-panel,
     .wiz-card,
     .wiz-detail-panel,
     .wiz-review-panel,
     .wiz-empty-panel {
         padding: 0.85rem;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .wiz-card {
+        padding: 1rem;
+    }
+
+    .grid-header-row.wiz-collection-header {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
