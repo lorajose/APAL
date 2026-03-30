@@ -1,324 +1,698 @@
-import { LightningElement, api } from 'lwc';
-import getPracticeById from '@salesforce/apex/PracticeSearchController.getPracticeById';
-import getPracticeByCaseId from '@salesforce/apex/PracticeSearchController.getPracticeByCaseId';
+import { LightningElement, api } from "lwc";
+import { FlowAttributeChangeEvent } from "lightning/flowSupport";
+import getPracticeById from "@salesforce/apex/PracticeSearchController.getPracticeById";
+import getPracticeByCaseId from "@salesforce/apex/PracticeSearchController.getPracticeByCaseId";
 
 export default class PracticeInCaseFlow extends LightningElement {
-    @api isFromFlow;
+  @api isFromFlow;
 
-    @api
-    get practiceId() {
-        return this._practiceId;
-    }
-    set practiceId(value) {
-        this._practiceId = value;
-        this._maybeInitFromPracticeId();
-    }
+  @api
+  get practiceId() {
+    return this._practiceId;
+  }
+  set practiceId(value) {
+    const normalizedValue = value || null;
+    const hasChanged = normalizedValue !== this._practiceId;
 
-    @api
-    get practiceRecord() {
-        return this._practiceRecord;
-    }
-    set practiceRecord(value) {
-        this._practiceRecord = value;
-        if (value && value.Id) {
-            this._maybeInitFromPracticeRecord(value);
-        }
+    this._practiceId = normalizedValue;
+
+    if (!this._isInternalPracticeMutation) {
+      this._handleExternalPracticeSelection(normalizedValue);
     }
 
-    @api
-    get recordId() {
-        return this._recordId;
+    if (
+      hasChanged ||
+      (normalizedValue && this._practiceRecord?.Id !== normalizedValue)
+    ) {
+      this._maybeInitFromPracticeId();
     }
-    set recordId(value) {
-        this._recordId = value;
-        this._maybeInitFromRecordId();
+  }
+
+  @api
+  get practiceRecord() {
+    return this._practiceRecord;
+  }
+  set practiceRecord(value) {
+    this._practiceRecord = value || null;
+
+    if (!this._practiceRecord?.Id) {
+      return;
     }
 
-    @api
-    get objectApiName() {
-        return this._objectApiName;
-    }
-    set objectApiName(value) {
-        this._objectApiName = value;
-        this._maybeInitFromRecordId();
+    if (!this._isInternalPracticeMutation) {
+      this._handleExternalPracticeSelection(this._practiceRecord.Id);
     }
 
-    _practiceId;
-    _practiceRecord;
-    _recordId;
-    _objectApiName;
-    _initializedFromRecordId = false;
-    _initializedFromPracticeId = false;
-    _initializedFromPracticeRecord = false;
+    this._maybeInitFromPracticeRecord(this._practiceRecord);
+  }
 
-connectedCallback() {
-    window.addEventListener('practiceselected', this.handlePracticeSelected.bind(this));
-}
+  @api
+  get suggestedPracticeId() {
+    return this._suggestedPracticeId;
+  }
+  set suggestedPracticeId(value) {
+    const normalizedValue = value || null;
 
-disconnectedCallback() {
-    window.removeEventListener('practiceselected', this.handlePracticeSelected.bind(this));
-}
-
-
-handlePracticeSelected(event) {
-    const { practiceId, practiceRecord } = event.detail;
-    console.log('📡 Recibido desde modal New Provider:', practiceId, practiceRecord);
-
-    const searchInput = this.template.querySelector('c-practice-search-input');
-    if (searchInput && typeof searchInput.addNewPractice === 'function') {
-        searchInput.addNewPractice(practiceRecord);
-        console.log('🎯 Practice sincronizado desde modal:', practiceRecord.Name);
+    if (normalizedValue === this._suggestedPracticeId) {
+      return;
     }
-}
 
-    handleValueChange(event) {
-        this._practiceId = event.detail.practiceId;
-        this._practiceRecord = event.detail.practiceRecord;
+    this._suggestedPracticeId = normalizedValue;
+    this._handleSuggestedPracticeChange();
+  }
+
+  @api
+  get recordId() {
+    return this._recordId;
+  }
+  set recordId(value) {
+    this._recordId = value;
+    this._maybeInitFromRecordId();
+  }
+
+  @api
+  get objectApiName() {
+    return this._objectApiName;
+  }
+  set objectApiName(value) {
+    this._objectApiName = value;
+    this._maybeInitFromRecordId();
+  }
+
+  _practiceId;
+  _practiceRecord;
+  _suggestedPracticeId;
+  _recordId;
+  _objectApiName;
+  _selectionSource;
+  _initializedFromRecordId = false;
+  _lastResolvedPracticeId;
+  _lastResolvedPracticeRecordId;
+  _pendingSuggestedPracticeId;
+  _boundPracticeSelectedHandler;
+  _boundSuggestedPracticeHandler;
+  _isInternalPracticeMutation = false;
+  _syncInputTimeout;
+
+  hasManualPracticeOverride = false;
+  showSuggestedPracticeHelper = false;
+
+  connectedCallback() {
+    this._boundPracticeSelectedHandler = this.handlePracticeSelected.bind(this);
+    this._boundSuggestedPracticeHandler =
+      this.handleSuggestedPracticeEvent.bind(this);
+    window.addEventListener(
+      "practiceselected",
+      this._boundPracticeSelectedHandler
+    );
+    window.addEventListener(
+      "providersuggestedpracticechange",
+      this._boundSuggestedPracticeHandler
+    );
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener(
+      "practiceselected",
+      this._boundPracticeSelectedHandler
+    );
+    window.removeEventListener(
+      "providersuggestedpracticechange",
+      this._boundSuggestedPracticeHandler
+    );
+    if (this._syncInputTimeout) {
+      window.clearTimeout(this._syncInputTimeout);
     }
-    // 🧹 Limpieza manual
-handleClearSelection() {
-this._practiceId = null;
-this._practiceRecord = null;
-}
+  }
+
+  handlePracticeSelected(event) {
+    const { practiceRecord } = event.detail || {};
+
+    if (!practiceRecord?.Id || this.hasManualPracticeOverride) {
+      return;
+    }
+
+    const shouldShowHelper = practiceRecord.Id === this._suggestedPracticeId;
+    this._applyPracticeSelection(practiceRecord, {
+      source: shouldShowHelper ? "suggested" : "provider",
+      notifyFlow: true,
+      syncChild: true,
+      showHelper: shouldShowHelper
+    });
+  }
+
+  handleSuggestedPracticeEvent(event) {
+    const suggestedPracticeId = event.detail?.suggestedPracticeId || null;
+    if (suggestedPracticeId === this._suggestedPracticeId) {
+      return;
+    }
+
+    this._suggestedPracticeId = suggestedPracticeId;
+    this._handleSuggestedPracticeChange();
+  }
+
+  handleValueChange(event) {
+    const nextPracticeId = event.detail.practiceId || null;
+    const nextPracticeRecord = event.detail.practiceRecord || null;
+
+    if (!nextPracticeId) {
+      this.handleClearSelection();
+      return;
+    }
+
+    this._selectionSource = "manual";
+    this.hasManualPracticeOverride =
+      nextPracticeId !== this._suggestedPracticeId;
+    this.showSuggestedPracticeHelper = false;
+
+    if (nextPracticeRecord?.Id) {
+      this._applyPracticeSelection(nextPracticeRecord, {
+        source: "manual",
+        notifyFlow: true,
+        syncChild: false,
+        showHelper: false
+      });
+      return;
+    }
+
+    this._practiceId = nextPracticeId;
+    this._practiceRecord = null;
+    this._maybeInitFromPracticeId();
+  }
+
+  handleClearSelection() {
+    this._clearPracticeState({ resetManualOverride: true, notifyFlow: true });
+  }
 
   handleInitialPopulate() {
-        if (this._practiceId) {
-            this._maybeInitFromPracticeId();
-        } else {
-            this.handleClearSelection();
-        }
+    if (this._practiceId) {
+      this._maybeInitFromPracticeId();
+    } else {
+      this.handleClearSelection();
     }
+  }
 
+  finishAction = async ({ outputVariables }) => {
+    console.log(
+      "🎯 finishAction outputVariables:",
+      JSON.stringify(outputVariables)
+    );
 
-// 🔄 Se ejecuta al terminar el Flow del modal
-finishAction = async ({ outputVariables }) => {
-    console.log('🎯 finishAction outputVariables:', JSON.stringify(outputVariables));
-
-    const searchInput = this.template.querySelector('c-practice-search-input');
-    if (!outputVariables || outputVariables.length === 0) return;
+    if (!outputVariables || outputVariables.length === 0) {
+      return;
+    }
 
     let recordId;
     let recordObject;
 
-    // 🧩 Detectar qué variable vino del Flow
     for (const outputVar of outputVariables) {
-        if (outputVar.name === 'practiceRecordId' && outputVar.value) {
-            recordId = outputVar.value;
-        }
-        if (outputVar.name === 'practiceRecord' && outputVar.value) {
-            recordObject = outputVar.value;
-        }
+      if (outputVar.name === "practiceRecordId" && outputVar.value) {
+        recordId = outputVar.value;
+      }
+      if (outputVar.name === "practiceRecord" && outputVar.value) {
+        recordObject = outputVar.value;
+      }
     }
 
-    // 🧠 Caso 1: el Flow devolvió todo el record
-    if (recordObject && recordObject.Id) {
-        console.log('🆕 Nuevo Practice recibido desde Flow:', recordObject);
-        this._applyNewPractice(recordObject, searchInput);
-        return;
+    if (recordObject?.Id) {
+      console.log("🆕 Nuevo Practice recibido desde Flow:", recordObject);
+      this._applyPracticeSelection(recordObject, {
+        source: "manual",
+        notifyFlow: true,
+        syncChild: true,
+        showHelper: false,
+        delayMs: 400
+      });
+      return;
     }
 
-    // 🧠 Caso 2: el Flow solo devolvió el ID (lo más común)
-    if (recordId && !recordObject) {
-        console.log('📥 Obteniendo Practice desde Apex con Id:', recordId);
+    if (recordId) {
+      console.log("📥 Obteniendo Practice desde Apex con Id:", recordId);
 
-        try {
-            const practice = await getPracticeById({ practiceId: recordId });
-            console.log('✅ Practice recuperado:', practice);
-            if (practice) {
-                this._applyNewPractice(practice, searchInput);
-            }
-        } catch (error) {
-            console.error('❌ Error al obtener Practice por Id:', error);
+      try {
+        const practice = await getPracticeById({ practiceId: recordId });
+        console.log("✅ Practice recuperado:", practice);
+        if (practice) {
+          this._applyPracticeSelection(practice, {
+            source: "manual",
+            notifyFlow: true,
+            syncChild: true,
+            showHelper: false,
+            delayMs: 400
+          });
         }
+      } catch (error) {
+        console.error("❌ Error al obtener Practice por Id:", error);
+      }
     }
-};
+  };
 
-// 🧩 Función reutilizable para aplicar el nuevo Practice
-/* _applyNewPractice(practice, searchInput) {
-    this.practiceRecord = practice;
-    this.practiceId = practice.Id;
+  renderedCallback() {
+    this._maybeInitFromRecordId();
+  }
 
-    // 🔁 Autocompletar el input
-    setTimeout(() => {
-        if (searchInput && typeof searchInput.addNewPractice === 'function') {
-            searchInput.addNewPractice(practice);
-        }
-    }, 150);
-
-    // 🔊 Notificar al Flow padre
-    this.dispatchEvent(
-        new CustomEvent('practiceselected', {
-            detail: {
-                practiceId: practice.Id,
-                practiceRecord: practice
-            },
-            bubbles: true,
-            composed: true
-        })
+  _isAccountContext() {
+    if (this._objectApiName) {
+      return this._objectApiName === "Account";
+    }
+    return (
+      typeof this._recordId === "string" && this._recordId.startsWith("001")
     );
+  }
 
-    console.log(`✨ Practice autocompletado: ${practice.Name}`);
-} */
+  _isCaseContext() {
+    if (this._objectApiName) {
+      return this._objectApiName === "Case";
+    }
+    return (
+      typeof this._recordId === "string" && this._recordId.startsWith("500")
+    );
+  }
 
-    _applyNewPractice(practice, searchInput) {
-    this._practiceRecord = practice;
-    this._practiceId = practice.Id;
-
-    // Esperar al DOM antes de autocompletar
-    setTimeout(() => {
-        try {
-            const input = this.template.querySelector('c-practice-search-input');
-            if (input && typeof input.addNewPractice === 'function') {
-                input.addNewPractice(practice);
-                console.log(`✨ Practice autocompletado: ${practice.Name}`);
-            } else {
-                console.warn('⚠️ El componente de búsqueda no está disponible aún.');
-            }
-
-            // 🔊 Evento global o LMS
-            window.dispatchEvent(new CustomEvent('practicecreated', {
-                detail: { practiceId: practice.Id, practiceRecord: practice }
-            }));
-
-            // 📩 Notificar al Flow padre
-      // eslint-disable-next-line no-undef
-      if (typeof FlowAttributeChangeEvent !== 'undefined') {
-          this.dispatchEvent(new FlowAttributeChangeEvent('practiceRecord', this._practiceRecord));
-          this.dispatchEvent(new FlowAttributeChangeEvent('practiceId', this._practiceId));
+  async _populateFromRecordId(
+    recordId,
+    { source = "recordContext", notifyFlow = true, showHelper = false } = {}
+  ) {
+    try {
+      const practice = await getPracticeById({ practiceId: recordId });
+      if (!practice) {
+        return;
       }
 
-      console.log('📩 Flow principal actualizado con nuevo Practice.');
+      if (
+        source === "recordContext" &&
+        (this._suggestedPracticeId || this.hasManualPracticeOverride)
+      ) {
+        return;
+      }
 
+      if (
+        source === "manual" &&
+        this._practiceId &&
+        this._practiceId !== recordId
+      ) {
+        return;
+      }
 
-        } catch (e) {
-            console.error('❌ Error al autocompletar el practice:', e);
-        }
-    }, 400); // pequeño delay para asegurar que el Flow modal cerró
-}
+      if (source === "suggested" && this._suggestedPracticeId !== recordId) {
+        return;
+      }
 
-    renderedCallback() {
-        this._maybeInitFromRecordId();
+      this._applyPracticeSelection(practice, {
+        source,
+        notifyFlow,
+        syncChild: true,
+        showHelper
+      });
+    } catch (error) {
+      console.error("❌ Error al obtener Practice por Id:", error);
+    }
+  }
+
+  async _populateFromCaseId(
+    recordId,
+    { source = "recordContext", notifyFlow = true, showHelper = false } = {}
+  ) {
+    try {
+      const practice = await getPracticeByCaseId({ caseId: recordId });
+      if (!practice) {
+        return;
+      }
+
+      if (
+        source === "recordContext" &&
+        (this._suggestedPracticeId || this.hasManualPracticeOverride)
+      ) {
+        return;
+      }
+
+      if (
+        source === "manual" &&
+        this._practiceId &&
+        this._practiceId !== recordId
+      ) {
+        return;
+      }
+
+      this._applyPracticeSelection(practice, {
+        source,
+        notifyFlow,
+        syncChild: true,
+        showHelper
+      });
+    } catch (error) {
+      console.error("❌ Error al obtener Practice por Case Id:", error);
+    }
+  }
+
+  _maybeInitFromRecordId() {
+    if (this._initializedFromRecordId) {
+      return;
     }
 
-    _isAccountContext() {
-        if (this._objectApiName) {
-            return this._objectApiName === 'Account';
-        }
-        return typeof this._recordId === 'string' && this._recordId.startsWith('001');
+    if (this._practiceId) {
+      return;
     }
 
-    _isCaseContext() {
-        if (this._objectApiName) {
-            return this._objectApiName === 'Case';
-        }
-        return typeof this._recordId === 'string' && this._recordId.startsWith('500');
+    if (!this._recordId) {
+      const inferredId = this._getAccountIdFromUrl();
+      if (inferredId) {
+        this._recordId = inferredId;
+      } else {
+        return;
+      }
     }
 
-    async _populateFromRecordId(recordId) {
-        const searchInput = this.template.querySelector('c-practice-search-input');
-        try {
-            const practice = await getPracticeById({ practiceId: recordId });
-            if (practice) {
-                this._applyNewPractice(practice, searchInput);
-            }
-        } catch (error) {
-            console.error('❌ Error al obtener Practice por Id:', error);
-        }
+    this._initializedFromRecordId = true;
+
+    if (this._isAccountContext()) {
+      this._populateFromRecordId(this._recordId, { source: "recordContext" });
+    } else if (this._isCaseContext()) {
+      this._populateFromCaseId(this._recordId, { source: "recordContext" });
+    }
+  }
+
+  _maybeInitFromPracticeId() {
+    if (!this._practiceId) {
+      return;
     }
 
-    async _populateFromCaseId(recordId) {
-        const searchInput = this.template.querySelector('c-practice-search-input');
-        try {
-            const practice = await getPracticeByCaseId({ caseId: recordId });
-            if (practice) {
-                this._applyNewPractice(practice, searchInput);
-            }
-        } catch (error) {
-            console.error('❌ Error al obtener Practice por Case Id:', error);
-        }
+    if (this._practiceRecord?.Id === this._practiceId) {
+      this._maybeInitFromPracticeRecord(this._practiceRecord);
+      return;
     }
 
-    _maybeInitFromRecordId() {
-        if (this._initializedFromRecordId) return;
-        if (this._practiceId) return;
-        if (!this._recordId) {
-            const inferredId = this._getAccountIdFromUrl();
-            if (inferredId) {
-                this._recordId = inferredId;
-            } else {
-                return;
-            }
-        }
-        this._initializedFromRecordId = true;
-        if (this._isAccountContext()) {
-            this._populateFromRecordId(this._recordId);
-        } else if (this._isCaseContext()) {
-            this._populateFromCaseId(this._recordId);
-        }
+    if (this._lastResolvedPracticeId === this._practiceId) {
+      return;
     }
 
-    _maybeInitFromPracticeId() {
-        if (this._initializedFromPracticeId) return;
-        if (!this._practiceId) return;
-        if (this._practiceRecord && this._practiceRecord.Id) {
-            this._maybeInitFromPracticeRecord(this._practiceRecord);
-            return;
-        }
-        this._initializedFromPracticeId = true;
-        if (typeof this._practiceId === 'string' && this._practiceId.startsWith('500')) {
-            this._populateFromCaseId(this._practiceId);
-        } else {
-            this._populateFromRecordId(this._practiceId);
-        }
+    this._lastResolvedPracticeId = this._practiceId;
+
+    const source = this._selectionSource || "manual";
+    const showHelper =
+      source === "suggested" && this._practiceId === this._suggestedPracticeId;
+
+    if (
+      typeof this._practiceId === "string" &&
+      this._practiceId.startsWith("500")
+    ) {
+      this._populateFromCaseId(this._practiceId, { source, showHelper });
+    } else {
+      this._populateFromRecordId(this._practiceId, { source, showHelper });
+    }
+  }
+
+  _maybeInitFromPracticeRecord(record) {
+    if (!record?.Id) {
+      return;
     }
 
-    _maybeInitFromPracticeRecord(record) {
-        if (this._initializedFromPracticeRecord) return;
-        if (!record || !record.Id) return;
-        this._initializedFromPracticeRecord = true;
-        const searchInput = this.template.querySelector('c-practice-search-input');
-        this._applyNewPractice(record, searchInput);
+    if (
+      this._lastResolvedPracticeRecordId === record.Id &&
+      this._isPracticeInputSynced(record)
+    ) {
+      return;
     }
 
-    _getAccountIdFromUrl() {
-        try {
-            const href = window.location.href;
-            const directMatch = href.match(/\/Account\/([a-zA-Z0-9]{15,18})/);
-            if (directMatch) {
-                return directMatch[1];
-            }
-            const params = new URL(href).searchParams;
-            const candidates = [
-                params.get('recordId'),
-                params.get('c__recordId'),
-                params.get('c__contextId'),
-                params.get('c__accountId')
-            ].filter((val) => val);
-            for (const val of candidates) {
-                if (typeof val === 'string' && val.startsWith('001')) {
-                    return val;
-                }
-            }
-            const hashIndex = href.indexOf('#');
-            if (hashIndex !== -1) {
-                const hash = href.slice(hashIndex + 1);
-                const hashParams = new URLSearchParams(hash.includes('?') ? hash.split('?')[1] : hash);
-                const hashCandidates = [
-                    hashParams.get('recordId'),
-                    hashParams.get('c__recordId'),
-                    hashParams.get('c__contextId'),
-                    hashParams.get('c__accountId')
-                ].filter((val) => val);
-                for (const val of hashCandidates) {
-                    if (typeof val === 'string' && val.startsWith('001')) {
-                        return val;
-                    }
-                }
-            }
-            return null;
-        } catch (error) {
-            return null;
-        }
+    this._lastResolvedPracticeRecordId = record.Id;
+
+    const source = this._selectionSource || "manual";
+    const showHelper =
+      source === "suggested" && record.Id === this._suggestedPracticeId;
+
+    this._applyPracticeSelection(record, {
+      source,
+      notifyFlow: false,
+      syncChild: true,
+      showHelper
+    });
+  }
+
+  _handleExternalPracticeSelection(practiceId) {
+    if (!practiceId) {
+      this._selectionSource = null;
+      this.hasManualPracticeOverride = false;
+      this.showSuggestedPracticeHelper = false;
+      return;
     }
-  
+
+    if (this._suggestedPracticeId && practiceId === this._suggestedPracticeId) {
+      this._selectionSource = "suggested";
+      this.hasManualPracticeOverride = false;
+      this.showSuggestedPracticeHelper = true;
+      return;
+    }
+
+    this._selectionSource = "manual";
+    this.hasManualPracticeOverride = true;
+    this.showSuggestedPracticeHelper = false;
+  }
+
+  _handleSuggestedPracticeChange() {
+    if (!this._suggestedPracticeId) {
+      this.showSuggestedPracticeHelper = false;
+      return;
+    }
+
+    if (
+      this.hasManualPracticeOverride &&
+      this._practiceId &&
+      this._practiceId !== this._suggestedPracticeId
+    ) {
+      return;
+    }
+
+    if (this._practiceId === this._suggestedPracticeId) {
+      this._selectionSource = "suggested";
+      this.hasManualPracticeOverride = false;
+      this.showSuggestedPracticeHelper = true;
+
+      if (this._practiceRecord?.Id === this._suggestedPracticeId) {
+        this._syncPracticeInput(this._practiceRecord);
+      } else {
+        this._maybeInitFromPracticeId();
+      }
+      return;
+    }
+
+    this._applySuggestedPracticeSelection(this._suggestedPracticeId);
+  }
+
+  async _applySuggestedPracticeSelection(practiceId) {
+    if (!practiceId || this.hasManualPracticeOverride) {
+      return;
+    }
+
+    if (this._practiceRecord?.Id === practiceId) {
+      this._applyPracticeSelection(this._practiceRecord, {
+        source: "suggested",
+        notifyFlow: true,
+        syncChild: true,
+        showHelper: true
+      });
+      return;
+    }
+
+    if (this._pendingSuggestedPracticeId === practiceId) {
+      return;
+    }
+
+    this._pendingSuggestedPracticeId = practiceId;
+
+    try {
+      const practice = await getPracticeById({ practiceId });
+      if (
+        !practice ||
+        this._suggestedPracticeId !== practiceId ||
+        this.hasManualPracticeOverride
+      ) {
+        return;
+      }
+
+      this._applyPracticeSelection(practice, {
+        source: "suggested",
+        notifyFlow: true,
+        syncChild: true,
+        showHelper: true
+      });
+    } catch (error) {
+      console.error("❌ Error al autocompletar el practice:", error);
+    } finally {
+      if (this._pendingSuggestedPracticeId === practiceId) {
+        this._pendingSuggestedPracticeId = null;
+      }
+    }
+  }
+
+  _applyPracticeSelection(
+    practice,
+    {
+      source = "manual",
+      notifyFlow = false,
+      syncChild = true,
+      showHelper = false,
+      delayMs = 150,
+      focusSearch = false
+    } = {}
+  ) {
+    if (!practice?.Id) {
+      return;
+    }
+
+    this._setPracticeState(practice, source, showHelper);
+    this._syncPracticeInput(
+      practice,
+      delayMs,
+      syncChild,
+      focusSearch || source === "suggested"
+    );
+
+    if (notifyFlow) {
+      this._dispatchPracticeFlowChanges();
+    }
+  }
+
+  _setPracticeState(practice, source, showHelper) {
+    this._isInternalPracticeMutation = true;
+    this._practiceRecord = practice;
+    this._practiceId = practice.Id;
+    this._lastResolvedPracticeId = practice.Id;
+    this._lastResolvedPracticeRecordId = practice.Id;
+    this._selectionSource = source;
+
+    if (source === "suggested") {
+      this.hasManualPracticeOverride = false;
+      this.showSuggestedPracticeHelper = showHelper;
+    } else {
+      if (source === "manual") {
+        this.hasManualPracticeOverride = true;
+      }
+      this.showSuggestedPracticeHelper = false;
+    }
+
+    this._isInternalPracticeMutation = false;
+  }
+
+  _syncPracticeInput(
+    practice,
+    delayMs = 0,
+    shouldSync = true,
+    shouldFocusSearch = false
+  ) {
+    if (!shouldSync) {
+      return;
+    }
+
+    if (this._syncInputTimeout) {
+      window.clearTimeout(this._syncInputTimeout);
+    }
+
+    // eslint-disable-next-line @lwc/lwc/no-async-operation
+    this._syncInputTimeout = window.setTimeout(() => {
+      try {
+        const input = this.template.querySelector("c-practice-search-input");
+        if (!input) {
+          return;
+        }
+
+        if (
+          typeof input.addNewPractice === "function" &&
+          !this._isPracticeInputSynced(practice)
+        ) {
+          input.addNewPractice(practice);
+          console.log(`✨ Practice autocompletado: ${practice.Name}`);
+        }
+
+        if (shouldFocusSearch && typeof input.focusSearchInput === "function") {
+          input.focusSearchInput(true);
+        }
+      } catch (error) {
+        console.error("❌ Error al sincronizar el practice:", error);
+      }
+    }, delayMs);
+  }
+
+  _isPracticeInputSynced(practice) {
+    const input = this.template.querySelector("c-practice-search-input");
+    return Boolean(
+      input &&
+      input.selectedPracticeId === practice.Id &&
+      input.searchKey === practice.Name
+    );
+  }
+
+  _clearPracticeState({
+    resetManualOverride = false,
+    notifyFlow = false
+  } = {}) {
+    this._isInternalPracticeMutation = true;
+    this._practiceId = null;
+    this._practiceRecord = null;
+    this._lastResolvedPracticeId = null;
+    this._lastResolvedPracticeRecordId = null;
+    this.showSuggestedPracticeHelper = false;
+
+    if (resetManualOverride) {
+      this.hasManualPracticeOverride = false;
+      this._selectionSource = null;
+    }
+
+    this._isInternalPracticeMutation = false;
+
+    if (notifyFlow) {
+      this._dispatchPracticeFlowChanges();
+    }
+  }
+
+  _dispatchPracticeFlowChanges() {
+    this.dispatchEvent(
+      new FlowAttributeChangeEvent("practiceRecord", this._practiceRecord)
+    );
+    this.dispatchEvent(
+      new FlowAttributeChangeEvent("practiceId", this._practiceId)
+    );
+  }
+
+  _getAccountIdFromUrl() {
+    try {
+      const href = window.location.href;
+      const directMatch = href.match(/\/Account\/([a-zA-Z0-9]{15,18})/);
+      if (directMatch) {
+        return directMatch[1];
+      }
+      const params = new URL(href).searchParams;
+      const candidates = [
+        params.get("recordId"),
+        params.get("c__recordId"),
+        params.get("c__contextId"),
+        params.get("c__accountId")
+      ].filter((val) => val);
+      for (const val of candidates) {
+        if (typeof val === "string" && val.startsWith("001")) {
+          return val;
+        }
+      }
+      const hashIndex = href.indexOf("#");
+      if (hashIndex !== -1) {
+        const hash = href.slice(hashIndex + 1);
+        const hashParams = new URLSearchParams(
+          hash.includes("?") ? hash.split("?")[1] : hash
+        );
+        const hashCandidates = [
+          hashParams.get("recordId"),
+          hashParams.get("c__recordId"),
+          hashParams.get("c__contextId"),
+          hashParams.get("c__accountId")
+        ].filter((val) => val);
+        for (const val of hashCandidates) {
+          if (typeof val === "string" && val.startsWith("001")) {
+            return val;
+          }
+        }
+      }
+      return null;
+    } catch (error) {
+      return null;
+    }
+  }
 }

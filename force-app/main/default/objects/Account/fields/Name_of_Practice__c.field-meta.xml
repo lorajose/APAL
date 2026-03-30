@@ -2,6 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Name_of_Practice__c</fullName>
     <externalId>false</externalId>
+    <inlineHelpText>Please use Practice field above to connect a Practice record</inlineHelpText>
     <label>Name of Practice</label>
     <length>255</length>
     <required>false</required>
