@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>61.0</apiVersion>
     <isExposed>true</isExposed>
@@ -16,31 +16,35 @@
     <targetConfigs>
         <!-- Configuración cuando el componente se usa en un Flow -->
         <targetConfig targets="lightning__FlowScreen">
-            <property
-                name="practiceId"
-                label="Practice Id"
-                type="String" />
+            <property name="practiceId" label="Practice Id" type="String" />
 
             <property
-                name="isFromFlow"
-                label="Flow Mode"
-                type="Boolean"
-                default="false" />
+        name="isFromFlow"
+        label="Flow Mode"
+        type="Boolean"
+        default="false"
+      />
 
             <property
-                name="practiceRecord"
-                label="Practice Record"
-                type="@salesforce/schema/Account" />
+        name="practiceRecord"
+        label="Practice Record"
+        type="@salesforce/schema/Account"
+      />
 
             <property
-                name="recordId"
-                label="Record Id"
-                type="String" />
+        name="suggestedPracticeId"
+        label="Suggested Practice Id"
+        type="String"
+        role="inputOnly"
+      />
+
+            <property name="recordId" label="Record Id" type="String" />
 
             <property
-                name="objectApiName"
-                label="Object API Name"
-                type="String" />
+        name="objectApiName"
+        label="Object API Name"
+        type="String"
+      />
         </targetConfig>
 
         <!-- Configuración para páginas de registro (opcional, igual que Provider) -->
