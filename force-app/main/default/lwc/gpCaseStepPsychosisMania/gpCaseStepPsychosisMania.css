@@ -144,6 +144,11 @@
 	margin-top: 0.4rem;
 }
 
+.notes-lightning-textarea {
+	display: block;
+	margin-top: 0.4rem;
+}
+
 @media (max-width: 768px) {
 	.slds-grid_align-spread {
 		flex-direction: column;

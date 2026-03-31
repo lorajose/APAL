@@ -112,6 +112,7 @@ const IMPAIRED_DOMAIN_OPTIONS = [{
 
 const TOP_SYMPTOM_CATEGORY = 'Top Symptoms';
 const TOP_SYMPTOM_CASE_TYPE = 'General_Psychiatry';
+const DATE_ONLY_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
 const IMPAIRMENT_LEVEL_OPTIONS = [{
         label: '—',
@@ -639,22 +640,35 @@ export default class GpCaseStepPresenting extends LightningElement {
     }
 
     formatDateForInput(value) {
-        const normalized = this.normalizeDateValue(value);
-        if (!normalized) return '';
-        return normalized.toISOString().slice(0, 10);
+        return this.normalizeDateValue(value) || '';
     }
 
     normalizeDateValue(value) {
         if (!value) return null;
-        if (value instanceof Date) return value;
-        const date = new Date(value);
-        return isNaN(date.getTime()) ? null : date;
+        if (typeof value === 'string') {
+            const trimmed = value.trim();
+            if (!trimmed) return null;
+            if (DATE_ONLY_PATTERN.test(trimmed)) {
+                return trimmed;
+            }
+            const isoDatePart = trimmed.match(/^(\d{4}-\d{2}-\d{2})T/);
+            if (isoDatePart) {
+                return isoDatePart[1];
+            }
+            const date = new Date(trimmed);
+            return isNaN(date.getTime()) ? null : this.formatDateParts(date);
+        }
+        if (value instanceof Date) {
+            return isNaN(value.getTime()) ? null : this.formatDateParts(value);
+        }
+        return null;
     }
 
     formatDateForSalesforce(dateValue) {
-        if (!dateValue) return null;
-        const date = dateValue instanceof Date ? dateValue : new Date(dateValue);
-        if (isNaN(date.getTime())) return null;
+        return this.normalizeDateValue(dateValue);
+    }
+
+    formatDateParts(date) {
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
         const year = date.getFullYear();

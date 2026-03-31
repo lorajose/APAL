@@ -3,6 +3,15 @@
  *
  * This file is intentionally not connected yet. It is a source-of-truth draft
  * for gradual adoption across the GP Case wizard without changing behavior.
+ *
+ * Relationship to c/gpCaseWizardStyles:
+ * - This file is the broader inventory and planning surface.
+ * - Only the live-adopted subset belongs in c/gpCaseWizardStyles.
+ * - Domain-specific card skins, business-coupled layouts, and one-off step
+ *   structure should stay local to their owning components.
+ *
+ * See /Users/joselora/healthhaven-dev/GP_CASE_WIZARD_STYLING.md for the
+ * current active-vs-reserved inventory and shared-layer authoring rules.
  */
 
 :host,
@@ -165,6 +174,21 @@
 /* ------------------------------------------------------------ */
 /* Button Foundations                                           */
 /* ------------------------------------------------------------ */
+/* Active today:
+ * - wiz-btn
+ * - wiz-btn-footer-back
+ * - wiz-btn-footer-next
+ * - wiz-step-footer
+ * - wiz-subflow-footer
+ * - wiz-subflow-actions
+ *
+ * Reserved inventory until live markup adopts it:
+ * - wiz-btn-primary
+ * - wiz-btn-secondary
+ * - wiz-btn-ghost
+ * - wiz-btn-text
+ * - wiz-btn-pill-danger
+ */
 .wiz-btn {
     display: inline-flex;
     align-items: center;
@@ -336,7 +360,11 @@
 .wiz-textarea,
 .text-input.wiz-control,
 .textarea.wiz-control {
+    display: block;
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
     border: 1px solid var(--wiz-border-strong);
     border-radius: var(--wiz-radius-control);
     background: var(--wiz-surface-panel);
@@ -345,6 +373,65 @@
     font-size: var(--wiz-font-size-body);
     padding: 0.45rem 0.6rem;
     margin-top: 0;
+}
+
+.text-input[type='date'],
+.wiz-control[type='date'],
+.text-input.wiz-control[type='date'] {
+    display: block;
+    width: 100%;
+    inline-size: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    min-inline-size: 100%;
+    align-self: stretch;
+    -webkit-appearance: none;
+    appearance: none;
+    line-height: 1.2;
+    text-align: left;
+}
+
+.wiz-date-field {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.35rem;
+    width: 100%;
+}
+
+.wiz-date-control,
+input.wiz-date-control,
+.text-input.wiz-date-control,
+.wiz-control.wiz-date-control {
+    display: block !important;
+    width: 100% !important;
+    inline-size: 100% !important;
+    max-width: 100% !important;
+    max-inline-size: 100% !important;
+    min-width: 0 !important;
+    min-inline-size: 0 !important;
+    height: var(--wiz-button-height) !important;
+    min-height: var(--wiz-button-height) !important;
+    box-sizing: border-box;
+    align-self: stretch;
+    -webkit-appearance: auto;
+    appearance: auto;
+    line-height: normal;
+    text-align: left;
+}
+
+.text-input[type='date']::-webkit-date-and-time-value,
+.wiz-control[type='date']::-webkit-date-and-time-value,
+.text-input.wiz-control[type='date']::-webkit-date-and-time-value,
+.wiz-date-control::-webkit-date-and-time-value {
+    text-align: left;
+}
+
+.text-input[type='date']::-webkit-calendar-picker-indicator,
+.wiz-control[type='date']::-webkit-calendar-picker-indicator,
+.text-input.wiz-control[type='date']::-webkit-calendar-picker-indicator,
+.wiz-date-control::-webkit-calendar-picker-indicator {
+    margin-left: auto;
 }
 
 .wiz-textarea,
@@ -365,6 +452,19 @@
 /* ------------------------------------------------------------ */
 /* Chip / Selectable Foundations                                */
 /* ------------------------------------------------------------ */
+/* Active today:
+ * - wiz-chip-grid
+ * - wiz-selected-list
+ * - wiz-selected-row
+ * - wiz-review-list
+ * - wiz-counter
+ *
+ * Reserved inventory until live markup adopts it directly:
+ * - wiz-chip
+ * - wiz-select-card
+ * - wiz-select-grid
+ * - wiz-pill state modifiers
+ */
 .wiz-chip {
     display: inline-flex;
     align-items: center;
@@ -556,6 +656,21 @@
 /* ------------------------------------------------------------ */
 /* Collection Shell Foundations                                 */
 /* ------------------------------------------------------------ */
+/* Active today:
+ * - wiz-collection-header
+ * - wiz-control-group
+ * - wiz-collection-actions
+ * - wiz-result-row
+ * - wiz-action-row
+ * - wiz-action-row-end
+ *
+ * Reserved inventory:
+ * - wiz-collection-grid
+ * - wiz-detail-stack
+ *
+ * Compatibility selectors below intentionally support additive adoption while
+ * legacy local class names are still present in live markup.
+ */
 .wiz-collection-header {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));

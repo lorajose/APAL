@@ -112,6 +112,19 @@
 	gap: 1rem;
 }
 
+.form-grid .field {
+	min-width: 0;
+}
+
+.form-grid .wiz-control,
+.form-grid .text-input {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+	box-sizing: border-box;
+}
+
 .field {
 	display: flex;
 	flex-direction: column;
@@ -230,6 +243,22 @@
 
 	.form-grid {
 		grid-template-columns: 1fr;
+	}
+
+	.form-grid .field,
+	.form-grid .checkbox-field {
+		width: 100%;
+	}
+
+	.form-grid .text-input,
+	.form-grid .wiz-control,
+	.form-grid select.text-input.wiz-control {
+		width: 100%;
+		max-width: 100%;
+	}
+
+	.form-grid .checkbox-field {
+		justify-content: flex-start;
 	}
 }
 
