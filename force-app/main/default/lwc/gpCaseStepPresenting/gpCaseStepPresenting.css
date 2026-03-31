@@ -143,11 +143,24 @@
 }
 
 .checkbox-field {
-	justify-content: flex-end;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 0.5rem;
 }
 
 .checkbox-field .checkbox {
 	width: auto;
+	order: 1;
+	flex: 0 0 auto;
+	margin: 0;
+}
+
+.checkbox-field .input-label,
+.checkbox-field .wiz-field-label {
+	order: 2;
+	margin: 0;
+	flex: 0 1 auto;
 }
 
 .top-symptoms-header {
@@ -258,6 +271,8 @@
 	}
 
 	.form-grid .checkbox-field {
+		flex-direction: row;
+		align-items: center;
 		justify-content: flex-start;
 	}
 }

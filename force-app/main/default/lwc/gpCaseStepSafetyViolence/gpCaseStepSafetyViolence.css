@@ -23,14 +23,6 @@
 	font-size: 0.9rem;
 }
 
-.checkbox-field {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.5rem;
-	font-size: 0.9rem;
-	color: #374151;
-}
-
 .actions {
 	display: flex;
 	justify-content: space-between;
@@ -59,10 +51,4 @@
 .required {
 	color: #dc2626;
 	font-size: 0.85rem;
-}
-
-@media (max-width: 768px) {
-	.checkbox-field {
-		flex-wrap: wrap;
-	}
 }

@@ -53,7 +53,7 @@
                     <p class="error-text wiz-field-error wiz-inline-error">{lethalMeansError}</p>
                 </template>
 
-                <label class="checkbox-field">
+                <label class="checkbox-field wiz-checkbox-row">
                     <input type="checkbox" checked={meansSafetyPlan} onchange={handleMeansPlanChange} />
                     <span class="input-label wiz-field-label">Means safety plan agreed?</span>
                 </label>
@@ -112,11 +112,11 @@
                                     >{item.note}</textarea>
                                 </div>
                                 <div class="flag-row">
-                                    <label class="checkbox-field">
+                                    <label class="checkbox-field wiz-checkbox-row">
                                         <input type="checkbox" data-value={item.value} data-flag="recent" checked={item.recent} onchange={handleStressorFlagChange} />
                                         <span>Recent?</span>
                                     </label>
-                                    <label class="checkbox-field">
+                                    <label class="checkbox-field wiz-checkbox-row">
                                         <input type="checkbox" data-value={item.value} data-flag="historical" checked={item.historical} onchange={handleStressorFlagChange} />
                                         <span>Historical?</span>
                                     </label>
@@ -141,7 +141,7 @@
                     </template>
                 </select>
 
-                <label class="checkbox-field">
+                <label class="checkbox-field wiz-checkbox-row">
                     <input type="checkbox" checked={costCoverageIssues} onchange={handleCostCoverageChange} />
                     <span class="input-label wiz-field-label">Cost/Coverage Issues?</span>
                 </label>
