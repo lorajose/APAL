@@ -19,7 +19,9 @@
     --wiz-color-text-muted: #4b5563;
     --wiz-color-text-subtle: #6b7280;
     --wiz-color-text-inverse: #ffffff;
+    --wiz-color-text-link: #2563eb;
     --wiz-surface-panel: #ffffff;
+    --wiz-surface-panel-subtle: #f9fafb;
     --wiz-accent-brand: #032d60;
 
     --wiz-accent-primary: #059669;
@@ -420,6 +422,40 @@
 .wiz-btn.is-disabled {
     opacity: 0.55;
     cursor: not-allowed;
+}
+
+.wiz-btn-primary {
+    background: var(--wiz-accent-primary);
+    border-color: var(--wiz-accent-primary);
+    color: var(--wiz-color-text-inverse);
+}
+
+.wiz-btn-primary:hover {
+    background: var(--wiz-accent-primary-hover);
+    border-color: var(--wiz-accent-primary-hover);
+}
+
+.wiz-btn-ghost {
+    background: transparent;
+    border-color: var(--wiz-border-strong);
+    color: var(--wiz-color-text-default);
+}
+
+.wiz-btn-ghost:hover {
+    background: var(--wiz-surface-panel-subtle);
+}
+
+.wiz-btn-text {
+    min-height: auto;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    color: var(--wiz-color-text-link);
+    background: transparent;
+}
+
+.wiz-btn-text:hover {
+    text-decoration: underline;
 }
 
 .wiz-btn-footer-back {

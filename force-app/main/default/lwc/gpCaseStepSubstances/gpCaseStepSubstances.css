@@ -508,7 +508,6 @@
 
 .secondary,
 .ghost-button,
-.text-button,
 .primary-button,
 .primary,
 .secondary {
@@ -526,8 +525,7 @@
 	cursor: pointer;
 }
 
-.ghost-button,
-.text-button {
+.ghost-button {
 	background: none;
 	border: 1px solid #d1d5db;
 	color: #374151;
@@ -539,11 +537,6 @@
 .ghost-button.danger {
 	color: #b91c1c;
 	border-color: #fca5a5;
-}
-
-.text-button {
-	border: none;
-	color: #2563eb;
 }
 
 @media (max-width: 768px) {
