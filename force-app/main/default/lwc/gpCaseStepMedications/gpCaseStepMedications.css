@@ -337,11 +337,8 @@
 }
 
 .error-inline {
-	color: #b91c1c;
-	font-size: 0.85rem;
 	margin-top: 0.25rem;
 	display: block;
-	line-height: 1.2;
 }
 
 .wizard-shell {
@@ -450,8 +447,6 @@
 
 .detail-brand {
 	margin: 0.1rem 0 0.4rem;
-	color: #6b7280;
-	font-size: 0.85rem;
 }
 
 .detail-header .category-pill {
@@ -515,13 +510,9 @@
 
 .review-subtitle {
 	margin: 0.15rem 0 0.4rem;
-	font-size: 0.85rem;
-	color: #6b7280;
 }
 
 .review-line {
-	font-size: 0.9rem;
-	color: #111827;
 	margin: 0.35rem 0;
 }
 
@@ -540,8 +531,6 @@
 }
 
 .review-notes {
-	font-size: 0.85rem;
-	color: #374151;
 	margin: 0.35rem 0 0;
 	display: flex;
 	gap: 0.35rem;

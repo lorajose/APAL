@@ -422,6 +422,12 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
     }
 
     get wizardNextDisabled() {
+        if (this.wizardStep === 0) {
+            return this.wizardSelection.length === 0;
+        }
+        if (this.wizardStep === 1) {
+            return this.wizardDraft.length === 0;
+        }
         return false;
     }
 

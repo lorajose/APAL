@@ -198,7 +198,7 @@
                             <header class="detail-header wiz-panel-header">
                                 <div>
                                     <h3 class="wiz-item-title">{item.meta.label}</h3>
-                                    <p class="detail-brand">{item.meta.category}</p>
+                                    <p class="detail-brand wiz-text-secondary">{item.meta.category}</p>
                                 </div>
                                 <button class="text-button wiz-btn wiz-btn-text" type="button" data-id={item.id} onclick={handleWizardRemoveDraft}>Remove</button>
                             </header>
@@ -218,9 +218,9 @@
                                 <article key={item.id} class="review-entry">
                                     <div class="review-heading">
                                         <h4>{item.meta.label}</h4>
-                                        <p class="review-subtitle">{item.meta.category}</p>
+                                        <p class="review-subtitle wiz-text-secondary">{item.meta.category}</p>
                                     </div>
-                                    <p class="review-notes">
+                                    <p class="review-notes wiz-text-body">
                                         <span>Notes:</span>
                                         <span>
                                             <template if:true={item.notes}>

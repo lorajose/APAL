@@ -171,6 +171,24 @@
     line-height: 1.4;
 }
 
+.wiz-text-secondary {
+    color: var(--wiz-color-text-subtle);
+    font-size: var(--wiz-font-size-meta);
+    line-height: 1.4;
+}
+
+.wiz-text-body {
+    color: var(--wiz-color-text-default);
+    font-size: var(--wiz-font-size-body);
+    line-height: 1.4;
+}
+
+.wiz-text-error {
+    color: var(--wiz-state-danger-text);
+    font-size: var(--wiz-font-size-helper);
+    line-height: 1.35;
+}
+
 /* ------------------------------------------------------------ */
 /* Button Foundations                                           */
 /* ------------------------------------------------------------ */
