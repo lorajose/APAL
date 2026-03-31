@@ -565,6 +565,32 @@
     line-height: 1.4;
 }
 
+.wiz-checkbox-row,
+.checkbox-field.wiz-checkbox-row {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 100%;
+    color: var(--wiz-color-text-default);
+    font-size: var(--wiz-font-size-body);
+}
+
+.wiz-checkbox-row input[type='checkbox'],
+.checkbox-field.wiz-checkbox-row input[type='checkbox'] {
+    flex: 0 0 auto;
+    margin-top: 0.15rem;
+}
+
+.wiz-checkbox-row .input-label,
+.wiz-checkbox-row .wiz-field-label,
+.checkbox-field.wiz-checkbox-row .input-label,
+.checkbox-field.wiz-checkbox-row .wiz-field-label,
+.wiz-checkbox-row > span,
+.checkbox-field.wiz-checkbox-row > span {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
 .wiz-field-error,
 .wiz-inline-error,
 .error-text.wiz-inline-error {
@@ -661,6 +687,12 @@ input.wiz-date-control,
     resize: vertical;
 }
 
+.wiz-lightning-textarea,
+.lightning-textarea.wiz-lightning-textarea {
+    display: block;
+    margin-top: 0;
+}
+
 .wiz-control.is-error,
 .wiz-input.is-error,
 .wiz-select.is-error,
@@ -686,6 +718,25 @@ input.wiz-date-control,
         width: 100%;
     }
 
+    .slds-grid_align-spread.wiz-step-footer {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--wiz-footer-gap);
+    }
+
+    .wiz-step-footer > .wiz-btn {
+        width: auto;
+        min-width: 0;
+        flex: 1 1 0;
+        margin: 0;
+    }
+
+    .wiz-checkbox-row,
+    .checkbox-field.wiz-checkbox-row {
+        flex-wrap: nowrap;
+    }
+
     .wiz-collection-header {
         grid-template-columns: 1fr;
     }
@@ -709,6 +760,11 @@ input.wiz-date-control,
 
     .empty-state-card.wiz-empty-panel {
         align-items: flex-start;
+    }
+
+    .wiz-detail-notes > .wiz-lightning-textarea + .wiz-field-helper,
+    .field.wiz-detail-notes > .wiz-lightning-textarea + .helper-text {
+        margin-top: 0;
     }
 }
 
