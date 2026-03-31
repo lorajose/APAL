@@ -217,7 +217,7 @@
                                     <h3 class="wiz-item-title">{item.meta.name}</h3>
                                     <p class="detail-brand">{item.meta.category}</p>
                                 </div>
-                                <button class="text-button" data-id={item.id} onclick={handleWizardRemoveDraft}>Remove</button>
+                                <button class="text-button wiz-btn wiz-btn-text" data-id={item.id} onclick={handleWizardRemoveDraft}>Remove</button>
                             </header>
                             <div class="detail-grid">
                                 <label class="checkbox-field">
@@ -277,13 +277,13 @@
                     <!-- <button class="ghost-button" onclick={wizardBack} disabled={wizardBackDisabled}>Back</button> -->
                     <div class="wizard-actions wiz-subflow-actions">
                         <template if:true={wizardStepIsReview}>
-                            <button class="ghost-button" onclick={handleReviewEditDetails}>Edit Details</button>
-                            <button class="ghost-button" onclick={handleReviewChangeSelection}>Change Selection</button>
+                            <button class="ghost-button wiz-btn wiz-btn-ghost" onclick={handleReviewEditDetails}>Edit Details</button>
+                            <button class="ghost-button wiz-btn wiz-btn-ghost" onclick={handleReviewChangeSelection}>Change Selection</button>
                         </template>
                         <template if:false={wizardStepIsReview}>
-                            <button class="ghost-button wizard-cancel" onclick={cancelWizard}>Cancel</button>
+                            <button class="ghost-button wizard-cancel wiz-btn wiz-btn-ghost" onclick={cancelWizard}>Cancel</button>
                         </template>
-                        <button class="primary-button" onclick={wizardNext} disabled={wizardNextDisabled}>
+                        <button class="primary-button wiz-btn wiz-btn-primary" onclick={wizardNext} disabled={wizardNextDisabled}>
                             <template if:true={wizardStepIsReview}>Save</template>
                             <template if:false={wizardStepIsReview}>Next</template>
                         </button>

@@ -176,6 +176,9 @@
 /* ------------------------------------------------------------ */
 /* Active today:
  * - wiz-btn
+ * - wiz-btn-primary
+ * - wiz-btn-ghost
+ * - wiz-btn-text
  * - wiz-btn-footer-back
  * - wiz-btn-footer-next
  * - wiz-step-footer
@@ -183,10 +186,7 @@
  * - wiz-subflow-actions
  *
  * Reserved inventory until live markup adopts it:
- * - wiz-btn-primary
  * - wiz-btn-secondary
- * - wiz-btn-ghost
- * - wiz-btn-text
  * - wiz-btn-pill-danger
  */
 .wiz-btn {
