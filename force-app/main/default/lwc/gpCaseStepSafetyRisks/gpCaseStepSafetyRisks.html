@@ -99,7 +99,7 @@
                                         <span>Historical</span>
                                     </label>
                                     <template if:true={risk.flagError}>
-                                        <p class="error-inline">Select Recent and/or Historical</p>
+                                        <p class="error-inline wiz-text-error">Select Recent and/or Historical</p>
                                     </template>
                                 </div>
                                 <template if:true={showAllNotes}>
@@ -215,7 +215,7 @@
                             <header class="detail-header wiz-panel-header">
                                 <div>
                                     <h3 class="wiz-item-title">{item.meta.name}</h3>
-                                    <p class="detail-brand">{item.meta.category}</p>
+                                    <p class="detail-brand wiz-text-secondary">{item.meta.category}</p>
                                 </div>
                                 <button class="text-button wiz-btn wiz-btn-text" data-id={item.id} onclick={handleWizardRemoveDraft}>Remove</button>
                             </header>
@@ -245,9 +245,9 @@
                                 <article key={item.id} class="review-entry">
                                     <div class="review-heading">
                                         <h4>{item.meta.name}</h4>
-                                        <p class="review-subtitle">{item.meta.category}</p>
+                                        <p class="review-subtitle wiz-text-secondary">{item.meta.category}</p>
                                     </div>
-                                    <p class="review-line">
+                                    <p class="review-line wiz-text-body">
                                         Recent:
                                         <template if:true={item.recent}>Yes</template>
                                         <template if:false={item.recent}>No</template>
@@ -256,7 +256,7 @@
                                         <template if:true={item.historical}>Yes</template>
                                         <template if:false={item.historical}>No</template>
                                     </p>
-                                    <p class="review-notes">
+                                    <p class="review-notes wiz-text-body">
                                         <span>Notes:</span>
                                         <span>
                                             <template if:true={item.notes}>

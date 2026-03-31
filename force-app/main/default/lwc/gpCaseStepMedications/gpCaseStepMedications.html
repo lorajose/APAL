@@ -213,7 +213,7 @@
                             <header class="detail-header wiz-panel-header">
                                 <div>
                                     <h3 class="wiz-item-title">{item.meta.title}</h3>
-                                    <p class="detail-brand">Brand: {item.meta.brand}</p>
+                                    <p class="detail-brand wiz-text-secondary">Brand: {item.meta.brand}</p>
                                     <span class="category-pill">{item.meta.category}</span>
                                 </div>
                                 <button class="text-button wiz-btn wiz-btn-text" data-id={item.id} onclick={handleWizardRemoveDraft}>Remove</button>
@@ -227,7 +227,7 @@
                                         </template>
                                     </select>
                                     <template if:true={item.actionError}>
-                                        <p class="error-inline">Select the Action</p>
+                                        <p class="error-inline wiz-text-error">Select the Action</p>
                                     </template>
                                 </label>
                                 <label class="input-label">Frequency
@@ -275,10 +275,10 @@
                                     <div class="review-heading">
                                         <div>
                                             <h4>{item.meta.title}</h4>
-                                            <p class="review-subtitle">{item.meta.brand} · {item.meta.category}</p>
+                                            <p class="review-subtitle wiz-text-secondary">{item.meta.brand} · {item.meta.category}</p>
                                         </div>
                                     </div>
-                                    <p class="review-line">
+                                    <p class="review-line wiz-text-body">
                                         Action:
                                         <template if:true={item.action}>
                                             {item.action}
@@ -295,7 +295,7 @@
                                     <template if:true={item.allergy}>
                                         <p class="review-flag alert">Allergy flagged</p>
                                     </template>
-                                    <p class="review-notes">
+                                    <p class="review-notes wiz-text-body">
                                         <span>Notes:</span>
                                         <span>
                                             <template if:true={item.notes}>
