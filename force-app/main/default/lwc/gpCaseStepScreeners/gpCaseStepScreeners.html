@@ -216,7 +216,7 @@
                                 </div>
                                 <button class="text-button wiz-btn wiz-btn-text" data-id={item.id} onclick={handleWizardRemoveDraft}>Remove</button>
                             </header>
-                            <div class="detail-grid">
+                            <div class="detail-grid wiz-detail-grid">
                                 <div class="field wiz-field">
                                     <label class="input-label wiz-field-label">Approximate Date</label>
                                     <input type="date" class="text-input wiz-control wiz-date-control" data-id={item.id} data-field="date" value={item.date} onchange={handleWizardDetailChange} />
@@ -230,9 +230,9 @@
                                     <span>Positive outcome?</span>
                                 </label>
                             </div>
-                            <div class="field field-full">
+                            <div class="field field-full wiz-detail-notes">
                                 <label class="input-label">Notes</label>
-                                <textarea class="textarea" data-id={item.id} data-field="notes" oninput={handleWizardDetailChange}>{item.notes}</textarea>
+                                <textarea class="textarea wiz-detail-notes-input" data-id={item.id} data-field="notes" oninput={handleWizardDetailChange}>{item.notes}</textarea>
                             </div>
                         </section>
                     </template>

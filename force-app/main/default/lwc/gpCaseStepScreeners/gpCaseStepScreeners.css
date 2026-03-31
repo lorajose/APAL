@@ -396,22 +396,10 @@
 	margin: 0.1rem 0 0.4rem;
 }
 
-.detail-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-	gap: 0.85rem;
-	margin-bottom: 0.9rem;
-}
-
 .checkbox-field {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.5rem;
-}
-
-.detail-card .textarea {
-	min-height: 120px;
-	margin-top: 0.35rem;
 }
 
 .review-panel h3 {
@@ -507,9 +495,6 @@
 		grid-template-columns: 1fr;
 	}
 
-	.detail-grid {
-		grid-template-columns: 1fr;
-	}
 }
 
 @media (max-width: 1200px) {
@@ -524,7 +509,4 @@
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 
-	.detail-grid {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-	}
 }

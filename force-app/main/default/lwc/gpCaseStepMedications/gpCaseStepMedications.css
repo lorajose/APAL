@@ -453,13 +453,6 @@
 	display: inline-flex;
 }
 
-.detail-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-	gap: 0.85rem;
-	margin-bottom: 0.9rem;
-}
-
 .checkbox-field {
 	display: flex;
 	align-items: center;
@@ -475,11 +468,6 @@
 
 .checkbox-field.alert span {
 	color: #b91c1c;
-}
-
-.detail-card .textarea {
-	min-height: 120px;
-	margin-top: 0.35rem;
 }
 
 .review-grid {
@@ -595,10 +583,6 @@
 		grid-template-columns: 1fr;
 	}
 
-	.detail-grid {
-		grid-template-columns: 1fr;
-	}
-
 	.review-grid {
 		grid-template-columns: 1fr;
 	}
@@ -606,10 +590,6 @@
 
 @media (min-width: 769px) and (max-width: 1024px) {
 	.med-grid {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-	}
-
-	.detail-grid {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 
