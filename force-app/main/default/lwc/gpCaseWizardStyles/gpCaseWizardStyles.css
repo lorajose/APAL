@@ -1,8 +1,16 @@
 /*
  * Consumable shared wizard presentation module for LWC @import usage.
  *
- * This currently exposes the adoption-safe heading, panel, selector, footer, collection-shell, and FormField slices.
- * The broader draft remains in gpCaseCreator/wizard.css.
+ * Contract:
+ * - Keep this file limited to selectors already used by live wizard markup or
+ *   compatibility selectors required by additive migration.
+ * - Do not add domain-specific card skins, business-state styling, or one-off
+ *   step layouts here.
+ * - Promote new shared selectors from gpCaseCreator/wizard.css only after the
+ *   class is actually adopted by live component markup.
+ *
+ * See /Users/joselora/healthhaven-dev/GP_CASE_WIZARD_STYLING.md for the active
+ * shared contract, reserved inventory, and local-boundary guidance.
  */
 
 :host {
@@ -275,6 +283,10 @@
     font-weight: var(--wiz-font-weight-semibold);
 }
 
+/* Compatibility selectors: keep these while legacy local wrappers remain in
+ * live markup. They are part of the current consumable contract, but they are
+ * migration bridges rather than first-choice authoring APIs.
+ */
 .summary-header.wiz-panel-header {
     align-items: center;
     gap: 0.5rem;
@@ -498,7 +510,11 @@
 .wiz-textarea,
 .text-input.wiz-control,
 .textarea.wiz-control {
+    display: block;
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
     border: 1px solid var(--wiz-border-strong);
     border-radius: var(--wiz-radius-control);
     background: var(--wiz-surface-panel);
@@ -508,6 +524,65 @@
     font-size: var(--wiz-font-size-body);
     padding: 0.45rem 0.6rem;
     margin-top: 0;
+}
+
+.text-input[type='date'],
+.wiz-control[type='date'],
+.text-input.wiz-control[type='date'] {
+    display: block;
+    width: 100%;
+    inline-size: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    min-inline-size: 100%;
+    align-self: stretch;
+    -webkit-appearance: none;
+    appearance: none;
+    line-height: 1.2;
+    text-align: left;
+}
+
+.wiz-date-field {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.35rem;
+    width: 100%;
+}
+
+.wiz-date-control,
+input.wiz-date-control,
+.text-input.wiz-date-control,
+.wiz-control.wiz-date-control {
+    display: block !important;
+    width: 100% !important;
+    inline-size: 100% !important;
+    max-width: 100% !important;
+    max-inline-size: 100% !important;
+    min-width: 0 !important;
+    min-inline-size: 0 !important;
+    height: var(--wiz-button-height) !important;
+    min-height: var(--wiz-button-height) !important;
+    box-sizing: border-box;
+    align-self: stretch;
+    -webkit-appearance: auto;
+    appearance: auto;
+    line-height: normal;
+    text-align: left;
+}
+
+.text-input[type='date']::-webkit-date-and-time-value,
+.wiz-control[type='date']::-webkit-date-and-time-value,
+.text-input.wiz-control[type='date']::-webkit-date-and-time-value,
+.wiz-date-control::-webkit-date-and-time-value {
+    text-align: left;
+}
+
+.text-input[type='date']::-webkit-calendar-picker-indicator,
+.wiz-control[type='date']::-webkit-calendar-picker-indicator,
+.text-input.wiz-control[type='date']::-webkit-calendar-picker-indicator,
+.wiz-date-control::-webkit-calendar-picker-indicator {
+    margin-left: auto;
 }
 
 .wiz-textarea,
@@ -545,6 +620,7 @@
         grid-template-columns: 1fr;
     }
 
+    /* Responsive compatibility selectors for additive collection-shell adoption. */
     .grid-actions.wiz-collection-actions {
         width: 100%;
     }

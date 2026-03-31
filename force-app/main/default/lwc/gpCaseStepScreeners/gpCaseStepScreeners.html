@@ -217,12 +217,14 @@
                                 <button class="text-button" data-id={item.id} onclick={handleWizardRemoveDraft}>Remove</button>
                             </header>
                             <div class="detail-grid">
-                                <label class="input-label">Approximate Date
-                                    <input type="date" class="text-input" data-id={item.id} data-field="date" value={item.date} onchange={handleWizardDetailChange} />
-                                </label>
-                                <label class="input-label">Score
-                                    <input type="text" class="text-input" data-id={item.id} data-field="score" value={item.score} oninput={handleWizardDetailChange} />
-                                </label>
+                                <div class="field wiz-field">
+                                    <label class="input-label wiz-field-label">Approximate Date</label>
+                                    <input type="date" class="text-input wiz-control wiz-date-control" data-id={item.id} data-field="date" value={item.date} onchange={handleWizardDetailChange} />
+                                </div>
+                                <div class="field wiz-field">
+                                    <label class="input-label wiz-field-label">Score</label>
+                                    <input type="text" class="text-input wiz-control" data-id={item.id} data-field="score" value={item.score} oninput={handleWizardDetailChange} />
+                                </div>
                                 <label class="checkbox-field success">
                                     <input type="checkbox" data-id={item.id} data-field="positive" checked={item.positive} onchange={handleWizardDetailChange} />
                                     <span>Positive outcome?</span>
