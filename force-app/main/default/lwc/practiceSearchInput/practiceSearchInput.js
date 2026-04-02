@@ -22,6 +22,8 @@ export default class PracticeSearchInput extends NavigationMixin(
   @track isDropdownOpen = false;
   isServiceConsole = false;
   saveListenerAttached = false;
+  lastToastKey;
+  lastToastAt = 0;
 
   get comboboxClass() {
     return `slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click ${this.isDropdownOpen ? "slds-is-open" : ""}`;
@@ -205,13 +207,11 @@ export default class PracticeSearchInput extends NavigationMixin(
       new FlowAttributeChangeEvent("selectedPracticeOutput", name)
     );
 
-    this.dispatchEvent(
-      new ShowToastEvent({
-        title: "Practice Selected",
-        message: `"${name}" selected.`,
-        variant: "success"
-      })
-    );
+    this.showToastOnce({
+      title: "Practice Selected:",
+      message: `"${name}"`,
+      variant: "success"
+    });
   }
 
   // ❌ Limpieza completa
@@ -261,16 +261,7 @@ export default class PracticeSearchInput extends NavigationMixin(
   @api
   addNewPractice(newPractice) {
     if (!newPractice || !newPractice.Id) return;
-    this.selectedPracticeId = newPractice.Id;
-    this.searchKey = newPractice.Name;
-    this.isDropdownOpen = false;
-    this.showLoading = false;
-
-    // Guarda en localStorage al seleccionar
-    localStorage.setItem(
-      this.storageKey,
-      JSON.stringify({ id: newPractice.Id, name: newPractice.Name })
-    );
+    this._applyPracticeSelectionState(newPractice);
 
     this.dispatchEvent(
       new FlowAttributeChangeEvent("practiceId", newPractice.Id)
@@ -279,14 +270,18 @@ export default class PracticeSearchInput extends NavigationMixin(
       new FlowAttributeChangeEvent("selectedPracticeOutput", newPractice.Name)
     );
 
-    this.dispatchEvent(
-      new ShowToastEvent({
-        title: "Practice Selected",
-        message: `"${newPractice.Name}" created y selected.`,
-        variant: "success"
-      })
-    );
+    this.showToastOnce({
+      title: "Practice Created:",
+      message: `"${newPractice.Name}"`,
+      variant: "success"
+    });
     console.log("🆕 Practice created y selected:", newPractice.Name);
+  }
+
+  @api
+  setSelectedPractice(practice) {
+    if (!practice || !practice.Id) return;
+    this._applyPracticeSelectionState(practice);
   }
 
   @api
@@ -298,5 +293,44 @@ export default class PracticeSearchInput extends NavigationMixin(
     if (selectText && typeof input.select === "function") {
       input.select();
     }
+  }
+
+  @api
+  clearSelectedPractice() {
+    this.clearSelection();
+  }
+
+  showToastOnce({ title, message, variant }) {
+    const toastKey = `${title}:${message}:${variant}`;
+    const now = Date.now();
+
+    if (this.lastToastKey === toastKey && now - this.lastToastAt < 1000) {
+      return;
+    }
+
+    this.lastToastKey = toastKey;
+    this.lastToastAt = now;
+
+    this.dispatchEvent(
+      new ShowToastEvent({
+        title,
+        message,
+        variant
+      })
+    );
+  }
+
+  _applyPracticeSelectionState(practice) {
+    this.selectedPracticeId = practice.Id;
+    this.selectedPracticeOutput = practice.Name;
+    this.searchKey = practice.Name;
+    this.isDropdownOpen = false;
+    this.showLoading = false;
+    this.practices = [];
+
+    localStorage.setItem(
+      this.storageKey,
+      JSON.stringify({ id: practice.Id, name: practice.Name })
+    );
   }
 }

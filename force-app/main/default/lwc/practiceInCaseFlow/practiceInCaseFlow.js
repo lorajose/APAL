@@ -1,5 +1,6 @@
 import { LightningElement, api } from "lwc";
 import { FlowAttributeChangeEvent } from "lightning/flowSupport";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import getPracticeById from "@salesforce/apex/PracticeSearchController.getPracticeById";
 import getPracticeByCaseId from "@salesforce/apex/PracticeSearchController.getPracticeByCaseId";
 
@@ -93,6 +94,10 @@ export default class PracticeInCaseFlow extends LightningElement {
   _boundSuggestedPracticeHandler;
   _isInternalPracticeMutation = false;
   _syncInputTimeout;
+  _lastAutoFillToastKey;
+  _lastAutoFillToastAt = 0;
+  _lastCreatedToastKey;
+  _lastCreatedToastAt = 0;
 
   hasManualPracticeOverride = false;
   showSuggestedPracticeHelper = false;
@@ -128,7 +133,7 @@ export default class PracticeInCaseFlow extends LightningElement {
   handlePracticeSelected(event) {
     const { practiceRecord } = event.detail || {};
 
-    if (!practiceRecord?.Id || this.hasManualPracticeOverride) {
+    if (!practiceRecord?.Id) {
       return;
     }
 
@@ -143,12 +148,39 @@ export default class PracticeInCaseFlow extends LightningElement {
 
   handleSuggestedPracticeEvent(event) {
     const suggestedPracticeId = event.detail?.suggestedPracticeId || null;
-    if (suggestedPracticeId === this._suggestedPracticeId) {
+    const shouldClearPractice = Boolean(event.detail?.shouldClearPractice);
+    const forceReplacePractice = Boolean(event.detail?.forceReplacePractice);
+
+    if (shouldClearPractice) {
+      this._suggestedPracticeId = null;
+      this._clearPracticeState({
+        resetManualOverride: true,
+        notifyFlow: true,
+        syncChild: true
+      });
+      return;
+    }
+
+    const shouldReplaceCurrentPractice =
+      Boolean(suggestedPracticeId) &&
+      this._practiceId !== suggestedPracticeId &&
+      forceReplacePractice;
+
+    if (
+      suggestedPracticeId === this._suggestedPracticeId &&
+      !shouldReplaceCurrentPractice
+    ) {
       return;
     }
 
     this._suggestedPracticeId = suggestedPracticeId;
-    this._handleSuggestedPracticeChange();
+
+    if (forceReplacePractice && suggestedPracticeId) {
+      this.hasManualPracticeOverride = false;
+      this._selectionSource = "suggested";
+    }
+
+    this._handleSuggestedPracticeChange({ forceReplacePractice });
   }
 
   handleValueChange(event) {
@@ -181,7 +213,11 @@ export default class PracticeInCaseFlow extends LightningElement {
   }
 
   handleClearSelection() {
-    this._clearPracticeState({ resetManualOverride: true, notifyFlow: true });
+    this._clearPracticeState({
+      resetManualOverride: true,
+      notifyFlow: true,
+      syncChild: true
+    });
   }
 
   handleInitialPopulate() {
@@ -221,7 +257,8 @@ export default class PracticeInCaseFlow extends LightningElement {
         notifyFlow: true,
         syncChild: true,
         showHelper: false,
-        delayMs: 400
+        delayMs: 400,
+        showCreatedToast: true
       });
       return;
     }
@@ -238,7 +275,8 @@ export default class PracticeInCaseFlow extends LightningElement {
             notifyFlow: true,
             syncChild: true,
             showHelper: false,
-            delayMs: 400
+            delayMs: 400,
+            showCreatedToast: true
           });
         }
       } catch (error) {
@@ -448,13 +486,14 @@ export default class PracticeInCaseFlow extends LightningElement {
     this.showSuggestedPracticeHelper = false;
   }
 
-  _handleSuggestedPracticeChange() {
+  _handleSuggestedPracticeChange({ forceReplacePractice = false } = {}) {
     if (!this._suggestedPracticeId) {
       this.showSuggestedPracticeHelper = false;
       return;
     }
 
     if (
+      !forceReplacePractice &&
       this.hasManualPracticeOverride &&
       this._practiceId &&
       this._practiceId !== this._suggestedPracticeId
@@ -475,11 +514,19 @@ export default class PracticeInCaseFlow extends LightningElement {
       return;
     }
 
-    this._applySuggestedPracticeSelection(this._suggestedPracticeId);
+    this._applySuggestedPracticeSelection(this._suggestedPracticeId, {
+      forceReplacePractice
+    });
   }
 
-  async _applySuggestedPracticeSelection(practiceId) {
-    if (!practiceId || this.hasManualPracticeOverride) {
+  async _applySuggestedPracticeSelection(
+    practiceId,
+    { forceReplacePractice = false } = {}
+  ) {
+    if (
+      !practiceId ||
+      (!forceReplacePractice && this.hasManualPracticeOverride)
+    ) {
       return;
     }
 
@@ -504,7 +551,7 @@ export default class PracticeInCaseFlow extends LightningElement {
       if (
         !practice ||
         this._suggestedPracticeId !== practiceId ||
-        this.hasManualPracticeOverride
+        (!forceReplacePractice && this.hasManualPracticeOverride)
       ) {
         return;
       }
@@ -532,7 +579,9 @@ export default class PracticeInCaseFlow extends LightningElement {
       syncChild = true,
       showHelper = false,
       delayMs = 150,
-      focusSearch = false
+      focusSearch = false,
+      showCreatedToast = false,
+      showProviderAutoFillToast = false
     } = {}
   ) {
     if (!practice?.Id) {
@@ -544,8 +593,21 @@ export default class PracticeInCaseFlow extends LightningElement {
       practice,
       delayMs,
       syncChild,
-      focusSearch || source === "suggested"
+      focusSearch || source === "suggested",
+      showCreatedToast
     );
+
+    if (showCreatedToast) {
+      this._showPracticeCreatedToast(practice);
+    }
+
+    if (
+      showProviderAutoFillToast ||
+      source === "suggested" ||
+      source === "provider"
+    ) {
+      this._showProviderAutoFillToast(practice);
+    }
 
     if (notifyFlow) {
       this._dispatchPracticeFlowChanges();
@@ -577,7 +639,8 @@ export default class PracticeInCaseFlow extends LightningElement {
     practice,
     delayMs = 0,
     shouldSync = true,
-    shouldFocusSearch = false
+    shouldFocusSearch = false,
+    showCreatedToast = false
   ) {
     if (!shouldSync) {
       return;
@@ -595,11 +658,13 @@ export default class PracticeInCaseFlow extends LightningElement {
           return;
         }
 
+        const isPracticeInputSynced = this._isPracticeInputSynced(practice);
+
         if (
-          typeof input.addNewPractice === "function" &&
-          !this._isPracticeInputSynced(practice)
+          typeof input.setSelectedPractice === "function" &&
+          (!isPracticeInputSynced || showCreatedToast)
         ) {
-          input.addNewPractice(practice);
+          input.setSelectedPractice(practice);
           console.log(`✨ Practice autocompletado: ${practice.Name}`);
         }
 
@@ -623,7 +688,8 @@ export default class PracticeInCaseFlow extends LightningElement {
 
   _clearPracticeState({
     resetManualOverride = false,
-    notifyFlow = false
+    notifyFlow = false,
+    syncChild = false
   } = {}) {
     this._isInternalPracticeMutation = true;
     this._practiceId = null;
@@ -639,6 +705,13 @@ export default class PracticeInCaseFlow extends LightningElement {
 
     this._isInternalPracticeMutation = false;
 
+    if (syncChild) {
+      const input = this.template.querySelector("c-practice-search-input");
+      if (input && typeof input.clearSelectedPractice === "function") {
+        input.clearSelectedPractice();
+      }
+    }
+
     if (notifyFlow) {
       this._dispatchPracticeFlowChanges();
     }
@@ -650,6 +723,59 @@ export default class PracticeInCaseFlow extends LightningElement {
     );
     this.dispatchEvent(
       new FlowAttributeChangeEvent("practiceId", this._practiceId)
+    );
+  }
+
+  _showProviderAutoFillToast(practice) {
+    const message = "Practice autocompletion from the provider";
+    const toastKey = `${practice.Id}:${message}`;
+    const now = Date.now();
+
+    if (
+      this._lastAutoFillToastKey === toastKey &&
+      now - this._lastAutoFillToastAt < 1000
+    ) {
+      return;
+    }
+
+    this._lastAutoFillToastKey = toastKey;
+    this._lastAutoFillToastAt = now;
+
+    this.dispatchEvent(
+      new ShowToastEvent({
+        title: "Practice Selected",
+        message,
+        variant: "success"
+      })
+    );
+  }
+
+  _showPracticeCreatedToast(practice) {
+    if (!practice?.Id || !practice?.Name) {
+      return;
+    }
+
+    const title = "Practice Created:";
+    const message = `"${practice.Name}"`;
+    const toastKey = `${practice.Id}:${title}:${message}`;
+    const now = Date.now();
+
+    if (
+      this._lastCreatedToastKey === toastKey &&
+      now - this._lastCreatedToastAt < 1000
+    ) {
+      return;
+    }
+
+    this._lastCreatedToastKey = toastKey;
+    this._lastCreatedToastAt = now;
+
+    this.dispatchEvent(
+      new ShowToastEvent({
+        title,
+        message,
+        variant: "success"
+      })
     );
   }
 

@@ -7,6 +7,7 @@ export default class ProviderinCaseFlow extends LightningElement {
   _accountId;
   _accountRecord;
   _suggestedPracticeId;
+  _isHydratingProviderSelection = false;
 
   @api
   get accountId() {
@@ -37,13 +38,15 @@ export default class ProviderinCaseFlow extends LightningElement {
 
     this._accountId = accountId || null;
     this._accountRecord = accountRecord || null;
-    this._publishSuggestedPracticeId(this._accountRecord?.practiceid__c);
+    this._publishSuggestedPracticeId(this._accountRecord?.practiceid__c, {
+      forceReplacePractice: !this._isHydratingProviderSelection
+    });
   }
 
   handleClearSelection() {
     this._accountId = null;
     this._accountRecord = null;
-    this._publishSuggestedPracticeId(null);
+    this._publishSuggestedPracticeId(null, { shouldClearPractice: true });
   }
 
   handleInitialPopulate() {
@@ -53,7 +56,9 @@ export default class ProviderinCaseFlow extends LightningElement {
         searchInput &&
         typeof searchInput.setPreSelectedAccount === "function"
       ) {
+        this._isHydratingProviderSelection = true;
         searchInput.setPreSelectedAccount(this.accountId);
+        this._isHydratingProviderSelection = false;
       }
     } else {
       this.handleClearSelection();
@@ -147,7 +152,10 @@ export default class ProviderinCaseFlow extends LightningElement {
     }, 350);
   };
 
-  _publishSuggestedPracticeId(practiceId) {
+  _publishSuggestedPracticeId(
+    practiceId,
+    { shouldClearPractice = false, forceReplacePractice = false } = {}
+  ) {
     this._suggestedPracticeId = practiceId || null;
     this.dispatchEvent(
       new FlowAttributeChangeEvent(
@@ -158,7 +166,9 @@ export default class ProviderinCaseFlow extends LightningElement {
     window.dispatchEvent(
       new CustomEvent("providersuggestedpracticechange", {
         detail: {
-          suggestedPracticeId: this._suggestedPracticeId
+          suggestedPracticeId: this._suggestedPracticeId,
+          shouldClearPractice,
+          forceReplacePractice
         }
       })
     );
