@@ -38,6 +38,14 @@
         role="inputOnly"
       />
 
+            <property
+        name="startBlank"
+        label="Start Blank"
+        type="Boolean"
+        default="false"
+        role="inputOnly"
+      />
+
             <property name="recordId" label="Record Id" type="String" />
 
             <property
