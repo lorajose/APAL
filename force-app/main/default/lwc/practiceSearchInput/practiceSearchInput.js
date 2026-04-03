@@ -14,6 +14,7 @@ export default class PracticeSearchInput extends NavigationMixin(
   @api selectedPracticeOutput;
   @api practiceRecordTypeId; // Mantenemos esta prop para la navegación
   @api practiceId; // Flujo Output variable
+  @api disablePersistence = false;
 
   // 🧠 Estado interno
   @track searchKey = "";
@@ -47,6 +48,11 @@ export default class PracticeSearchInput extends NavigationMixin(
   connectedCallback() {
     console.log("🧩 practiceSearchInput conectado con persistencia robusta");
     this.initRecordType(); // Cargar el Record Type ID
+
+    if (this.disablePersistence) {
+      console.log("🫥 practiceSearchInput en modo sin persistencia");
+      return;
+    }
 
     const url = window.location.href.toLowerCase();
     const isNewCase =
@@ -198,8 +204,10 @@ export default class PracticeSearchInput extends NavigationMixin(
     this.practices = [];
 
     // Guardamos en localStorage al seleccionar
-    localStorage.setItem(this.storageKey, JSON.stringify({ id, name }));
-    console.log(`✅ Practice "${name}" guardado en ${this.storageKey}`);
+    if (!this.disablePersistence) {
+      localStorage.setItem(this.storageKey, JSON.stringify({ id, name }));
+      console.log(`✅ Practice "${name}" guardado en ${this.storageKey}`);
+    }
 
     // Notificar al Flow
     this.dispatchEvent(new FlowAttributeChangeEvent("practiceId", id));
@@ -221,10 +229,12 @@ export default class PracticeSearchInput extends NavigationMixin(
     this.searchKey = "";
     this.practices = [];
     this.isDropdownOpen = false;
-    localStorage.removeItem(this.storageKey);
-    // Limpiar también las banderas específicas al limpiar manualmente
-    localStorage.removeItem(this.storageKey + "_pendingSave");
-    localStorage.removeItem(this.storageKey + "_lastSaveAttempt");
+    if (!this.disablePersistence) {
+      localStorage.removeItem(this.storageKey);
+      // Limpiar también las banderas específicas al limpiar manualmente
+      localStorage.removeItem(this.storageKey + "_pendingSave");
+      localStorage.removeItem(this.storageKey + "_lastSaveAttempt");
+    }
     console.log(`🧹 Limpieza ejecutada (${this.storageKey})`);
   }
 
@@ -328,9 +338,11 @@ export default class PracticeSearchInput extends NavigationMixin(
     this.showLoading = false;
     this.practices = [];
 
-    localStorage.setItem(
-      this.storageKey,
-      JSON.stringify({ id: practice.Id, name: practice.Name })
-    );
+    if (!this.disablePersistence) {
+      localStorage.setItem(
+        this.storageKey,
+        JSON.stringify({ id: practice.Id, name: practice.Name })
+      );
+    }
   }
 }

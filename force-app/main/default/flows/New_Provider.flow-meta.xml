@@ -211,6 +211,12 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Location_of_Practice__c</field>
+            <value>
+                <elementReference>Location_of_Practice</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>MiddleName</field>
             <value>
                 <elementReference>Middle_Name</elementReference>
@@ -220,6 +226,12 @@
             <field>MyMedicalOrSpecialtyAssociation__c</field>
             <value>
                 <elementReference>My_Medical_or_Specialty_Association</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Name_of_Practice__c</field>
+            <value>
+                <elementReference>Name_of_Practice</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -707,6 +719,12 @@
                         </value>
                     </inputParameters>
                     <inputParameters>
+                        <name>startBlank</name>
+                        <value>
+                            <booleanValue>true</booleanValue>
+                        </value>
+                    </inputParameters>
+                    <inputParameters>
                         <name>practiceRecord</name>
                         <value>
                             <elementReference>practiceRecordFull</elementReference>
@@ -722,6 +740,22 @@
                         <assignToReference>practiceRecordFull</assignToReference>
                         <name>practiceRecord</name>
                     </outputParameters>
+                </fields>
+                <fields>
+                    <name>Name_of_Practice</name>
+                    <dataType>String</dataType>
+                    <fieldText>Name of Practice</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                </fields>
+                <fields>
+                    <name>Location_of_Practice</name>
+                    <dataType>String</dataType>
+                    <fieldText>Location of Practice</fieldText>
+                    <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
                 </fields>
                 <inputParameters>
                     <name>width</name>

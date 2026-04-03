@@ -6,6 +6,7 @@ import getPracticeByCaseId from "@salesforce/apex/PracticeSearchController.getPr
 
 export default class PracticeInCaseFlow extends LightningElement {
   @api isFromFlow;
+  @api startBlank = false;
 
   @api
   get practiceId() {
@@ -13,6 +14,11 @@ export default class PracticeInCaseFlow extends LightningElement {
   }
   set practiceId(value) {
     const normalizedValue = value || null;
+
+    if (this._shouldIgnoreInitialAmbientValue()) {
+      return;
+    }
+
     const hasChanged = normalizedValue !== this._practiceId;
 
     this._practiceId = normalizedValue;
@@ -34,6 +40,10 @@ export default class PracticeInCaseFlow extends LightningElement {
     return this._practiceRecord;
   }
   set practiceRecord(value) {
+    if (this._shouldIgnoreInitialAmbientValue()) {
+      return;
+    }
+
     this._practiceRecord = value || null;
 
     if (!this._practiceRecord?.Id) {
@@ -54,6 +64,10 @@ export default class PracticeInCaseFlow extends LightningElement {
   set suggestedPracticeId(value) {
     const normalizedValue = value || null;
 
+    if (this._shouldIgnoreInitialAmbientValue()) {
+      return;
+    }
+
     if (normalizedValue === this._suggestedPracticeId) {
       return;
     }
@@ -67,6 +81,10 @@ export default class PracticeInCaseFlow extends LightningElement {
     return this._recordId;
   }
   set recordId(value) {
+    if (this._shouldIgnoreInitialAmbientValue()) {
+      return;
+    }
+
     this._recordId = value;
     this._maybeInitFromRecordId();
   }
@@ -76,6 +94,10 @@ export default class PracticeInCaseFlow extends LightningElement {
     return this._objectApiName;
   }
   set objectApiName(value) {
+    if (this._shouldIgnoreInitialAmbientValue()) {
+      return;
+    }
+
     this._objectApiName = value;
     this._maybeInitFromRecordId();
   }
@@ -98,11 +120,17 @@ export default class PracticeInCaseFlow extends LightningElement {
   _lastAutoFillToastAt = 0;
   _lastCreatedToastKey;
   _lastCreatedToastAt = 0;
+  _hasRendered = false;
+  _hasEnforcedBlankStart = false;
 
   hasManualPracticeOverride = false;
   showSuggestedPracticeHelper = false;
 
   connectedCallback() {
+    if (this.startBlank) {
+      return;
+    }
+
     this._boundPracticeSelectedHandler = this.handlePracticeSelected.bind(this);
     this._boundSuggestedPracticeHandler =
       this.handleSuggestedPracticeEvent.bind(this);
@@ -286,7 +314,33 @@ export default class PracticeInCaseFlow extends LightningElement {
   };
 
   renderedCallback() {
+    this._hasRendered = true;
+
+    if (this.startBlank) {
+      this._enforceBlankStart();
+      return;
+    }
+
     this._maybeInitFromRecordId();
+  }
+
+  _shouldIgnoreInitialAmbientValue() {
+    return (
+      this.startBlank && !this._hasRendered && !this._isInternalPracticeMutation
+    );
+  }
+
+  _enforceBlankStart() {
+    if (this._hasEnforcedBlankStart) {
+      return;
+    }
+
+    this._hasEnforcedBlankStart = true;
+    this._clearPracticeState({
+      resetManualOverride: true,
+      notifyFlow: true,
+      syncChild: true
+    });
   }
 
   _isAccountContext() {
