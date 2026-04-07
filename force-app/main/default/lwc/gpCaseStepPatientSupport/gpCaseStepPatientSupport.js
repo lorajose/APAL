@@ -218,7 +218,7 @@ export default class GpCaseStepPatientSupport extends LightningElement {
                 if (item.appointmentCompletedIneffective) flags.push('ineffective');
                 if (item.suspended) flags.push('suspended');
                 if (item.careNotApplicable) flags.push('cna');
-                const cardClass = flags.length ? `scr-card ${flags.join(' ')}` : 'scr-card';
+                const cardClass = flags.length ? `scr-card wiz-selected-row ${flags.join(' ')}` : 'scr-card wiz-selected-row';
 
                 return {
                     ...item,
@@ -281,7 +281,7 @@ export default class GpCaseStepPatientSupport extends LightningElement {
                     ...item,
                     disabled,
                     checked,
-                    className: `${disabled ? 'catalog-card disabled' : 'catalog-card'}${checked ? ' selected' : ''}`
+                    className: `catalog-card wiz-catalog-row wiz-select-card${disabled ? ' disabled is-disabled' : ''}${checked ? ' selected is-selected' : ''}`
                 };
             })
             .filter(item => {
@@ -486,9 +486,9 @@ export default class GpCaseStepPatientSupport extends LightningElement {
         const id = event.target.dataset.id;
         if (!id) return;
         const value = event.target.value;
-        this.supports = this.supports.map(item =>
+        this.supports = this.supports.map(item => (
             item.id === id ? { ...item, notes: value } : item
-        );
+        ));
         this.emitDraftChange();
     }
 
@@ -497,9 +497,9 @@ export default class GpCaseStepPatientSupport extends LightningElement {
         const field = event.target.dataset.field;
         const value = event.target.checked;
         if (!id || !field) return;
-        this.supports = this.supports.map(item =>
+        this.supports = this.supports.map(item => (
             item.id === id ? { ...item, [field]: value } : item
-        );
+        ));
         this.emitDraftChange();
     }
 
@@ -637,9 +637,9 @@ export default class GpCaseStepPatientSupport extends LightningElement {
         if (!id) return;
         const field = event.target.dataset.field;
         const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-        this.wizardDraft = this.wizardDraft.map(item =>
+        this.wizardDraft = this.wizardDraft.map(item => (
             item.id === id ? { ...item, [field]: value } : item
-        );
+        ));
     }
 
     handleWizardRemoveDraft(event) {
@@ -769,7 +769,7 @@ export default class GpCaseStepPatientSupport extends LightningElement {
             if (copy.appointmentCompletedIneffective) flags.push('ineffective');
             if (copy.suspended) flags.push('suspended');
             if (copy.careNotApplicable) flags.push('cna');
-            copy.cardClass = flags.length ? `scr-card ${flags.join(' ')}` : 'scr-card';
+            copy.cardClass = flags.length ? `scr-card wiz-selected-row ${flags.join(' ')}` : 'scr-card wiz-selected-row';
             return copy;
         });
     }

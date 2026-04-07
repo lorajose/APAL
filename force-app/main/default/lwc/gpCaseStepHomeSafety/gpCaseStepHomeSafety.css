@@ -4,69 +4,12 @@
 	display: block;
 }
 
-.step-section {
-	display: flex;
-	flex-direction: column;
-	gap: 1rem;
-	color: #1f2937;
-}
-
-.section-header h2 {
-	margin: 0;
-	font-size: 1.2rem;
-	font-weight: 700;
-}
-
-.section-header p {
-	margin: 0.15rem 0 0;
-	color: #6b7280;
-	font-size: 0.9rem;
-}
-
-.field {
-	display: flex;
-	flex-direction: column;
-	gap: 0.35rem;
-}
-
-.field-full {
-	width: 100%;
-}
-
-.lethal-section .chip-grid {
+.lethal-section .wiz-chip-grid {
 	margin: 0.5rem 0 0.85rem;
 }
 
-.lethal-section .checkbox-field {
+.lethal-section .wiz-checkbox-row {
 	margin: 0.6rem 0;
-}
-
-.chip {
-	border: 1px solid #d1d5db;
-	background: #fff;
-}
-
-.chip:hover {
-	border-color: #cbd5f5;
-}
-
-.chip-selected {
-	background: #e0f2fe;
-	border-color: #0284c7;
-	color: #0369a1;
-}
-
-.selected-counter {
-	font-size: 0.85rem;
-	color: #6b7280;
-}
-
-.checkbox-field {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.45rem;
-	font-size: 0.9rem;
-	color: #374151;
 }
 
 .stressor-note-label {
@@ -77,32 +20,6 @@
 	display: flex;
 	flex-direction: column;
 	gap: 0.75rem;
-}
-
-.card-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-end;
-	gap: 1rem;
-	flex-wrap: wrap;
-}
-
-.card-subtitle {
-	margin: 0.1rem 0 0;
-}
-
-.input-row {
-	display: flex;
-	align-items: center;
-	gap: 0.75rem;
-}
-
-.pill-search {
-	flex: 1;
-	border: 1px solid #d1d5db;
-	border-radius: 999px;
-	padding: 0.45rem 0.85rem;
-	font-size: 0.85rem;
 }
 
 .stressor-grid {
@@ -122,21 +39,9 @@
 	font-weight: 600;
 }
 
-.checkbox-list {
-	border: 1px solid #e5e7eb;
-	border-radius: 0.75rem;
-	padding: 0.65rem;
+.stressor-grid .wiz-checkbox-list {
 	max-height: 320px;
 	overflow: auto;
-	background: #f9fafb;
-}
-
-.checkbox-row {
-	display: flex;
-	align-items: center;
-	gap: 0.45rem;
-	padding: 0.2rem 0;
-	font-size: 0.9rem;
 }
 
 .flag-row {
@@ -166,48 +71,12 @@
 	margin-bottom: 0.6rem;
 }
 
-.actions {
-	display: flex;
-	justify-content: space-between;
-	margin-top: 0.5rem;
-}
-
-.primary,
-.secondary {
-	border-radius: 999px;
-	padding: 0.5rem 1.5rem;
-	font-size: 0.95rem;
-	cursor: pointer;
-	border: none;
-}
-
-.primary {
-	background: #059669;
-	color: #fff;
-}
-
-.secondary {
-	background: #e5e7eb;
-	color: #374151;
-}
-
-.required {
-	color: #dc2626;
-	font-size: 0.85rem;
-	margin-left: 0.25rem;
-}
-
 @media (max-width: 768px) {
-	.input-row {
-		flex-direction: column;
-		align-items: stretch;
-	}
-
 	.stressor-grid {
 		grid-template-columns: 1fr;
 	}
 
-	.checkbox-list {
+	.stressor-grid .wiz-checkbox-list {
 		max-height: none;
 	}
 

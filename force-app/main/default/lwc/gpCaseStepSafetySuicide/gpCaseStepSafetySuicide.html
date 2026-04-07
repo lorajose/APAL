@@ -1,5 +1,5 @@
 <template>
-    <div class="step-section">
+    <div class="step-section wiz-step-stack">
        <!-- <div class="section-header">
             <h2>Step 4 — Safety: Suicide Risk</h2>
             <p>Capture ideation, protective factors, and access to means.</p>
@@ -56,6 +56,7 @@
                         <input
                             type="checkbox"
                             checked={suicidalIntent}
+                            aria-label="Suicidal intent present"
                             data-field="Suicidal_Intent__c"
                             onchange={handleCheckboxChange}
                         />
@@ -87,9 +88,9 @@
                         <p class="card-subtitle wiz-description">Select all means currently available.</p>
                     </div>
                 </div>
-                <div class="checkbox-list">
+                <div class="checkbox-list wiz-checkbox-list">
                     <template for:each={meansOptions} for:item="option">
-                        <label key={option.value} class="checkbox-row">
+                        <label key={option.value} class="checkbox-row wiz-checkbox-option">
                             <input
                                 type="checkbox"
                                 data-value={option.value}

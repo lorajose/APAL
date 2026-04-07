@@ -1,172 +1,172 @@
 <template>
-    <div class="step-section">
+    <div class="step-section wiz-step-stack">
        <!-- <div class="section-header">
             <div class="section-heading">
                 <h2>Step 15 — Review &amp; Save</h2>
                 <p>Final check before saving. Use the edit links to jump back if something needs attention.</p>
             </div>
         </div> -->
-        <section class="card wiz-card intro-card">
+        <section class="card wiz-card intro-card wiz-text-body">
             <p>{introMessage}</p>
         </section>
 
         <template if:true={showSummary}>
-        <section class="card wiz-card summary-card wiz-review-panel">
-            <div class="summary-header wiz-panel-header">
+        <section class="card wiz-card summary-card wiz-review-panel wiz-summary-card">
+            <div class="summary-header wiz-panel-header wiz-review-section-header">
                 <h3 class="wiz-item-title">Basics</h3>
-                <button class="link-button" data-step="1" onclick={handleEditStep}>Edit Basics</button>
+                <button class="link-button wiz-btn wiz-btn-text" type="button" data-step="1" onclick={handleEditStep}>Edit Basics</button>
             </div>
-            <dl class="summary-list">
+            <dl class="summary-list wiz-review-fact-list">
                 <template for:each={basicsSummary} for:item="row">
-                    <div key={row.label} class="summary-row">
-                        <dt>{row.label}</dt>
-                        <dd>{row.value}</dd>
+                    <div key={row.label} class="summary-row wiz-review-fact">
+                        <dt class="wiz-review-label">{row.label}</dt>
+                        <dd class="wiz-review-value">{row.value}</dd>
                     </div>
                 </template>
             </dl>
         </section>
 
-        <section class="card wiz-card summary-card wiz-review-panel">
-            <div class="summary-header wiz-panel-header">
+        <section class="card wiz-card summary-card wiz-review-panel wiz-summary-card">
+            <div class="summary-header wiz-panel-header wiz-review-section-header">
                 <h3 class="wiz-item-title">Presenting &amp; Availability</h3>
-                <button class="link-button" data-step="2" onclick={handleEditStep}>Edit Presenting</button>
+                <button class="link-button wiz-btn wiz-btn-text" type="button" data-step="2" onclick={handleEditStep}>Edit Presenting</button>
             </div>
-            <dl class="summary-list">
+            <dl class="summary-list wiz-review-fact-list">
                 <template for:each={presentingSummary} for:item="row">
-                    <div key={row.label} class="summary-row">
-                        <dt>{row.label}</dt>
-                        <dd>{row.value}</dd>
+                    <div key={row.label} class="summary-row wiz-review-fact">
+                        <dt class="wiz-review-label">{row.label}</dt>
+                        <dd class="wiz-review-value">{row.value}</dd>
                     </div>
                 </template>
             </dl>
         </section>
 
-        <section class="card wiz-card summary-card wiz-review-panel">
-            <div class="summary-header wiz-panel-header">
+        <section class="card wiz-card summary-card wiz-review-panel wiz-summary-card">
+            <div class="summary-header wiz-panel-header wiz-review-section-header">
                 <h3 class="wiz-item-title">Prior Dx &amp; Utilization</h3>
-                <button class="link-button" data-step="3" onclick={handleEditStep}>Edit Prior Dx</button>
+                <button class="link-button wiz-btn wiz-btn-text" type="button" data-step="3" onclick={handleEditStep}>Edit Prior Dx</button>
             </div>
-            <dl class="summary-list">
+            <dl class="summary-list wiz-review-fact-list">
                 <template for:each={priorSummary} for:item="row">
-                    <div key={row.label} class="summary-row">
-                        <dt>{row.label}</dt>
-                        <dd>{row.value}</dd>
+                    <div key={row.label} class="summary-row wiz-review-fact">
+                        <dt class="wiz-review-label">{row.label}</dt>
+                        <dd class="wiz-review-value">{row.value}</dd>
                     </div>
                 </template>
             </dl>
         </section>
 
-        <section class="card wiz-card summary-card wiz-review-panel">
-            <div class="summary-header wiz-panel-header">
+        <section class="card wiz-card summary-card wiz-review-panel wiz-summary-card">
+            <div class="summary-header wiz-panel-header wiz-review-section-header">
                 <h3 class="wiz-item-title">Safety — Suicide</h3>
-                <button class="link-button" data-step="4" onclick={handleEditStep}>Edit Suicide Risk</button>
+                <button class="link-button wiz-btn wiz-btn-text" type="button" data-step="4" onclick={handleEditStep}>Edit Suicide Risk</button>
             </div>
-            <dl class="summary-list">
+            <dl class="summary-list wiz-review-fact-list">
                 <template for:each={suicideSummary} for:item="row">
-                    <div key={row.label} class="summary-row">
-                        <dt>{row.label}</dt>
-                        <dd>{row.value}</dd>
+                    <div key={row.label} class="summary-row wiz-review-fact">
+                        <dt class="wiz-review-label">{row.label}</dt>
+                        <dd class="wiz-review-value">{row.value}</dd>
                     </div>
                 </template>
             </dl>
         </section>
 
-        <section class="card wiz-card summary-card wiz-review-panel">
-            <div class="summary-header wiz-panel-header">
+        <section class="card wiz-card summary-card wiz-review-panel wiz-summary-card">
+            <div class="summary-header wiz-panel-header wiz-review-section-header">
                 <h3 class="wiz-item-title">Safety — Homicide / Violence</h3>
-                <button class="link-button" data-step="5" onclick={handleEditStep}>Edit Homicide Risk</button>
+                <button class="link-button wiz-btn wiz-btn-text" type="button" data-step="5" onclick={handleEditStep}>Edit Homicide Risk</button>
             </div>
-            <dl class="summary-list">
+            <dl class="summary-list wiz-review-fact-list">
                 <template for:each={homicideSummary} for:item="row">
-                    <div key={row.label} class="summary-row">
-                        <dt>{row.label}</dt>
-                        <dd>{row.value}</dd>
+                    <div key={row.label} class="summary-row wiz-review-fact">
+                        <dt class="wiz-review-label">{row.label}</dt>
+                        <dd class="wiz-review-value">{row.value}</dd>
                     </div>
                 </template>
             </dl>
         </section>
 
-        <section class="card wiz-card summary-card wiz-review-panel">
-            <div class="summary-header wiz-panel-header">
+        <section class="card wiz-card summary-card wiz-review-panel wiz-summary-card">
+            <div class="summary-header wiz-panel-header wiz-review-section-header">
                 <h3 class="wiz-item-title">Psychosis, Mania &amp; Red Flags</h3>
-                <button class="link-button" data-step="6" onclick={handleEditStep}>Edit Psychosis/Mania</button>
+                <button class="link-button wiz-btn wiz-btn-text" type="button" data-step="6" onclick={handleEditStep}>Edit Psychosis/Mania</button>
             </div>
-            <dl class="summary-list">
+            <dl class="summary-list wiz-review-fact-list">
                 <template for:each={psychosisSummary} for:item="row">
-                    <div key={row.label} class="summary-row">
-                        <dt>{row.label}</dt>
-                        <dd>{row.value}</dd>
+                    <div key={row.label} class="summary-row wiz-review-fact">
+                        <dt class="wiz-review-label">{row.label}</dt>
+                        <dd class="wiz-review-value">{row.value}</dd>
                     </div>
                 </template>
             </dl>
         </section>
 
-        <section class="card wiz-card summary-card wiz-review-panel">
-            <div class="summary-header wiz-panel-header">
+        <section class="card wiz-card summary-card wiz-review-panel wiz-summary-card">
+            <div class="summary-header wiz-panel-header wiz-review-section-header">
                 <h3 class="wiz-item-title">Family &amp; Trauma</h3>
-                <button class="link-button" data-step="7" onclick={handleEditStep}>Edit Family/Trauma</button>
+                <button class="link-button wiz-btn wiz-btn-text" type="button" data-step="7" onclick={handleEditStep}>Edit Family/Trauma</button>
             </div>
-            <dl class="summary-list">
+            <dl class="summary-list wiz-review-fact-list">
                 <template for:each={familySummary} for:item="row">
-                    <div key={row.label} class="summary-row">
-                        <dt>{row.label}</dt>
-                        <dd>{row.value}</dd>
+                    <div key={row.label} class="summary-row wiz-review-fact">
+                        <dt class="wiz-review-label">{row.label}</dt>
+                        <dd class="wiz-review-value">{row.value}</dd>
                     </div>
                 </template>
             </dl>
         </section>
 
-        <section class="card wiz-card summary-card wiz-review-panel">
-            <div class="summary-header wiz-panel-header">
+        <section class="card wiz-card summary-card wiz-review-panel wiz-summary-card">
+            <div class="summary-header wiz-panel-header wiz-review-section-header">
                 <h3 class="wiz-item-title">Home Safety, Stressors &amp; Supports</h3>
-                <button class="link-button" data-step="8" onclick={handleEditStep}>Edit Home Safety</button>
+                <button class="link-button wiz-btn wiz-btn-text" type="button" data-step="8" onclick={handleEditStep}>Edit Home Safety</button>
             </div>
-            <dl class="summary-list">
+            <dl class="summary-list wiz-review-fact-list">
                 <template for:each={homeSafetySummary} for:item="row">
-                    <div key={row.label} class="summary-row">
-                        <dt>{row.label}</dt>
-                        <dd>{row.value}</dd>
+                    <div key={row.label} class="summary-row wiz-review-fact">
+                        <dt class="wiz-review-label">{row.label}</dt>
+                        <dd class="wiz-review-value">{row.value}</dd>
                     </div>
                 </template>
             </dl>
         </section>
 
-        <section class="card wiz-card summary-card wiz-review-panel">
-            <div class="summary-header wiz-panel-header">
+        <section class="card wiz-card summary-card wiz-review-panel wiz-summary-card">
+            <div class="summary-header wiz-panel-header wiz-review-section-header">
                 <h3 class="wiz-item-title">Orientation &amp; Cognition</h3>
-                <button class="link-button" data-step="9" onclick={handleEditStep}>Edit Cognition</button>
+                <button class="link-button wiz-btn wiz-btn-text" type="button" data-step="9" onclick={handleEditStep}>Edit Cognition</button>
             </div>
-            <dl class="summary-list">
+            <dl class="summary-list wiz-review-fact-list">
                 <template for:each={cognitionSummary} for:item="row">
-                    <div key={row.label} class="summary-row">
-                        <dt>{row.label}</dt>
-                        <dd>{row.value}</dd>
+                    <div key={row.label} class="summary-row wiz-review-fact">
+                        <dt class="wiz-review-label">{row.label}</dt>
+                        <dd class="wiz-review-value">{row.value}</dd>
                     </div>
                 </template>
             </dl>
         </section>
 
-        <section class="card wiz-card grid-card wiz-review-panel">
-            <div class="summary-header wiz-panel-header">
+        <section class="card wiz-card grid-card wiz-review-panel wiz-summary-card">
+            <div class="summary-header wiz-panel-header wiz-review-section-header">
                 <h3 class="wiz-item-title">Concerns</h3>
-                <button class="link-button" data-step="13" onclick={handleEditStep}>Edit Concerns</button>
+                <button class="link-button wiz-btn wiz-btn-text" type="button" data-step="13" onclick={handleEditStep}>Edit Concerns</button>
             </div>
             <template if:true={concerns.length}>
-                <div class="grid-list wiz-review-list">
+                <div class="grid-list wiz-review-list wiz-review-grid">
                     <template for:each={concerns} for:item="concern">
-                        <article key={concern.id} class="grid-item wiz-selected-row">
-                            <header>
+                        <article key={concern.id} class="grid-item wiz-selected-row wiz-review-grid-item">
+                            <header class="wiz-heading-stack">
                                 <h4>{concern.label}</h4>
                                 <p>{concern.category}</p>
                             </header>
-                            <p class="grid-notes">
+                            <p class="grid-notes wiz-review-copy">
                                 Source:
                                 <span>
                                     <template if:true={concern.sourceLabel}>{concern.sourceLabel}</template>
                                     <template if:false={concern.sourceLabel}>Manual</template>
                                 </span>
                             </p>
-                            <p class="grid-notes">
+                            <p class="grid-notes wiz-review-copy">
                                 Notes:
                                 <span>
                                     <template if:true={concern.notes}>{concern.notes}</template>
@@ -178,43 +178,43 @@
                 </div>
             </template>
             <template if:false={concerns.length}>
-                <p class="empty-subtitle">No concerns captured.</p>
+                <p class="empty-subtitle wiz-empty-state-subtitle">No concerns captured.</p>
             </template>
         </section>
 
-        <section class="card wiz-card grid-card wiz-review-panel">
-            <div class="summary-header wiz-panel-header">
+        <section class="card wiz-card grid-card wiz-review-panel wiz-summary-card">
+            <div class="summary-header wiz-panel-header wiz-review-section-header">
                 <h3 class="wiz-item-title">Medications</h3>
-                <button class="link-button" data-step="10" onclick={handleEditStep}>Edit Medications</button>
+                <button class="link-button wiz-btn wiz-btn-text" type="button" data-step="10" onclick={handleEditStep}>Edit Medications</button>
             </div>
             <template if:true={medications.length}>
-                <div class="grid-list wiz-review-list">
+                <div class="grid-list wiz-review-list wiz-review-grid">
                     <template for:each={medications} for:item="med">
-                        <article key={med.id} class="grid-item wiz-selected-row">
-                            <header>
+                        <article key={med.id} class="grid-item wiz-selected-row wiz-review-grid-item">
+                            <header class="wiz-heading-stack">
                                 <h4>{med.meta.title}</h4>
                                 <p>{med.meta.brand}</p>
                             </header>
                             <div class="pill-row wiz-panel-meta">
-                                <span class="summary-pill">
+                                <span class="summary-pill wiz-pill">
                                     <template if:true={med.action}>{med.action}</template>
                                     <template if:false={med.action}>—</template>
                                 </span>
                                 <template if:true={med.frequency}>
-                                    <span class="summary-pill">{med.frequency}</span>
+                                    <span class="summary-pill wiz-pill">{med.frequency}</span>
                                 </template>
                                 <template if:true={med.amount}>
-                                    <span class="summary-pill">{med.amount} {med.unit}</span>
+                                    <span class="summary-pill wiz-pill">{med.amount} {med.unit}</span>
                                 </template>
-                                <span class="summary-pill">{med.meta.category}</span>
+                                <span class="summary-pill wiz-pill">{med.meta.category}</span>
                                 <template if:true={med.current}>
-                                    <span class="summary-pill positive">Current</span>
+                                    <span class="summary-pill positive wiz-pill is-success">Current</span>
                                 </template>
                                 <template if:true={med.allergy}>
-                                    <span class="summary-pill warning">Allergy</span>
+                                    <span class="summary-pill warning wiz-pill is-warning">Allergy</span>
                                 </template>
                             </div>
-                            <p class="grid-notes">
+                            <p class="grid-notes wiz-review-copy">
                                 Notes:
                                 <span>
                                     <template if:true={med.notes}>{med.notes}</template>
@@ -226,31 +226,31 @@
                 </div>
             </template>
             <template if:false={medications.length}>
-                <p class="empty-subtitle">No medications captured.</p>
+                <p class="empty-subtitle wiz-empty-state-subtitle">No medications captured.</p>
             </template>
         </section>
 
-        <section class="card wiz-card grid-card wiz-review-panel">
-            <div class="summary-header wiz-panel-header">
+        <section class="card wiz-card grid-card wiz-review-panel wiz-summary-card">
+            <div class="summary-header wiz-panel-header wiz-review-section-header">
                 <h3 class="wiz-item-title">Substances</h3>
-                <button class="link-button" data-step="11" onclick={handleEditStep}>Edit Substances</button>
+                <button class="link-button wiz-btn wiz-btn-text" type="button" data-step="11" onclick={handleEditStep}>Edit Substances</button>
             </div>
             <template if:true={substances.length}>
-                <div class="grid-list wiz-review-list">
+                <div class="grid-list wiz-review-list wiz-review-grid">
                     <template for:each={substances} for:item="item">
-                        <article key={item.id} class="grid-item wiz-selected-row">
-                            <header>
+                        <article key={item.id} class="grid-item wiz-selected-row wiz-review-grid-item">
+                            <header class="wiz-heading-stack">
                                 <h4>{item.meta.name}</h4>
                             </header>
                             <div class="pill-row wiz-panel-meta">
                                 <template if:true={item.frequency}>
-                                    <span class="summary-pill">{item.frequency}</span>
+                                    <span class="summary-pill wiz-pill">{item.frequency}</span>
                                 </template>
                                 <template if:true={item.current}>
-                                    <span class="summary-pill positive">Current</span>
+                                    <span class="summary-pill positive wiz-pill is-success">Current</span>
                                 </template>
                             </div>
-                            <p class="grid-notes">
+                            <p class="grid-notes wiz-review-copy">
                                 Notes:
                                 <span>
                                     <template if:true={item.notes}>{item.notes}</template>
@@ -262,35 +262,35 @@
                 </div>
             </template>
             <template if:false={substances.length}>
-                <p class="empty-subtitle">No substances captured.</p>
+                <p class="empty-subtitle wiz-empty-state-subtitle">No substances captured.</p>
             </template>
         </section>
 
-        <section class="card wiz-card grid-card wiz-review-panel">
-            <div class="summary-header wiz-panel-header">
+        <section class="card wiz-card grid-card wiz-review-panel wiz-summary-card">
+            <div class="summary-header wiz-panel-header wiz-review-section-header">
                 <h3 class="wiz-item-title">Screeners</h3>
-                <button class="link-button" data-step="12" onclick={handleEditStep}>Edit Screeners</button>
+                <button class="link-button wiz-btn wiz-btn-text" type="button" data-step="12" onclick={handleEditStep}>Edit Screeners</button>
             </div>
             <template if:true={screeners.length}>
-                <div class="grid-list wiz-review-list">
+                <div class="grid-list wiz-review-list wiz-review-grid">
                     <template for:each={screeners} for:item="scr">
-                        <article key={scr.id} class="grid-item wiz-selected-row">
-                            <header>
+                        <article key={scr.id} class="grid-item wiz-selected-row wiz-review-grid-item">
+                            <header class="wiz-heading-stack">
                                 <h4>{scr.meta.name}</h4>
                                 <p>{scr.meta.type}</p>
                             </header>
                             <div class="pill-row wiz-panel-meta">
                                 <template if:true={scr.date}>
-                                    <span class="summary-pill">{scr.date}</span>
+                                    <span class="summary-pill wiz-pill">{scr.date}</span>
                                 </template>
                                 <template if:true={scr.score}>
-                                    <span class="summary-pill">Score: {scr.score}</span>
+                                    <span class="summary-pill wiz-pill">Score: {scr.score}</span>
                                 </template>
                                 <template if:true={scr.positive}>
-                                    <span class="summary-pill positive">Positive</span>
+                                    <span class="summary-pill positive wiz-pill is-success">Positive</span>
                                 </template>
                             </div>
-                            <p class="grid-notes">
+                            <p class="grid-notes wiz-review-copy">
                                 Notes:
                                 <span>
                                     <template if:true={scr.notes}>{scr.notes}</template>
@@ -302,43 +302,43 @@
                 </div>
             </template>
             <template if:false={screeners.length}>
-                <p class="empty-subtitle">No screeners captured.</p>
+                <p class="empty-subtitle wiz-empty-state-subtitle">No screeners captured.</p>
             </template>
         </section>
 
-        <section class="card wiz-card grid-card wiz-review-panel">
-            <div class="summary-header wiz-panel-header">
+        <section class="card wiz-card grid-card wiz-review-panel wiz-summary-card">
+            <div class="summary-header wiz-panel-header wiz-review-section-header">
                 <h3 class="wiz-item-title">Safety Risks</h3>
-                <button class="link-button" data-step="14" onclick={handleEditStep}>Edit Safety Risks</button>
+                <button class="link-button wiz-btn wiz-btn-text" type="button" data-step="14" onclick={handleEditStep}>Edit Safety Risks</button>
             </div>
             <template if:true={safetyRisks.length}>
-                <div class="grid-list wiz-review-list">
+                <div class="grid-list wiz-review-list wiz-review-grid">
                     <template for:each={safetyRisks} for:item="risk">
-                        <article key={risk.id} class="grid-item wiz-selected-row">
-                            <header>
+                        <article key={risk.id} class="grid-item wiz-selected-row wiz-review-grid-item">
+                            <header class="wiz-heading-stack">
                                 <h4>{risk.meta.name}</h4>
                                 <p>{risk.meta.category}</p>
                             </header>
                             <div class="pill-row wiz-panel-meta">
-                                <span class="summary-pill">
+                                <span class="summary-pill wiz-pill">
                                     Recent:
                                     <template if:true={risk.recent}>Yes</template>
                                     <template if:false={risk.recent}>No</template>
                                 </span>
-                                <span class="summary-pill">
+                                <span class="summary-pill wiz-pill">
                                     Historical:
                                     <template if:true={risk.historical}>Yes</template>
                                     <template if:false={risk.historical}>No</template>
                                 </span>
                             </div>
-                            <p class="grid-notes">
+                            <p class="grid-notes wiz-review-copy">
                                 Source:
                                 <span>
                                     <template if:true={risk.sourceLabel}>{risk.sourceLabel}</template>
                                     <template if:false={risk.sourceLabel}>Manual</template>
                                 </span>
                             </p>
-                            <p class="grid-notes">
+                            <p class="grid-notes wiz-review-copy">
                                 Notes:
                                 <span>
                                     <template if:true={risk.notes}>{risk.notes}</template>
@@ -350,7 +350,7 @@
                 </div>
             </template>
             <template if:false={safetyRisks.length}>
-                <p class="empty-subtitle">No safety risks captured.</p>
+                <p class="empty-subtitle wiz-empty-state-subtitle">No safety risks captured.</p>
             </template>
         </section>
         </template>

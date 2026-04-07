@@ -283,9 +283,10 @@ export default class gpCaseCreator extends NavigationMixin(LightningElement) {
     }
 
     get wizardLayoutClass() {
-        if (this.isPhone) return 'wizard-layout form-factor-small';
-        if (this.isTablet) return 'wizard-layout form-factor-medium';
-        return 'wizard-layout form-factor-large';
+        const baseClass = 'wizard-layout wiz-shell-layout';
+        if (this.isPhone) return `${baseClass} form-factor-small`;
+        if (this.isTablet) return `${baseClass} form-factor-medium`;
+        return `${baseClass} form-factor-large`;
     }
     // Getters de visibilidad (se mantienen igual)
     get isStep1() {
@@ -494,7 +495,8 @@ get stepsFormatted() {
             ? (hasError ? 'in-progress' : 'final-completed')
             : status;
         const showActive = isCurrent;
-        let css = "step-item ";
+        let css = "step-item wiz-sidebar-step ";
+        let sharedStateClass = 'is-locked';
         
         console.warn(`\nProcesando Paso ${s.value} (${s.label}):`);
         console.warn(` -> Estado encontrado: ${status}`);
@@ -502,20 +504,28 @@ get stepsFormatted() {
         // 2. Asignación de la clase CSS de estado
         if (showActive) {
             css += "step-active";
+            sharedStateClass = 'is-active';
         } else if (displayStatus === 'active') {
             // Si no es el paso actual, no mantenerlo en activo; mostrar como completado
             css += "step-completed";
+            sharedStateClass = 'is-complete-muted';
         } else if (displayStatus === 'final-completed') {
             css += "step-final-completed"; // Clase Verde con Check
+            sharedStateClass = 'is-complete';
         } else if (displayStatus === 'completed') {
             css += "step-completed"; // Gris claro
+            sharedStateClass = 'is-complete-muted';
         } else if (displayStatus === 'warning') {
             css += "step-warning";
+            sharedStateClass = 'is-warning';
         } else if (displayStatus === 'in-progress') {
             css += "step-in-progress";
+            sharedStateClass = 'is-error';
         } else {
             css += "step-locked"; // locked (default)
+            sharedStateClass = 'is-locked';
         }
+        css += ` ${sharedStateClass}`;
         
         // 3. Determinar la clickeabilidad
         // Permite saltar a cualquier paso que no esté 'locked'

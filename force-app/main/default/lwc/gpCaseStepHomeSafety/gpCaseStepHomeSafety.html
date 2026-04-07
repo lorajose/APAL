@@ -1,5 +1,5 @@
 <template>
-    <div class="step-section">
+    <div class="step-section wiz-step-stack">
       <!--  <div class="section-header">
             <h2>Step 8 — Home Safety, Stressors &amp; Supports</h2>
             <p>Confirm safety status, lethal-means access, and psychosocial stressors.</p>
@@ -28,7 +28,7 @@
                     <div class="wiz-heading-stack">
                         <p class="card-title wiz-item-title">
                             <template if:true={isLethalMeansRequired}>
-                                <span class="required">*</span>
+                                <span class="required wiz-required">*</span>
                             </template>
                             Lethal Means Access
                         </p>
@@ -77,17 +77,17 @@
                     <p class="card-title wiz-item-title">Psychosocial Stressors</p>
                     <p class="card-subtitle wiz-description">Select stressors; capture notes and recent/historical flags.</p>
                 </div>
-                <div class="input-row condensed">
+                <div class="input-row condensed wiz-search-row">
                     <label class="input-label wiz-field-label" for="stressor-search">Search</label>
-                    <input id="stressor-search" type="search" class="pill-search" placeholder="Filter stressors..." value={stressorSearch} oninput={handleStressorSearch} />
+                    <input id="stressor-search" type="search" class="pill-search wiz-pill-search" placeholder="Filter stressors..." value={stressorSearch} oninput={handleStressorSearch} />
                 </div>
             </header>
             <div class="stressor-grid">
                 <div class="available-column">
                     <p class="column-title">Available</p>
-                    <div class="checkbox-list">
+                    <div class="checkbox-list wiz-checkbox-list">
                         <template for:each={filteredStressors} for:item="option">
-                            <label key={option.value} class="checkbox-row">
+                            <label key={option.value} class="checkbox-row wiz-checkbox-option">
                                 <input type="checkbox" data-value={option.value} checked={option.checked} onchange={handleStressorToggle} />
                                 <span>{option.label}</span>
                             </label>
@@ -108,6 +108,7 @@
                                     <textarea
                                         class="textarea wiz-control"
                                         data-value={item.value}
+                                        aria-label="Stressor notes"
                                         oninput={handleStressorNoteChange}
                                     >{item.note}</textarea>
                                 </div>

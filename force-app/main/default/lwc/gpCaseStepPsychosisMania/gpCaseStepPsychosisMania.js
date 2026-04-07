@@ -208,7 +208,7 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
             .filter(option => option.label.toLowerCase().includes(term))
             .map(option => ({
                 ...option,
-                chipClass: `chip ${selected.has(option.value) ? 'chip-selected' : ''}`
+                chipClass: `chip wiz-chip${selected.has(option.value) ? ' chip-selected is-selected' : ''}`
             }));
     }
 
@@ -287,7 +287,6 @@ export default class GpCaseStepPsychosisMania extends LightningElement {
             this.psychosisNotes = recordPsychosisNotes;
         } else if (this.psychosisNotesDirty && this.psychosisNotes) {
             // Keep local draft when parent sends an empty draft on step change.
-            this.psychosisNotes = this.psychosisNotes;
         } else {
             this.psychosisNotes = '';
         }

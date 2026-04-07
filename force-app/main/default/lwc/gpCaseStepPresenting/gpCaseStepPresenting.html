@@ -1,5 +1,5 @@
 <template>
-    <div class="step-section">
+    <div class="step-section wiz-step-stack">
        <!-- <div class="section-header">
             <h2>Step 2 — Presenting &amp; Availability</h2>
             <p>Capture primary questions, domains, and presenting context together.</p>
@@ -53,9 +53,9 @@
                 </div>
                 <span class="selected-counter wiz-counter">{impairedCountLabel}</span>
             </header>
-            <div class="input-row">
+            <div class="input-row wiz-search-row">
                 <label class="input-label wiz-field-label" for="domains-search">Search</label>
-                <input id="domains-search" type="search" class="pill-search" placeholder="Filter options..."
+                <input id="domains-search" type="search" class="pill-search wiz-pill-search" placeholder="Filter options..."
                     value={domainsSearch} oninput={handleDomainSearch}>
             </div>
             <div class="chip-grid wiz-chip-grid">
@@ -94,7 +94,7 @@
             </div>
             <div class="field checkbox-field wiz-field">
                 <label class="input-label wiz-field-label">Abrupt change since onset?</label>
-                <input type="checkbox" class="checkbox" checked={abruptChange} onchange={handleCheckboxChange}>
+                <input type="checkbox" class="checkbox" checked={abruptChange} aria-label="Abrupt change since onset" onchange={handleCheckboxChange}>
             </div>
         </section>
 
@@ -104,18 +104,18 @@
                     <p class="card-title wiz-item-title">Top Symptoms / Concerns</p>
                     <p class="card-subtitle wiz-description">Select concerns; add notes for the ones you choose.</p>
                 </div>
-                <div class="input-row condensed">
+                <div class="input-row condensed wiz-search-row">
                     <label class="input-label wiz-field-label" for="symptom-search">Search</label>
-                    <input id="symptom-search" type="search" class="pill-search" placeholder="Filter concerns..."
+                    <input id="symptom-search" type="search" class="pill-search wiz-pill-search" placeholder="Filter concerns..."
                         value={symptomSearch} oninput={handleSymptomSearch}>
                 </div>
             </div>
                 <div class="top-symptoms-grid">
                 <div class="available-column">
                     <p class="column-title">Available</p>
-                    <div class="checkbox-list">
+                    <div class="checkbox-list wiz-checkbox-list">
                         <template for:each={filteredTopSymptoms} for:item="option">
-                            <label key={option.value} class="checkbox-row">
+                            <label key={option.value} class="checkbox-row wiz-checkbox-option">
                                 <input type="checkbox" data-value={option.value} checked={option.checked}
                                     onchange={handleSymptomToggle}>
                                 <span>{option.label}</span>
@@ -138,6 +138,7 @@
                                     <textarea
                                         class="textarea wiz-control"
                                         data-value={item.value}
+                                        aria-label="Symptom notes"
                                         oninput={handleSymptomNoteChange}
                                     >{item.note}</textarea>
                                 </div>

@@ -1,5 +1,5 @@
 <template>
-    <div class="step-section">
+    <div class="step-section wiz-step-stack">
        <!-- <div class="section-header">
             <h2>Step 6 — Psychosis, Mania &amp; Red Flags</h2>
             <p>Capture symptom clusters and note any medical contributors.</p>
@@ -8,15 +8,15 @@
         <section class="card wiz-card multi-grid">
             <div class="multi-column">
                 <header class="card-header wiz-card-header">
-                    <div>
+                    <div class="wiz-heading-stack">
                         <p class="card-title wiz-item-title">Psychosis Symptoms</p>
                         <p class="card-subtitle wiz-description">Search or tap to toggle key psychosis indicators.</p>
                     </div>
                     <span class="selected-counter wiz-counter">{psychosisCountLabel}</span>
                 </header>
-                <div class="input-row">
+                <div class="input-row wiz-search-row">
                     <label class="input-label wiz-field-label" for="psychosis-search">Search</label>
-                    <input id="psychosis-search" type="search" class="pill-search" placeholder="Filter options..."
+                    <input id="psychosis-search" type="search" class="pill-search wiz-pill-search" placeholder="Filter options..."
                         value={psychosisSearch} oninput={handlePsychosisSearch}>
                 </div>
                 <div class="chip-grid wiz-chip-grid">
@@ -31,15 +31,15 @@
 
             <div class="multi-column">
                 <header class="card-header wiz-card-header">
-                    <div>
+                    <div class="wiz-heading-stack">
                         <p class="card-title wiz-item-title">Mania / Hypomania Symptoms</p>
                         <p class="card-subtitle wiz-description">Capture mania/hypomania presentations observed.</p>
                     </div>
                     <span class="selected-counter wiz-counter">{maniaCountLabel}</span>
                 </header>
-                <div class="input-row">
+                <div class="input-row wiz-search-row">
                     <label class="input-label wiz-field-label" for="mania-search">Search</label>
-                    <input id="mania-search" type="search" class="pill-search" placeholder="Filter options..."
+                    <input id="mania-search" type="search" class="pill-search wiz-pill-search" placeholder="Filter options..."
                         value={maniaSearch} oninput={handleManiaSearch}>
                 </div>
                 <div class="chip-grid wiz-chip-grid">
@@ -71,15 +71,15 @@
 
         <section class="card wiz-card">
             <header class="card-header wiz-card-header">
-                <div>
+                <div class="wiz-heading-stack">
                     <p class="card-title wiz-item-title">Medical Red Flags</p>
                     <p class="card-subtitle wiz-description">Flag any contributing medical drivers that require parallel workup.</p>
                 </div>
                 <span class="selected-counter wiz-counter">{redFlagCountLabel}</span>
             </header>
-            <div class="input-row">
+            <div class="input-row wiz-search-row">
                 <label class="input-label wiz-field-label" for="red-flag-search">Search</label>
-                <input id="red-flag-search" type="search" class="pill-search" placeholder="Filter options..."
+                <input id="red-flag-search" type="search" class="pill-search wiz-pill-search" placeholder="Filter options..."
                     value={redFlagSearch} oninput={handleRedFlagSearch}>
             </div>
             <div class="chip-grid wiz-chip-grid">
