@@ -257,7 +257,7 @@ export default class GpCaseStepPresenting extends LightningElement {
             .filter(opt => opt.label.toLowerCase().includes(term))
             .map(opt => ({
                 ...opt,
-                chipClass: `chip ${selected.has(opt.value) ? 'chip-selected' : ''}`
+                chipClass: `chip wiz-chip${selected.has(opt.value) ? ' chip-selected is-selected' : ''}`
             }));
     }
 
@@ -268,7 +268,7 @@ export default class GpCaseStepPresenting extends LightningElement {
             .filter(opt => opt.label.toLowerCase().includes(term))
             .map(opt => ({
                 ...opt,
-                chipClass: `chip ${selected.has(opt.value) ? 'chip-selected' : ''}`
+                chipClass: `chip wiz-chip${selected.has(opt.value) ? ' chip-selected is-selected' : ''}`
             }));
     }
 
@@ -494,11 +494,11 @@ export default class GpCaseStepPresenting extends LightningElement {
         if (!value) return;
 
         this.selectedTopSymptoms = this.selectedTopSymptoms.map(item =>
-            item.value === value ? {
+            (item.value === value ? {
                 ...item,
                 note
             } :
-            item
+            item)
         );
         this.emitDraftChange();
     }

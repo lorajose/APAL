@@ -1,20 +1,20 @@
 <template>
-    <div class="step-section">
+    <div class="step-section wiz-step-stack">
        <!-- <div class="section-header">
             <h2>Step 7 — Family &amp; Trauma</h2>
             <p>Document recent trauma, safety concerns, and relevant family history.</p>
         </div> -->
 
         <section class="card wiz-card checkbox-grid">
-            <label class="checkbox-field">
+            <label class="checkbox-field wiz-checkbox">
                 <input type="checkbox" checked={recentTrauma} data-field="Recent_Trauma__c" onchange={handleCheckboxChange} />
                 <span class="input-label wiz-field-label">Recent trauma reported?</span>
             </label>
-            <label class="checkbox-field">
+            <label class="checkbox-field wiz-checkbox">
                 <input type="checkbox" checked={dependentSafetyConcern} data-field="Dependent_Safety_Concern__c" onchange={handleCheckboxChange} />
                 <span class="input-label wiz-field-label">Child / elder safety concern?</span>
             </label>
-            <label class="checkbox-field">
+            <label class="checkbox-field wiz-checkbox">
                 <input type="checkbox" checked={ipvConcern} data-field="IPV_Concern__c" onchange={handleCheckboxChange} />
                 <span class="input-label wiz-field-label">IPV concern noted?</span>
             </label>
@@ -26,17 +26,17 @@
                     <p class="card-title wiz-item-title">Family History (1st-degree)</p>
                     <p class="card-subtitle wiz-description">Select concerns; add notes for the ones you choose.</p>
                 </div>
-                <div class="input-row condensed">
+                <div class="input-row condensed wiz-search-row">
                     <label class="input-label wiz-field-label" for="family-search">Search</label>
-                    <input id="family-search" type="search" class="pill-search" placeholder="Filter concerns..." value={familySearch} oninput={handleFamilySearch} />
+                    <input id="family-search" type="search" class="pill-search wiz-pill-search" placeholder="Filter concerns..." value={familySearch} oninput={handleFamilySearch} />
                 </div>
             </header>
             <div class="family-history-grid">
                 <div class="available-column">
                     <p class="column-title">Available</p>
-                    <div class="checkbox-list">
+                    <div class="checkbox-list wiz-checkbox-list">
                         <template for:each={filteredFamilyOptions} for:item="option">
-                            <label key={option.value} class="checkbox-row">
+                            <label key={option.value} class="checkbox-row wiz-checkbox-option">
                                 <input type="checkbox" data-value={option.value} checked={option.checked} onchange={handleFamilyToggle} />
                                 <span>{option.label}</span>
                             </label>
@@ -57,6 +57,7 @@
                                     <textarea
                                         class="textarea wiz-control"
                                         data-value={item.value}
+                                        aria-label="Family history notes"
                                         oninput={handleFamilyNoteChange}
                                     >{item.note}</textarea>
                                 </div>

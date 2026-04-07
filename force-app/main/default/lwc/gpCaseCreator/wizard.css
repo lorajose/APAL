@@ -6,7 +6,8 @@
  *
  * Relationship to c/gpCaseWizardStyles:
  * - This file is the broader inventory and planning surface.
- * - Only the live-adopted subset belongs in c/gpCaseWizardStyles.
+ * - Only the live-adopted subset or intentionally staged adoption-ready
+ *   primitives for an immediate migration phase belong in c/gpCaseWizardStyles.
  * - Domain-specific card skins, business-coupled layouts, and one-off step
  *   structure should stay local to their owning components.
  *
@@ -98,6 +99,7 @@
     --wiz-shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04);
     --wiz-shadow-panel: 0 1px 2px rgba(15, 23, 42, 0.08);
     --wiz-shadow-focus: 0 0 0 3px rgba(37, 99, 235, 0.18);
+    --wiz-shadow-overlay-card: 0 20px 40px rgba(15, 23, 42, 0.2);
 
     /* ------------------------------------------------------------ */
     /* Component Sizing Tokens                                      */
@@ -110,6 +112,8 @@
     --wiz-panel-padding: 1rem;
     --wiz-footer-gap: 0.75rem;
     --wiz-grid-gap: 1rem;
+    --wiz-shell-sidebar-width: 260px;
+    --wiz-shell-sidebar-width-tablet: 200px;
 
     color: var(--wiz-color-text-default);
     font-family: var(--wiz-font-family);
@@ -122,6 +126,11 @@
     display: flex;
     flex-direction: column;
     gap: var(--wiz-space-1);
+}
+
+.wiz-heading-icon,
+.heading-icon.wiz-heading-icon {
+    --sds-c-icon-color-foreground-default: #6f2dbd;
 }
 
 .wiz-app-title,
@@ -189,6 +198,151 @@
     line-height: 1.35;
 }
 
+.wiz-step-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wiz-space-4);
+    color: var(--wiz-color-text-default);
+}
+
+.wiz-subflow-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--wiz-space-3);
+}
+
+.wiz-subflow-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    flex: 1 1 20rem;
+    min-width: 0;
+    max-width: 70%;
+}
+
+.wiz-subflow-shell {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wiz-space-4);
+}
+
+.wiz-progress {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.wiz-progress-dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: var(--wiz-border-strong);
+}
+
+.wiz-progress-dot.is-active {
+    background: var(--wiz-accent-primary);
+}
+
+.wiz-progress-label {
+    margin-left: 0.35rem;
+    color: var(--wiz-color-text-muted);
+    font-size: var(--wiz-font-size-meta);
+}
+
+/* ------------------------------------------------------------ */
+/* Shell Foundations                                            */
+/* ------------------------------------------------------------ */
+.wiz-shell-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wiz-space-1);
+    margin-bottom: var(--wiz-space-6);
+}
+
+.wiz-shell-subtitle {
+    font-size: var(--wiz-font-size-body);
+}
+
+.wiz-shell-layout {
+    display: grid;
+    grid-template-columns: minmax(0, var(--wiz-shell-sidebar-width)) minmax(0, 1fr);
+    gap: var(--wiz-space-6);
+    align-items: start;
+}
+
+.wiz-shell-sidebar,
+.wiz-shell-main {
+    min-width: 0;
+}
+
+.wiz-shell-sidebar {
+    background: var(--wiz-surface-panel);
+    border: 1px solid var(--wiz-border-default);
+    border-radius: 0.75rem;
+    padding: var(--wiz-card-padding) var(--wiz-space-3);
+}
+
+.wiz-sidebar-title {
+    margin: 0 0 var(--wiz-space-3);
+    color: var(--wiz-accent-brand);
+    font-size: 1.25rem;
+    font-weight: var(--wiz-font-weight-bold);
+}
+
+.wiz-step-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wiz-space-1);
+    margin-bottom: var(--wiz-space-4);
+}
+
+.wiz-step-instruction {
+    margin: 0;
+    color: var(--wiz-color-text-muted);
+    font-size: var(--wiz-font-size-helper);
+    line-height: 1.4;
+}
+
+.wiz-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--wiz-surface-overlay);
+}
+
+.wiz-overlay-card {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--wiz-space-3);
+    padding: var(--wiz-space-6) calc(var(--wiz-space-6) + var(--wiz-space-2));
+    border-radius: 0.75rem;
+    background: var(--wiz-surface-panel);
+    box-shadow: var(--wiz-shadow-overlay-card);
+    color: #0f172a;
+    font-weight: var(--wiz-font-weight-semibold);
+}
+
+.wiz-overlay-text {
+    font-size: 1rem;
+}
+
+@keyframes wiz-sidebar-check-fade-in {
+    0% {
+        opacity: 0;
+        transform: scale(0.6);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 /* ------------------------------------------------------------ */
 /* Button Foundations                                           */
 /* ------------------------------------------------------------ */
@@ -203,7 +357,7 @@
  * - wiz-subflow-footer
  * - wiz-subflow-actions
  *
- * Reserved inventory until live markup adopts it:
+ * Adoption-ready collection action roles now staged in shared:
  * - wiz-btn-secondary
  * - wiz-btn-pill-danger
  */
@@ -299,6 +453,10 @@
     font-size: var(--wiz-font-size-meta);
 }
 
+.wiz-btn-pill-danger:hover {
+    opacity: 0.9;
+}
+
 /* ------------------------------------------------------------ */
 /* Footer Foundations                                           */
 /* ------------------------------------------------------------ */
@@ -355,6 +513,32 @@
     line-height: 1.4;
 }
 
+.wiz-checkbox,
+.checkbox-field.wiz-checkbox {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: auto;
+    max-width: 100%;
+    color: var(--wiz-color-text-default);
+    font-size: var(--wiz-font-size-body);
+}
+
+.wiz-checkbox input[type='checkbox'],
+.checkbox-field.wiz-checkbox input[type='checkbox'] {
+    flex: 0 0 auto;
+    margin-top: 0.15rem;
+}
+
+.wiz-checkbox .input-label,
+.wiz-checkbox .wiz-field-label,
+.checkbox-field.wiz-checkbox .input-label,
+.checkbox-field.wiz-checkbox .wiz-field-label,
+.wiz-checkbox > span,
+.checkbox-field.wiz-checkbox > span {
+    min-width: 0;
+}
+
 .wiz-checkbox-row,
 .checkbox-field.wiz-checkbox-row {
     display: inline-flex;
@@ -377,6 +561,40 @@
 .checkbox-field.wiz-checkbox-row .wiz-field-label,
 .wiz-checkbox-row > span,
 .checkbox-field.wiz-checkbox-row > span {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.wiz-checkbox-list,
+.checkbox-list.wiz-checkbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    padding: 0.65rem;
+    border: 1px solid var(--wiz-border-default);
+    border-radius: 0.75rem;
+    background: var(--wiz-surface-panel-subtle);
+}
+
+.wiz-checkbox-option,
+.checkbox-row.wiz-checkbox-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    width: 100%;
+    padding: 0.2rem 0;
+    color: var(--wiz-color-text-default);
+    font-size: var(--wiz-font-size-body);
+}
+
+.wiz-checkbox-option input[type='checkbox'],
+.checkbox-row.wiz-checkbox-option input[type='checkbox'] {
+    flex: 0 0 auto;
+    margin-top: 0.15rem;
+}
+
+.wiz-checkbox-option > span,
+.checkbox-row.wiz-checkbox-option > span {
     flex: 1 1 auto;
     min-width: 0;
 }
@@ -503,14 +721,17 @@ input.wiz-date-control,
 /* Chip / Selectable Foundations                                */
 /* ------------------------------------------------------------ */
 /* Active today:
+ * - wiz-search-row
+ * - wiz-pill-search
+ * - wiz-chip
  * - wiz-chip-grid
  * - wiz-selected-list
  * - wiz-selected-row
  * - wiz-review-list
  * - wiz-counter
+ * - wiz-step-stack
  *
  * Reserved inventory until live markup adopts it directly:
- * - wiz-chip
  * - wiz-select-card
  * - wiz-select-grid
  * - wiz-pill state modifiers
@@ -629,6 +850,137 @@ input.wiz-date-control,
     gap: 0.35rem;
 }
 
+.wiz-empty-state-body {
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.wiz-empty-state-title {
+    margin: 0;
+    color: var(--wiz-color-text-strong);
+    font-size: var(--wiz-font-size-body);
+    font-weight: var(--wiz-font-weight-semibold);
+}
+
+.wiz-empty-state-subtitle {
+    margin: 0;
+    color: var(--wiz-color-text-subtle);
+    font-size: var(--wiz-font-size-meta);
+    line-height: 1.4;
+}
+
+.wiz-empty-state-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: var(--wiz-space-2);
+    margin-left: auto;
+}
+
+.wiz-collection-title {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--wiz-accent-brand);
+    font-size: var(--wiz-font-size-section-title);
+    font-weight: var(--wiz-font-weight-bold);
+}
+
+.wiz-collection-title-text {
+    display: inline-block;
+}
+
+.wiz-collection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--wiz-grid-gap);
+    margin-top: var(--wiz-space-3);
+}
+
+.wiz-catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--wiz-space-3);
+}
+
+.wiz-catalog-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.wiz-catalog-row > input[type='checkbox'] {
+    flex: 0 0 auto;
+    margin-top: 0.4rem;
+}
+
+.wiz-catalog-details {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.wiz-detail-card-shell {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wiz-space-2);
+    margin-bottom: 0.85rem;
+}
+
+.wiz-detail-card-shell:last-child {
+    margin-bottom: 0;
+}
+
+.wiz-detail-header {
+    margin-bottom: 0.1rem;
+}
+
+.wiz-detail-brand {
+    margin: 0.1rem 0 0.4rem;
+}
+
+.wiz-review-entry {
+    border: 1px solid var(--wiz-border-default);
+    border-radius: 0.8rem;
+    padding: 0.85rem;
+    background: var(--wiz-surface-panel-subtle);
+}
+
+.wiz-review-entry-subtitle {
+    margin: 0.15rem 0 0.4rem;
+}
+
+.wiz-review-entry-line {
+    margin: 0.35rem 0;
+}
+
+.wiz-review-entry-notes {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0.35rem 0 0;
+}
+
+.wiz-confirm-panel {
+    border: 1px solid #fecaca;
+    border-radius: 0.75rem;
+    background: #fff5f5;
+    padding: var(--wiz-space-3);
+    margin-top: var(--wiz-space-2);
+}
+
+.wiz-confirm-copy {
+    margin: 0;
+    color: var(--wiz-state-danger-text);
+    font-size: var(--wiz-font-size-meta);
+    font-weight: var(--wiz-font-weight-semibold);
+}
+
 .wiz-action-row,
 .wiz-action-row-end {
     display: flex;
@@ -661,6 +1013,35 @@ input.wiz-date-control,
     margin-top: 0.35rem;
 }
 
+.wiz-search-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.wiz-pill-search,
+.pill-search.wiz-pill-search {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    border: 1px solid var(--wiz-border-strong);
+    border-radius: var(--wiz-radius-pill);
+    background: var(--wiz-surface-panel);
+    color: var(--wiz-color-text-default);
+    font: inherit;
+    font-family: var(--wiz-font-family);
+    font-size: var(--wiz-font-size-meta);
+    line-height: 1.4;
+    padding: 0.45rem 0.85rem;
+}
+
+.wiz-pill-search::placeholder,
+.pill-search.wiz-pill-search::placeholder {
+    color: var(--wiz-color-text-subtle);
+    opacity: 1;
+}
+
 .wiz-counter,
 .wiz-pill {
     display: inline-flex;
@@ -689,11 +1070,13 @@ input.wiz-date-control,
     color: var(--wiz-state-warning-text);
 }
 
+.wiz-review-section-header,
 .summary-header.wiz-panel-header {
     align-items: center;
     gap: 0.5rem;
 }
 
+.wiz-summary-card,
 .summary-card.wiz-review-panel,
 .grid-card.wiz-review-panel {
     display: flex;
@@ -704,6 +1087,33 @@ input.wiz-date-control,
     box-shadow: var(--wiz-shadow-card);
 }
 
+.wiz-review-fact-list {
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.4rem 1rem;
+}
+
+.wiz-review-fact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.wiz-review-label {
+    margin: 0;
+    color: var(--wiz-color-text-subtle);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+.wiz-review-value {
+    margin: 0;
+    color: var(--wiz-color-text-strong);
+    font-size: 0.95rem;
+}
+
+.wiz-review-grid,
 .grid-list.wiz-review-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -711,12 +1121,43 @@ input.wiz-date-control,
     margin-top: 0;
 }
 
+.wiz-review-grid-item,
 .grid-item.wiz-selected-row {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     background: #f9fafb;
     padding: 0.75rem;
+}
+
+.wiz-review-grid-item > header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.wiz-review-grid-item > header h4 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: var(--wiz-font-weight-semibold);
+    color: var(--wiz-color-text-strong);
+}
+
+.wiz-review-grid-item > header p {
+    margin: 0;
+    color: var(--wiz-color-text-subtle);
+    font-size: var(--wiz-font-size-meta);
+}
+
+.wiz-review-copy {
+    margin: 0;
+    color: var(--wiz-color-text-muted);
+    font-size: var(--wiz-font-size-meta);
+    line-height: 1.4;
+}
+
+.wiz-review-copy > span {
+    color: var(--wiz-color-text-strong);
 }
 
 /* ------------------------------------------------------------ */
@@ -730,9 +1171,24 @@ input.wiz-date-control,
  * - wiz-action-row
  * - wiz-action-row-end
  *
- * Reserved inventory:
+ * Adoption-ready collection-subflow inventory now staged in shared:
+ * - wiz-step-stack
+ * - wiz-subflow-header
+ * - wiz-subflow-heading
+ * - wiz-subflow-shell
+ * - wiz-progress
+ * - wiz-progress-dot
+ * - wiz-progress-label
  * - wiz-collection-grid
- * - wiz-detail-stack
+ * - wiz-catalog-grid
+ * - wiz-detail-card-shell
+ * - wiz-detail-header
+ * - wiz-review-entry
+ * - wiz-review-entry-subtitle
+ * - wiz-review-entry-line
+ * - wiz-review-entry-notes
+ * - wiz-confirm-panel
+ * - wiz-confirm-copy
  *
  * Compatibility selectors below intentionally support additive adoption while
  * legacy local class names are still present in live markup.
@@ -757,6 +1213,19 @@ input.wiz-date-control,
     flex-wrap: wrap;
     justify-content: flex-end;
     gap: var(--wiz-space-2);
+}
+
+.wiz-grid-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--wiz-space-2);
+}
+
+.wiz-grid-actions .wiz-btn {
+    min-width: 150px;
+    justify-content: center;
 }
 
 .wiz-result-row {
@@ -816,69 +1285,168 @@ input.wiz-date-control,
 /* Sidebar / Progress Presentation Hooks                        */
 /* ------------------------------------------------------------ */
 .wiz-sidebar-step {
+    width: 100%;
+    margin-bottom: 0.45rem;
+    padding: 0.65rem 0.75rem;
     border: 1px solid var(--wiz-border-strong);
-    border-radius: 0.5rem;
+    border-radius: var(--wiz-radius-control);
     background: var(--wiz-surface-panel);
     color: var(--wiz-color-text-muted);
-    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    font-size: var(--wiz-font-size-meta);
+    text-align: left;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.25s ease;
+}
+
+.wiz-sidebar-step:last-child {
+    margin-bottom: 0;
 }
 
 .wiz-sidebar-step.is-active {
     background: var(--wiz-accent-brand);
     border-color: var(--wiz-accent-brand);
     color: var(--wiz-color-text-inverse);
+    font-weight: var(--wiz-font-weight-bold);
+}
+
+.wiz-sidebar-step.is-complete-muted {
+    border-color: #a8a8a8;
+    background: var(--wiz-surface-panel);
+    color: #374151;
+    font-weight: var(--wiz-font-weight-medium);
 }
 
 .wiz-sidebar-step.is-complete {
     background: var(--wiz-state-success-bg);
     border-color: var(--wiz-border-success);
     color: var(--wiz-state-success-text);
+    font-weight: var(--wiz-font-weight-semibold);
 }
 
 .wiz-sidebar-step.is-warning {
     background: var(--wiz-state-warning-bg);
     border-color: var(--wiz-border-warning);
     color: var(--wiz-state-warning-text);
+    font-weight: var(--wiz-font-weight-semibold);
 }
 
 .wiz-sidebar-step.is-error {
     background: var(--wiz-state-danger-bg);
     border-color: var(--wiz-border-danger);
     color: var(--wiz-state-danger-text);
+    font-weight: var(--wiz-font-weight-semibold);
 }
 
 .wiz-sidebar-step.is-locked {
-    opacity: 0.5;
+    opacity: 0.45;
     cursor: not-allowed;
+    background: var(--wiz-surface-panel-subtle);
 }
 
-.wiz-progress {
+.wiz-sidebar-step:hover {
+    background: var(--wiz-surface-panel-subtle);
+}
+
+.wiz-sidebar-step.is-active:hover {
+    background: var(--wiz-accent-brand);
+    border-color: var(--wiz-accent-brand);
+    color: var(--wiz-color-text-inverse);
+}
+
+.wiz-sidebar-step.is-active,
+.wiz-sidebar-step.is-complete {
+    box-shadow: 0 0 0 2px rgba(17, 24, 39, 0.25);
+}
+
+.wiz-sidebar-step-content {
     display: flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: 0.45rem;
+    min-width: 0;
 }
 
-.wiz-progress-dot {
-    width: 0.45rem;
-    height: 0.45rem;
-    border-radius: 50%;
-    background: var(--wiz-border-strong);
+.wiz-sidebar-step-number {
+    padding: 0.1rem 0.45rem;
+    border: 1px solid var(--wiz-border-success);
+    border-radius: var(--wiz-radius-pill);
+    background: var(--wiz-state-success-bg);
+    color: var(--wiz-state-success-text);
+    font-size: 0.75rem;
+    font-weight: var(--wiz-font-weight-semibold);
 }
 
-.wiz-progress-dot.is-active {
-    background: var(--wiz-accent-primary);
-}
-
-.wiz-progress-label {
-    margin-left: 0.35rem;
-    color: var(--wiz-color-text-muted);
+.wiz-sidebar-step-text {
+    color: inherit;
     font-size: var(--wiz-font-size-meta);
+}
+
+.wiz-sidebar-step-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    margin-left: 0.3rem;
+    border-radius: var(--wiz-radius-pill);
+    background: var(--wiz-state-success-bg);
+    color: var(--wiz-state-success-text);
+    font-size: 0.7rem;
+    font-weight: var(--wiz-font-weight-bold);
+    opacity: 0;
+    transform: scale(0.6);
+    animation: wiz-sidebar-check-fade-in 0.25s ease-out forwards;
 }
 
 /* ------------------------------------------------------------ */
 /* Responsive Foundations                                       */
 /* ------------------------------------------------------------ */
 @media (max-width: 768px) {
+    .wiz-shell-header {
+        margin-bottom: var(--wiz-space-4);
+    }
+
+    .wiz-shell-layout {
+        grid-template-columns: 1fr;
+        gap: var(--wiz-space-4);
+    }
+
+    .wiz-subflow-heading {
+        max-width: 100%;
+    }
+
+    .wiz-shell-sidebar {
+        padding: var(--wiz-space-2);
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+    }
+
+    .wiz-sidebar-title {
+        margin-bottom: var(--wiz-space-2);
+        font-size: 1rem;
+    }
+
+    .wiz-sidebar-step {
+        display: inline-flex;
+        width: auto;
+        min-width: 150px;
+        margin-right: var(--wiz-space-2);
+        margin-bottom: var(--wiz-space-2);
+    }
+
+    .wiz-sidebar-step-text {
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+
+    .wiz-overlay-card {
+        width: min(90vw, 24rem);
+        justify-content: center;
+        padding: var(--wiz-space-6);
+    }
+
     .wiz-step-footer,
     .wiz-subflow-footer,
     .wiz-subflow-actions,
@@ -916,8 +1484,16 @@ input.wiz-date-control,
         flex-wrap: nowrap;
     }
 
+    .wiz-search-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
     .wiz-collection-header,
-    .wiz-collection-grid {
+    .wiz-collection-grid,
+    .wiz-catalog-grid,
+    .wiz-review-fact-list,
+    .wiz-review-grid {
         grid-template-columns: 1fr;
     }
 
@@ -941,6 +1517,12 @@ input.wiz-date-control,
         align-items: flex-start;
     }
 
+    .wiz-empty-state-actions {
+        width: 100%;
+        margin-left: 0;
+        justify-content: stretch;
+    }
+
     .wiz-detail-notes > .wiz-lightning-textarea + .wiz-field-helper,
     .field.wiz-detail-notes > .wiz-lightning-textarea + .helper-text {
         margin-top: 0;
@@ -956,11 +1538,39 @@ input.wiz-date-control,
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
+    .wiz-shell-layout {
+        grid-template-columns: minmax(0, var(--wiz-shell-sidebar-width-tablet)) minmax(0, 1fr);
+        gap: var(--wiz-space-4);
+    }
+
+    .wiz-shell-sidebar {
+        padding: 0.75rem 0.6rem;
+    }
+
+    .wiz-sidebar-title {
+        margin-bottom: var(--wiz-space-2);
+        font-size: 1.05rem;
+    }
+
+    .wiz-sidebar-step {
+        padding: 0.55rem 0.6rem;
+    }
+
+    .wiz-sidebar-step-text {
+        font-size: 0.82rem;
+    }
+
     .wiz-card {
         padding: 1rem;
     }
 
     .wiz-detail-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .wiz-collection-grid,
+    .wiz-review-fact-list,
+    .wiz-review-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 

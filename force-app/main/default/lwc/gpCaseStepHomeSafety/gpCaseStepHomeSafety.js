@@ -134,7 +134,7 @@ export default class GpCaseStepHomeSafety extends LightningElement {
         const selected = new Set(this.lethalMeans);
         return this.lethalMeansOptionsCatalog.map(option => ({
             ...option,
-            chipClass: `chip ${selected.has(option.value) ? 'chip-selected' : ''}`
+            chipClass: `chip wiz-chip${selected.has(option.value) ? ' chip-selected is-selected' : ''}`
         }));
     }
 
@@ -292,9 +292,9 @@ export default class GpCaseStepHomeSafety extends LightningElement {
         const value = event.currentTarget.dataset.value;
         if (!value) return;
         const note = event.currentTarget.value || '';
-        this.stressors = this.stressors.map(item =>
+        this.stressors = this.stressors.map((item) => (
             item.value === value ? { ...item, note } : item
-        );
+        ));
         this.emitDraftChange();
     }
 
@@ -303,9 +303,9 @@ export default class GpCaseStepHomeSafety extends LightningElement {
         const flag = event.currentTarget.dataset.flag;
         if (!value || !flag) return;
         const checked = event.currentTarget.checked;
-        this.stressors = this.stressors.map(item =>
+        this.stressors = this.stressors.map((item) => (
             item.value === value ? { ...item, [flag]: checked } : item
-        );
+        ));
         this.emitDraftChange();
     }
 

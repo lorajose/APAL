@@ -1,17 +1,17 @@
 <template>
-    <div class="step-section">
-        <div class="section-header">
-            <div class="section-heading">
+    <div class="step-section wiz-step-stack">
+        <div class="section-header wiz-subflow-header">
+            <div class="section-heading wiz-subflow-heading">
                 <template if:true={isListMode}>
                     <template if:true={showFilters}>
                         <h2 class="wiz-section-title">
-                            <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
+                            <lightning-icon icon-name={headerIconName} size="small" class="heading-icon wiz-heading-icon"></lightning-icon>
                             {headerTitle}
                         </h2>
                     </template>
                 </template>
                 <template if:true={isWizardMode}>
-                    <div class="wizard-heading">
+                    <div class="wizard-heading wiz-heading-stack">
                         <h3 class="wiz-subflow-title">Concerns</h3>
                       <!--  <p class="wizard-subcopy">Pick concerns, add context notes, review, and save.</p>
                         <div class="wizard-inline-progress">
@@ -24,7 +24,7 @@
                 </template>
             </div>
             <template if:true={isWizardMode}>
-                <button class="ghost-button wizard-cancel" type="button" onclick={cancelWizard}>Cancel</button>
+                <button class="ghost-button wiz-btn wiz-btn-ghost" type="button" onclick={cancelWizard}>Cancel</button>
             </template>
         </div>
 
@@ -33,41 +33,41 @@
                 <section class="card wiz-card grid-controls">
                     <div class="grid-header-row wiz-collection-header">
                         <template if:false={showFilters}>
-                            <div class="grid-title">
-                                <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
-                                <span class="grid-title-text wiz-subflow-title">{headerTitle}</span>
+                            <div class="grid-title wiz-collection-title">
+                                <lightning-icon icon-name={headerIconName} size="small" class="heading-icon wiz-heading-icon"></lightning-icon>
+                                <span class="grid-title-text wiz-subflow-title wiz-collection-title-text">{headerTitle}</span>
                             </div>
                         </template>
                         <template if:true={showFilters}>
                             <div class="control-group wiz-control-group">
-                                <label class="input-label" for="category-filter">Filter by category</label>
-                                <select id="category-filter" class="text-input" value={categoryFilter} onchange={handleCategoryFilter}>
+                                <label class="input-label wiz-field-label" for="category-filter">Filter by category</label>
+                                <select id="category-filter" class="text-input wiz-control" value={categoryFilter} onchange={handleCategoryFilter}>
                                     <template for:each={categoryOptions} for:item="opt">
                                         <option key={opt.value} value={opt.value}>{opt.label}</option>
                                     </template>
                                 </select>
                             </div>
                             <div class="control-group wiz-control-group">
-                                <label class="input-label" for="concern-search">Search</label>
-                                <input id="concern-search" class="text-input" type="search" placeholder="Filter by label..." value={searchValue} oninput={handleSearchChange} />
+                                <label class="input-label wiz-field-label" for="concern-search">Search</label>
+                                <input id="concern-search" class="text-input wiz-control" type="search" placeholder="Filter by label..." value={searchValue} oninput={handleSearchChange} />
                             </div>
                         </template>
-                        <div class="grid-actions wiz-collection-actions">
-                        <button class="ghost-button" type="button" onclick={toggleShowNotes}>
+                        <div class="grid-actions wiz-collection-actions wiz-grid-actions">
+                        <button class="ghost-button wiz-btn wiz-btn-ghost" type="button" onclick={toggleShowNotes}>
                             <template if:true={showAllNotes}>Hide notes</template>
                             <template if:false={showAllNotes}>Show notes</template>
                         </button>
                             <template if:true={showAddButton}>
                                 <template if:true={hasConcerns}>
-                                    <button class="ghost-button" type="button" onclick={openWizardForEdit}>Edit</button>
+                                    <button class="ghost-button wiz-btn wiz-btn-ghost" type="button" onclick={openWizardForEdit}>Edit</button>
                                 </template>
-                                <button class="primary-button" type="button" onclick={openWizard}>Add Concerns</button>
+                                <button class="primary-button wiz-btn wiz-btn-primary" type="button" onclick={openWizard}>Add Concerns</button>
                             </template>
                         </div>
                     </div>
-                    <div class="concern-grid">
+                    <div class="concern-grid wiz-collection-grid">
                         <template for:each={filteredConcerns} for:item="concern">
-                            <article key={concern.id} class="concern-card">
+                            <article key={concern.id} class="concern-card wiz-selected-row">
                                 <header class="concern-card-header">
                                     <div>
                                         <h3>{concern.label}</h3>
@@ -89,9 +89,9 @@
                                     </div>
                                 </header>
                                 <template if:true={showAllNotes}>
-                                    <div class="field field-full">
-                                        <label class="input-label">Notes</label>
-                                        <textarea class="textarea" data-id={concern.id} oninput={handleNoteChange} disabled={readOnlyNotes}>{concern.notes}</textarea>
+                                    <div class="field field-full wiz-field">
+                                        <label class="input-label wiz-field-label">Notes</label>
+                                        <textarea class="textarea wiz-control wiz-textarea" data-id={concern.id} aria-label="Concern notes" oninput={handleNoteChange} disabled={readOnlyNotes}>{concern.notes}</textarea>
                                     </div>
                                 </template>
                                 <template if:false={showAllNotes}>
@@ -107,14 +107,14 @@
                                     </p>
                                 </template>
                                 <div class="card-actions wiz-action-row-end">
-                                    <button class="pill-button danger" type="button" data-id={concern.id} data-label={concern.label} data-category={concern.category} onclick={handleRemoveConcern}>Remove</button>
+                                    <button class="pill-button danger wiz-btn wiz-btn-pill-danger" type="button" data-id={concern.id} data-label={concern.label} data-category={concern.category} onclick={handleRemoveConcern}>Remove</button>
                                 </div>
                                 <template if:true={concern.showConfirm}>
-                                    <div class="remove-confirm">
-                                        <p>Remove this concern?</p>
+                                    <div class="remove-confirm wiz-confirm-panel">
+                                        <p class="wiz-confirm-copy">Remove this concern?</p>
                                         <div class="remove-actions wiz-action-row">
-                                            <button class="pill-button danger" type="button" data-id={concern.id} data-label={concern.label} data-category={concern.category} onclick={confirmRemove}>Confirm Remove</button>
-                                            <button class="pill-button secondary" type="button" onclick={cancelRemove}>Cancel</button>
+                                            <button class="pill-button danger wiz-btn wiz-btn-pill-danger" type="button" data-id={concern.id} data-label={concern.label} data-category={concern.category} onclick={confirmRemove}>Confirm Remove</button>
+                                            <button class="pill-button secondary wiz-btn wiz-btn-secondary" type="button" onclick={cancelRemove}>Cancel</button>
                                         </div>
                                     </div>
                                 </template>
@@ -128,9 +128,11 @@
                 <template if:true={showEmptyState}>
                 <section class="card empty-state-card wiz-empty-panel">
                     <template if:false={showFilters}>
-                        <div class="grid-title">
-                            <lightning-icon icon-name={headerIconName} size="small" class="heading-icon"></lightning-icon>
-                            <span class="grid-title-text wiz-subflow-title">{headerTitle}</span>
+                        <div class="wiz-empty-state-body">
+                            <div class="grid-title wiz-collection-title">
+                                <lightning-icon icon-name={headerIconName} size="small" class="heading-icon wiz-heading-icon"></lightning-icon>
+                                <span class="grid-title-text wiz-subflow-title wiz-collection-title-text">{headerTitle}</span>
+                            </div>
                         </div>
                     </template>
                    <!-- <div>
@@ -138,7 +140,9 @@
                         <p class="empty-subtitle">Use the button to add items manually.</p>
                     </div> -->
                     <template if:true={showAddButton}>
-                        <button class="primary-button" onclick={openWizard}>Add Concerns</button>
+                        <div class="wiz-empty-state-actions">
+                            <button class="primary-button wiz-btn wiz-btn-primary" type="button" onclick={openWizard}>Add Concerns</button>
+                        </div>
                     </template>
                 </section>
                 </template>
@@ -146,7 +150,7 @@
         </template>
 
         <template if:true={isWizardMode}>
-            <section class="card wiz-card wizard-shell">
+            <section class="card wiz-card wizard-shell wiz-subflow-shell">
                <!-- <div class="wizard-progress">
                     <span class={wizardStep >= 0 ? 'dot active' : 'dot'}></span>
                     <span class={wizardStep >= 1 ? 'dot active' : 'dot'}></span>
@@ -157,32 +161,32 @@
                 <template if:true={wizardStepIsPick}>
                     <div class="wizard-controls wiz-collection-header">
                         <div class="control-group wiz-control-group">
-                            <label class="input-label" for="wizard-category">Filter by category</label>
-                            <select id="wizard-category" class="text-input" value={wizardCategoryFilter} onchange={handleWizardCategoryChange}>
+                            <label class="input-label wiz-field-label" for="wizard-category">Filter by category</label>
+                            <select id="wizard-category" class="text-input wiz-control" value={wizardCategoryFilter} onchange={handleWizardCategoryChange}>
                                 <template for:each={wizardCategoryOptions} for:item="opt">
                                     <option key={opt.value} value={opt.value}>{opt.label}</option>
                                 </template>
                             </select>
                         </div>
                         <div class="control-group wiz-control-group">
-                            <label class="input-label" for="wizard-search">Search</label>
-                            <input id="wizard-search" class="text-input" type="search" placeholder="Filter by label..." value={wizardSearch} oninput={handleWizardSearch} />
+                            <label class="input-label wiz-field-label" for="wizard-search">Search</label>
+                            <input id="wizard-search" class="text-input wiz-control" type="search" placeholder="Filter by label..." value={wizardSearch} oninput={handleWizardSearch} />
                         </div>
                     </div>
                     <div class="wizard-result-row wiz-result-row">
-                        <span class="result-pill">{wizardResultCount} result(s)</span>
+                        <span class="result-pill wiz-pill">{wizardResultCount} result(s)</span>
                         <div class="result-actions wiz-collection-actions">
-                            <button class="ghost-button" type="button" onclick={handleSelectAllFiltered}>Select all (filtered)</button>
-                            <button class="ghost-button" type="button" onclick={handleClearSelection}>Clear</button>
+                            <button class="ghost-button wiz-btn wiz-btn-ghost" type="button" onclick={handleSelectAllFiltered}>Select all (filtered)</button>
+                            <button class="ghost-button wiz-btn wiz-btn-ghost" type="button" onclick={handleClearSelection}>Clear</button>
                         </div>
                     </div>
-                    <div class="wizard-catalog">
+                    <div class="wizard-catalog wiz-catalog-grid">
                         <template for:each={wizardCatalogItems} for:item="item">
                             <label key={item.id} class={item.className}>
                                 <input type="checkbox" data-id={item.id} checked={item.checked} disabled={item.disabled} onchange={handleWizardSelectionToggle} />
-                                <div class="catalog-details">
-                                    <p class="catalog-title">{item.label}</p>
-                                    <p class="catalog-brand">{item.category}</p>
+                                <div class="catalog-details wiz-catalog-details">
+                                    <p class="catalog-title wiz-item-title">{item.label}</p>
+                                    <p class="catalog-brand wiz-text-secondary">{item.category}</p>
                                     <template if:true={item.disabled}>
                                         <span class="catalog-added">Added</span>
                                     </template>
@@ -194,17 +198,17 @@
 
                 <template if:true={wizardStepIsDetails}>
                     <template for:each={wizardDraft} for:item="item">
-                        <section key={item.id} class="detail-card wiz-detail-panel">
-                            <header class="detail-header wiz-panel-header">
+                        <section key={item.id} class="detail-card wiz-detail-panel wiz-detail-card-shell">
+                            <header class="detail-header wiz-panel-header wiz-detail-header">
                                 <div>
                                     <h3 class="wiz-item-title">{item.meta.label}</h3>
-                                    <p class="detail-brand wiz-text-secondary">{item.meta.category}</p>
+                                    <p class="detail-brand wiz-detail-brand wiz-text-secondary">{item.meta.category}</p>
                                 </div>
                                 <button class="text-button wiz-btn wiz-btn-text" type="button" data-id={item.id} onclick={handleWizardRemoveDraft}>Remove</button>
                             </header>
-                            <div class="field field-full wiz-detail-notes">
-                                <label class="input-label">Notes</label>
-                                <textarea class="textarea wiz-detail-notes-input" data-id={item.id} data-field="notes" oninput={handleWizardDetailChange}>{item.notes}</textarea>
+                            <div class="field field-full wiz-detail-notes wiz-field">
+                                <label class="input-label wiz-field-label">Notes</label>
+                                <textarea class="textarea wiz-control wiz-textarea wiz-detail-notes-input" data-id={item.id} data-field="notes" aria-label="Concern notes" oninput={handleWizardDetailChange}>{item.notes}</textarea>
                             </div>
                         </section>
                     </template>
@@ -215,12 +219,12 @@
                         <h3 class="wiz-subflow-title">Review</h3>
                         <div class="review-list wiz-review-list">
                             <template for:each={wizardDraft} for:item="item">
-                                <article key={item.id} class="review-entry">
+                                <article key={item.id} class="review-entry wiz-review-entry">
                                     <div class="review-heading">
-                                        <h4>{item.meta.label}</h4>
-                                        <p class="review-subtitle wiz-text-secondary">{item.meta.category}</p>
+                                        <h4 class="wiz-item-title">{item.meta.label}</h4>
+                                        <p class="review-subtitle wiz-review-entry-subtitle wiz-text-secondary">{item.meta.category}</p>
                                     </div>
-                                    <p class="review-notes wiz-text-body">
+                                    <p class="review-notes wiz-review-entry-notes wiz-text-body">
                                         <span>Notes:</span>
                                         <span>
                                             <template if:true={item.notes}>

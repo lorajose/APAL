@@ -4,83 +4,20 @@
 	display: block;
 }
 
-.step-section {
-	display: flex;
-	flex-direction: column;
-	gap: 1rem;
-	color: #1f2937;
-}
-
-.section-header h2 {
-	margin: 0;
-	font-size: 1.2rem;
-	font-weight: 700;
-}
-
-.section-header p {
-	margin: 0.15rem 0 0;
-	color: #6b7280;
-	font-size: 0.9rem;
-}
-
 .checkbox-grid {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 0.75rem;
 }
 
-.checkbox-field {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.45rem;
-	font-size: 0.9rem;
-	color: #374151;
-}
-
-.field {
-	display: flex;
-	flex-direction: column;
-	gap: 0.35rem;
-}
-
 .family-note-label {
 	font-weight: 400;
-}
-
-.field-full {
-	width: 100%;
 }
 
 .family-history-section {
 	display: flex;
 	flex-direction: column;
 	gap: 0.75rem;
-}
-
-.card-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-end;
-	gap: 1rem;
-	flex-wrap: wrap;
-}
-
-.card-subtitle {
-	margin: 0.1rem 0 0;
-}
-
-.input-row {
-	display: flex;
-	align-items: center;
-	gap: 0.75rem;
-}
-
-.pill-search {
-	flex: 1;
-	border: 1px solid #d1d5db;
-	border-radius: 999px;
-	padding: 0.45rem 0.85rem;
-	font-size: 0.85rem;
 }
 
 .family-history-grid {
@@ -100,25 +37,13 @@
 	font-weight: 600;
 }
 
-.checkbox-list {
-	border: 1px solid #e5e7eb;
-	border-radius: 0.75rem;
-	padding: 0.65rem;
-	max-height: 300px;
-	overflow: auto;
-	background: #f9fafb;
-}
-
-.checkbox-row {
-	display: flex;
-	align-items: center;
-	gap: 0.45rem;
-	padding: 0.2rem 0;
-	font-size: 0.9rem;
-}
-
 .selected-column {
 	gap: 0.65rem;
+}
+
+.family-history-grid .wiz-checkbox-list {
+	max-height: 300px;
+	overflow: auto;
 }
 
 .link-button {
@@ -134,26 +59,12 @@
 	font-size: 0.85rem;
 }
 
-.error-text {
-	background: #fef2f2;
-	border: 1px solid #fecaca;
-	color: #dc2626;
-	padding: 0.5rem 0.75rem;
-	border-radius: 0.5rem;
-	font-size: 0.85rem;
-}
-
 @media (max-width: 768px) {
-	.input-row {
-		flex-direction: column;
-		align-items: stretch;
-	}
-
 	.family-history-grid {
 		grid-template-columns: 1fr;
 	}
 
-	.checkbox-list {
+	.family-history-grid .wiz-checkbox-list {
 		max-height: none;
 	}
 }
