@@ -1508,6 +1508,20 @@ input.wiz-date-control,
         flex: 1 1 100%;
     }
 
+    .wiz-subflow-header > .wiz-btn,
+    .wiz-subflow-actions > .wiz-btn {
+        width: min(100%, 14rem);
+        max-width: 100%;
+        margin-inline: auto;
+    }
+
+    .wiz-subflow-actions {
+        width: 100%;
+        margin-left: 0;
+        align-items: center;
+        justify-content: center;
+    }
+
     .empty-state-card.wiz-empty-panel {
         align-items: flex-start;
     }
