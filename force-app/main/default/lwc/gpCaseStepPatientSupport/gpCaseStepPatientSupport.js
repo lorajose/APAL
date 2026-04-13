@@ -10,6 +10,12 @@ import CASE_TYPE_FIELD from '@salesforce/schema/Case.Case_Type__c';
 import CASE_SERVICE_FIELD from '@salesforce/schema/Case.Service__c';
 
 const cloneList = (list = []) => JSON.parse(JSON.stringify(list || []));
+const FILTER_OPTIONS = [
+    { label: 'Name', value: 'name' }
+];
+const WIZARD_FILTER_OPTIONS = [
+    { label: 'Name', value: 'name' }
+];
 const looksLikeId = (value) => {
     if (!value || typeof value !== 'string') return false;
     const trimmed = value.trim();
@@ -235,9 +241,15 @@ export default class GpCaseStepPatientSupport extends LightningElement {
     }
 
     get filterOptions() {
-        return [
-            { label: 'Name', value: 'name' }
-        ];
+        return FILTER_OPTIONS;
+    }
+
+    get filterOptionsDecorated() {
+        return this.decorateOptionList(FILTER_OPTIONS, this.filterBy);
+    }
+
+    get wizardFilterOptionsDecorated() {
+        return this.decorateOptionList(WIZARD_FILTER_OPTIONS, this.wizardFilter);
     }
 
     get isGridView() {
@@ -258,6 +270,13 @@ export default class GpCaseStepPatientSupport extends LightningElement {
 
     get wizardStepIsReview() {
         return this.wizardStep === 2;
+    }
+
+    decorateOptionList(options = [], selectedValue = '') {
+        return (options || []).map(option => ({
+            ...option,
+            selected: option.value === selectedValue
+        }));
     }
 
     get wizardNextDisabled() {

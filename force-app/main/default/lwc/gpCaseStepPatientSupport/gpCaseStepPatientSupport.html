@@ -93,9 +93,9 @@
                                 <template if:true={showFilters}>
                                     <div class="control-group wiz-control-group">
                                         <label class="input-label wiz-field-label" for="grid-filter">Filter by</label>
-                                        <select id="grid-filter" class="text-input wiz-control" value={filterBy} onchange={handleFilterChange}>
-                                            <template for:each={filterOptions} for:item="option">
-                                                <option key={option.value} value={option.value}>{option.label}</option>
+                                        <select id="grid-filter" class="text-input wiz-control" onchange={handleFilterChange}>
+                                            <template for:each={filterOptionsDecorated} for:item="option">
+                                                <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
                                             </template>
                                         </select>
                                     </div>
@@ -251,8 +251,10 @@
                             <div class="wizard-controls wiz-collection-header">
                                 <div class="control-group wiz-control-group">
                                     <label class="input-label wiz-field-label" for="wizard-filter">Filter by</label>
-                                    <select id="wizard-filter" class="text-input wiz-control" value={wizardFilter} onchange={handleWizardFilterChange}>
-                                        <option value="name">Name</option>
+                                    <select id="wizard-filter" class="text-input wiz-control" onchange={handleWizardFilterChange}>
+                                        <template for:each={wizardFilterOptionsDecorated} for:item="option">
+                                            <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
+                                        </template>
                                     </select>
                                 </div>
                                 <div class="control-group wiz-control-group">
@@ -334,42 +336,50 @@
                         </template>
 
                         <template if:true={wizardStepIsReview}>
-                            <div class="review-grid wiz-review-grid">
-                                <template for:each={wizardDraft} for:item="item">
-                                    <article key={item.id} class="review-card wiz-selected-row wiz-review-grid-item">
-                                        <header class="wiz-panel-header">
-                                            <h3 class="wiz-item-title">{item.meta.name}</h3>
-                                        </header>
-                                        <div class="pill-row wiz-panel-meta">
-                                            <template if:true={item.scheduled}>
-                                                <span class="summary-pill wiz-pill">Scheduled</span>
-                                            </template>
-                                            <template if:true={item.going}>
-                                                <span class="summary-pill wiz-pill">Going</span>
-                                            </template>
-                                            <template if:true={item.appointmentCompleted}>
-                                                <span class="summary-pill wiz-pill">Appt Completed</span>
-                                            </template>
-                                            <template if:true={item.appointmentCompletedIneffective}>
-                                                <span class="summary-pill wiz-pill">Completed (Ineffective)</span>
-                                            </template>
-                                            <template if:true={item.suspended}>
-                                                <span class="summary-pill wiz-pill">Suspended</span>
-                                            </template>
-                                            <template if:true={item.careNotApplicable}>
-                                                <span class="summary-pill wiz-pill">Care Not Applicable</span>
-                                            </template>
-                                        </div>
-                                        <p class="scr-notes wiz-text-body wiz-review-copy">
-                                            <template if:true={item.notes}>
-                                                {item.notes}
-                                            </template>
-                                            <template if:false={item.notes}>
-                                                —
-                                            </template>
-                                        </p>
-                                    </article>
-                                </template>
+                            <div class="review-panel wiz-review-panel">
+                                <h3 class="wiz-subflow-title">Review</h3>
+                                <div class="review-list wiz-review-list">
+                                    <template for:each={wizardDraft} for:item="item">
+                                        <article key={item.id} class="review-entry wiz-review-entry">
+                                            <div class="review-heading">
+                                                <div>
+                                                    <h4 class="wiz-item-title">{item.meta.name}</h4>
+                                                </div>
+                                            </div>
+                                            <div class="pill-row wiz-panel-meta">
+                                                <template if:true={item.scheduled}>
+                                                    <span class="summary-pill wiz-pill">Scheduled</span>
+                                                </template>
+                                                <template if:true={item.going}>
+                                                    <span class="summary-pill wiz-pill">Going</span>
+                                                </template>
+                                                <template if:true={item.appointmentCompleted}>
+                                                    <span class="summary-pill wiz-pill">Appt Completed</span>
+                                                </template>
+                                                <template if:true={item.appointmentCompletedIneffective}>
+                                                    <span class="summary-pill wiz-pill">Completed (Ineffective)</span>
+                                                </template>
+                                                <template if:true={item.suspended}>
+                                                    <span class="summary-pill wiz-pill">Suspended</span>
+                                                </template>
+                                                <template if:true={item.careNotApplicable}>
+                                                    <span class="summary-pill wiz-pill">Care Not Applicable</span>
+                                                </template>
+                                            </div>
+                                            <p class="review-notes wiz-review-entry-notes wiz-text-body">
+                                                <span>Notes:</span>
+                                                <span>
+                                                    <template if:true={item.notes}>
+                                                        {item.notes}
+                                                    </template>
+                                                    <template if:false={item.notes}>
+                                                        —
+                                                    </template>
+                                                </span>
+                                            </p>
+                                        </article>
+                                    </template>
+                                </div>
                             </div>
                         </template>
 
