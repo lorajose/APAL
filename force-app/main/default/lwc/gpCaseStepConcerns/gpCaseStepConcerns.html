@@ -76,13 +76,13 @@
                                             <span class="source-pill">{concern.sourceLabel}</span>
                                         </div>
                                         <template if:true={showConcernId}>
-                                            <p class="concern-id">
-                                                <span class="concern-label">Concern Id:</span>
+                                            <p class="concern-id wiz-record-ref">
+                                                <span class="concern-label wiz-record-ref-label">Concern Id:</span>
                                                 <template if:true={concern.recordLink}>
-                                                    <a class="concern-id-value" href={concern.recordLink} target="_blank">{concern.recordName}</a>
+                                                    <a class="concern-id-value wiz-record-ref-value" href={concern.recordLink} target="_blank">{concern.recordName}</a>
                                                 </template>
                                                 <template if:false={concern.recordLink}>
-                                                    <span class="concern-id-value">{concern.recordName}</span>
+                                                    <span class="concern-id-value wiz-record-ref-value">{concern.recordName}</span>
                                                 </template>
                                             </p>
                                         </template>

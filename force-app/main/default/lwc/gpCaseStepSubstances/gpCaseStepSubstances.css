@@ -6,20 +6,6 @@
 
 .sub-name {
 	margin: 2px 0 0 0.5rem;
-	color: #374151;
-	font-size: 0.85rem;
-	font-weight: 600;
-	display: inline-flex;
-	align-items: center;
-	gap: 0.35rem;
-}
-
-.sub-id-value {
-	margin-left: 0.1rem;
-}
-
-.sub-label {
-	white-space: nowrap;
 }
 
 .sub-card {

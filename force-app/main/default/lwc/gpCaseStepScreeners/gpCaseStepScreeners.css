@@ -40,17 +40,3 @@
 	color: #374151;
 	margin: 0;
 }
-
-.link-pill a {
-	color: #0f2d52;
-	font-weight: 600;
-}
-
-.scr-label {
-	white-space: nowrap;
-	margin-right: 0.25rem;
-}
-
-.scr-id-value {
-	margin-left: 0.05rem;
-}

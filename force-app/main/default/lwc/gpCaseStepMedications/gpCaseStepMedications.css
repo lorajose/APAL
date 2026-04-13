@@ -59,24 +59,6 @@
 
 .med-record {
 	margin: 0.15rem 0;
-	font-size: 0.85rem;
-	color: #374151;
-	display: inline-flex;
-	align-items: center;
-	gap: 0.35rem;
-}
-
-.med-record a {
-	color: #0f2d52;
-	font-weight: 600;
-}
-
-.med-label {
-	white-space: nowrap;
-}
-
-.med-id-value {
-	margin-left: 0.05rem;
 }
 
 .checkbox-field.success span {

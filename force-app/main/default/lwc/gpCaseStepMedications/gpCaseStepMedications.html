@@ -76,13 +76,13 @@
                                     </div>
                                 </header>
                                 <template if:true={showMedicationId}>
-                                    <p class="med-record">
-                                        <span class="med-label">Medication Id:</span>
+                                    <p class="med-record wiz-record-ref">
+                                        <span class="med-label wiz-record-ref-label">Medication Id:</span>
                                         <template if:true={med.recordLink}>
-                                            <a class="med-id-value" href={med.recordLink} target="_blank">{med.recordName}</a>
+                                            <a class="med-id-value wiz-record-ref-value" href={med.recordLink} target="_blank">{med.recordName}</a>
                                         </template>
                                         <template if:false={med.recordLink}>
-                                            <span class="med-id-value">{med.recordName}</span>
+                                            <span class="med-id-value wiz-record-ref-value">{med.recordName}</span>
                                         </template>
                                     </p>
                                 </template>
@@ -223,36 +223,37 @@
                                 <button class="text-button wiz-btn wiz-btn-text" type="button" data-id={item.id} onclick={handleWizardRemoveDraft}>Remove</button>
                             </header>
                             <div class="detail-grid wiz-detail-grid">
-                                <label class="input-label wiz-field-label">Action<span class="required wiz-required">*</span>
+                                <div class="field wiz-field">
+                                    <label class="input-label wiz-field-label">Action<span class="required wiz-required">*</span></label>
                                     <select class={item.actionClass} data-id={item.id} data-field="action" aria-label="Medication action" onchange={handleWizardDetailChange}>
                                         <option value="">Select action</option>
                                         <template for:each={item.actionOptionsDecorated} for:item="option">
                                             <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
                                         </template>
                                     </select>
-                                    <template if:true={item.actionError}>
-                                        <p class="error-inline wiz-inline-error">Select the Action</p>
-                                    </template>
-                                </label>
-                                <label class="input-label wiz-field-label">Frequency
+                                </div>
+                                <div class="field wiz-field">
+                                    <label class="input-label wiz-field-label">Frequency</label>
                                     <select class="text-input wiz-control" data-id={item.id} data-field="frequency" aria-label="Medication frequency" onchange={handleWizardDetailChange}>
                                         <option value="">--</option>
                                         <template for:each={item.frequencyOptionsDecorated} for:item="option">
                                             <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
                                         </template>
                                     </select>
-                                </label>
-                                <label class="input-label wiz-field-label">Amount
+                                </div>
+                                <div class="field wiz-field">
+                                    <label class="input-label wiz-field-label">Amount</label>
                                     <input type="number" class="text-input wiz-control" data-id={item.id} data-field="amount" value={item.amount} aria-label="Medication amount" oninput={handleWizardDetailChange} />
-                                </label>
-                                <label class="input-label wiz-field-label">Dosing Unit
+                                </div>
+                                <div class="field wiz-field">
+                                    <label class="input-label wiz-field-label">Dosing Unit</label>
                                     <select class="text-input wiz-control" data-id={item.id} data-field="unit" aria-label="Medication dosing unit" onchange={handleWizardDetailChange}>
                                         <option value="">--</option>
                                         <template for:each={item.unitOptionsDecorated} for:item="option">
                                             <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
                                         </template>
                                     </select>
-                                </label>
+                                </div>
                                 <label class="checkbox-field wiz-checkbox-row success">
                                     <input type="checkbox" data-id={item.id} data-field="current" checked={item.current} onchange={handleWizardDetailChange} />
                                     <span>Current medication?</span>

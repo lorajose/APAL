@@ -79,13 +79,13 @@
                                 </header>
                                 <p class="risk-description">{risk.meta.description}</p>
                                 <template if:true={showRiskId}>
-                                    <p class="risk-id">
-                                        <span class="risk-label">Risk Id:</span>
+                                    <p class="risk-id wiz-record-ref">
+                                        <span class="risk-label wiz-record-ref-label">Risk Id:</span>
                                         <template if:true={risk.recordLink}>
-                                            <a class="risk-id-value" href={risk.recordLink} target="_blank">{risk.recordName}</a>
+                                            <a class="risk-id-value wiz-record-ref-value" href={risk.recordLink} target="_blank">{risk.recordName}</a>
                                         </template>
                                         <template if:false={risk.recordLink}>
-                                            <span class="risk-id-value">{risk.recordName}</span>
+                                            <span class="risk-id-value wiz-record-ref-value">{risk.recordName}</span>
                                         </template>
                                     </p>
                                 </template>
