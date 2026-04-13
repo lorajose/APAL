@@ -27,24 +27,6 @@
 
 .concern-id {
 	margin: 0.25rem 0 0;
-	font-size: 0.85rem;
-	color: #374151;
-	display: inline-flex;
-	align-items: center;
-	gap: 0.35rem;
-}
-
-.concern-id a {
-	color: #0f2d52;
-	font-weight: 600;
-}
-
-.concern-label {
-	white-space: nowrap;
-}
-
-.concern-id-value {
-	margin-left: 0.05rem;
 }
 
 .concern-category-pill {

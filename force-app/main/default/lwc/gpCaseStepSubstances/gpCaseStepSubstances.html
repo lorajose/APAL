@@ -73,13 +73,13 @@
                                     <h3>{sub.meta.name}</h3>
                                     <span class="sub-category-pill">{sub.meta.category}</span>
                                     <template if:true={showSubstanceName}>
-                                        <p class="sub-name">
-                                            <span class="sub-label">Substance Id:</span>
+                                        <p class="sub-name wiz-record-ref">
+                                            <span class="sub-label wiz-record-ref-label">Substance Id:</span>
                                             <template if:true={sub.recordLink}>
-                                                <a class="sub-id-value" href={sub.recordLink} target="_blank">{sub.recordName}</a>
+                                                <a class="sub-id-value wiz-record-ref-value" href={sub.recordLink} target="_blank">{sub.recordName}</a>
                                             </template>
                                             <template if:false={sub.recordLink}>
-                                                <span class="sub-id-value">{sub.recordName}</span>
+                                                <span class="sub-id-value wiz-record-ref-value">{sub.recordName}</span>
                                             </template>
                                         </p>
                                     </template>

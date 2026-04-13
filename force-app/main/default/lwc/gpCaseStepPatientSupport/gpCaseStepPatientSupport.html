@@ -124,13 +124,13 @@
                                             <div>
                                                 <h3 class="wiz-item-title">{sup.supportName}</h3>
                                                 <template if:true={showSupportId}>
-                                                    <p class="support-id">
-                                                        <span class="support-label">Support Id:</span>
+                                                    <p class="support-id wiz-record-ref">
+                                                        <span class="support-label wiz-record-ref-label">Support Id:</span>
                                                         <template if:true={sup.recordLink}>
-                                                            <a class="support-id-value" href={sup.recordLink} target="_blank">{sup.recordName}</a>
+                                                            <a class="support-id-value wiz-record-ref-value" href={sup.recordLink} target="_blank">{sup.recordName}</a>
                                                         </template>
                                                         <template if:false={sup.recordLink}>
-                                                            <span class="support-id-value">{sup.recordName}</span>
+                                                            <span class="support-id-value wiz-record-ref-value">{sup.recordName}</span>
                                                         </template>
                                                     </p>
                                                 </template>

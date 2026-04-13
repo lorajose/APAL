@@ -167,6 +167,40 @@
     overflow-wrap: anywhere;
 }
 
+.wiz-record-ref {
+    margin: 0;
+    color: #374151;
+    font-size: var(--wiz-font-size-meta);
+    font-weight: var(--wiz-font-weight-semibold);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.wiz-record-ref-label {
+    white-space: nowrap;
+    color: inherit;
+    font: inherit;
+}
+
+.wiz-record-ref-value {
+    margin-left: 0.05rem;
+    font: inherit;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+a.wiz-record-ref-value {
+    color: var(--wiz-color-text-link);
+    font-weight: inherit;
+}
+
+a.wiz-record-ref-value:hover {
+    text-decoration: underline;
+}
+
 .wiz-text-error {
     color: var(--wiz-state-danger-text);
     font-size: var(--wiz-font-size-helper);
