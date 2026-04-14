@@ -272,7 +272,9 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
                 const flags = [];
                 if (item.recent) flags.push('recent');
                 if (item.historical) flags.push('historical');
-                const cardClass = flags.length ? `risk-card ${flags.join(' ')}` : 'risk-card';
+                const cardClass = flags.length
+                    ? `risk-card wiz-selected-row ${flags.join(' ')}`
+                    : 'risk-card wiz-selected-row';
                 return {
                 ...item,
                 meta: (() => {
@@ -371,14 +373,14 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
         const id = event.target.dataset.id;
         const field = event.target.dataset.field;
         const value = event.target.checked;
-        this.risks = this.risks.map(item => item.id === id ? { ...item, [field]: value } : item);
+        this.risks = this.risks.map(item => (item.id === id ? { ...item, [field]: value } : item));
         this.emitDraftChange();
     }
 
     handleNoteChange(event) {
         const id = event.target.dataset.id;
         const value = event.target.value;
-        this.risks = this.risks.map(item => item.id === id ? { ...item, notes: value } : item);
+        this.risks = this.risks.map(item => (item.id === id ? { ...item, notes: value } : item));
         this.emitDraftChange();
     }
 
@@ -422,6 +424,12 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
     }
 
     get wizardNextDisabled() {
+        if (this.wizardStep === 0) {
+            return this.wizardSelection.length === 0;
+        }
+        if (this.wizardStep === 1) {
+            return this.wizardDraft.length === 0;
+        }
         return false;
     }
 
@@ -458,9 +466,9 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
             .map(item => {
                 const disabled = existingIds.has(item.id);
                 const checked = existingIds.has(item.id) || this.wizardSelection.includes(item.id);
-                const classList = ['catalog-card'];
-                if (checked) classList.push('selected');
-                if (disabled) classList.push('disabled');
+                const classList = ['catalog-card', 'wiz-catalog-row', 'wiz-select-card'];
+                if (checked) classList.push('selected', 'is-selected');
+                if (disabled) classList.push('disabled', 'is-disabled');
                 return {
                     ...item,
                     disabled,
@@ -565,7 +573,7 @@ export default class GpCaseStepSafetyRisks extends LightningElement {
         if (!id) return;
         const field = event.target.dataset.field;
         const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-        this.wizardDraft = this.wizardDraft.map(item => item.id === id ? { ...item, [field]: value } : item);
+        this.wizardDraft = this.wizardDraft.map(item => (item.id === id ? { ...item, [field]: value } : item));
     }
 
     handleWizardRemoveDraft(event) {

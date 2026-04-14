@@ -27,22 +27,6 @@
                             </visibilityRule>
                         </valueListItems>
                         <valueListItems>
-                            <value>Case.New_Patient_Support</value>
-                            <visibilityRule>
-                                <booleanFilter>1 AND 2</booleanFilter>
-                                <criteria>
-                                    <leftValue>{!Record.RecordType.DeveloperName}</leftValue>
-                                    <operator>EQUAL</operator>
-                                    <rightValue>Care_Navigation</rightValue>
-                                </criteria>
-                                <criteria>
-                                    <leftValue>{!Record.Parent.Unrelated_Call__c}</leftValue>
-                                    <operator>EQUAL</operator>
-                                    <rightValue>false</rightValue>
-                                </criteria>
-                            </visibilityRule>
-                        </valueListItems>
-                        <valueListItems>
                             <value>Edit</value>
                         </valueListItems>
                     </valueList>
@@ -932,12 +916,8 @@
     <flexiPageRegions>
         <itemInstances>
             <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.Family_History_Notes__c</fieldItem>
-                <identifier>RecordFamily_History_Notes_cField</identifier>
+                <fieldItem>Record.Parent.Family_History_Notes__c</fieldItem>
+                <identifier>RecordParentFamily_History_Notes_cField</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>

@@ -471,6 +471,16 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
+                <fieldItem>Record.Self_Harm_History__c</fieldItem>
+                <identifier>RecordSelf_Harm_History_cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldInstanceProperties>
+                    <name>uiBehavior</name>
+                    <value>none</value>
+                </fieldInstanceProperties>
                 <fieldItem>Record.Prior_Diagnoses__c</fieldItem>
                 <identifier>RecordPrior_Diagnoses_cField</identifier>
             </fieldInstance>

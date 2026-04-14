@@ -10,6 +10,12 @@ import CASE_TYPE_FIELD from '@salesforce/schema/Case.Case_Type__c';
 import CASE_SERVICE_FIELD from '@salesforce/schema/Case.Service__c';
 
 const cloneList = (list = []) => JSON.parse(JSON.stringify(list || []));
+const FILTER_OPTIONS = [
+    { label: 'Name', value: 'name' }
+];
+const WIZARD_FILTER_OPTIONS = [
+    { label: 'Name', value: 'name' }
+];
 const looksLikeId = (value) => {
     if (!value || typeof value !== 'string') return false;
     const trimmed = value.trim();
@@ -218,7 +224,7 @@ export default class GpCaseStepPatientSupport extends LightningElement {
                 if (item.appointmentCompletedIneffective) flags.push('ineffective');
                 if (item.suspended) flags.push('suspended');
                 if (item.careNotApplicable) flags.push('cna');
-                const cardClass = flags.length ? `scr-card ${flags.join(' ')}` : 'scr-card';
+                const cardClass = flags.length ? `scr-card wiz-selected-row ${flags.join(' ')}` : 'scr-card wiz-selected-row';
 
                 return {
                     ...item,
@@ -235,9 +241,15 @@ export default class GpCaseStepPatientSupport extends LightningElement {
     }
 
     get filterOptions() {
-        return [
-            { label: 'Name', value: 'name' }
-        ];
+        return FILTER_OPTIONS;
+    }
+
+    get filterOptionsDecorated() {
+        return this.decorateOptionList(FILTER_OPTIONS, this.filterBy);
+    }
+
+    get wizardFilterOptionsDecorated() {
+        return this.decorateOptionList(WIZARD_FILTER_OPTIONS, this.wizardFilter);
     }
 
     get isGridView() {
@@ -258,6 +270,13 @@ export default class GpCaseStepPatientSupport extends LightningElement {
 
     get wizardStepIsReview() {
         return this.wizardStep === 2;
+    }
+
+    decorateOptionList(options = [], selectedValue = '') {
+        return (options || []).map(option => ({
+            ...option,
+            selected: option.value === selectedValue
+        }));
     }
 
     get wizardNextDisabled() {
@@ -281,7 +300,7 @@ export default class GpCaseStepPatientSupport extends LightningElement {
                     ...item,
                     disabled,
                     checked,
-                    className: `${disabled ? 'catalog-card disabled' : 'catalog-card'}${checked ? ' selected' : ''}`
+                    className: `catalog-card wiz-catalog-row wiz-select-card${disabled ? ' disabled is-disabled' : ''}${checked ? ' selected is-selected' : ''}`
                 };
             })
             .filter(item => {
@@ -486,9 +505,9 @@ export default class GpCaseStepPatientSupport extends LightningElement {
         const id = event.target.dataset.id;
         if (!id) return;
         const value = event.target.value;
-        this.supports = this.supports.map(item =>
+        this.supports = this.supports.map(item => (
             item.id === id ? { ...item, notes: value } : item
-        );
+        ));
         this.emitDraftChange();
     }
 
@@ -497,9 +516,9 @@ export default class GpCaseStepPatientSupport extends LightningElement {
         const field = event.target.dataset.field;
         const value = event.target.checked;
         if (!id || !field) return;
-        this.supports = this.supports.map(item =>
+        this.supports = this.supports.map(item => (
             item.id === id ? { ...item, [field]: value } : item
-        );
+        ));
         this.emitDraftChange();
     }
 
@@ -637,9 +656,9 @@ export default class GpCaseStepPatientSupport extends LightningElement {
         if (!id) return;
         const field = event.target.dataset.field;
         const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-        this.wizardDraft = this.wizardDraft.map(item =>
+        this.wizardDraft = this.wizardDraft.map(item => (
             item.id === id ? { ...item, [field]: value } : item
-        );
+        ));
     }
 
     handleWizardRemoveDraft(event) {
@@ -769,7 +788,7 @@ export default class GpCaseStepPatientSupport extends LightningElement {
             if (copy.appointmentCompletedIneffective) flags.push('ineffective');
             if (copy.suspended) flags.push('suspended');
             if (copy.careNotApplicable) flags.push('cna');
-            copy.cardClass = flags.length ? `scr-card ${flags.join(' ')}` : 'scr-card';
+            copy.cardClass = flags.length ? `scr-card wiz-selected-row ${flags.join(' ')}` : 'scr-card wiz-selected-row';
             return copy;
         });
     }

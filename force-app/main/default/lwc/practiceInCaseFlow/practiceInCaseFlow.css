@@ -1,0 +1,48 @@
+.practice-search-shell {
+  position: relative;
+}
+
+.practice-helper {
+  position: relative;
+  margin-top: 0.55rem;
+  margin-left: 0.35rem;
+}
+
+.practice-helper--overlay {
+  position: absolute;
+  top: 2.35rem;
+  left: 50%;
+  z-index: 2;
+  margin: 0;
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+}
+
+.practice-helper__bubble {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18rem;
+  max-width: min(28rem, calc(100vw - 3rem));
+  padding: 0.7rem 1rem;
+  border-radius: 0.45rem;
+  background: linear-gradient(180deg, #0f3f78 0%, #0a3565 100%);
+  box-shadow: 0 6px 18px rgba(15, 63, 120, 0.24);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.practice-helper__bubble::after {
+  content: "";
+  position: absolute;
+  left: 1.2rem;
+  bottom: -0.55rem;
+  width: 0;
+  height: 0;
+  border-left: 0.6rem solid transparent;
+  border-right: 0.6rem solid transparent;
+  border-top: 0.6rem solid #0a3565;
+}

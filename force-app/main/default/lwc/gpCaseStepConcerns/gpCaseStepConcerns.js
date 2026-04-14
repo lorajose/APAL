@@ -472,9 +472,9 @@ export default class GpCaseStepConcerns extends LightningElement {
             .map(item => {
                 const disabled = existingIds.has(item.id) && this.wizardMode === 'add';
                 const checked = existingIds.has(item.id) || this.wizardSelection.includes(item.id);
-                const classes = ['catalog-card'];
-                if (checked) classes.push('selected');
-                if (disabled) classes.push('disabled');
+                const classes = ['catalog-card', 'wiz-catalog-row', 'wiz-select-card'];
+                if (checked) classes.push('selected', 'is-selected');
+                if (disabled) classes.push('disabled', 'is-disabled');
                 return {
                     ...item,
                     disabled,
@@ -567,7 +567,7 @@ export default class GpCaseStepConcerns extends LightningElement {
         const field = event.target.dataset.field;
         const value = event.target.value;
         if (field !== 'notes') {
-            this.wizardDraft = this.wizardDraft.map(item => item.id === id ? { ...item, [field]: value } : item);
+            this.wizardDraft = this.wizardDraft.map(item => (item.id === id ? { ...item, [field]: value } : item));
             return;
         }
         const target = this.wizardDraft.find(item => item.id === id);

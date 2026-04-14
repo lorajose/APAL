@@ -242,7 +242,9 @@ export default class GpCaseStepScreeners extends LightningElement {
         const term = (this.searchValue || '').toLowerCase();
         return this.screeners
             .map(item => {
-                const cardClass = item.positive ? 'scr-card positive-flag' : 'scr-card';
+                const cardClass = item.positive
+                    ? 'scr-card wiz-selected-row positive-flag'
+                    : 'scr-card wiz-selected-row';
                 return {
                     ...item,
                     meta: this.catalogIndex[item.catalogId || item.id] || {
@@ -285,7 +287,7 @@ export default class GpCaseStepScreeners extends LightningElement {
         if (!id) return;
         const value = event.target.value;
         this.screeners = this.screeners.map(scr =>
-            scr.id === id ? { ...scr, notes: value } : scr
+            (scr.id === id ? { ...scr, notes: value } : scr)
         );
         this.emitDraftChange();
     }
@@ -443,9 +445,9 @@ export default class GpCaseStepScreeners extends LightningElement {
             .map(item => {
                 const disabled = existingIds.has(item.id) && this.wizardMode === 'add';
                 const checked = existingIds.has(item.id) || this.wizardSelection.includes(item.id);
-                const classList = ['catalog-card'];
-                if (checked) classList.push('selected');
-                if (disabled) classList.push('disabled');
+                const classList = ['catalog-card', 'wiz-catalog-row', 'wiz-select-card'];
+                if (checked) classList.push('selected', 'is-selected');
+                if (disabled) classList.push('disabled', 'is-disabled');
                 return {
                     ...item,
                     disabled,
@@ -590,7 +592,7 @@ export default class GpCaseStepScreeners extends LightningElement {
         const field = event.target.dataset.field;
         const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
         this.wizardDraft = this.wizardDraft.map(item =>
-            item.id === id ? { ...item, [field]: value } : item
+            (item.id === id ? { ...item, [field]: value } : item)
         );
     }
 

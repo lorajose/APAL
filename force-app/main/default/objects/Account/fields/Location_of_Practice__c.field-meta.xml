@@ -2,7 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Location_of_Practice__c</fullName>
     <externalId>false</externalId>
-    <inlineHelpText>Please include city and state (abbreviated)</inlineHelpText>
+    <inlineHelpText>Please use Practice field above to connect a Practice record</inlineHelpText>
     <label>Location of Practice</label>
     <length>255</length>
     <required>false</required>

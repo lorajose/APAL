@@ -1,22 +1,24 @@
 <template>
-  <div class="wizard-title">
-    <template if:true={isUpdateMode}>Case Editing Wizard</template>
-    <template if:false={isUpdateMode}>Case Creation Wizard</template>
-  </div>
-  <div class="wizard-subtitle">
-    Go through all the steps and fill in the required information → Review and edit if needed → Save
+  <div class="wiz-shell-header">
+    <div class="wizard-title wiz-app-title">
+      <template if:true={isUpdateMode}>Case Editing Wizard</template>
+      <template if:false={isUpdateMode}>Case Creation Wizard</template>
+    </div>
+    <div class="wizard-subtitle wiz-description wiz-shell-subtitle">
+      Go through all the steps and fill in the required information → Review and edit if needed → Save
+    </div>
   </div>
   <template if:true={isSaving}>
-    <div class="wizard-overlay" role="status" aria-live="polite">
-      <div class="wizard-overlay-card">
+    <div class="wizard-overlay wiz-overlay" role="status" aria-live="polite">
+      <div class="wizard-overlay-card wiz-overlay-card">
         <lightning-spinner alternative-text="Saving" size="medium"></lightning-spinner>
-        <span class="wizard-overlay-text">{savingLabel}</span>
+        <span class="wizard-overlay-text wiz-overlay-text">{savingLabel}</span>
       </div>
     </div>
   </template>
     <div class={wizardLayoutClass}>
-      <div class="sidebar">
-        <div class="sidebar-title">Steps</div>
+      <div class="sidebar wiz-shell-sidebar">
+        <div class="sidebar-title wiz-sidebar-title">Steps</div>
         <template if:true={stepsReady}>
         <template for:each={stepsFormatted} for:item="s">
         <div
@@ -26,14 +28,14 @@
           onclick={handleJumpToStep}
           >
           <div class="slds-grid slds-grid_align-start slds-grow slds-p-around_x-small">
-            <span class="step-label-container slds-grid slds-grid_align-start slds-grow">
-            <span class="step-number-badge slds-var-m-right_x-small">{s.value}</span>
-            <span class="step-label-text">{s.label}</span> 
+            <span class="step-label-container wiz-sidebar-step-content slds-grid slds-grid_align-start slds-grow">
+            <span class="step-number-badge wiz-sidebar-step-number slds-var-m-right_x-small">{s.value}</span>
+            <span class="step-label-text wiz-sidebar-step-text">{s.label}</span> 
             </span>
             <!-- RIGHT: CHECK ICON -->
             <!-- ICON → protegido -->
             <template if:true={s.isCompleteAndChecked}>
-                <span class="step-check-icon" aria-label="Step complete">&#10003;</span>
+                <span class="step-check-icon wiz-sidebar-step-check" aria-label="Step complete">&#10003;</span>
             </template>
 
           </div>
@@ -41,9 +43,11 @@
       </template>
       </template>
     </div>
-    <div class="step-panel">
-      <h2 class="step-title">Step {currentStep} — {currentSectionName}</h2>
-      <p class="step-description">{currentDescription}</p>
+    <div class="step-panel wiz-step-panel wiz-shell-main">
+      <div class="wiz-step-header">
+        <h2 class="step-title wiz-step-title">Step {currentStep} — {currentSectionName}</h2>
+        <p class="step-description wiz-description wiz-step-instruction">{currentDescription}</p>
+      </div>
       <template if:true={inlineMessage}>
         <div class="inline-alert" role="alert">
           <span class="inline-alert-title">{inlineMessage.title}</span>
