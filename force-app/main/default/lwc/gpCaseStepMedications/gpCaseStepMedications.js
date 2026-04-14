@@ -284,7 +284,15 @@ export default class GpCaseStepMedications extends LightningElement {
     get filteredMedications() {
         const term = (this.searchValue || '').toLowerCase();
         return this.medications
-            .map(item => ({
+            .map(item => {
+                const isAllergy = item.allergy;
+                const isCurrent = item.current;
+                const flags = [];
+                if (isAllergy) flags.push('allergy');
+                if (isCurrent) flags.push('current');
+                const cardClass = flags.length ? `med-card wiz-selected-row ${flags.join(' ')}` : 'med-card wiz-selected-row';
+
+                return {
                 ...item,
                 meta: this.catalogIndex[item.id] || {
                     title: item.catalogName || item.meta?.title || item.id,
@@ -292,10 +300,11 @@ export default class GpCaseStepMedications extends LightningElement {
                 },
                 recordName: item.recordName || item.name || null,
                 recordLink: this.buildPatientMedicationLink(item.recordId),
-                cardClass: item.allergy ? 'med-card allergy' : 'med-card',
+                cardClass,
                 showConfirm: this.confirmRemoveId === item.id,
                 previewNotes: this.notePreview(item.notes)
-            }))
+                };
+            })
             .filter(item => {
                 if (!term) return true;
                 const filterField = this.filterBy;
@@ -376,9 +385,9 @@ export default class GpCaseStepMedications extends LightningElement {
         const id = event.target.dataset.id;
         if (!id) return;
         const value = event.target.value;
-        this.medications = this.medications.map(med =>
+        this.medications = this.medications.map(med => (
             med.id === id ? { ...med, notes: value } : med
-        );
+        ));
         this.emitDraftChange();
     }
 
@@ -546,7 +555,12 @@ export default class GpCaseStepMedications extends LightningElement {
                     unitError = true;
                     hasError = true;
                 }
-                return { ...item, actionError, unitError, actionClass: actionError ? 'text-input input-error' : 'text-input' };
+                return {
+                    ...item,
+                    actionError,
+                    unitError,
+                    actionClass: actionError ? 'text-input wiz-control is-error' : 'text-input wiz-control'
+                };
             });
             this.wizardDraft = this.decorateWizardDraft(updated);
             this.wizardDraft = [...this.wizardDraft]; // force rerender for error state
@@ -641,7 +655,7 @@ export default class GpCaseStepMedications extends LightningElement {
                 const normalized = (value || '').trim();
                 if (normalized && normalized !== 'Select action') {
                     next.actionError = false;
-                    next.actionClass = 'text-input';
+                    next.actionClass = 'text-input wiz-control';
                     this.setActionValidity(id, '');
                     next.action = normalized;
                 } else {
@@ -779,9 +793,9 @@ export default class GpCaseStepMedications extends LightningElement {
             .map(item => {
                 const disabled = existingIds.has(item.id) && this.wizardMode === 'add';
                 const checked = existingIds.has(item.id) || this.wizardSelection.includes(item.id);
-                const classList = ['catalog-card'];
-                if (checked) classList.push('selected');
-                if (disabled) classList.push('disabled');
+                const classList = ['catalog-card', 'wiz-catalog-row', 'wiz-select-card'];
+                if (checked) classList.push('selected', 'is-selected');
+                if (disabled) classList.push('disabled', 'is-disabled');
                 return {
                     ...item,
                     disabled,
@@ -844,7 +858,7 @@ export default class GpCaseStepMedications extends LightningElement {
         base.unitOptionsDecorated = this.decorateOptionList(UNITS, base.unit || '');
         base.actionError = !!base.actionError;
         base.unitError = !!base.unitError;
-        base.actionClass = base.actionError ? 'text-input input-error' : 'text-input';
+        base.actionClass = base.actionError ? 'text-input wiz-control is-error' : 'text-input wiz-control';
         return base;
     }
 

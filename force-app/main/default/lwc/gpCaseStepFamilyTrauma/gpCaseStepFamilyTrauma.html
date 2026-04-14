@@ -1,62 +1,63 @@
 <template>
-    <div class="step-section">
+    <div class="step-section wiz-step-stack">
        <!-- <div class="section-header">
             <h2>Step 7 — Family &amp; Trauma</h2>
             <p>Document recent trauma, safety concerns, and relevant family history.</p>
         </div> -->
 
-        <section class="card checkbox-grid">
-            <label class="checkbox-field">
+        <section class="card wiz-card checkbox-grid">
+            <label class="checkbox-field wiz-checkbox">
                 <input type="checkbox" checked={recentTrauma} data-field="Recent_Trauma__c" onchange={handleCheckboxChange} />
-                <span class="input-label" >Recent trauma reported?</span>
+                <span class="input-label wiz-field-label">Recent trauma reported?</span>
             </label>
-            <label class="checkbox-field">
+            <label class="checkbox-field wiz-checkbox">
                 <input type="checkbox" checked={dependentSafetyConcern} data-field="Dependent_Safety_Concern__c" onchange={handleCheckboxChange} />
-                <span class="input-label" >Child / elder safety concern?</span>
+                <span class="input-label wiz-field-label">Child / elder safety concern?</span>
             </label>
-            <label class="checkbox-field">
+            <label class="checkbox-field wiz-checkbox">
                 <input type="checkbox" checked={ipvConcern} data-field="IPV_Concern__c" onchange={handleCheckboxChange} />
-                <span class="input-label" >IPV concern noted?</span>
+                <span class="input-label wiz-field-label">IPV concern noted?</span>
             </label>
         </section>
 
-        <section class="card family-history-section">
-            <header class="card-header">
-                <div>
-                    <p class="card-title">Family History (1st-degree)</p>
-                    <p class="card-subtitle">Select concerns; add notes for the ones you choose.</p>
+        <section class="card wiz-card family-history-section">
+            <header class="card-header wiz-card-header">
+                <div class="wiz-heading-stack">
+                    <p class="card-title wiz-item-title">Family History (1st-degree)</p>
+                    <p class="card-subtitle wiz-description">Select concerns; add notes for the ones you choose.</p>
                 </div>
-                <div class="input-row condensed">
-                    <label class="input-label" for="family-search">Search</label>
-                    <input id="family-search" type="search" class="pill-search" placeholder="Filter concerns..." value={familySearch} oninput={handleFamilySearch} />
+                <div class="input-row condensed wiz-search-row">
+                    <label class="input-label wiz-field-label" for="family-search">Search</label>
+                    <input id="family-search" type="search" class="pill-search wiz-pill-search" placeholder="Filter concerns..." value={familySearch} oninput={handleFamilySearch} />
                 </div>
             </header>
             <div class="family-history-grid">
                 <div class="available-column">
                     <p class="column-title">Available</p>
-                    <div class="checkbox-list">
+                    <div class="checkbox-list wiz-checkbox-list">
                         <template for:each={filteredFamilyOptions} for:item="option">
-                            <label key={option.value} class="checkbox-row">
+                            <label key={option.value} class="checkbox-row wiz-checkbox-option">
                                 <input type="checkbox" data-value={option.value} checked={option.checked} onchange={handleFamilyToggle} />
                                 <span>{option.label}</span>
                             </label>
                         </template>
                     </div>
                 </div>
-                <div class="selected-column">
+                <div class="selected-column wiz-selected-list">
                     <p class="column-title">Selected</p>
                     <template if:true={hasSelectedFamily}>
                         <template for:each={selectedFamilyHistory} for:item="item">
-                            <div key={item.value} class="selected-card">
-                                <header>
+                            <div key={item.value} class="selected-card wiz-selected-row">
+                                <header class="wiz-panel-header">
                                     <span>{item.label}</span>
                                     <button class="link-button" type="button" data-value={item.value} onclick={handleFamilyRemove}>Remove</button>
                                 </header>
-                                <div class="field field-full">
-                                    <label class="input-label family-note-label">Notes</label>
+                                <div class="field field-full wiz-field">
+                                    <label class="input-label family-note-label wiz-field-label">Notes</label>
                                     <textarea
-                                        class="textarea"
+                                        class="textarea wiz-control"
                                         data-value={item.value}
+                                        aria-label="Family history notes"
                                         oninput={handleFamilyNoteChange}
                                     >{item.note}</textarea>
                                 </div>
@@ -70,22 +71,22 @@
             </div>
         </section>
 
-        <section class="card">
-            <div class="field field-full">
-                <label class="input-label" for="family-notes">Family History and Trauma Notes</label>
+        <section class="card wiz-card">
+            <div class="field field-full wiz-field">
+                <label class="input-label wiz-field-label" for="family-notes">Family History and Trauma Notes</label>
                 <textarea
                     id="family-notes"
-                    class="textarea"
+                    class="textarea wiz-control"
                     placeholder="Add context, protective relatives, or patterns."
                     oninput={handleNotesChange}
                 >{familyHistoryNotes}</textarea>
-                <p class="helper-text">Add context, protective relatives, or patterns.</p>
+                <p class="helper-text wiz-field-helper">Add context, protective relatives, or patterns.</p>
             </div>
         </section>
 
-        <div class="slds-grid slds-grid_align-spread slds-var-m-top_large">
-            <button class="slds-button btn-back" type="button" onclick={handleBack}>Back</button>
-            <button class="slds-button btn-next" type="button" onclick={handleNext}>Next</button>
+        <div class="slds-grid slds-grid_align-spread slds-var-m-top_large wiz-step-footer">
+            <button class="slds-button btn-back wiz-btn wiz-btn-footer-back" type="button" onclick={handleBack}>Back</button>
+            <button class="slds-button btn-next wiz-btn wiz-btn-footer-next" type="button" onclick={handleNext}>Next</button>
         </div>
     </div>
 </template>

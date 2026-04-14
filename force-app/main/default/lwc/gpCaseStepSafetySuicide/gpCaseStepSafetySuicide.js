@@ -18,6 +18,7 @@ const ACCESS_MEANS_FALLBACK = [
     { label: 'Large medication supply', value: 'Large medication supply' },
     { label: 'Ligature risk', value: 'Ligature risk' }
 ];
+const DATE_ONLY_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
 export default class GpCaseStepSafetySuicide extends LightningElement {
     @api errors = {};
@@ -117,17 +118,35 @@ export default class GpCaseStepSafetySuicide extends LightningElement {
     }
 
     formatDateForInput(value) {
-        if (!value) return '';
-        if (value instanceof Date) {
-            return value.toISOString().slice(0, 10);
-        }
-        return value;
+        return this.normalizeDateValue(value) || '';
     }
 
-    parseDateForPayload(value) {
+    normalizeDateValue(value) {
         if (!value) return null;
-        if (value instanceof Date) return value;
-        return new Date(value);
+        if (typeof value === 'string') {
+            const trimmed = value.trim();
+            if (!trimmed) return null;
+            if (DATE_ONLY_PATTERN.test(trimmed)) {
+                return trimmed;
+            }
+            const isoDatePart = trimmed.match(/^(\d{4}-\d{2}-\d{2})T/);
+            if (isoDatePart) {
+                return isoDatePart[1];
+            }
+            const date = new Date(trimmed);
+            return Number.isNaN(date.getTime()) ? null : this.formatDateParts(date, true);
+        }
+        if (value instanceof Date) {
+            return Number.isNaN(value.getTime()) ? null : this.formatDateParts(value, true);
+        }
+        return null;
+    }
+
+    formatDateParts(date, useUtc = false) {
+        const month = String((useUtc ? date.getUTCMonth() : date.getMonth()) + 1).padStart(2, '0');
+        const day = String(useUtc ? date.getUTCDate() : date.getDate()).padStart(2, '0');
+        const year = useUtc ? date.getUTCFullYear() : date.getFullYear();
+        return `${year}-${month}-${day}`;
     }
 
     @api
@@ -219,7 +238,7 @@ export default class GpCaseStepSafetySuicide extends LightningElement {
     buildPayload() {
         return {
             Suicidal_Ideation__c: this.ideation || null,
-            Last_Attempt_Date__c: this.parseDateForPayload(this.lastAttemptDate),
+            Last_Attempt_Date__c: this.normalizeDateValue(this.lastAttemptDate),
             Protective_Factors__c: this.protectiveFactors || null,
             Suicidal_Intent__c: this.suicidalIntent,
             Past_Suicide_Attempts__c: this.getNumberOrNull(this.pastAttempts),

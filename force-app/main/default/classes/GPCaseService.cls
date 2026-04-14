@@ -549,10 +549,12 @@ public with sharing class GPCaseService {
                 } else {
                     c.put(key, Boolean.valueOf(String.valueOf(value)));
                 }
+            } else if (describe.getType() == Schema.DisplayType.Picklist ||
+                       describe.getType() == Schema.DisplayType.MultiPicklist) {
+                String sanitizedValue = sanitizeRestrictedPicklistValue(describe, String.valueOf(value));
+                c.put(key, sanitizedValue);
             } else if (describe.getType() == Schema.DisplayType.String ||
                        describe.getType() == Schema.DisplayType.TextArea ||
-                       describe.getType() == Schema.DisplayType.Picklist ||
-                       describe.getType() == Schema.DisplayType.MultiPicklist ||
                        describe.getType() == Schema.DisplayType.Phone ||
                        describe.getType() == Schema.DisplayType.Email ||
                        describe.getType() == Schema.DisplayType.Url) {
@@ -566,6 +568,45 @@ public with sharing class GPCaseService {
             }
         }
         update c;
+    }
+
+    private static String sanitizeRestrictedPicklistValue(Schema.DescribeFieldResult describe, String rawValue) {
+        if (describe == null || rawValue == null) {
+            return rawValue;
+        }
+
+        Schema.DisplayType fieldType = describe.getType();
+        if (fieldType != Schema.DisplayType.Picklist && fieldType != Schema.DisplayType.MultiPicklist) {
+            return rawValue;
+        }
+
+        if (!describe.isRestrictedPicklist()) {
+            return rawValue;
+        }
+
+        Set<String> allowedValues = new Set<String>();
+        for (Schema.PicklistEntry entry : describe.getPicklistValues()) {
+            if (entry.isActive()) {
+                allowedValues.add(entry.getValue());
+            }
+        }
+
+        if (fieldType == Schema.DisplayType.MultiPicklist) {
+            List<String> filteredValues = new List<String>();
+            Set<String> seenValues = new Set<String>();
+            for (String token : rawValue.split(';')) {
+                String candidate = token == null ? null : token.trim();
+                if (String.isBlank(candidate) || !allowedValues.contains(candidate) || seenValues.contains(candidate)) {
+                    continue;
+                }
+                filteredValues.add(candidate);
+                seenValues.add(candidate);
+            }
+            return filteredValues.isEmpty() ? null : String.join(filteredValues, ';');
+        }
+
+        String trimmedValue = rawValue.trim();
+        return allowedValues.contains(trimmedValue) ? trimmedValue : null;
     }
 
 
@@ -604,19 +645,17 @@ public with sharing class GPCaseService {
             SELECT Id, Subject, Priority, Description,
                    Impaired_Domains__c, Symptom_Onset_Date__c,
                    Impairment_Level__c, Course__c, Abrupt_Change__c, Other_Symptoms__c,
-                   Top_Symptoms__c,
                    Psych_Hospitalizations__c, ED_Visits_Count__c,
-                   Self_Harm_History__c, Other_Prior_Diagnosis__c, Prior_Diagnoses__c,
+                   Self_Harm_History__c, Other_Prior_Diagnosis__c,
                    Suicidal_Ideation__c, Last_Attempt_Date__c, Protective_Factors__c,
                    Suicidal_Intent__c, Past_Suicide_Attempts__c, Access_to_Means__c,
                    Homicidal_Ideation__c, Violence_Recent__c, Weapons_Access__c, Violence_Details__c,
-                   Psychosis_Symptoms__c, Mania_Symptoms__c, Medical_Red_Flags__c,
                    Psychosis_Notes__c, Medical_Notes__c,
                    Recent_Trauma__c, Dependent_Safety_Concern__c, IPV_Concern__c,
-                   Family_History_Notes__c, Family_History__c,
+                   Family_History_Notes__c,
                    Home_Safety__c, Lethal_Means_Access__c, Means_Safety_Plan__c,
                    Safety_Notes__c, Reliable_Supports__c, Cost_Coverage_Issues__c,
-                   Supports_Notes__c, Psychosocial_Stressors__c,
+                   Supports_Notes__c,
                    Orientation__c, Cognition_Notes__c
             FROM Case
             WHERE Id = :parentCaseId
@@ -632,15 +671,13 @@ public with sharing class GPCaseService {
             'Impairment_Level__c',
             'Course__c',
             'Abrupt_Change__c',
-            'Other_Symptoms__c',
-            'Top_Symptoms__c'
+            'Other_Symptoms__c'
         }));
         payload.put('priorDx', mapCaseFields(caseRecord, new List<String>{
             'Psych_Hospitalizations__c',
             'ED_Visits_Count__c',
             'Self_Harm_History__c',
-            'Other_Prior_Diagnosis__c',
-            'Prior_Diagnoses__c'
+            'Other_Prior_Diagnosis__c'
         }));
         payload.put('suicide', mapCaseFields(caseRecord, new List<String>{
             'Suicidal_Ideation__c',
@@ -657,9 +694,6 @@ public with sharing class GPCaseService {
             'Violence_Details__c'
         }));
         payload.put('psychosisMania', mapCaseFields(caseRecord, new List<String>{
-            'Psychosis_Symptoms__c',
-            'Mania_Symptoms__c',
-            'Medical_Red_Flags__c',
             'Psychosis_Notes__c',
             'Medical_Notes__c'
         }));
@@ -667,8 +701,7 @@ public with sharing class GPCaseService {
             'Recent_Trauma__c',
             'Dependent_Safety_Concern__c',
             'IPV_Concern__c',
-            'Family_History_Notes__c',
-            'Family_History__c'
+            'Family_History_Notes__c'
         }));
         payload.put('homeSafety', mapCaseFields(caseRecord, new List<String>{
             'Home_Safety__c',
@@ -677,8 +710,7 @@ public with sharing class GPCaseService {
             'Safety_Notes__c',
             'Reliable_Supports__c',
             'Cost_Coverage_Issues__c',
-            'Supports_Notes__c',
-            'Psychosocial_Stressors__c'
+            'Supports_Notes__c'
         }));
         payload.put('cognition', mapCaseFields(caseRecord, new List<String>{
             'Orientation__c',
@@ -723,15 +755,39 @@ public with sharing class GPCaseService {
         if (patientId == null && hasPatientField) {
             patientId = (Id)parentCase.get('Patient__c');
         }
-        deleteExistingMedications(parentCaseId);
         System.debug(LoggingLevel.INFO, 'saveMedications => items: ' + JSON.serialize(items));
         if (items == null || items.isEmpty()) {
-            System.debug(LoggingLevel.ERROR, 'saveMedications error: payload is null or empty.');
+            System.debug(LoggingLevel.ERROR, 'saveMedications empty payload -> deleting all patient medications for case.');
+            List<Patient_Medication__c> existingAll = [
+                SELECT Id FROM Patient_Medication__c WHERE Case__c = :parentCaseId
+            ];
+            if (!existingAll.isEmpty()) {
+                delete existingAll;
+            }
             return;
         }
 
         Map<String, Id> medIds = fetchCatalogIds('Medication__c', collectNamesFromMedications(items));
-        List<Patient_Medication__c> toInsert = new List<Patient_Medication__c>();
+
+        // Existing records to preserve Medication Id (Reference Number)
+        Map<String, Patient_Medication__c> existingById = new Map<String, Patient_Medication__c>();
+        Map<String, Patient_Medication__c> existingByName = new Map<String, Patient_Medication__c>();
+        for (Patient_Medication__c pm : [
+            SELECT Id, Medication_List__c, Medication_List__r.Name
+            FROM Patient_Medication__c
+            WHERE Case__c = :parentCaseId
+        ]) {
+            if (pm.Medication_List__c != null) {
+                existingById.put(String.valueOf(pm.Medication_List__c), pm);
+            }
+            if (pm.Medication_List__r != null && !String.isBlank(pm.Medication_List__r.Name)) {
+                existingByName.put(pm.Medication_List__r.Name.toLowerCase(), pm);
+            }
+        }
+
+        List<Patient_Medication__c> toUpsert = new List<Patient_Medication__c>();
+        Set<String> payloadKeys = new Set<String>();
+
         for (MedicationInput item : items) {
             if (String.isBlank(item.catalogName)) {
                 System.debug(LoggingLevel.ERROR, 'saveMedications item skipped because catalogName is blank: ' + JSON.serialize(item));
@@ -744,10 +800,21 @@ public with sharing class GPCaseService {
                 });
             }
             Patient_Medication__c record = new Patient_Medication__c();
-            record.Case__c = parentCaseId;
-            record.Medication_List__c = medId;
-            if (patientId != null && Patient_Medication__c.SObjectType.getDescribe().fields.getMap().containsKey('Patient__c')) {
-                record.put('Patient__c', patientId);
+            String key = medId != null ? String.valueOf(medId) : item.catalogName.toLowerCase();
+            payloadKeys.add(key);
+
+            // Reuse existing record to keep reference number
+            Patient_Medication__c existing = existingById.get(String.valueOf(medId));
+            if (existing == null) {
+                existing = existingByName.get(item.catalogName.toLowerCase());
+            }
+            record.Id = existing != null ? existing.Id : null;
+            if (record.Id == null) {
+                record.Case__c = parentCaseId;
+                record.Medication_List__c = medId;
+                if (patientId != null && Patient_Medication__c.SObjectType.getDescribe().fields.getMap().containsKey('Patient__c')) {
+                    record.put('Patient__c', patientId);
+                }
             }
             record.Medication_Changes__c = item.action;
             record.Frequency__c = item.frequency;
@@ -762,10 +829,31 @@ public with sharing class GPCaseService {
                     throw new AuraHandledException('Invalid amount for medication "' + item.catalogName + '".');
                 }
             }
-            toInsert.add(record);
+            toUpsert.add(record);
         }
-        if (!toInsert.isEmpty()) {
-            insert toInsert;
+
+        // Delete records not present in payload
+        List<Patient_Medication__c> toDelete = new List<Patient_Medication__c>();
+        Set<Id> deleteSeen = new Set<Id>();
+        List<Patient_Medication__c> existingForDelete = new List<Patient_Medication__c>();
+        existingForDelete.addAll(existingById.values());
+        existingForDelete.addAll(existingByName.values());
+        for (Patient_Medication__c existing : existingForDelete) {
+            if (deleteSeen.contains(existing.Id)) continue;
+            String key = existing.Medication_List__c != null
+                ? String.valueOf(existing.Medication_List__c)
+                : (existing.Medication_List__r != null ? existing.Medication_List__r.Name.toLowerCase() : null);
+            if (key == null || !payloadKeys.contains(key)) {
+                toDelete.add(new Patient_Medication__c(Id = existing.Id));
+                deleteSeen.add(existing.Id);
+            }
+        }
+
+        if (!toUpsert.isEmpty()) {
+            upsert toUpsert;
+        }
+        if (!toDelete.isEmpty()) {
+            delete toDelete;
         }
     }
 
@@ -773,13 +861,37 @@ public with sharing class GPCaseService {
     public static void saveSubstances(Id caseId, List<SubstanceInput> items) {
         Id parentCaseId = resolveCaseId(caseId);
         Id patientId = fetchCasePatient(parentCaseId);
-        deleteExistingSubstances(parentCaseId);
         System.debug(LoggingLevel.INFO, 'saveSubstances => items: ' + JSON.serialize(items));
         if (items == null || items.isEmpty()) {
+            List<Patient_Substance__c> existingAll = [
+                SELECT Id FROM Patient_Substance__c WHERE Case__c = :parentCaseId
+            ];
+            if (!existingAll.isEmpty()) {
+                delete existingAll;
+            }
             return;
         }
         Map<String, Id> subs = fetchCatalogIds('Substance_List__c', collectNamesFromSubstances(items));
-        List<Patient_Substance__c> toInsert = new List<Patient_Substance__c>();
+
+        // Existing records to preserve Substance Id
+        Map<String, Patient_Substance__c> existingById = new Map<String, Patient_Substance__c>();
+        Map<String, Patient_Substance__c> existingByName = new Map<String, Patient_Substance__c>();
+        for (Patient_Substance__c ps : [
+            SELECT Id, Substance_Listing__c, Substance_Listing__r.Name
+            FROM Patient_Substance__c
+            WHERE Case__c = :parentCaseId
+        ]) {
+            if (ps.Substance_Listing__c != null) {
+                existingById.put(String.valueOf(ps.Substance_Listing__c), ps);
+            }
+            if (ps.Substance_Listing__r != null && !String.isBlank(ps.Substance_Listing__r.Name)) {
+                existingByName.put(ps.Substance_Listing__r.Name.toLowerCase(), ps);
+            }
+        }
+
+        List<Patient_Substance__c> toUpsert = new List<Patient_Substance__c>();
+        Set<String> payloadKeys = new Set<String>();
+
         for (SubstanceInput item : items) {
             if (String.isBlank(item.catalogName)) {
                 continue;
@@ -791,16 +903,49 @@ public with sharing class GPCaseService {
                 });
             }
             Patient_Substance__c record = new Patient_Substance__c();
-            record.Case__c = parentCaseId;
-            setPatientIfPossible(record, patientId);
-            record.Substance_Listing__c = catalogId;
+            String key = catalogId != null ? String.valueOf(catalogId) : item.catalogName.toLowerCase();
+            payloadKeys.add(key);
+
+            Patient_Substance__c existing = existingById.get(String.valueOf(catalogId));
+            if (existing == null) {
+                existing = existingByName.get(item.catalogName.toLowerCase());
+            }
+            record.Id = existing != null ? existing.Id : null;
+            if (record.Id == null) {
+                record.Case__c = parentCaseId;
+                record.Substance_Listing__c = catalogId;
+                setPatientIfPossible(record, patientId);
+            } else {
+                setPatientIfPossible(record, patientId);
+            }
             record.Frequency_of_Substance_Use__c = item.frequency;
             record.Current_Substance__c = item.current;
             record.Notes_new__c = item.notes;
-            toInsert.add(record);
+            toUpsert.add(record);
         }
-        if (!toInsert.isEmpty()) {
-            insert toInsert;
+
+        // Delete records not present in payload
+        List<Patient_Substance__c> toDelete = new List<Patient_Substance__c>();
+        Set<Id> deleteSeen = new Set<Id>();
+        List<Patient_Substance__c> existingForDelete = new List<Patient_Substance__c>();
+        existingForDelete.addAll(existingById.values());
+        existingForDelete.addAll(existingByName.values());
+        for (Patient_Substance__c existing : existingForDelete) {
+            if (deleteSeen.contains(existing.Id)) continue;
+            String key = existing.Substance_Listing__c != null
+                ? String.valueOf(existing.Substance_Listing__c)
+                : (existing.Substance_Listing__r != null ? existing.Substance_Listing__r.Name.toLowerCase() : null);
+            if (key == null || !payloadKeys.contains(key)) {
+                toDelete.add(new Patient_Substance__c(Id = existing.Id));
+                deleteSeen.add(existing.Id);
+            }
+        }
+
+        if (!toUpsert.isEmpty()) {
+            upsert toUpsert;
+        }
+        if (!toDelete.isEmpty()) {
+            delete toDelete;
         }
     }
 
@@ -808,13 +953,38 @@ public with sharing class GPCaseService {
     public static void saveScreeners(Id caseId, List<ScreenerInput> items) {
         Id parentCaseId = resolveCaseId(caseId);
         Id patientId = fetchCasePatient(parentCaseId);
-        deleteExistingScreeners(parentCaseId);
         System.debug(LoggingLevel.INFO, 'saveScreeners => items: ' + JSON.serialize(items));
         if (items == null || items.isEmpty()) {
+            List<Patient_Screener__c> existingAll = [
+                SELECT Id FROM Patient_Screener__c WHERE Case__c = :parentCaseId
+            ];
+            if (!existingAll.isEmpty()) {
+                delete existingAll;
+            }
             return;
         }
+
         Map<String, Id> screeners = fetchCatalogIds('Screener__c', collectNamesFromScreeners(items));
-        List<Patient_Screener__c> toInsert = new List<Patient_Screener__c>();
+
+        // Existing records to preserve Screener Reference Number
+        Map<String, Patient_Screener__c> existingById = new Map<String, Patient_Screener__c>();
+        Map<String, Patient_Screener__c> existingByName = new Map<String, Patient_Screener__c>();
+        for (Patient_Screener__c ps : [
+            SELECT Id, Screener__c, Screener__r.Name
+            FROM Patient_Screener__c
+            WHERE Case__c = :parentCaseId
+        ]) {
+            if (ps.Screener__c != null) {
+                existingById.put(String.valueOf(ps.Screener__c), ps);
+            }
+            if (ps.Screener__r != null && !String.isBlank(ps.Screener__r.Name)) {
+                existingByName.put(ps.Screener__r.Name.toLowerCase(), ps);
+            }
+        }
+
+        List<Patient_Screener__c> toUpsert = new List<Patient_Screener__c>();
+        Set<String> payloadKeys = new Set<String>();
+
         for (ScreenerInput item : items) {
             if (String.isBlank(item.catalogName)) {
                 continue;
@@ -826,9 +996,20 @@ public with sharing class GPCaseService {
                 });
             }
             Patient_Screener__c record = new Patient_Screener__c();
-            record.Case__c = parentCaseId;
+            String key = catalogId != null ? String.valueOf(catalogId) : item.catalogName.toLowerCase();
+            payloadKeys.add(key);
+
+            // Try to preserve existing record to keep reference number
+            Patient_Screener__c existing = existingById.get(String.valueOf(catalogId));
+            if (existing == null) {
+                existing = existingByName.get(item.catalogName.toLowerCase());
+            }
+            record.Id = existing != null ? existing.Id : null;
+            if (record.Id == null) {
+                record.Case__c = parentCaseId;
+                record.Screener__c = catalogId;
+            }
             setPatientIfPossible(record, patientId);
-            record.Screener__c = catalogId;
             if (!String.isBlank(item.screenedDate)) {
                 try {
                     record.Aproximate_Date_Screened__c = Date.valueOf(item.screenedDate);
@@ -839,10 +1020,31 @@ public with sharing class GPCaseService {
             record.Score__c = item.score;
             record.Positive_Outcome__c = item.positive;
             record.Notes_new__c = item.notes;
-            toInsert.add(record);
+            toUpsert.add(record);
         }
-        if (!toInsert.isEmpty()) {
-            insert toInsert;
+
+        // Delete only records not present in payload (cover id and name cases)
+        List<Patient_Screener__c> toDelete = new List<Patient_Screener__c>();
+        Set<Id> deleteSeen = new Set<Id>();
+        List<Patient_Screener__c> existingForDelete = new List<Patient_Screener__c>();
+        existingForDelete.addAll(existingById.values());
+        existingForDelete.addAll(existingByName.values());
+        for (Patient_Screener__c existing : existingForDelete) {
+            if (deleteSeen.contains(existing.Id)) continue;
+            String key = existing.Screener__c != null
+                ? String.valueOf(existing.Screener__c)
+                : (existing.Screener__r != null ? existing.Screener__r.Name.toLowerCase() : null);
+            if (key == null || !payloadKeys.contains(key)) {
+                toDelete.add(new Patient_Screener__c(Id = existing.Id));
+                deleteSeen.add(existing.Id);
+            }
+        }
+
+        if (!toUpsert.isEmpty()) {
+            upsert toUpsert;
+        }
+        if (!toDelete.isEmpty()) {
+            delete toDelete;
         }
     }
 
@@ -1085,8 +1287,6 @@ public with sharing class GPCaseService {
             record.Id = existing != null ? existing.Id : null;
             if (record.Id == null) {
                 record.Case__c = parentCaseId;
-                record.Concern__c = concernId;
-            } else if (concernId != null && existing.Concern__c != concernId) {
                 record.Concern__c = concernId;
             }
             setPatientIfPossible(record, patientId);
@@ -1680,63 +1880,6 @@ public with sharing class GPCaseService {
         return names;
     }
 
-    // Build concerns from Case fields (psychosis/mania shared note + red flags shared note).
-    private static List<ConcernInput> buildCaseDrivenConcerns(Id caseId) {
-        List<ConcernInput> results = new List<ConcernInput>();
-        if (caseId == null) return results;
-
-        Case c = [
-            SELECT Psychosis_Symptoms__c, Mania_Symptoms__c, Medical_Red_Flags__c,
-                   Psychosis_Notes__c, Medical_Notes__c
-            FROM Case
-            WHERE Id = :caseId
-            LIMIT 1
-        ];
-
-        String sharedPsychosisNote = c.Psychosis_Notes__c;
-        String sharedRedFlagNote = c.Medical_Notes__c;
-
-        // Psychosis symptoms
-        for (String val : parseMultiValue(c.Psychosis_Symptoms__c)) {
-            ConcernInput ci = new ConcernInput();
-            ci.label = val;
-            ci.category = 'Psychosis Symptoms';
-            ci.notes = sharedPsychosisNote;
-            ci.source = 'Step6_PsychosisMania';
-            results.add(ci);
-        }
-        // Mania / Hypomania symptoms
-        for (String val : parseMultiValue(c.Mania_Symptoms__c)) {
-            ConcernInput ci = new ConcernInput();
-            ci.label = val;
-            ci.category = 'Mania/Hypomania Symptoms';
-            ci.notes = sharedPsychosisNote;
-            ci.source = 'Step6_PsychosisMania';
-            results.add(ci);
-        }
-        // Medical red flags
-        for (String val : parseMultiValue(c.Medical_Red_Flags__c)) {
-            ConcernInput ci = new ConcernInput();
-            ci.label = val;
-            ci.category = 'Medical Red Flags';
-            ci.notes = sharedRedFlagNote;
-            ci.source = 'Step6_MedicalRedFlags';
-            results.add(ci);
-        }
-        return results;
-    }
-
-    private static List<String> parseMultiValue(String raw) {
-        List<String> values = new List<String>();
-        if (String.isBlank(raw)) return values;
-        for (String v : raw.split(';')) {
-            if (!String.isBlank(v)) {
-                values.add(v.trim());
-            }
-        }
-        return values;
-    }
-
     private static Set<String> collectNamesFromSafetyRisks(List<SafetyRiskInput> items) {
         Set<String> names = new Set<String>();
         if (items == null) return names;
@@ -1864,10 +2007,16 @@ public with sharing class GPCaseService {
         if (lower == 'stressors' || lower == 'psychological stressors') {
             return 'Step8_PsychologicalStressors';
         }
+        if (lower == 'psychosocial stressors') {
+            return 'Step8_PsychologicalStressors';
+        }
         if (lower == 'manual') {
             return 'Manual';
         }
-        if (!String.isBlank(category) && category.toLowerCase().contains('psychological')) {
+        if (!String.isBlank(category) && (
+            category.toLowerCase().contains('psychological')
+            || category.toLowerCase().contains('psychosocial')
+        )) {
             return 'Step8_PsychologicalStressors';
         }
         return null;

@@ -1,126 +1,154 @@
-import { LightningElement, api, track } from 'lwc';
-import searchPractices from '@salesforce/apex/PracticeSearchController.searchPractices';
-import getPracticeRecordTypeId from '@salesforce/apex/PracticeSearchController.getPracticeRecordTypeId';
-import getLastCreatedPractice from '@salesforce/apex/PracticeSearchController.getLastCreatedPractice';
-import { FlowAttributeChangeEvent } from 'lightning/flowSupport';
-import { NavigationMixin } from 'lightning/navigation';
-import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { LightningElement, api, track } from "lwc";
+import searchPractices from "@salesforce/apex/PracticeSearchController.searchPractices";
+import getPracticeRecordTypeId from "@salesforce/apex/PracticeSearchController.getPracticeRecordTypeId";
+import getLastCreatedPractice from "@salesforce/apex/PracticeSearchController.getLastCreatedPractice";
+import { FlowAttributeChangeEvent } from "lightning/flowSupport";
+import { NavigationMixin } from "lightning/navigation";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
-export default class PracticeSearchInput extends NavigationMixin(LightningElement) {
+export default class PracticeSearchInput extends NavigationMixin(
+  LightningElement
+) {
   // ⚙️ Variables públicas
   @api selectedPracticeId;
   @api selectedPracticeOutput;
   @api practiceRecordTypeId; // Mantenemos esta prop para la navegación
   @api practiceId; // Flujo Output variable
+  @api disablePersistence = false;
 
   // 🧠 Estado interno
-  @track searchKey = '';
+  @track searchKey = "";
   @track practices = [];
   @track showLoading = false;
   @track isDropdownOpen = false;
   isServiceConsole = false;
   saveListenerAttached = false;
+  lastToastKey;
+  lastToastAt = 0;
 
   get comboboxClass() {
-    return `slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click ${this.isDropdownOpen ? 'slds-is-open' : ''}`;
+    return `slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click ${this.isDropdownOpen ? "slds-is-open" : ""}`;
   }
 
   get isInputFilled() {
-    return this.searchKey && this.searchKey.trim() !== '';
+    return this.searchKey && this.searchKey.trim() !== "";
   }
-  
+
   get isButtonDisabled() {
     return !this.isInputFilled;
   }
 
   // 🔑 Clave única por tab y registro
   get storageKey() {
-    const tabKey = window.name || 'mainTab';
-    const recordKey = this.practiceId || 'newCase'; 
+    const tabKey = window.name || "mainTab";
+    const recordKey = this.practiceId || "newCase";
     return `practice_${tabKey}_${recordKey}`; // Cambiado a 'practice_'
   }
 
   connectedCallback() {
-    console.log('🧩 practiceSearchInput conectado con persistencia robusta');
+    console.log("🧩 practiceSearchInput conectado con persistencia robusta");
     this.initRecordType(); // Cargar el Record Type ID
+
+    if (this.disablePersistence) {
+      console.log("🫥 practiceSearchInput en modo sin persistencia");
+      return;
+    }
 
     const url = window.location.href.toLowerCase();
     const isNewCase =
-      url.includes('/new') || url.includes('/newcase') || url.includes('/case/create');
+      url.includes("/new") ||
+      url.includes("/newcase") ||
+      url.includes("/case/create");
 
     // --- USANDO CLAVES ESPECÍFICAS PARA EVITAR CONFLICTOS CON OTROS COMPONENTES ---
-    const pendingSave = localStorage.getItem(this.storageKey + '_pendingSave');
-    const lastAttempt = localStorage.getItem(this.storageKey + '_lastSaveAttempt');
+    const pendingSave = localStorage.getItem(this.storageKey + "_pendingSave");
+    const lastAttempt = localStorage.getItem(
+      this.storageKey + "_lastSaveAttempt"
+    );
 
     // ⏱️ Solo consideramos intentos dentro de los últimos 10 segundos
     const validAttempt =
-      pendingSave && lastAttempt && Date.now() - parseInt(lastAttempt, 10) < 10000;
+      pendingSave &&
+      lastAttempt &&
+      Date.now() - parseInt(lastAttempt, 10) < 10000;
 
     const saved = localStorage.getItem(this.storageKey);
 
     // ♻️ Caso 1: intento previo detectado
     if (validAttempt && saved) {
-        const parsed = JSON.parse(saved);
-        
-        // Asumimos que hubo un error y restauramos el valor
-        this.selectedPracticeId = parsed.id;
-        this.searchKey = parsed.name;
-        console.log('⚠️ Intento de guardado detectado → se conserva Practice:', parsed.name);
+      const parsed = JSON.parse(saved);
 
-        // Eliminamos las banderas ESPECÍFICAS inmediatamente después de restaurar.
-        localStorage.removeItem(this.storageKey + '_pendingSave');
-        localStorage.removeItem(this.storageKey + '_lastSaveAttempt');
-        
-        return; 
+      // Asumimos que hubo un error y restauramos el valor
+      this.selectedPracticeId = parsed.id;
+      this.searchKey = parsed.name;
+      console.log(
+        "⚠️ Intento de guardado detectado → se conserva Practice:",
+        parsed.name
+      );
+
+      // Eliminamos las banderas ESPECÍFICAS inmediatamente después de restaurar.
+      localStorage.removeItem(this.storageKey + "_pendingSave");
+      localStorage.removeItem(this.storageKey + "_lastSaveAttempt");
+
+      return;
     }
-    
+
     // ♻️ Caso 2: recarga normal o error previo persistente
     if (saved && !validAttempt) {
       const parsed = JSON.parse(saved);
       this.selectedPracticeId = parsed.id;
       this.searchKey = parsed.name;
-      console.log('♻️ Restaurado Practice persistente:', parsed.name);
+      console.log("♻️ Restaurado Practice persistente:", parsed.name);
     }
 
     // 🆕 Caso nuevo → limpiar
     if (isNewCase && !validAttempt) {
       this.clearSelection();
-      console.log('🆕 Nuevo Case → limpio inicial');
+      console.log("🆕 Nuevo Case → limpio inicial");
     }
 
     // 💾 Detectar intento de guardado (Save / Guardar)
     if (!this.saveListenerAttached) {
-        document.addEventListener('click', (e) => {
-            const label = (e.target.innerText || '').toLowerCase();
-            if (label.includes('save') || label.includes('guardar')) {
-                console.log('💾 Intento de guardar detectado');
-                // Guardamos el estado ANTES del intento de guardado
-                if (this.searchKey && this.selectedPracticeId) {
-                   localStorage.setItem(
-                        this.storageKey,
-                        JSON.stringify({ id: this.selectedPracticeId, name: this.searchKey })
-                    );
-                   // Establecemos las banderas ESPECÍFICAS
-                    localStorage.setItem(this.storageKey + '_pendingSave', 'true');
-                    localStorage.setItem(this.storageKey + '_lastSaveAttempt', Date.now().toString());
-                    console.log('📦 Guardado temporal de Practice antes del intento:', this.searchKey);
-                } else {
-                    localStorage.removeItem(this.storageKey); 
-                }
-            }
-        });
-        this.saveListenerAttached = true;
+      document.addEventListener("click", (e) => {
+        const label = (e.target.innerText || "").toLowerCase();
+        if (label.includes("save") || label.includes("guardar")) {
+          console.log("💾 Intento de guardar detectado");
+          // Guardamos el estado ANTES del intento de guardado
+          if (this.searchKey && this.selectedPracticeId) {
+            localStorage.setItem(
+              this.storageKey,
+              JSON.stringify({
+                id: this.selectedPracticeId,
+                name: this.searchKey
+              })
+            );
+            // Establecemos las banderas ESPECÍFICAS
+            localStorage.setItem(this.storageKey + "_pendingSave", "true");
+            localStorage.setItem(
+              this.storageKey + "_lastSaveAttempt",
+              Date.now().toString()
+            );
+            console.log(
+              "📦 Guardado temporal de Practice antes del intento:",
+              this.searchKey
+            );
+          } else {
+            localStorage.removeItem(this.storageKey);
+          }
+        }
+      });
+      this.saveListenerAttached = true;
     }
 
     // 🚫 No limpiar al cambiar de tab en Service Console
-    this.isServiceConsole = window.location.href.includes('console');
+    this.isServiceConsole = window.location.href.includes("console");
     if (!this.isServiceConsole) {
-      window.addEventListener('beforeunload', () => {
-        console.log('🔁 Cierre completo → limpieza');
+      window.addEventListener("beforeunload", () => {
+        console.log("🔁 Cierre completo → limpieza");
         localStorage.removeItem(this.storageKey);
         // Limpiar también las banderas específicas al cierre completo del navegador
-        localStorage.removeItem(this.storageKey + '_pendingSave');
-        localStorage.removeItem(this.storageKey + '_lastSaveAttempt');
+        localStorage.removeItem(this.storageKey + "_pendingSave");
+        localStorage.removeItem(this.storageKey + "_lastSaveAttempt");
       });
     }
   }
@@ -128,22 +156,22 @@ export default class PracticeSearchInput extends NavigationMixin(LightningElemen
   // 📦 RecordTypeId: Método para cargar el RT ID (específico de Practice)
   async initRecordType() {
     try {
-        this.practiceRecordTypeId = await getPracticeRecordTypeId();
+      this.practiceRecordTypeId = await getPracticeRecordTypeId();
     } catch (err) {
-        console.error('Error fetching Practice RecordTypeId', err);
+      console.error("Error fetching Practice RecordTypeId", err);
     }
   }
 
   // Métodos necesarios para el HTML del lookup:
   handleFocus() {
     if (this.practices.length > 0 || this.searchKey.length >= 2) {
-        this.isDropdownOpen = true;
+      this.isDropdownOpen = true;
     }
   }
 
   handleBlur() {
     setTimeout(() => {
-        this.isDropdownOpen = false;
+      this.isDropdownOpen = false;
     }, 300);
   }
 
@@ -156,7 +184,7 @@ export default class PracticeSearchInput extends NavigationMixin(LightningElemen
 
       searchPractices({ searchKey: this.searchKey })
         .then((result) => (this.practices = result))
-        .catch((error) => console.error('❌ Error searching practices:', error))
+        .catch((error) => console.error("❌ Error searching practices:", error))
         .finally(() => (this.showLoading = false));
     } else {
       this.isDropdownOpen = false;
@@ -176,62 +204,66 @@ export default class PracticeSearchInput extends NavigationMixin(LightningElemen
     this.practices = [];
 
     // Guardamos en localStorage al seleccionar
-    localStorage.setItem(this.storageKey, JSON.stringify({ id, name }));
-    console.log(`✅ Practice "${name}" guardado en ${this.storageKey}`);
+    if (!this.disablePersistence) {
+      localStorage.setItem(this.storageKey, JSON.stringify({ id, name }));
+      console.log(`✅ Practice "${name}" guardado en ${this.storageKey}`);
+    }
 
     // Notificar al Flow
-    this.dispatchEvent(new FlowAttributeChangeEvent('practiceId', id));
-    this.dispatchEvent(new FlowAttributeChangeEvent('selectedPracticeOutput', name));
-
+    this.dispatchEvent(new FlowAttributeChangeEvent("practiceId", id));
     this.dispatchEvent(
-      new ShowToastEvent({
-        title: 'Practice Selected',
-        message: `"${name}" selected.`,
-        variant: 'success'
-      })
+      new FlowAttributeChangeEvent("selectedPracticeOutput", name)
     );
+
+    this.showToastOnce({
+      title: "Practice Selected:",
+      message: `"${name}"`,
+      variant: "success"
+    });
   }
 
   // ❌ Limpieza completa
   clearSelection() {
     this.selectedPracticeId = null;
     this.selectedPracticeOutput = null;
-    this.searchKey = '';
+    this.searchKey = "";
     this.practices = [];
     this.isDropdownOpen = false;
-    localStorage.removeItem(this.storageKey);
-     // Limpiar también las banderas específicas al limpiar manualmente
-    localStorage.removeItem(this.storageKey + '_pendingSave');
-    localStorage.removeItem(this.storageKey + '_lastSaveAttempt');
+    if (!this.disablePersistence) {
+      localStorage.removeItem(this.storageKey);
+      // Limpiar también las banderas específicas al limpiar manualmente
+      localStorage.removeItem(this.storageKey + "_pendingSave");
+      localStorage.removeItem(this.storageKey + "_lastSaveAttempt");
+    }
     console.log(`🧹 Limpieza ejecutada (${this.storageKey})`);
   }
-  
+
   // ➕ Crear nueva práctica (específico de PracticeSearchInput)
   handleNewPractice() {
     this.showLoading = true;
     this[NavigationMixin.Navigate]({
-        type: 'standard__recordPage',
-        attributes: {
-            objectApiName: 'Account', // Asumiendo que la práctica es un Account
-            actionName: 'new'
-        },
-        state: {
-            recordTypeId: this.practiceRecordTypeId || null,
-            navigationLocation: 'RELATED_LIST',
-            useRecordTypeCheck: 1
-        }
+      type: "standard__recordPage",
+      attributes: {
+        objectApiName: "Account", // Asumiendo que la práctica es un Account
+        actionName: "new"
+      },
+      state: {
+        recordTypeId: this.practiceRecordTypeId || null,
+        navigationLocation: "RELATED_LIST",
+        useRecordTypeCheck: 1
+      }
     });
 
     // Esperar y recuperar la última práctica creada (esto depende de Apex)
     setTimeout(() => {
-        getLastCreatedPractice()
-            .then((practice) => {
-                if (practice && practice.Id) {
-                    this.addNewPractice(practice);
-                }
-            })
-            .catch((err) => console.error('Error al obtener nueva Practice:', err))
-            .finally(() => (this.showLoading = false));
+      getLastCreatedPractice()
+        .then((practice) => {
+          if (practice && practice.Id) {
+            this.addNewPractice(practice);
+          }
+        })
+        .catch((err) => console.error("Error al obtener nueva Practice:", err))
+        .finally(() => (this.showLoading = false));
     }, 2500);
   }
 
@@ -239,24 +271,78 @@ export default class PracticeSearchInput extends NavigationMixin(LightningElemen
   @api
   addNewPractice(newPractice) {
     if (!newPractice || !newPractice.Id) return;
-    this.selectedPracticeId = newPractice.Id;
-    this.searchKey = newPractice.Name;
-    this.isDropdownOpen = false;
-    this.showLoading = false;
-
-    // Guarda en localStorage al seleccionar
-    localStorage.setItem(this.storageKey, JSON.stringify({ id: newPractice.Id, name: newPractice.Name }));
-
-    this.dispatchEvent(new FlowAttributeChangeEvent('practiceId', newPractice.Id));
-    this.dispatchEvent(new FlowAttributeChangeEvent('selectedPracticeOutput', newPractice.Name));
+    this._applyPracticeSelectionState(newPractice);
 
     this.dispatchEvent(
-        new ShowToastEvent({
-            title: 'Practice Selected',
-            message: `"${newPractice.Name}" created y selected.`,
-            variant: 'success'
-        })
+      new FlowAttributeChangeEvent("practiceId", newPractice.Id)
     );
-    console.log('🆕 Practice created y selected:', newPractice.Name);
+    this.dispatchEvent(
+      new FlowAttributeChangeEvent("selectedPracticeOutput", newPractice.Name)
+    );
+
+    this.showToastOnce({
+      title: "Practice Created:",
+      message: `"${newPractice.Name}"`,
+      variant: "success"
+    });
+    console.log("🆕 Practice created y selected:", newPractice.Name);
+  }
+
+  @api
+  setSelectedPractice(practice) {
+    if (!practice || !practice.Id) return;
+    this._applyPracticeSelectionState(practice);
+  }
+
+  @api
+  focusSearchInput(selectText = false) {
+    const input = this.template.querySelector("#practiceSearch");
+    if (!input) return;
+
+    input.focus();
+    if (selectText && typeof input.select === "function") {
+      input.select();
+    }
+  }
+
+  @api
+  clearSelectedPractice() {
+    this.clearSelection();
+  }
+
+  showToastOnce({ title, message, variant }) {
+    const toastKey = `${title}:${message}:${variant}`;
+    const now = Date.now();
+
+    if (this.lastToastKey === toastKey && now - this.lastToastAt < 1000) {
+      return;
+    }
+
+    this.lastToastKey = toastKey;
+    this.lastToastAt = now;
+
+    this.dispatchEvent(
+      new ShowToastEvent({
+        title,
+        message,
+        variant
+      })
+    );
+  }
+
+  _applyPracticeSelectionState(practice) {
+    this.selectedPracticeId = practice.Id;
+    this.selectedPracticeOutput = practice.Name;
+    this.searchKey = practice.Name;
+    this.isDropdownOpen = false;
+    this.showLoading = false;
+    this.practices = [];
+
+    if (!this.disablePersistence) {
+      localStorage.setItem(
+        this.storageKey,
+        JSON.stringify({ id: practice.Id, name: practice.Name })
+      );
+    }
   }
 }

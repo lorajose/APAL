@@ -328,7 +328,7 @@ export default class GpCaseStepReviewSave extends LightningElement {
             { label: 'Protective Factors', value: this.formatValue(this.suicide.Protective_Factors__c) },
             { label: 'Access to Means', value: this.formatList(this.suicide.Access_to_Means__c) },
             { label: 'Past Attempts (#)', value: this.formatValue(this.suicide.Past_Suicide_Attempts__c) },
-            { label: 'Last Attempt Date', value: this.formatDate(this.suicide.Last_Attempt_Date__c) }
+            { label: 'Last Attempt Date', value: this.formatDateOnly(this.suicide.Last_Attempt_Date__c) }
         ];
     }
 
@@ -343,9 +343,9 @@ export default class GpCaseStepReviewSave extends LightningElement {
 
     get psychosisSummary() {
         return [
-            { label: 'Psychosis Symptoms', value: this.formatList(this.psychosis.Psychosis_Symptoms__c) },
-            { label: 'Mania Symptoms', value: this.formatList(this.psychosis.Mania_Symptoms__c) },
-            { label: 'Medical Red Flags', value: this.formatList(this.psychosis.Medical_Red_Flags__c) },
+            { label: 'Psychosis Symptoms', value: this.formatList(this.psychosis.psychosisSymptomsDraft) },
+            { label: 'Mania Symptoms', value: this.formatList(this.psychosis.maniaSymptomsDraft) },
+            { label: 'Medical Red Flags', value: this.formatList(this.psychosis.medicalRedFlagsDraft) },
             { label: 'Psychosis Notes', value: this.formatValue(this.psychosis.Psychosis_Notes__c) },
             { label: 'Red Flag Notes', value: this.formatValue(this.psychosis.Red_Flag_Notes__c) }
         ];
@@ -356,6 +356,10 @@ export default class GpCaseStepReviewSave extends LightningElement {
             { label: 'Recent Trauma', value: this.familyTrauma.Recent_Trauma__c ? 'Yes' : 'No' },
             { label: 'Child/Elder Safety Concern', value: this.familyTrauma.Dependent_Safety_Concern__c ? 'Yes' : 'No' },
             { label: 'IPV Concern', value: this.familyTrauma.IPV_Concern__c ? 'Yes' : 'No' },
+            {
+                label: 'Family History',
+                value: this.formatList((this.familyTrauma.familyHistoryDraft || []).map((item) => item.label || item.value))
+            },
             { label: 'Family History and Trauma Notes', value: this.formatValue(this.familyTrauma.Family_History_Notes__c) }
         ];
     }
@@ -366,7 +370,7 @@ export default class GpCaseStepReviewSave extends LightningElement {
             { label: 'Lethal Means Access', value: this.formatList(this.homeSafety.Lethal_Means_Access__c) },
             { label: 'Means Safety Plan', value: this.homeSafety.Means_Safety_Plan__c ? 'Yes' : 'No' },
             { label: 'Safety Notes', value: this.formatValue(this.homeSafety.Safety_Notes__c) },
-            { label: 'Psychosocial Stressors', value: this.formatStressorDraft(this.homeSafety.psychosocialStressorsDraft, this.homeSafety.Psychosocial_Stressors__c) },
+            { label: 'Psychosocial Stressors', value: this.formatStressorDraft(this.homeSafety.psychosocialStressorsDraft) },
             { label: 'Reliable Supports', value: this.formatValue(this.homeSafety.Reliable_Supports__c) },
             { label: 'Cost/Coverage Issues', value: this.homeSafety.Cost_Coverage_Issues__c ? 'Yes' : 'No' },
             { label: 'Supports Notes', value: this.formatValue(this.homeSafety.Supports_Notes__c) }
@@ -387,7 +391,7 @@ export default class GpCaseStepReviewSave extends LightningElement {
         ] : []),
 
         { label: 'Means Safety Plan', value: this.homeSafety.Means_Safety_Plan__c ? 'Yes' : 'No' },
-        { label: 'Psychosocial Stressors', value: this.formatStressorDraft(this.homeSafety.psychosocialStressorsDraft, this.homeSafety.Psychosocial_Stressors__c) },
+        { label: 'Psychosocial Stressors', value: this.formatStressorDraft(this.homeSafety.psychosocialStressorsDraft) },
         { label: 'Reliable Supports', value: this.formatValue(this.homeSafety.Reliable_Supports__c) },
         { label: 'Cost/Coverage Issues', value: this.homeSafety.Cost_Coverage_Issues__c ? 'Yes' : 'No' },
         { label: 'Supports Notes', value: this.formatValue(this.homeSafety.Supports_Notes__c) }
@@ -415,20 +419,40 @@ export default class GpCaseStepReviewSave extends LightningElement {
         return dt.toLocaleDateString();
     }
 
+    formatDateOnly(value) {
+        if (!value) return FALLBACK;
+        if (typeof value === 'string') {
+            const trimmed = value.trim();
+            const match = trimmed.match(/^(\d{4})-(\d{2})-(\d{2})(?:T.*)?$/);
+            if (match) {
+                const [, year, month, day] = match;
+                return new Date(Number(year), Number(month) - 1, Number(day)).toLocaleDateString();
+            }
+        }
+        if (value instanceof Date && !Number.isNaN(value.getTime())) {
+            return new Date(
+                value.getUTCFullYear(),
+                value.getUTCMonth(),
+                value.getUTCDate()
+            ).toLocaleDateString();
+        }
+        return this.formatDate(value);
+    }
+
     formatList(value) {
         if (!value) return FALLBACK;
         if (Array.isArray(value)) return value.length ? value.join(', ') : FALLBACK;
         return value.split(';').filter(Boolean).join(', ') || FALLBACK;
     }
 
-    formatStressorDraft(draftList, fallbackSerialized) {
+    formatStressorDraft(draftList) {
         if (Array.isArray(draftList) && draftList.length) {
             const labels = draftList
                 .map(item => item.label || item.value)
                 .filter(Boolean);
             return labels.length ? labels.join(', ') : FALLBACK;
         }
-        return this.formatList(fallbackSerialized);
+        return FALLBACK;
     }
 
     handleBack() {

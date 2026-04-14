@@ -201,7 +201,7 @@ export default class GpCaseStepSubstances extends LightningElement {
                 },
                 recordName: item.recordName || item.name || null,
                 recordLink: this.buildPatientSubstanceLink(item.recordId),
-                cardClass: item.current ? 'sub-card current' : 'sub-card',
+                cardClass: item.current ? 'sub-card wiz-selected-row current' : 'sub-card wiz-selected-row',
                 showConfirm: this.confirmRemoveId === item.id,
                 previewNotes: this.notePreview(item.notes)
             }))
@@ -234,9 +234,9 @@ export default class GpCaseStepSubstances extends LightningElement {
         const id = event.target.dataset.id;
         if (!id) return;
         const value = event.target.value;
-        this.substances = this.substances.map(sub =>
+        this.substances = this.substances.map(sub => (
             sub.id === id ? { ...sub, notes: value } : sub
-        );
+        ));
         this.emitDraftChange();
     }
 
@@ -462,9 +462,9 @@ export default class GpCaseStepSubstances extends LightningElement {
             .map(item => {
                 const disabled = existingIds.has(item.id) && this.wizardMode === 'add';
                 const checked = existingIds.has(item.id) || this.wizardSelection.includes(item.id);
-                const classList = ['catalog-card'];
-                if (checked) classList.push('selected');
-                if (disabled) classList.push('disabled');
+                const classList = ['catalog-card', 'wiz-catalog-row', 'wiz-select-card'];
+                if (checked) classList.push('selected', 'is-selected');
+                if (disabled) classList.push('disabled', 'is-disabled');
                 return {
                     ...item,
                     disabled,
@@ -605,9 +605,9 @@ export default class GpCaseStepSubstances extends LightningElement {
         if (!id) return;
         const field = event.target.dataset.field;
         const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-        this.wizardDraft = this.decorateWizardDraft(this.wizardDraft.map(item =>
+        this.wizardDraft = this.decorateWizardDraft(this.wizardDraft.map(item => (
             item.id === id ? { ...item, [field]: value } : item
-        ));
+        )));
     }
 
     handleWizardRemoveDraft(event) {

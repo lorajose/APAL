@@ -275,7 +275,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Name_of_Practice__c</fieldItem>
                 <identifier>RecordName_of_Practice_cField</identifier>
@@ -291,7 +291,7 @@
             <fieldInstance>
                 <fieldInstanceProperties>
                     <name>uiBehavior</name>
-                    <value>required</value>
+                    <value>none</value>
                 </fieldInstanceProperties>
                 <fieldItem>Record.Location_of_Practice__c</fieldItem>
                 <identifier>RecordPractice_Locality__cField</identifier>

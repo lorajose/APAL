@@ -1,5 +1,5 @@
 <template>
-    <div class="step-section">
+    <div class="step-section wiz-step-stack">
        <!-- <div class="section-header">
             <h2>Step 2 — Presenting &amp; Availability</h2>
             <p>Capture primary questions, domains, and presenting context together.</p>
@@ -34,33 +34,31 @@
         </section> -->
 
         <!-- PCQT Selector (wizard-controlled) en card independiente -->
-        <section class="card">
-            <c-pcqt-selector
-                case-type={caseType}
-                value={pcqtSelectorValue}
-                required={pcqtRequired}
-                errors={errors}
-                record-id={caseId}
-                wizard-mode={pcqtWizardMode}
-                show-save-buttons="false"
-                onchange={handlePcqtChange}>
-            </c-pcqt-selector>
-        </section>
+        <c-pcqt-selector
+            case-type={caseType}
+            value={pcqtSelectorValue}
+            required={pcqtRequired}
+            errors={errors}
+            record-id={caseId}
+            wizard-mode={pcqtWizardMode}
+            show-save-buttons="false"
+            onchange={handlePcqtChange}>
+        </c-pcqt-selector>
 
-        <section class="card">
-            <header class="card-header">
-                <div>
-                    <p class="card-title">Impaired Domains</p>
-                    <p class="card-subtitle">Highlight where functioning is taking the biggest hit.</p>
+        <section class="card wiz-card">
+            <header class="card-header wiz-card-header">
+                <div class="wiz-heading-stack">
+                    <p class="card-title wiz-item-title">Impaired Domains</p>
+                    <p class="card-subtitle wiz-description">Highlight where functioning is taking the biggest hit.</p>
                 </div>
-                <span class="selected-counter">{impairedCountLabel}</span>
+                <span class="selected-counter wiz-counter">{impairedCountLabel}</span>
             </header>
-            <div class="input-row">
-                <label class="input-label" for="domains-search">Search</label>
-                <input id="domains-search" type="search" class="pill-search" placeholder="Filter options..."
+            <div class="input-row wiz-search-row">
+                <label class="input-label wiz-field-label" for="domains-search">Search</label>
+                <input id="domains-search" type="search" class="pill-search wiz-pill-search" placeholder="Filter options..."
                     value={domainsSearch} oninput={handleDomainSearch}>
             </div>
-            <div class="chip-grid">
+            <div class="chip-grid wiz-chip-grid">
                 <template for:each={impairedFilteredOptions} for:item="option">
                     <button key={option.value} type="button" class={option.chipClass} data-value={option.value}
                         onclick={handleDomainToggle}>
@@ -70,54 +68,54 @@
             </div>
         </section>
 
-        <section class="card form-grid">
-            <div class="field">
-                <label class="input-label" for="onset-date">Symptom Onset Date</label>
-                <input id="onset-date" type="date" class="text-input" value={symptomOnsetDate}
+        <section class="card wiz-card form-grid">
+            <div class="field wiz-field">
+                <label class="input-label wiz-field-label" for="onset-date">Symptom Onset Date</label>
+                <input id="onset-date" type="date" class="text-input wiz-control wiz-date-control" value={symptomOnsetDate}
                     data-field="Symptom_Onset_Date__c" oninput={handleInputChange}>
             </div>
-            <div class="field">
-                <label class="input-label" for="impairment-level">Impairment Level</label>
-                <select id="impairment-level" class="text-input"
+            <div class="field wiz-field">
+                <label class="input-label wiz-field-label" for="impairment-level">Impairment Level</label>
+                <select id="impairment-level" class="text-input wiz-control"
                     data-field="Impairment_Level__c" onchange={handleInputChange}>
                     <template for:each={impairmentLevelOptions} for:item="option">
                         <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
                     </template>
                 </select>
             </div>
-            <div class="field">
-                <label class="input-label" for="course">Course</label>
-                <select id="course" class="text-input" data-field="Course__c"
+            <div class="field wiz-field">
+                <label class="input-label wiz-field-label" for="course">Course</label>
+                <select id="course" class="text-input wiz-control" data-field="Course__c"
                     onchange={handleInputChange}>
                     <template for:each={courseOptions} for:item="option">
                         <option key={option.value} value={option.value} selected={option.selected}>{option.label}</option>
                     </template>
                 </select>
             </div>
-            <div class="field checkbox-field">
-                <label class="input-label">Abrupt change since onset?</label>
-                <input type="checkbox" class="checkbox" checked={abruptChange} onchange={handleCheckboxChange}>
+            <div class="field checkbox-field wiz-field">
+                <label class="input-label wiz-field-label">Abrupt change since onset?</label>
+                <input type="checkbox" class="checkbox" checked={abruptChange} aria-label="Abrupt change since onset" onchange={handleCheckboxChange}>
             </div>
         </section>
 
-        <section class="card">
+        <section class="card wiz-card">
             <div class="top-symptoms-header">
-                <div>
-                    <p class="card-title">Top Symptoms / Concerns</p>
-                    <p class="card-subtitle">Select concerns; add notes for the ones you choose.</p>
+                <div class="wiz-heading-stack">
+                    <p class="card-title wiz-item-title">Top Symptoms / Concerns</p>
+                    <p class="card-subtitle wiz-description">Select concerns; add notes for the ones you choose.</p>
                 </div>
-                <div class="input-row condensed">
-                    <label class="input-label" for="symptom-search">Search</label>
-                    <input id="symptom-search" type="search" class="pill-search" placeholder="Filter concerns..."
+                <div class="input-row condensed wiz-search-row">
+                    <label class="input-label wiz-field-label" for="symptom-search">Search</label>
+                    <input id="symptom-search" type="search" class="pill-search wiz-pill-search" placeholder="Filter concerns..."
                         value={symptomSearch} oninput={handleSymptomSearch}>
                 </div>
             </div>
                 <div class="top-symptoms-grid">
                 <div class="available-column">
                     <p class="column-title">Available</p>
-                    <div class="checkbox-list">
+                    <div class="checkbox-list wiz-checkbox-list">
                         <template for:each={filteredTopSymptoms} for:item="option">
-                            <label key={option.value} class="checkbox-row">
+                            <label key={option.value} class="checkbox-row wiz-checkbox-option">
                                 <input type="checkbox" data-value={option.value} checked={option.checked}
                                     onchange={handleSymptomToggle}>
                                 <span>{option.label}</span>
@@ -125,21 +123,22 @@
                         </template>
                     </div>
                 </div>
-                <div class="selected-column">
+                <div class="selected-column wiz-selected-list">
                     <p class="column-title">Selected</p>
                     <template if:true={hasSelectedTopSymptoms}>
                         <template for:each={selectedTopSymptoms} for:item="item">
-                            <div key={item.value} class="selected-card">
-                                <header>
+                            <div key={item.value} class="selected-card wiz-selected-row">
+                                <header class="wiz-panel-header">
                                     <span>{item.label}</span>
                                     <button class="link-button" type="button" data-value={item.value}
                                         onclick={handleSymptomRemove}>Remove</button>
                                 </header>
-                                <div class="field field-full">
-                                    <label class="input-label">Notes</label>
+                                <div class="field field-full wiz-field">
+                                    <label class="input-label wiz-field-label">Notes</label>
                                     <textarea
-                                        class="textarea"
+                                        class="textarea wiz-control"
                                         data-value={item.value}
+                                        aria-label="Symptom notes"
                                         oninput={handleSymptomNoteChange}
                                     >{item.note}</textarea>
                                 </div>
@@ -153,23 +152,23 @@
             </div>
         </section>
 
-           <section class="card">
-            <div class="field field-full">
-                <label class="input-label" for="other-symptoms">Other Symptoms</label>
+           <section class="card wiz-card">
+            <div class="field field-full wiz-field">
+                <label class="input-label wiz-field-label" for="other-symptoms">Other Symptoms</label>
                 <textarea
                     id="other-symptoms"
-                    class="textarea"
+                    class="textarea wiz-control"
                     placeholder="Only fill this out if a symptom is missing."
                     data-field="Other_Symptoms__c"
                     oninput={handleInputChange}
                 >{otherSymptoms}</textarea>
-                <p class="helper-text">Only fill this out if a symptom is missing.</p>
+                <p class="helper-text wiz-field-helper">Only fill this out if a symptom is missing.</p>
             </div>
         </section>
 
-        <div class="slds-grid slds-grid_align-spread slds-var-m-top_large">
-            <button class="slds-button btn-back" type="button" onclick={handleBack}>Back</button>
-            <button class="slds-button btn-next" type="button" onclick={handleNext}>Next</button>
+        <div class="slds-grid slds-grid_align-spread slds-var-m-top_large wiz-step-footer">
+            <button class="slds-button btn-back wiz-btn wiz-btn-footer-back" type="button" onclick={handleBack}>Back</button>
+            <button class="slds-button btn-next wiz-btn wiz-btn-footer-next" type="button" onclick={handleNext}>Next</button>
         </div>
     </div>
 </template>

@@ -1,15 +1,15 @@
 <template>
-    <div class="step-section">
+    <div class="step-section wiz-step-stack">
        <!-- <div class="section-header">
             <h2>Step 5 — Safety: Homicide / Violence</h2>
             <p>Track ideation and any weaponized risk details.</p>
         </div> -->
 
-        <section class="card">
-            <label class="input-label" for="ideation"><span class="required">*</span>Homicidal Ideation</label>
+        <section class="card wiz-card wiz-field">
+            <label class="input-label wiz-field-label" for="ideation"><span class="required wiz-required">*</span>Homicidal Ideation</label>
             <select
                 id="ideation"
-                class="text-input"
+                class="text-input wiz-control"
                 onchange={handleIdeationChange}
             >
                 <option value="">—</option>
@@ -18,24 +18,24 @@
                 </template>
             </select>
             <template if:true={ideationError}>
-                <p class="error-text">{ideationError}</p>
+                <p class="error-text wiz-field-error wiz-inline-error">{ideationError}</p>
             </template>
         </section>
 
-        <section class="card">
-            <label class="checkbox-field">
+        <section class="card wiz-card">
+            <label class="checkbox-field wiz-checkbox-row">
                 <input
                     type="checkbox"
                     checked={recentViolence}
                     onchange={handleCheckboxChange}
                 />
-                <span  class="input-label">Recent violence or agitation observed?</span>
+                <span class="input-label wiz-field-label">Recent violence or agitation observed?</span>
             </label>
         </section>
 
         <template if:true={showDetail}>
-            <section class="card">
-                <label class="checkbox-field">
+            <section class="card wiz-card">
+                <label class="checkbox-field wiz-checkbox-row">
                     <input
                         id="weapons-access"
                         type="checkbox"
@@ -43,28 +43,28 @@
                         data-field="Weapons_Access__c"
                         onchange={handleInputChange}
                     />
-                    <span class="input-label">Weapons Access</span>
+                    <span class="input-label wiz-field-label">Weapons Access</span>
                 </label>
             </section>
 
-            <section class="card">
-                <label class="input-label" for="violence-details"><span class="required">*</span>Violence / Threat Details</label>
+            <section class="card wiz-card wiz-field">
+                <label class="input-label wiz-field-label" for="violence-details"><span class="required wiz-required">*</span>Violence / Threat Details</label>
                 <textarea
                     id="violence-details"
-                    class="textarea"
+                    class="textarea wiz-control"
                     data-field="Violence_Details__c"
                     oninput={handleInputChange}
                     placeholder="Summarize threats, targets, timelines, etc."
                 >{violenceDetails}</textarea>
                 <template if:true={violenceDetailsError}>
-                    <p class="error-text">{violenceDetailsError}</p>
+                    <p class="error-text wiz-field-error wiz-inline-error">{violenceDetailsError}</p>
                 </template>
             </section>
         </template>
 
-        <div class="slds-grid slds-grid_align-spread slds-var-m-top_large">
-            <button class="slds-button btn-back" type="button" onclick={handleBack}>Back</button>
-            <button class="slds-button btn-next" type="button" onclick={handleNext}>Next</button>
+        <div class="slds-grid slds-grid_align-spread slds-var-m-top_large wiz-step-footer">
+            <button class="slds-button btn-back wiz-btn wiz-btn-footer-back" type="button" onclick={handleBack}>Back</button>
+            <button class="slds-button btn-next wiz-btn wiz-btn-footer-next" type="button" onclick={handleNext}>Next</button>
         </div>
     </div>
 </template>

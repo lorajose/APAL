@@ -1,5 +1,6 @@
 import { LightningElement, api, track } from 'lwc';
 import getPcqtOptions from '@salesforce/apex/GPCaseService.getPcqtOptions';
+import getConcernCatalog from '@salesforce/apex/GPCaseService.getConcernCatalog';
 
 const PCQT_OPTIONS = [{
         label: 'Diagnosis clarification',
@@ -109,43 +110,9 @@ const IMPAIRED_DOMAIN_OPTIONS = [{
     }
 ];
 
-const TOP_SYMPTOMS = [{
-        label: 'Depressed mood',
-        value: 'Depressed mood'
-    },
-    {
-        label: 'Anhedonia',
-        value: 'Anhedonia'
-    },
-    {
-        label: 'Anxiety',
-        value: 'Anxiety'
-    },
-    {
-        label: 'Panic',
-        value: 'Panic'
-    },
-    {
-        label: 'Insomnia',
-        value: 'Insomnia'
-    },
-    {
-        label: 'Hypersomnia',
-        value: 'Hypersomnia'
-    },
-    {
-        label: 'Appetite change',
-        value: 'Appetite change'
-    },
-    {
-        label: 'Low energy',
-        value: 'Low energy'
-    },
-    {
-        label: 'Poor concentration',
-        value: 'Poor concentration'
-    }
-];
+const TOP_SYMPTOM_CATEGORY = 'Top Symptoms';
+const TOP_SYMPTOM_CASE_TYPE = 'General_Psychiatry';
+const DATE_ONLY_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
 const IMPAIRMENT_LEVEL_OPTIONS = [{
         label: '—',
@@ -236,6 +203,7 @@ export default class GpCaseStepPresenting extends LightningElement {
     @track pcqtSelectedLabels = []; // labels coming from selector
     @track impairedDomains = [];
     @track selectedTopSymptoms = [];
+    @track topSymptomOptions = [];
 
     @track pcqtSearch = '';
     @track domainsSearch = '';
@@ -253,6 +221,7 @@ export default class GpCaseStepPresenting extends LightningElement {
         if (!this._caseType) {
             this._caseType = 'General_Psychiatry';
             this.loadPcqtOptions();
+            this.loadTopSymptomOptions();
         }
     }
 
@@ -264,6 +233,7 @@ export default class GpCaseStepPresenting extends LightningElement {
         if (this._caseType === value) return;
         this._caseType = value;
         this.loadPcqtOptions();
+        this.loadTopSymptomOptions();
     }
 
     get impairmentLevelOptions() {
@@ -287,7 +257,7 @@ export default class GpCaseStepPresenting extends LightningElement {
             .filter(opt => opt.label.toLowerCase().includes(term))
             .map(opt => ({
                 ...opt,
-                chipClass: `chip ${selected.has(opt.value) ? 'chip-selected' : ''}`
+                chipClass: `chip wiz-chip${selected.has(opt.value) ? ' chip-selected is-selected' : ''}`
             }));
     }
 
@@ -298,14 +268,14 @@ export default class GpCaseStepPresenting extends LightningElement {
             .filter(opt => opt.label.toLowerCase().includes(term))
             .map(opt => ({
                 ...opt,
-                chipClass: `chip ${selected.has(opt.value) ? 'chip-selected' : ''}`
+                chipClass: `chip wiz-chip${selected.has(opt.value) ? ' chip-selected is-selected' : ''}`
             }));
     }
 
     get filteredTopSymptoms() {
         const term = (this.symptomSearch || '').toLowerCase();
         const selected = new Set(this.selectedTopSymptoms.map(item => item.value));
-        return TOP_SYMPTOMS
+        return this.topSymptomOptions
             .filter(opt => opt.label.toLowerCase().includes(term))
             .map(opt => ({
                 ...opt,
@@ -380,6 +350,27 @@ export default class GpCaseStepPresenting extends LightningElement {
         this.syncPcqtSelectionWithOptions();
     }
 
+    async loadTopSymptomOptions() {
+        try {
+            const data = await getConcernCatalog({
+                caseType: TOP_SYMPTOM_CASE_TYPE
+            });
+            if (Array.isArray(data)) {
+                this.topSymptomOptions = data
+                    .filter(item => ((item && item.category) || '').toLowerCase() === TOP_SYMPTOM_CATEGORY.toLowerCase())
+                    .map(item => ({
+                        label: item.label,
+                        value: item.label
+                    }))
+                    .filter(item => !!item.value);
+                return;
+            }
+        } catch (error) {
+            console.warn('Failed to load Top Symptoms catalog', error);
+        }
+        this.topSymptomOptions = [];
+    }
+
     syncPcqtSelectionWithOptions() {
         const allowed = new Set(this.pcqtOptions.map(opt => opt.value));
         const filtered = this.pcqtSelected.filter(value => allowed.has(value));
@@ -427,38 +418,12 @@ export default class GpCaseStepPresenting extends LightningElement {
                 note: item.note || ''
             }));
         } else {
-            this.selectedTopSymptoms = this.parseTopSymptomPayload(value.Top_Symptoms__c);
+            this.selectedTopSymptoms = [];
         }
     }
 
     get data() {
         return this.buildPayload();
-    }
-
-    parseTopSymptomPayload(rawValue) {
-        if (!rawValue) {
-            return [];
-        }
-        if (Array.isArray(rawValue)) {
-            return rawValue.map(item => ({
-                value: item.value,
-                label: item.label || item.value,
-                note: item.note || ''
-            }));
-        }
-        try {
-            const parsed = JSON.parse(rawValue);
-            if (Array.isArray(parsed)) {
-                return parsed.map(item => ({
-                    value: item.value,
-                    label: item.label || item.value,
-                    note: item.note || ''
-                }));
-            }
-        } catch (e) {
-            console.warn('Unable to parse Top Symptoms payload', e);
-        }
-        return [];
     }
 
     handlePcqtSearch(event) {
@@ -508,7 +473,7 @@ export default class GpCaseStepPresenting extends LightningElement {
                 ...this.selectedTopSymptoms.slice(index + 1)
             ];
         } else {
-            const option = TOP_SYMPTOMS.find(opt => opt.value === value);
+            const option = this.topSymptomOptions.find(opt => opt.value === value);
             if (option) {
                 this.selectedTopSymptoms = [
                     ...this.selectedTopSymptoms,
@@ -529,11 +494,11 @@ export default class GpCaseStepPresenting extends LightningElement {
         if (!value) return;
 
         this.selectedTopSymptoms = this.selectedTopSymptoms.map(item =>
-            item.value === value ? {
+            (item.value === value ? {
                 ...item,
                 note
             } :
-            item
+            item)
         );
         this.emitDraftChange();
     }
@@ -669,39 +634,41 @@ export default class GpCaseStepPresenting extends LightningElement {
             Abrupt_Change__c: this.abruptChange,
             Course__c: this.course || null,
             Other_Symptoms__c: this.otherSymptoms || null,
-            Top_Symptoms__c: this.serializeTopSymptoms(),
-            Top_Symptom_Count__c: this.selectedTopSymptoms.length,
             topSymptomsDraft,
             topSymptomNotesDraft
         };
     }
 
-    serializeTopSymptoms() {
-        if (!this.selectedTopSymptoms.length) {
-            return null;
-        }
-        return this.selectedTopSymptoms
-            .map(item => item.value)
-            .join(';');
-    }
-
     formatDateForInput(value) {
-        const normalized = this.normalizeDateValue(value);
-        if (!normalized) return '';
-        return normalized.toISOString().slice(0, 10);
+        return this.normalizeDateValue(value) || '';
     }
 
     normalizeDateValue(value) {
         if (!value) return null;
-        if (value instanceof Date) return value;
-        const date = new Date(value);
-        return isNaN(date.getTime()) ? null : date;
+        if (typeof value === 'string') {
+            const trimmed = value.trim();
+            if (!trimmed) return null;
+            if (DATE_ONLY_PATTERN.test(trimmed)) {
+                return trimmed;
+            }
+            const isoDatePart = trimmed.match(/^(\d{4}-\d{2}-\d{2})T/);
+            if (isoDatePart) {
+                return isoDatePart[1];
+            }
+            const date = new Date(trimmed);
+            return isNaN(date.getTime()) ? null : this.formatDateParts(date);
+        }
+        if (value instanceof Date) {
+            return isNaN(value.getTime()) ? null : this.formatDateParts(value);
+        }
+        return null;
     }
 
     formatDateForSalesforce(dateValue) {
-        if (!dateValue) return null;
-        const date = dateValue instanceof Date ? dateValue : new Date(dateValue);
-        if (isNaN(date.getTime())) return null;
+        return this.normalizeDateValue(dateValue);
+    }
+
+    formatDateParts(date) {
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
         const year = date.getFullYear();
